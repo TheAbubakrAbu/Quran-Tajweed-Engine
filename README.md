@@ -39,13 +39,18 @@ Quran Tajweed Engine/
 │   ├── reciters.json           62 reciters across 8 riwayat
 │   ├── tajweed-rules.json      rule catalogue: categories, colors, trigger letters
 │   ├── tajweed-annotations.json  pre-computed tajweed spans for all 6236 ayahs (113,642 spans)
+│   ├── arabic-alphabet.json    letters (+tajweed weight), numbers, tashkeel, waqf stopping signs
+│   ├── fonts/                  Uthmani, Qiraat, Indopak TTFs + fonts.json
 │   ├── qiraat/                 7 alternate readings (Warsh, Qaloon, Duri, Susi, Bazzi, Qunbul, Shubah)
 │   ├── surahs/                 per-surah split (NNN.json) + lightweight index.json
 │   └── tajweed/                per-surah pre-computed tajweed (NNN.json)
 ├── docs/                       ← comprehensive documentation
-│   ├── 00-getting-started.md · architecture.md · glossary.md · faq.md · recipes.md · PORTING.md
+│   ├── 00-getting-started · architecture · glossary · faq · recipes · PORTING
+│   ├── fonts · arabic-alphabet · tajweed-rules-explained · tajweed-rules-reference
 │   ├── 01-quran … 08-caching   per-feature specifications
 │   └── integration/            web · react-native · flutter · ios · android · server
+├── credits/                    ← per-app credits (Al-Islam, Al-Adhan, Al-Quran)
+├── scripts/                    ← build-data.mjs · generate-tajweed.mjs (single-source codegen)
 ├── packages/                   ← reference implementations (7 languages)
 │   ├── quran-engine-js/        JavaScript / TypeScript (reference, full tajweed detector)
 │   ├── quran-engine-py/        Python
@@ -70,6 +75,17 @@ Each layer stands alone and can be adopted independently:
 6. **Ayah search** — Arabic/English, references, boolean → [docs/06](docs/06-ayah-search.md)
 7. **Surah sorting** — sort & filter the 114 → [docs/07](docs/07-surah-sorting.md)
 8. **Caching** — offline downloads → [docs/08](docs/08-caching.md)
+
+**Plus:** bundled Quran [**fonts**](docs/fonts.md) (Uthmani / Qiraat / Indopak), an [**Arabic-alphabet**](docs/arabic-alphabet.md)
+reference (letters, tashkeel, waqf signs), and a detailed [**tajweed rules explained**](docs/tajweed-rules-explained.md)
+guide ("what does *idgham* mean?").
+
+### Tajweed: one source of truth
+
+The whole tajweed rule catalogue (colors, trigger letters, meanings) lives in one file —
+[`data/tajweed-rules.json`](data/tajweed-rules.json). Edit it, run `node scripts/generate-tajweed.mjs`, and
+the per-language constants in **all 7 ports** plus [docs/tajweed-rules-reference.md](docs/tajweed-rules-reference.md)
+regenerate together. Change one file → everything updates.
 
 ## Language ports
 
@@ -139,3 +155,14 @@ Quran text is sacred — keep it unmodified.
 
 New language ports, better tajweed accuracy, more data, and examples are all welcome. See
 [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## A note on intent
+
+This project — like the apps it draws from, **[Al-Islam](credits/AL-ISLAM.md)**,
+**[Al-Adhan](credits/AL-ADHAN.md)**, and **[Al-Quran](credits/AL-QURAN.md)** — is offered as
+*sadaqah jariyah*: a continuing charity for the benefit of the Muslim community and anyone building tools to
+read, learn, and listen to the Quran. If it helps you, please keep the chain of attribution intact and
+consider contributing improvements back, so the reward continues for everyone who came before you.
+
+> *"When a person dies, all their deeds end except three: a continuing charity (sadaqah jariyah), beneficial
+> knowledge, or a righteous child who prays for them."* — Prophet Muhammad ﷺ (Sahih Muslim)

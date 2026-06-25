@@ -1,0 +1,41 @@
+{
+  "description": "Quran display fonts bundled with the engine. Register the TTF, then render Arabic text with the matching postScriptName. See ../../docs/fonts.md for guidance on which to use.",
+  "fonts": [
+    {
+      "id": "uthmani",
+      "file": "Uthmani.ttf",
+      "label": "Uthmani (Hafs)",
+      "postScriptName": "KFGQPCHAFSUthmanicScript-Regula",
+      "script": "uthmani",
+      "riwayah": "Hafs an Asim",
+      "recommendedForTajweed": true,
+      "credit": "King Fahd Glorious Quran Printing Complex (KFGQPC)",
+      "source": "https://qul.tarteel.ai/resources/font/245",
+      "notes": "Crisp, well-separated letters — best for per-letter tajweed coloring. The default for the bundled Hafs text and the tajweed annotation corpus."
+    },
+    {
+      "id": "qiraat",
+      "file": "Qiraat.ttf",
+      "label": "Qiraat (Qunbul Uthmani)",
+      "postScriptName": "KFGQPCQUMBULUthmanicScript-Regu",
+      "script": "uthmani",
+      "riwayah": "supports non-Hafs qiraat",
+      "recommendedForTajweed": false,
+      "credit": "King Fahd Glorious Quran Printing Complex (KFGQPC)",
+      "source": "https://github.com/thetruetruth/quran-data-kfgqpc",
+      "notes": "Uthmani-style font that renders glyphs/marks present in the other qiraat (Warsh, Qaloon, Duri, Susi, Bazzi, Qunbul, Shubah) that the standard Uthmani.ttf does not support. Use it to display the data/qiraat/* readings. Trade-off: its marks tend to blend/overlap, so per-letter tajweed coloring is less clean than with Uthmani.ttf."
+    },
+    {
+      "id": "indopak",
+      "file": "Indopak.ttf",
+      "label": "Indopak (Nastaliq)",
+      "postScriptName": "Al_Mushaf",
+      "script": "indopak",
+      "riwayah": "Hafs an Asim",
+      "recommendedForTajweed": false,
+      "credit": "Ayman Siddiqui and R. Siddiqua (Al Mushaf / Urdu Nigar)",
+      "source": "https://qul.tarteel.ai/resources/font/242",
+      "notes": "The Indo-Pak / South-Asian Nastaliq writing style, familiar to readers in the Indian subcontinent. Different orthographic conventions from the Uthmani script; the bundled per-ayah UTF-16 tajweed offsets are computed against the Uthmani text, so coloring is intended for the Uthmani fonts."
+    }
+  ]
+}
