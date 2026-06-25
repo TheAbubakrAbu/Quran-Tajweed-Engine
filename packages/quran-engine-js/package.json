@@ -1,0 +1,36 @@
+{
+  "name": "@quran-tajweed-engine/core",
+  "version": "0.1.0",
+  "description": "Framework-agnostic Quran engine: Quran text, tajweed coloring, juz/page, recitations, search, sorting and caching. Pure ESM JavaScript with JSDoc/TS types and zero runtime dependencies.",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": "./src/index.js",
+    "./node": "./src/node.js"
+  },
+  "files": [
+    "src",
+    "index.d.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "keywords": [
+    "quran",
+    "tajweed",
+    "islam",
+    "arabic",
+    "qiraat",
+    "recitation",
+    "mushaf"
+  ],
+  "license": "MIT",
+  "author": "Reference port of Al-Islam by Abubakr Elmallah",
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false
+}

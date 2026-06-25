@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "quran-engine"
+version = "0.1.0"
+description = "Framework-agnostic Quran engine: text, tajweed, juz/page, recitations, search, sorting, caching."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+keywords = ["quran", "tajweed", "islam", "arabic", "qiraat", "recitation", "mushaf"]
+
+[project.urls]
+Homepage = "https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars"
+
+[tool.hatch.build.targets.wheel]
+packages = ["quran_engine"]

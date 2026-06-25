@@ -1,0 +1,14 @@
+[package]
+name = "quran-engine"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Rust port of the Quran Tajweed Engine — a data-first, framework-agnostic Quran engine (text, juz/page, audio URLs, sorting, search, tajweed spans)."
+repository = "https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars"
+readme = "README.md"
+keywords = ["quran", "tajweed", "arabic", "islam"]
+categories = ["text-processing"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

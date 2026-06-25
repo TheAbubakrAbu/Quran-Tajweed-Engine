@@ -1,0 +1,13 @@
+name: quran_engine
+description: >-
+  Framework-agnostic Quran engine for Dart & Flutter. A thin, idiomatic wrapper
+  over the JSON corpus in the Quran Tajweed Engine repo: surahs/ayahs, tajweed
+  colors, juz/page navigation, audio URLs, sorting, and reference parsing.
+version: 0.1.0
+repository: https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars
+
+environment:
+  sdk: ">=2.18.0 <4.0.0"
+
+dev_dependencies:
+  test: ^1.24.0

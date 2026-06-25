@@ -1,0 +1,383 @@
+{
+  "$schema": "./tajweed-rules.schema.md",
+  "description": "Tajweed rule catalogue (categories, canonical colors, trigger letters) extracted from Al-Islam's TajweedRules.swift. See docs/02-tajweed.md for the full detection engine specification.",
+  "sections": [
+    {
+      "id": "silents",
+      "title": "Sukūn — Silent"
+    },
+    {
+      "id": "ghunnah",
+      "title": "Ghunnah — Nasal"
+    },
+    {
+      "id": "sifaat",
+      "title": "Sifaat — Articulation"
+    },
+    {
+      "id": "madd",
+      "title": "Madd — Elongation"
+    }
+  ],
+  "categories": [
+    {
+      "id": "lamShamsiyah",
+      "section": "silents",
+      "sortRank": 0,
+      "colorHex": "#B4B4B4",
+      "englishTitle": "Solar Lam",
+      "arabicTitle": "لَامٌ شَمسِيَّة",
+      "transliteration": "Laam Shamiyyah",
+      "countLabel": null,
+      "applicableLetters": null,
+      "shortDescription": "Lam of al- is silent before sun letters."
+    },
+    {
+      "id": "droppedLetter",
+      "section": "silents",
+      "sortRank": 1,
+      "colorHex": "#B4B4B4",
+      "englishTitle": "Written but Not Pronounced",
+      "arabicTitle": "حَرفٌ غَيرُ مَنطُوق",
+      "transliteration": "Harf Ghayr Mantuq",
+      "countLabel": null,
+      "applicableLetters": null,
+      "shortDescription": "Letter written in the script but dropped in recitation."
+    },
+    {
+      "id": "hamzatWaslSilent",
+      "section": "silents",
+      "sortRank": 2,
+      "colorHex": "#B4B4B4",
+      "englishTitle": "Joining Hamzah",
+      "arabicTitle": "هَمزَةُ الوَصل",
+      "transliteration": "Hamzat al-Wasl",
+      "countLabel": null,
+      "applicableLetters": null,
+      "shortDescription": "Start-only hamzah; dropped when connecting."
+    },
+    {
+      "id": "idghamBilaGhunnah",
+      "section": "silents",
+      "sortRank": 3,
+      "colorHex": "#B4B4B4",
+      "englishTitle": "Merge Without Ghunnah",
+      "arabicTitle": "إِدغَامٌ بِلَا غُنَّة",
+      "transliteration": "Idgham Bilaa Ghunnah",
+      "countLabel": null,
+      "applicableLetters": "When noon (ن) or tanween comes before: ل، ر",
+      "shortDescription": "Silent-style merge into next without nasal sound."
+    },
+    {
+      "id": "idghamGhunnah",
+      "section": "ghunnah",
+      "sortRank": 5,
+      "colorHex": "#45BC73",
+      "englishTitle": "Merge with Ghunnah",
+      "arabicTitle": "إِدغَامٌ بِغُنَّةٍ",
+      "transliteration": "Idgham Bighunnah",
+      "countLabel": "2 counts",
+      "applicableLetters": "When a noon sound (ن or tanween) comes before: ي، ن، م، و",
+      "shortDescription": "Merge into the next letter with nasal."
+    },
+    {
+      "id": "generalGhunnah",
+      "section": "ghunnah",
+      "sortRank": 4,
+      "colorHex": "#45BC73",
+      "englishTitle": "Shaddah Ghunnah",
+      "arabicTitle": "غُنَّة عَامَّة",
+      "transliteration": "Ghunnah Aammah",
+      "countLabel": "2 counts",
+      "applicableLetters": "Noon or meem with shaddah; also used on selected nasal merge targets",
+      "shortDescription": "Noon/meem with shaddah nasal sound."
+    },
+    {
+      "id": "ikhfaaLight",
+      "section": "ghunnah",
+      "sortRank": 6,
+      "colorHex": "#45BC73",
+      "englishTitle": "Hidden Letter (Light)",
+      "arabicTitle": "إِخْفَاء مُرَقَّق",
+      "transliteration": "Ikhfaa (Light)",
+      "countLabel": "2 counts",
+      "applicableLetters": "When a noon sound (ن or tanween) comes before lighter letters: ت، ث، ج، د، ذ، ز، س، ش، ف، ك",
+      "shortDescription": "Lightly hide noon or tanween with nasal."
+    },
+    {
+      "id": "ikhfaaHeavy",
+      "section": "ghunnah",
+      "sortRank": 7,
+      "colorHex": "#1FAA94",
+      "englishTitle": "Hidden Letter (Heavy)",
+      "arabicTitle": "إِخْفَاء مُفَخَّم",
+      "transliteration": "Ikhfaa (Heavy)",
+      "countLabel": "2 counts",
+      "applicableLetters": "When a noon sound (ن or tanween) comes before heavier letters: ص، ض، ط، ظ، ق",
+      "shortDescription": "Heavily hide noon or tanween with nasal."
+    },
+    {
+      "id": "iqlaab",
+      "section": "ghunnah",
+      "sortRank": 8,
+      "colorHex": "#75B233",
+      "englishTitle": "Noon into Meem",
+      "arabicTitle": "إِقلَاب",
+      "transliteration": "Iqlaab",
+      "countLabel": "2 counts",
+      "applicableLetters": "When noon (ن) or tanween comes before: ب (changes to meem sound)",
+      "shortDescription": "Noon/tanween turns to meem before baa."
+    },
+    {
+      "id": "qalqalah",
+      "section": "sifaat",
+      "sortRank": 9,
+      "colorHex": "#78CCF9",
+      "englishTitle": "Bounce Letter",
+      "arabicTitle": "قَلقَلَة",
+      "transliteration": "Qalqalah",
+      "countLabel": null,
+      "applicableLetters": "Letters that bounce when they have sukoon or are stopped on: ق، ط، ب، ج، د",
+      "shortDescription": "Qutb jad letters bounce on sukoon/stop."
+    },
+    {
+      "id": "tafkhim",
+      "section": "sifaat",
+      "sortRank": 10,
+      "colorHex": "#3B85C2",
+      "englishTitle": "Heavy Letter",
+      "arabicTitle": "تَفخِيم",
+      "transliteration": "Tafkheem",
+      "countLabel": null,
+      "applicableLetters": "Letters pronounced heavily (elevated tongue): خ، ص، ض، غ، ط، ق، ظ",
+      "shortDescription": "Heavy, full-mouth pronunciation."
+    },
+    {
+      "id": "maddNatural",
+      "section": "madd",
+      "sortRank": 11,
+      "colorHex": "#B98C2F",
+      "englishTitle": "Madd Letters (2 Counts)",
+      "arabicTitle": "مَدٌّ طَبِيعِي",
+      "transliteration": "Madd Tabee Letters",
+      "countLabel": "2 counts",
+      "applicableLetters": "Occurs on madd letters: ا، و، ي (normal 2-count elongation)",
+      "shortDescription": "From full vowel letters: alif, waw, or yaa."
+    },
+    {
+      "id": "maddNaturalMiniature",
+      "section": "madd",
+      "sortRank": 12,
+      "colorHex": "#B98C2F",
+      "englishTitle": "Tiny Madd Marks",
+      "arabicTitle": "مَدٌّ طَبِيعِي صَغِير",
+      "transliteration": "Madd Tabee Tiny Marks",
+      "countLabel": "2 counts",
+      "applicableLetters": "Occurs on miniature madd marks: alif sagheerah, waw sagheerah, ya sagheerah",
+      "shortDescription": "From tiny vowel diacritics: small alif, waw, or yaa."
+    },
+    {
+      "id": "maddSukoon",
+      "section": "madd",
+      "sortRank": 13,
+      "colorHex": "#E37935",
+      "englishTitle": "Ending Madd",
+      "arabicTitle": "مَدّ الوَقْف",
+      "transliteration": "Ending Madd",
+      "countLabel": "2, 4, or 6 counts",
+      "applicableLetters": "When stopping creates madd aarid lis-sukoon after ا، و، ي, or madd leen after َ + وۡ / َ + يۡ",
+      "shortDescription": "Stop-based madd, including aarid and leen."
+    },
+    {
+      "id": "maddSeparated",
+      "section": "madd",
+      "sortRank": 15,
+      "colorHex": "#EB51AA",
+      "englishTitle": "Madd Munfasil",
+      "arabicTitle": "مَدٌّ مُنفَصِل",
+      "transliteration": "Madd Munfasil",
+      "countLabel": "2, 4, or 5 counts",
+      "applicableLetters": "When madd letters (ا، و، ي) are followed by hamzah in the next word",
+      "shortDescription": "Madd at word end before next hamzah."
+    },
+    {
+      "id": "maddConnected",
+      "section": "madd",
+      "sortRank": 16,
+      "colorHex": "#D9453E",
+      "englishTitle": "Madd Muttasil",
+      "arabicTitle": "مَدٌّ مُتَّصِل",
+      "transliteration": "Madd Muttasil",
+      "countLabel": "4 or 5 counts",
+      "applicableLetters": "When madd letters (ا، و، ي) are followed by hamzah in the same word",
+      "shortDescription": "Madd letter + hamzah in one word."
+    },
+    {
+      "id": "maddNecessary",
+      "section": "madd",
+      "sortRank": 14,
+      "colorHex": "#AE2517",
+      "englishTitle": "Madd Lazim",
+      "arabicTitle": "مَدٌّ لَازِم",
+      "transliteration": "Madd Laazim",
+      "countLabel": "6 counts",
+      "applicableLetters": "When madd letters (ا، و، ي) are followed by a permanent sukoon or shaddah",
+      "shortDescription": "Fixed required madd due to shaddah after madd."
+    }
+  ],
+  "letterSets": {
+    "heavyBaseLetters": [
+      "خ",
+      "ص",
+      "ض",
+      "ط",
+      "ظ",
+      "غ",
+      "ق"
+    ],
+    "qalqalahLetters": [
+      "ق",
+      "ط",
+      "ب",
+      "ج",
+      "د"
+    ],
+    "sunLetters": [
+      "ت",
+      "ث",
+      "د",
+      "ذ",
+      "ر",
+      "ز",
+      "س",
+      "ش",
+      "ص",
+      "ض",
+      "ط",
+      "ظ",
+      "ل",
+      "ن"
+    ],
+    "alifFollowerLetters": [
+      "ا",
+      "ى"
+    ],
+    "noonTanweenTargetOnlyIdghamLetters": [
+      "ن"
+    ],
+    "noonTanweenSplitIdghamLetters": [
+      "م",
+      "ي",
+      "و"
+    ],
+    "noonTanweenSourceOnlyIdghamLetters": [
+      "ل",
+      "ر"
+    ],
+    "ikhfaaHeavyLetters": [
+      "ص",
+      "ض",
+      "ط",
+      "ظ",
+      "ق"
+    ],
+    "ikhfaaLightLetters": [
+      "ت",
+      "ث",
+      "ج",
+      "د",
+      "ذ",
+      "ز",
+      "س",
+      "ش",
+      "ف",
+      "ك"
+    ]
+  },
+  "muqattaat": {
+    "surahsOpeningMuqattaat": [
+      2,
+      3,
+      7,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      19,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      20,
+      36,
+      38,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      50,
+      68
+    ],
+    "completeAyahMuqattaatSurahs": [
+      2,
+      3,
+      7,
+      19,
+      20,
+      26,
+      28,
+      29,
+      30,
+      31,
+      32,
+      36,
+      40,
+      41,
+      43,
+      44,
+      45,
+      46
+    ],
+    "firstWordOnlyMuqattaatSurahs": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      27,
+      38,
+      50,
+      68
+    ],
+    "note": "Ash-Shura (42) is special-cased: its muqatta'at span ayahs 1 and 2."
+  },
+  "treeDrivenRuleMap": {
+    "madd_2": "maddNatural",
+    "madd_munfasil": "maddSeparated",
+    "madd_muttasil": "maddConnected",
+    "madd_6": "maddNecessary",
+    "madd_246": "maddSukoon",
+    "qalqalah": "qalqalah",
+    "silent": "hamzatWaslSilent",
+    "idghaam_ghunnah": "idghamGhunnah",
+    "idghaam_shafawi": "idghamGhunnah",
+    "idghaam_no_ghunnah": "idghamBilaGhunnah",
+    "idghaam_mutajanisayn": "idghamGhunnah",
+    "idghaam_mutaqaribayn": "idghamGhunnah",
+    "ikhfa": "ikhfaaLight",
+    "ikhfa_shafawi": "ikhfaaLight",
+    "iqlaab": "iqlaab"
+  },
+  "stopBasedCategories": [
+    "maddSukoon"
+  ]
+}

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quran Tajweed Engine — browser demo</title>
+  <!--
+    HOW TO RUN
+    ----------
+    Browsers cannot read the filesystem, so the engine data must be SERVED over
+    HTTP. The data lives at the repo root under /data, and this page fetches it
+    with relative paths (../../data/...). Start a static server FROM THE REPO ROOT:
+
+        cd "<repo root>"
+        python3 -m http.server 8000
+
+    then open:  http://localhost:8000/examples/browser/index.html
+
+    What this demo does:
+      • loads data/tajweed-rules.json + data/reciters.json once,
+      • loads the lightweight data/surahs/index.json for the surah dropdown,
+      • lazily fetches one surah file (data/surahs/NNN.json) when selected,
+      • builds an engine for just that surah with createEngine(),
+      • renders each ayah RTL with tajweed coloring + a play button.
+  -->
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, sans-serif; max-width: 820px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; }
+    h1 { font-size: 1.3rem; }
+    select { font-size: 1rem; padding: .35rem .5rem; }
+    .ayah { border-bottom: 1px solid #8884; padding: 1rem 0; }
+    .ref { font: .8rem/1 monospace; color: #888; }
+    .arabic { font-size: 2rem; direction: rtl; text-align: right; margin: .4rem 0; font-family: "Scheherazade New", "Amiri", "Traditional Arabic", serif; }
+    .translation { color: #666; font-size: .95rem; }
+    button.play { cursor: pointer; font-size: .85rem; margin-top: .4rem; }
+    #status { color: #888; }
+  </style>
+</head>
+<body>
+  <h1>Quran Tajweed Engine — browser demo</h1>
+  <p>
+    <label>Surah:
+      <select id="surahSelect"><option>loading…</option></select>
+    </label>
+  </p>
+  <p id="status">Loading data…</p>
+  <div id="output"></div>
+  <audio id="player" hidden></audio>
+
+  <script type="module">
+    // Import the framework-agnostic engine entry point directly from source.
+    import { createEngine, ayahAudioUrl } from "../../packages/quran-engine-js/src/index.js";
+
+    const DATA = "../../data";
+    const statusEl = document.getElementById("status");
+    const selectEl = document.getElementById("surahSelect");
+    const outputEl = document.getElementById("output");
+    const player = document.getElementById("player");
+
+    const fetchJson = (path) => fetch(path).then((r) => {
+      if (!r.ok) throw new Error(`${path} → HTTP ${r.status} (are you serving from the repo root?)`);
+      return r.json();
+    });
+
+    // "#RRGGBB" → CSS color (the engine already gives hex, so this is a pass-through guard).
+    const colorOf = (span) => span.color || "inherit";
+
+    let tajweedRules, reciters, alafasy;
+    // Cumulative ayah offset per surah id (0-based count of ayahs in all earlier
+    // surahs), built from the full index so the global ayah number is correct even
+    // though each loaded engine only holds a single surah.
+    const cumulativeOffset = new Map();
+
+    async function boot() {
+      // Load the small shared data once: rules, reciters, surah index.
+      const [rules, reciterList, surahIndex] = await Promise.all([
+        fetchJson(`${DATA}/tajweed-rules.json`),
+        fetchJson(`${DATA}/reciters.json`),
+        fetchJson(`${DATA}/surahs/index.json`),
+      ]);
+      tajweedRules = rules;
+      reciters = reciterList;
+      alafasy = reciterList.find((r) => r.name === "Mishary Alafasy");
+
+      let acc = 0;
+      for (const s of surahIndex) { cumulativeOffset.set(s.id, acc); acc += s.numberOfAyahs; }
+
+      // Populate the dropdown.
+      selectEl.innerHTML = "";
+      for (const s of surahIndex) {
+        const opt = document.createElement("option");
+        opt.value = s.id;
+        opt.textContent = `${s.id}. ${s.nameEnglish} — ${s.nameArabic}`;
+        selectEl.appendChild(opt);
+      }
+      selectEl.addEventListener("change", () => loadSurah(Number(selectEl.value)));
+      await loadSurah(1);
+    }
+
+    async function loadSurah(id) {
+      statusEl.textContent = `Loading surah ${id}…`;
+      outputEl.innerHTML = "";
+      const padded = String(id).padStart(3, "0");
+      const surah = await fetchJson(`${DATA}/surahs/${padded}.json`);
+
+      // Build an engine for just this one surah. createEngine only needs `quran`
+      // to be an array of surahs; we pass the rules so spans get colors.
+      const engine = createEngine({
+        quran: [surah],
+        juz: [],
+        reciters,
+        tajweedRules,
+      });
+
+      statusEl.textContent = `${surah.nameEnglish} (${surah.nameArabic}) — ${surah.numberOfAyahs} ayahs`;
+
+      for (const ayah of surah.ayahs) {
+        outputEl.appendChild(renderAyah(engine, surah.id, ayah));
+      }
+    }
+
+    function renderAyah(engine, surahId, ayah) {
+      const wrap = document.createElement("div");
+      wrap.className = "ayah";
+
+      const ref = document.createElement("div");
+      ref.className = "ref";
+      ref.textContent = `${surahId}:${ayah.id}`;
+      wrap.appendChild(ref);
+
+      // Tajweed-colored Arabic, RTL. Spans are non-overlapping and in order;
+      // text between spans is appended uncolored.
+      const arabic = document.createElement("p");
+      arabic.className = "arabic";
+      arabic.dir = "rtl";
+      arabic.lang = "ar";
+      const text = ayah.textArabic;
+      const spans = engine.tajweed(text);
+      let cursor = 0;
+      for (const sp of spans) {
+        if (sp.start > cursor) arabic.appendChild(document.createTextNode(text.slice(cursor, sp.start)));
+        const el = document.createElement("span");
+        el.style.color = colorOf(sp);
+        el.title = sp.category;
+        el.textContent = text.slice(sp.start, sp.end);
+        arabic.appendChild(el);
+        cursor = sp.end;
+      }
+      if (cursor < text.length) arabic.appendChild(document.createTextNode(text.slice(cursor)));
+      wrap.appendChild(arabic);
+
+      const tr = document.createElement("div");
+      tr.className = "translation";
+      tr.textContent = ayah.textEnglishSaheeh;
+      wrap.appendChild(tr);
+
+      // Play button → single-ayah audio via the global ayah number.
+      if (alafasy) {
+        const btn = document.createElement("button");
+        btn.className = "play";
+        btn.textContent = "▶ Play";
+        btn.addEventListener("click", () => {
+          // Use the full-index offset (the single-surah engine doesn't know about
+          // earlier surahs) + the ayah id within the surah.
+          const globalN = cumulativeOffset.get(surahId) + ayah.id;
+          player.src = ayahAudioUrl(alafasy, globalN);
+          player.play();
+        });
+        wrap.appendChild(btn);
+      }
+      return wrap;
+    }
+
+    boot().catch((err) => {
+      statusEl.textContent = `Error: ${err.message}`;
+      console.error(err);
+    });
+  </script>
+</body>
+</html>
