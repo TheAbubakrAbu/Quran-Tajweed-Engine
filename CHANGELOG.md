@@ -55,9 +55,9 @@ The first public version: a complete, framework-agnostic Quran engine.
 - **Single source of truth for tajweed** — `data/tajweed-rules.json` enriched with literal meanings + long
   descriptions; `scripts/generate-tajweed.mjs` regenerates per-language constants (`tajweed-rules.generated.*`)
   in all 7 ports plus `docs/tajweed-rules-reference.md` from that one file.
-- **Per-app credits** (`credits/`) for Al-Islam, Al-Adhan, and Al-Quran, and precise upstream-source
-  attribution (KFGQPC, Risan Bagja Pradana, Global Quran, Quran Foundation, MyIslam, font authors, MP3 Quran,
-  alquran.cloud) in [CREDITS.md](CREDITS.md). Added a *sadaqah jariyah* intent note.
+- Precise upstream-source attribution (KFGQPC, Risan Bagja Pradana, Global Quran, Quran Foundation, MyIslam,
+  font authors, MP3 Quran, alquran.cloud) in [CREDITS.md](CREDITS.md), linking each app's own credits in its
+  repository. Added a *sadaqah jariyah* intent note. (Per-app credits live in each app's own repo.)
 
 ### Known limitations
 - Tajweed detector simplifies full final-`ر` vowel context and muqatta'at lazim-harfi sub-typing

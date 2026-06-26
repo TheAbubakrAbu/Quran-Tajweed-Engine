@@ -1,8 +1,10 @@
 # Credits & data provenance
 
 This engine would not exist without the people and projects below. Please preserve this attribution in
-any redistribution. Per-app credit pages for the three apps this work draws from are in
-[`credits/`](credits/): [Al-Islam](credits/AL-ISLAM.md) · [Al-Adhan](credits/AL-ADHAN.md) · [Al-Quran](credits/AL-QURAN.md).
+any redistribution. Each upstream app keeps its own full credits in its repository —
+[Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars/blob/main/CREDITS.md) ·
+[Al-Adhan](https://github.com/TheAbubakrAbu/Al-Adhan-Prayer-Times/blob/main/CREDITS.md) ·
+[Al-Quran](https://github.com/TheAbubakrAbu/Al-Quran-Beginner-Quran/blob/main/CREDITS.md).
 
 ## Upstream project
 

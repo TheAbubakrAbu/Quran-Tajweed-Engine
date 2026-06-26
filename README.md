@@ -49,7 +49,6 @@ Quran Tajweed Engine/
 │   ├── fonts · arabic-alphabet · tajweed-rules-explained · tajweed-rules-reference
 │   ├── 01-quran … 08-caching   per-feature specifications
 │   └── integration/            web · react-native · flutter · ios · android · server
-├── credits/                    ← per-app credits (Al-Islam, Al-Adhan, Al-Quran)
 ├── scripts/                    ← build-data.mjs · generate-tajweed.mjs (single-source codegen)
 ├── packages/                   ← reference implementations (7 languages)
 │   ├── quran-engine-js/        JavaScript / TypeScript (reference, full tajweed detector)
@@ -158,8 +157,9 @@ New language ports, better tajweed accuracy, more data, and examples are all wel
 
 ## A note on intent
 
-This project — like the apps it draws from, **[Al-Islam](credits/AL-ISLAM.md)**,
-**[Al-Adhan](credits/AL-ADHAN.md)**, and **[Al-Quran](credits/AL-QURAN.md)** — is offered as
+This project — like the apps it draws from, **[Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars)**,
+**[Al-Adhan](https://github.com/TheAbubakrAbu/Al-Adhan-Prayer-Times)**, and
+**[Al-Quran](https://github.com/TheAbubakrAbu/Al-Quran-Beginner-Quran)** — is offered as
 *sadaqah jariyah*: a continuing charity for the benefit of the Muslim community and anyone building tools to
 read, learn, and listen to the Quran. If it helps you, please keep the chain of attribution intact and
 consider contributing improvements back, so the reward continues for everyone who came before you.
