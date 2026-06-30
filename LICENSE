@@ -1,11 +1,6 @@
 MIT License
 
-Copyright (c) 2025 Abubakr Elmallah (Al-Islam | Islamic Pillars)
-Copyright (c) 2026 Quran Tajweed Engine contributors
-
-This project, the Quran Tajweed Engine, repackages data and algorithms from the
-open-source "Al-Islam | Islamic Pillars" application by Abubakr Elmallah. See
-CREDITS.md for full attribution and data provenance.
+Copyright (c) 2026 Abubakr Elmallah
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-NOTE ON THE QURANIC TEXT: The Arabic text of the Holy Quran and its alternate
-readings (qiraat) are sacred and must be preserved without alteration. The
-included English translations (Saheeh International; Dr. Mustafa Khattab, The
-Clear Quran) and surah introductions (Maududi; Ibn Ashur) remain the work of
-their respective authors and publishers. The MIT license above applies to this
-software packaging; consult the respective rights holders for terms governing
-redistribution of the textual content itself.
