@@ -1,10 +1,10 @@
-<a href="https://apps.apple.com/us/app/al-islam-islamic-pillars/id6449729655?platform=iphone">
-  <img src="Logo.png" alt="Logo" width="120" style="border-radius:10px;"/>
-</a>
-
 # Credits & data provenance
 
 This engine would not exist without the people and projects below. Please preserve this attribution in any redistribution. Each upstream app keeps its own full credits in its repository — [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars/blob/main/CREDITS.md) · [Al-Adhan](https://github.com/TheAbubakrAbu/Al-Adhan-Prayer-Times/blob/main/CREDITS.md) · [Al-Quran](https://github.com/TheAbubakrAbu/Al-Quran-Beginner-Quran/blob/main/CREDITS.md).
+
+<a href="https://apps.apple.com/us/app/al-islam-islamic-pillars/id6449729655?platform=iphone">
+  <img src="Logo.png" alt="Logo" width="120" style="border-radius:10px;"/>
+</a>
 
 ## Upstream project
 

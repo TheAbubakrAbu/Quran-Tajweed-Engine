@@ -1,12 +1,12 @@
-<a href="https://apps.apple.com/us/app/al-islam-islamic-pillars/id6449729655?platform=iphone">
-  <img src="Logo.png" alt="Logo" width="120" style="border-radius:10px;"/>
-</a>
-
 # Quran Tajweed Engine
 
 **An open-source, offline-first, framework-agnostic Quran engine.** Complete Quran text, *correct* pre-computed tajweed coloring for every ayah, juz/page navigation, surah & ayah recitations, full-text search, sorting, and offline caching — shipped as **portable data + precise specifications + reference implementations in 7 languages**, so anyone can build a Quran app in *any* language or framework: iOS, Android, web, React Native, Flutter, Node, Deno, Bun, Python, Go, Rust — whatever you use. No network required; everything ships in the box.
 
 > Data and algorithms are extracted, with attribution, from the open-source **[Al-Islam | Islamic Pillars](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars)** app by **Abubakr Elmallah**. This repository repackages them as a standalone, reusable engine. See [CREDITS.md](CREDITS.md).
+
+<a href="https://apps.apple.com/us/app/al-islam-islamic-pillars/id6449729655?platform=iphone">
+  <img src="Logo.png" alt="Logo" width="120" style="border-radius:10px;"/>
+</a>
 
 ## At a glance
 
