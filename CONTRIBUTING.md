@@ -1,12 +1,10 @@
 # Contributing
 
-Thank you for helping make the Quran more accessible. Contributions of all kinds are welcome —
-bug fixes, new language ports, better tajweed accuracy, more data, docs, and examples.
+Thank you for helping make the Quran more accessible. Contributions of all kinds are welcome — bug fixes, new language ports, better tajweed accuracy, more data, docs, and examples.
 
 ## Ground rules
 
-1. **Never alter the Quranic Arabic text.** `quran.json` and `qiraat/*` are sacred and shipped verbatim.
-   Fixes to the text must come from an authoritative source and be flagged clearly.
+1. **Never alter the Quranic Arabic text.** `quran.json` and `qiraat/*` are sacred and shipped verbatim. Fixes to the text must come from an authoritative source and be flagged clearly.
 2. **Keep attribution intact.** Preserve [CREDITS.md](CREDITS.md) and the data provenance.
 3. **Data-first.** Prefer adding data + a spec over hard-coding behavior in one port.
 4. **Every port follows [docs/PORTING.md](docs/PORTING.md)** and ships a test asserting the canonical cases.
@@ -20,11 +18,9 @@ bug fixes, new language ports, better tajweed accuracy, more data, docs, and exa
 ### Add a new language port
 1. Read [docs/PORTING.md](docs/PORTING.md) — the full contract.
 2. Create `packages/quran-engine-<lang>/`.
-3. Implement: Load + Quran + Tajweed (via the annotation corpus) + JuzPage + audio URLs + sorting +
-   reference parsing. Search and caching are "extended" (nice to have).
+3. Implement: Load + Quran + Tajweed (via the annotation corpus) + JuzPage + audio URLs + sorting + reference parsing. Search and caching are "extended" (nice to have).
 4. Use the pre-computed tajweed corpus (strategy A) unless you have a reason to port the detector.
-5. Ship a test asserting the canonical cases (totalAyahs 6236, the audio URLs, juz boundaries,
-   sort order, `2:255` parsing, tajweed UTF-16 slice reconstruction). See any existing port's test.
+5. Ship a test asserting the canonical cases (totalAyahs 6236, the audio URLs, juz boundaries, sort order, `2:255` parsing, tajweed UTF-16 slice reconstruction). See any existing port's test.
 6. Add a package `README.md` and link it from the root README + getting-started.
 
 ### Improve tajweed accuracy
@@ -33,8 +29,7 @@ bug fixes, new language ports, better tajweed accuracy, more data, docs, and exa
 - After changing it, regenerate the corpus: `node scripts/build-data.mjs`, and note the change in the changelog.
 
 ### Add data
-- New translation, tafsir, word-by-word, audio source, etc.: add a JSON file under `/data`, document its
-  schema in a new `docs/` page, and surface it in the ports. Keep files reasonably sized (consider per-surah splits).
+- New translation, tafsir, word-by-word, audio source, etc.: add a JSON file under `/data`, document its schema in a new `docs/` page, and surface it in the ports. Keep files reasonably sized (consider per-surah splits).
 
 ## Development
 
@@ -52,5 +47,4 @@ bug fixes, new language ports, better tajweed accuracy, more data, docs, and exa
 
 ## Reporting issues
 
-Include the input (surah:ayah or query), what you expected, what you got, and which port/version. For
-tajweed, paste the ayah and the spans you received.
+Include the input (surah:ayah or query), what you expected, what you got, and which port/version. For tajweed, paste the ayah and the spans you received.

@@ -1,7 +1,6 @@
 # 04 · Surah recitations (full-surah audio)
 
-Stream a whole surah from a reciter. URLs are built from the reciter directory in
-[`data/reciters.json`](../data/reciters.json) (62 reciters across 8 riwayat).
+Stream a whole surah from a reciter. URLs are built from the reciter directory in [`data/reciters.json`](../data/reciters.json) (62 reciters across 8 riwayat).
 
 ## Reciter schema
 
@@ -23,8 +22,7 @@ Stream a whole surah from a reciter. URLs are built from the reciter directory i
 surahAudioUrl(reciter, surahNumber) = reciter.surahLink + zeroPad3(surahNumber) + ".mp3"
 ```
 
-`surahNumber` is zero-padded to **3 digits** (`1 → "001"`, `57 → "057"`, `114 → "114"`). `surahLink`
-already ends with `/`. Valid range `1..114`.
+`surahNumber` is zero-padded to **3 digits** (`1 → "001"`, `57 → "057"`, `114 → "114"`). `surahLink` already ends with `/`. Valid range `1..114`.
 
 ```js
 import { surahAudioUrl } from "@quran-tajweed-engine/core";
@@ -43,16 +41,11 @@ engine.reciters.byId(id);              // exact lookup
 
 ## Riwayat available
 
-Default **Hafs an Asim**, plus **Warsh**, **Qaloon**, **ad-Duri**, **as-Susi**, **al-Bazzi**, **Qunbul**,
-**Shubah**, **Khalaf**. Groups in the data: `Minshawi`, `Murattal`, `Mujawwad`, `Muallim`, and the
-per-riwayah groups.
+Default **Hafs an Asim**, plus **Warsh**, **Qaloon**, **ad-Duri**, **as-Susi**, **al-Bazzi**, **Qunbul**, **Shubah**, **Khalaf**. Groups in the data: `Minshawi`, `Murattal`, `Mujawwad`, `Muallim`, and the per-riwayah groups.
 
 ## Caveats
 
-- A few rows historically embed a full per-file URL in `surahLink` (ending in `.mp3`). Normalize any
-  reciter table you author so `surahLink` is always a directory ending in `/`; `withSurahFeed()` filters
-  out the malformed `.mp3`-ending entries.
-- All audio is hosted on `mp3quran.net` CDNs. The engine only builds URLs — playback, prefetch, and
-  gapless hand-off are the host app's concern (see doc 08 for caching).
+- A few rows historically embed a full per-file URL in `surahLink` (ending in `.mp3`). Normalize any reciter table you author so `surahLink` is always a directory ending in `/`; `withSurahFeed()` filters out the malformed `.mp3`-ending entries.
+- All audio is hosted on `mp3quran.net` CDNs. The engine only builds URLs — playback, prefetch, and gapless hand-off are the host app's concern (see doc 08 for caching).
 
 Reference: [`src/audio.js`](../packages/quran-engine-js/src/audio.js).

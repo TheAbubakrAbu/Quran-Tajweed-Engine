@@ -1,7 +1,6 @@
 # 01 · Quran (text, translations, qiraat)
 
-The foundation. Everything else builds on this data. The engine is **data-first**: the canonical
-artifact is the JSON in [`/data`](../data), and any language that can parse JSON can use it.
+The foundation. Everything else builds on this data. The engine is **data-first**: the canonical artifact is the JSON in [`/data`](../data), and any language that can parse JSON can use it.
 
 ## Data files
 
@@ -43,8 +42,7 @@ Top-level is a JSON **array** of surah objects:
 }
 ```
 
-The **global ayah number** (1..6236) — used by the ayah-audio CDN and as a stable verse key — is the
-cumulative ayah index across the whole mushaf:
+The **global ayah number** (1..6236) — used by the ayah-audio CDN and as a stable verse key — is the cumulative ayah index across the whole mushaf:
 
 ```
 globalAyahNumber(surah, ayah) = (sum of numberOfAyahs for all surahs before `surah`) + ayah
@@ -65,9 +63,7 @@ Each qiraah file is an **object** keyed by surah id (as a string), mapping to an
 }
 ```
 
-To display an ayah in a non-default reading, look up `qiraat[riwayah][surahId][ayahIndex].text`,
-falling back to `textArabic` (Hafs) when no override exists. The riwayah keys used by the JS package
-are: `warsh`, `qaloon`, `duri`, `susi`, `buzzi`, `qunbul`, `shubah`.
+To display an ayah in a non-default reading, look up `qiraat[riwayah][surahId][ayahIndex].text`, falling back to `textArabic` (Hafs) when no override exists. The riwayah keys used by the JS package are: `warsh`, `qaloon`, `duri`, `susi`, `buzzi`, `qunbul`, `shubah`.
 
 ## `surah-info.json` schema
 
@@ -75,8 +71,7 @@ are: `warsh`, `qaloon`, `duri`, `susi`, `buzzi`, `qunbul`, `shubah`.
 { "id": 1, "sources": [ { "name": "Maududi", "contents": "## Name\n\nThis Surah is named ..." } ] }
 ```
 
-`contents` is pre-converted Markdown (`##` headings + paragraphs) so it renders without HTML parsing.
-Source names present: `Maududi`, `Ibn Ashur`, and `ابن عاشور` (Ibn Ashur, Arabic).
+`contents` is pre-converted Markdown (`##` headings + paragraphs) so it renders without HTML parsing. Source names present: `Maududi`, `Ibn Ashur`, and `ابن عاشور` (Ibn Ashur, Arabic).
 
 ## Reference implementation
 
@@ -95,6 +90,4 @@ engine.quran.info(1)[0].contents;                  // Maududi intro (Markdown)
 
 ## Provenance
 
-See [CREDITS.md](../CREDITS.md). Arabic text is the Hafs an Asim Uthmani script; English translations
-are Saheeh International and Dr. Mustafa Khattab's *The Clear Quran*. All data is extracted, unmodified,
-from the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars) app.
+See [CREDITS.md](../CREDITS.md). Arabic text is the Hafs an Asim Uthmani script; English translations are Saheeh International and Dr. Mustafa Khattab's *The Clear Quran*. All data is extracted, unmodified, from the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars) app.

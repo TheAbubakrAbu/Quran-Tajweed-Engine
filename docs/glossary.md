@@ -1,7 +1,6 @@
 # Glossary
 
-Plain-English definitions of every Quran, recitation, and tajweed term used in this engine. No prior
-knowledge assumed. (Transliterations are approximate; Arabic is read right-to-left.)
+Plain-English definitions of every Quran, recitation, and tajweed term used in this engine. No prior knowledge assumed. (Transliterations are approximate; Arabic is read right-to-left.)
 
 ## Quran structure
 
@@ -84,8 +83,7 @@ These are the 17 categories the engine detects. Colors are in `data/tajweed-rule
 | **Madd Aarid / Leen (Stop madd)** (مد عارض للسكون) | Extra stretch that appears only when you **stop** at a word's end. | 2/4/6 |
 | **Madd Lazim (Necessary)** (مد لازم) | An obligatory fixed 6-count stretch (madd followed by a permanent sukoon/shadda). | 6 |
 
-> "Counts" (*harakat*) are the timing unit of tajweed — roughly the time to say one short vowel. They keep
-> recitation rhythmically consistent. The engine **colors** these rules; it doesn't enforce timing.
+> "Counts" (*harakat*) are the timing unit of tajweed — roughly the time to say one short vowel. They keep recitation rhythmically consistent. The engine **colors** these rules; it doesn't enforce timing.
 
 ## Engine terms
 

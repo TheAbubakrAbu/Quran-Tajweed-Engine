@@ -1,13 +1,8 @@
 # QuranEngine (Swift)
 
-The Swift port of the open-source **Quran Tajweed Engine**. A thin, idiomatic wrapper over the
-JSON corpus in [`../../data`](../../data) plus a handful of pure functions — no network, database,
-or framework required.
+The Swift port of the open-source **Quran Tajweed Engine**. A thin, idiomatic wrapper over the JSON corpus in [`../../data`](../../data) plus a handful of pure functions — no network, database, or framework required.
 
-This package follows the shared contract in [`../../docs/PORTING.md`](../../docs/PORTING.md); the
-behaviour matches the reference JS implementation in
-[`../quran-engine-js`](../quran-engine-js). See `../../docs/01-quran.md` … `08-caching.md` for the
-per-feature specs.
+This package follows the shared contract in [`../../docs/PORTING.md`](../../docs/PORTING.md); the behaviour matches the reference JS implementation in [`../quran-engine-js`](../quran-engine-js). See `../../docs/01-quran.md` … `08-caching.md` for the per-feature specs.
 
 ## Requirements
 
@@ -77,21 +72,13 @@ For an app, bundle the JSON as assets and pass the bundle URL as `dataDirectory:
 
 ## Tajweed strategy
 
-This port uses **strategy (A)** from the porting guide: it loads `tajweed-annotations.json` and
-maps each annotation's `rule` to a color from `tajweed-rules.json` → `categories[].colorHex`.
-Annotation `start`/`end` are UTF-16 code-unit offsets; Swift slices them natively via
-`String.Index(utf16Offset:in:)`. Each returned `TajweedSpan.text` is the reconstructed UTF-16 slice
-and equals the slice the reference engine produces (asserted in the tests).
+This port uses **strategy (A)** from the porting guide: it loads `tajweed-annotations.json` and maps each annotation's `rule` to a color from `tajweed-rules.json` → `categories[].colorHex`. Annotation `start`/`end` are UTF-16 code-unit offsets; Swift slices them natively via `String.Index(utf16Offset:in:)`. Each returned `TajweedSpan.text` is the reconstructed UTF-16 slice and equals the slice the reference engine produces (asserted in the tests).
 
 ## Search scope
 
-The core search path is implemented: cleaned-blob substring + phrase-prefix token matching, mushaf
-order, digit-rejection for verse text, optional "ignore silent letters" Arabic variant, and surah
-search by name / number / `2:255` reference / makkan-madani.
+The core search path is implemented: cleaned-blob substring + phrase-prefix token matching, mushaf order, digit-rejection for verse text, optional "ignore silent letters" Arabic variant, and surah search by name / number / `2:255` reference / makkan-madani.
 
-**Omitted:** the boolean grammar (`& | ! # ^ % $`). Per the porting guide's "minimal port"
-allowance, queries with those operators are treated as plain text rather than parsed as a boolean
-expression.
+**Omitted:** the boolean grammar (`& | ! # ^ % $`). Per the porting guide's "minimal port" allowance, queries with those operators are treated as plain text rather than parsed as a boolean expression.
 
 ## Tests
 
@@ -99,12 +86,8 @@ expression.
 swift test
 ```
 
-The test target asserts the canonical cases from `docs/PORTING.md` (totalAyahs == 6236, global ayah
-numbers, audio URLs, juz boundaries, sorting, reference parsing) and verifies that every tajweed
-span's reconstructed UTF-16 slice equals its recorded text.
+The test target asserts the canonical cases from `docs/PORTING.md` (totalAyahs == 6236, global ayah numbers, audio URLs, juz boundaries, sorting, reference parsing) and verifies that every tajweed span's reconstructed UTF-16 slice equals its recorded text.
 
 ## License & attribution
 
-MIT. All data and algorithms are extracted from the open-source **Al-Islam | Islamic Pillars** app
-by **Abubakr Elmallah**. Please preserve this attribution — see
-[`../../CREDITS.md`](../../CREDITS.md) and [`../../LICENSE`](../../LICENSE).
+MIT. All data and algorithms are extracted from the open-source **Al-Islam | Islamic Pillars** app by **Abubakr Elmallah**. Please preserve this attribution — see [`../../CREDITS.md`](../../CREDITS.md) and [`../../LICENSE`](../../LICENSE).

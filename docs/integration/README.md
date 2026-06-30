@@ -1,11 +1,8 @@
 # Integration guides
 
-Platform-by-platform guides for dropping the **Quran Tajweed Engine** into a real app. Each guide covers
-install/setup, a minimal working sample, a tajweed-rendering snippet, an audio snippet, and links back to
-the per-feature specs.
+Platform-by-platform guides for dropping the **Quran Tajweed Engine** into a real app. Each guide covers install/setup, a minimal working sample, a tajweed-rendering snippet, an audio snippet, and links back to the per-feature specs.
 
-All of them read the same canonical JSON in [`/data`](../../data) — see
-[getting started](../00-getting-started.md) and the [architecture](../architecture.md) for the big picture.
+All of them read the same canonical JSON in [`/data`](../../data) — see [getting started](../00-getting-started.md) and the [architecture](../architecture.md) for the big picture.
 
 | Guide | Stack | Package |
 |---|---|---|

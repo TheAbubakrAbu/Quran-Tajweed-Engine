@@ -1,13 +1,10 @@
 # Getting started
 
-Welcome. This is a **complete Quran engine** you can drop into any app, in any language. This page gets
-you from zero to "I'm reading colored Quran text and playing audio" in a few minutes.
+Welcome. This is a **complete Quran engine** you can drop into any app, in any language. This page gets you from zero to "I'm reading colored Quran text and playing audio" in a few minutes.
 
 ## The one big idea
 
-**The data is the engine.** Everything lives as plain JSON in [`/data`](../data). Any language that can
-read JSON can use it. The code in [`/packages`](../packages) is just convenient, idiomatic wrappers around
-that data — use one if it fits your stack, or read the data directly and follow the specs in this folder.
+**The data is the engine.** Everything lives as plain JSON in [`/data`](../data). Any language that can read JSON can use it. The code in [`/packages`](../packages) is just convenient, idiomatic wrappers around that data — use one if it fits your stack, or read the data directly and follow the specs in this folder.
 
 ```
 ┌─────────────┐   reads    ┌──────────────────────────┐   you build   ┌──────────────┐
@@ -95,8 +92,7 @@ Plus **[caching](08-caching.md)** for offline audio.
 
 ## New to the terminology?
 
-If words like *ayah, juz, riwayah, ghunnah, ikhfaa, madd* are unfamiliar, skim the
-**[glossary](glossary.md)** first — it explains every term in plain English.
+If words like *ayah, juz, riwayah, ghunnah, ikhfaa, madd* are unfamiliar, skim the **[glossary](glossary.md)** first — it explains every term in plain English.
 
 ## Next steps
 

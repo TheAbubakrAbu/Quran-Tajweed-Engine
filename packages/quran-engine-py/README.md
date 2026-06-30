@@ -1,8 +1,6 @@
 # quran-engine (Python)
 
-Python port of the [Quran Tajweed Engine](../../README.md). Pure standard library — no dependencies.
-Reads the canonical JSON in [`../../data`](../../data) and follows the shared
-[porting contract](../../docs/PORTING.md).
+Python port of the [Quran Tajweed Engine](../../README.md). Pure standard library — no dependencies. Reads the canonical JSON in [`../../data`](../../data) and follows the shared [porting contract](../../docs/PORTING.md).
 
 ## Install / use
 
@@ -44,14 +42,11 @@ sort_surahs(engine.quran.all(), "ayahs", "descending")[0].id   # 2
 
 ## Modules
 
-`quran` · `juz_page` · `tajweed` · `audio` · `search` · `sorting` · `cache` · `text` — one per feature,
-mirroring the JS package and the `docs/` specs.
+`quran` · `juz_page` · `tajweed` · `audio` · `search` · `sorting` · `cache` · `text` — one per feature, mirroring the JS package and the `docs/` specs.
 
 ## Tajweed strategy
 
-This port uses **strategy (A)** from the porting guide: it loads the pre-computed annotation corpus
-(`data/tajweed-annotations.json`) and maps each rule to its color. Annotation offsets are UTF-16, so the
-port converts them with `quran_engine.text.utf16_slice` (Python strings are code-point indexed).
+This port uses **strategy (A)** from the porting guide: it loads the pre-computed annotation corpus (`data/tajweed-annotations.json`) and maps each rule to its color. Annotation offsets are UTF-16, so the port converts them with `quran_engine.text.utf16_slice` (Python strings are code-point indexed).
 
 ## Tests
 

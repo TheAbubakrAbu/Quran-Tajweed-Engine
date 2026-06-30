@@ -1,7 +1,6 @@
 # 07 · Surah sorting & filtering
 
-Order the 114 surahs by different keys, and filter by revelation place. Mirrors
-`orderedQuranSurahs` / `supportsSurahSortDirection` in `QuranView.swift`.
+Order the 114 surahs by different keys, and filter by revelation place. Mirrors `orderedQuranSurahs` / `supportsSurahSortDirection` in `QuranView.swift`.
 
 ## Sort modes
 
@@ -14,8 +13,7 @@ Order the 114 surahs by different keys, and filter by revelation place. Mirrors
 | `words` | `wordCount` | yes |
 | `letters` | `letterCount` | yes |
 
-The reference app exposes additional browse buckets (`juz`, `khatm`, `sajdah`, `muqattaat`, `pages`) that
-are groupings rather than pure sorts; the JS port implements the six comparator modes above.
+The reference app exposes additional browse buckets (`juz`, `khatm`, `sajdah`, `muqattaat`, `pages`) that are groupings rather than pure sorts; the JS port implements the six comparator modes above.
 
 ## Rules
 

@@ -1,8 +1,6 @@
 # Flutter
 
-Use **`quran-engine-dart`** in a Flutter app. It's a thin, data-driven wrapper over the JSON in
-[`/data`](../../data) — no network, database, or framework at runtime (audio is just URL strings). Tajweed
-uses the pre-computed annotation corpus (strategy A), so coloring is exact and dependency-free.
+Use **`quran-engine-dart`** in a Flutter app. It's a thin, data-driven wrapper over the JSON in [`/data`](../../data) — no network, database, or framework at runtime (audio is just URL strings). Tajweed uses the pre-computed annotation corpus (strategy A), so coloring is exact and dependency-free.
 
 ## Setup
 
@@ -28,8 +26,7 @@ flutter:
 
 ## Minimal working example (load via `rootBundle` + `Engine.fromJson`)
 
-In Flutter you can't use `dart:io` to walk the filesystem, so decode the bundled assets and feed the maps
-into `Engine.fromJson`:
+In Flutter you can't use `dart:io` to walk the filesystem, so decode the bundled assets and feed the maps into `Engine.fromJson`:
 
 ```dart
 import 'dart:convert';
@@ -56,14 +53,11 @@ engine.quran.ayah(2, 255)!.textArabic;        // Ayat al-Kursi
 engine.globalAyahNumber(2, 255);              // global ayah number
 ```
 
-Build the engine once (e.g. in `main()` before `runApp`, or behind a `FutureBuilder` / provider) and reuse
-it — decoding `quran.json` is the heaviest step.
+Build the engine once (e.g. in `main()` before `runApp`, or behind a `FutureBuilder` / provider) and reuse it — decoding `quran.json` is the heaviest step.
 
 ## Tajweed rendering with `RichText` / `TextSpan`
 
-`engine.tajweedSpans(surah, ayah)` returns `List<TajweedSpan>`, each with `text`, `rule`, and `colorHex`
-(e.g. `"#AE2517"`). The spans are non-overlapping and in order, but only cover the *colored* parts — fill
-the gaps with the surrounding text so nothing is dropped. Convert the hex string to a `Color`:
+`engine.tajweedSpans(surah, ayah)` returns `List<TajweedSpan>`, each with `text`, `rule`, and `colorHex` (e.g. `"#AE2517"`). The spans are non-overlapping and in order, but only cover the *colored* parts — fill the gaps with the surrounding text so nothing is dropped. Convert the hex string to a `Color`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -105,13 +99,11 @@ Widget tajweedAyah(Engine engine, int surah, int ayah) {
 }
 ```
 
-`TajweedSpan.start`/`end` are UTF-16 code-unit offsets; Dart `String`s are UTF-16, so `text.substring`
-slices them directly. See [02-tajweed.md](../02-tajweed.md).
+`TajweedSpan.start`/`end` are UTF-16 code-unit offsets; Dart `String`s are UTF-16, so `text.substring` slices them directly. See [02-tajweed.md](../02-tajweed.md).
 
 ## Audio with `just_audio` (or `audioplayers`)
 
-Audio URLs come from the free functions `surahAudioUrl` / `ayahAudioUrl`. The engine never fetches audio —
-hand the URL to your player.
+Audio URLs come from the free functions `surahAudioUrl` / `ayahAudioUrl`. The engine never fetches audio — hand the URL to your player.
 
 ```yaml
 dependencies:

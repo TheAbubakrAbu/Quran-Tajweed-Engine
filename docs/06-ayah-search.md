@@ -1,10 +1,8 @@
 # 06 · Ayah search
 
-Search Quran text in Arabic (with or without diacritics) and English (Saheeh, Mustafa, transliteration),
-plus surah-name and reference (`2:255`) lookup. Faithful port of the search system in `QuranData.swift`.
+Search Quran text in Arabic (with or without diacritics) and English (Saheeh, Mustafa, transliteration), plus surah-name and reference (`2:255`) lookup. Faithful port of the search system in `QuranData.swift`.
 
-> **Key behaviours:** verse search is **unranked** — results come back in mushaf order. Verse-text search
-> **rejects any query containing a digit** (numeric / reference queries go through *surah* search instead).
+> **Key behaviours:** verse search is **unranked** — results come back in mushaf order. Verse-text search **rejects any query containing a digit** (numeric / reference queries go through *surah* search instead).
 
 ## The verse index
 
@@ -19,8 +17,7 @@ Each ayah is indexed into three blobs + token lists:
 | `englishExactBlob` | english joined | lowercase + collapse spaces, **no** mark stripping |
 | `*Tokens` | each blob | split on spaces |
 
-The Arabic fold map (carriers → bare letters): `ٱ أ إ آ ى → ا`, `ؤ → و`, `ئ ى → ي`, `ة → ه`, dagger-alif → `ا`,
-hamza → removed. The four boolean operators `& | ! #` survive the strip.
+The Arabic fold map (carriers → bare letters): `ٱ أ إ آ ى → ا`, `ؤ → و`, `ئ ى → ي`, `ة → ه`, dagger-alif → `ا`, hamza → removed. The four boolean operators `& | ! #` survive the strip.
 
 ## Query flow
 
@@ -43,8 +40,7 @@ engine.search.searchVerses("rahm", { ignoreSilentLetters: true, limit: 20 });
 
 ## Boolean / advanced grammar
 
-Triggered when the query contains any of `& | ! # ^ % $`. Split into OR-groups on `|`, each group into
-AND-terms on `&`. Per-term prefixes/suffixes:
+Triggered when the query contains any of `& | ! # ^ % $`. Split into OR-groups on `|`, each group into AND-terms on `&`. Per-term prefixes/suffixes:
 
 | Token | Meaning |
 |---|---|
@@ -72,13 +68,10 @@ engine.search.parseReference("2:255");      // → { surah: 2, ayah: 255 }
 engine.search.parseReference("baqarah 10"); // → { surah: 2, ayah: 10 }
 ```
 
-Surah matching uses a per-surah blob of `nameArabic + nameTransliteration + nameEnglish + similarNames + id`
-(folded), plus a compact spaceless variant, plus makkan/madani aliases.
+Surah matching uses a per-surah blob of `nameArabic + nameTransliteration + nameEnglish + similarNames + id` (folded), plus a compact spaceless variant, plus makkan/madani aliases.
 
 ## Performance note
 
-The reference Swift build also maintains inverted token + prefix indexes (prefix length 2 for Arabic,
-3 for English) to avoid scanning all 6236 verses, AND-intersecting candidate sets across query tokens.
-The JS port filters linearly (fast enough for 6236 short blobs); add the inverted index if you need it.
+The reference Swift build also maintains inverted token + prefix indexes (prefix length 2 for Arabic, 3 for English) to avoid scanning all 6236 verses, AND-intersecting candidate sets across query tokens. The JS port filters linearly (fast enough for 6236 short blobs); add the inverted index if you need it.
 
 Reference: [`src/search.js`](../packages/quran-engine-js/src/search.js), [`src/text.js`](../packages/quran-engine-js/src/text.js).

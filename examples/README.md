@@ -1,9 +1,6 @@
 # Examples
 
-Runnable examples for the **Quran Tajweed Engine**. The Node examples import the
-engine straight from source (`../packages/quran-engine-js/src/...`), so they run
-with **zero install** on Node 18+ — no `npm install`, no build step. They read the
-canonical JSON from the repo's `/data` directory.
+Runnable examples for the **Quran Tajweed Engine**. The Node examples import the engine straight from source (`../packages/quran-engine-js/src/...`), so they run with **zero install** on Node 18+ — no `npm install`, no build step. They read the canonical JSON from the repo's `/data` directory.
 
 | File | What it shows | How to run |
 |------|---------------|------------|
@@ -23,14 +20,11 @@ node examples/tajweed-terminal.mjs 2 255      # one ayah (Ayat al-Kursi)
 node examples/tajweed-terminal.mjs 112        # a whole surah (al-Ikhlas)
 ```
 
-`tajweed-terminal.mjs` needs a terminal with 24-bit ("true color") support —
-iTerm2, Apple Terminal, the VS Code terminal, GNOME Terminal, and Windows
-Terminal all qualify.
+`tajweed-terminal.mjs` needs a terminal with 24-bit ("true color") support — iTerm2, Apple Terminal, the VS Code terminal, GNOME Terminal, and Windows Terminal all qualify.
 
 ## Browser example
 
-Browsers can't read the filesystem, so the `/data` JSON must be **served over
-HTTP**. Start a static server from the repo root:
+Browsers can't read the filesystem, so the `/data` JSON must be **served over HTTP**. Start a static server from the repo root:
 
 ```sh
 python3 -m http.server 8000
@@ -38,17 +32,11 @@ python3 -m http.server 8000
 
 then open <http://localhost:8000/examples/browser/index.html>.
 
-The page imports the engine via a native `<script type="module">` (no bundler)
-and fetches the data with relative `../../data/...` paths. It loads the small
-`data/surahs/index.json` for the dropdown and lazily fetches one surah file
-(`data/surahs/NNN.json`) when selected.
+The page imports the engine via a native `<script type="module">` (no bundler) and fetches the data with relative `../../data/...` paths. It loads the small `data/surahs/index.json` for the dropdown and lazily fetches one surah file (`data/surahs/NNN.json`) when selected.
 
 ## React example
 
-`react-ayah.jsx` is a snippet for a bundler (Vite/Next/CRA). Build the engine
-once at app scope with `createEngine({ quran, juz, reciters, tajweedRules })` and
-pass it to `<AyahView engine={engine} surah={2} ayah={255} />`. See the comment
-block at the bottom of the file.
+`react-ayah.jsx` is a snippet for a bundler (Vite/Next/CRA). Build the engine once at app scope with `createEngine({ quran, juz, reciters, tajweedRules })` and pass it to `<AyahView engine={engine} surah={2} ayah={255} />`. See the comment block at the bottom of the file.
 
 ## The API in one minute
 

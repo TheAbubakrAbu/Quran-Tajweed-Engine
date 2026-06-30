@@ -1,7 +1,6 @@
 # Recipes (cookbook)
 
-Copy-paste solutions to common tasks. Examples are in JavaScript (the reference port); the same calls
-exist in every port with idiomatic naming (`globalAyahNumber` ⇄ `global_ayah_number`, etc.).
+Copy-paste solutions to common tasks. Examples are in JavaScript (the reference port); the same calls exist in every port with idiomatic naming (`globalAyahNumber` ⇄ `global_ayah_number`, etc.).
 
 Assume:
 ```js
@@ -178,5 +177,4 @@ a.wordCount; a.letterCount;
 
 ---
 
-Need something not here? The features are small and composable — check the per-feature specs
-([01](01-quran.md)–[08](08-caching.md)) or open an issue.
+Need something not here? The features are small and composable — check the per-feature specs ([01](01-quran.md)–[08](08-caching.md)) or open an issue.

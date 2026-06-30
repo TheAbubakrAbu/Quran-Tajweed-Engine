@@ -1,8 +1,6 @@
 # iOS / macOS (SwiftUI)
 
-Use **`quran-engine-swift`** in a SwiftUI app. It's a thin, idiomatic wrapper over the JSON in
-[`/data`](../../data) plus a few pure functions — no network, database, or framework required. Tajweed uses
-the pre-computed annotation corpus (strategy A), so coloring is exact and offsets slice natively.
+Use **`quran-engine-swift`** in a SwiftUI app. It's a thin, idiomatic wrapper over the JSON in [`/data`](../../data) plus a few pure functions — no network, database, or framework required. Tajweed uses the pre-computed annotation corpus (strategy A), so coloring is exact and offsets slice natively.
 
 ## Setup
 
@@ -15,16 +13,13 @@ dependencies: [
 ]
 ```
 
-Or in Xcode: **File ▸ Add Package Dependencies…** and point at the `quran-engine-swift` directory (or its
-git URL). Then `import QuranEngine`.
+Or in Xcode: **File ▸ Add Package Dependencies…** and point at the `quran-engine-swift` directory (or its git URL). Then `import QuranEngine`.
 
-Bundle the `/data` JSON in your app target (drag the `data` folder into Xcode as a *folder reference* so it
-keeps its structure) and point the loader at it with `dataDirectory:`.
+Bundle the `/data` JSON in your app target (drag the `data` folder into Xcode as a *folder reference* so it keeps its structure) and point the loader at it with `dataDirectory:`.
 
 ## Minimal working example (canonical load + a SwiftUI view)
 
-`Engine.load` resolves `/data` from an explicit `dataDirectory:`, the `QURAN_ENGINE_DATA` env var, or the
-repo path. In an app, pass the bundle URL of your bundled data folder:
+`Engine.load` resolves `/data` from an explicit `dataDirectory:`, the `QURAN_ENGINE_DATA` env var, or the repo path. In an app, pass the bundle URL of your bundled data folder:
 
 ```swift
 import SwiftUI
@@ -60,10 +55,7 @@ struct AyahScreen: View {
 
 ## Tajweed rendering with `AttributedString`
 
-`engine.tajweed.tajweedSpans(surah, ayah)` returns `[TajweedSpan]`, each with `start`, `end`, `rule`,
-`colorHex` (`"#RRGGBB"`, optional), and the reconstructed `text`. The spans cover only the *colored* parts,
-in order and non-overlapping — fill the gaps with the surrounding text. Build an `AttributedString` and set
-the foreground color per run:
+`engine.tajweed.tajweedSpans(surah, ayah)` returns `[TajweedSpan]`, each with `start`, `end`, `rule`, `colorHex` (`"#RRGGBB"`, optional), and the reconstructed `text`. The spans cover only the *colored* parts, in order and non-overlapping — fill the gaps with the surrounding text. Build an `AttributedString` and set the foreground color per run:
 
 ```swift
 import SwiftUI
@@ -115,9 +107,7 @@ struct TajweedText: View {
 }
 ```
 
-`TajweedSpan.start`/`end` are UTF-16 offsets and `span.text` is already the reconstructed `[start, end)`
-slice — Swift `String` indexes natively via `String.Index(utf16Offset:in:)`, so no conversion is needed.
-See [02-tajweed.md](../02-tajweed.md).
+`TajweedSpan.start`/`end` are UTF-16 offsets and `span.text` is already the reconstructed `[start, end)` slice — Swift `String` indexes natively via `String.Index(utf16Offset:in:)`, so no conversion is needed. See [02-tajweed.md](../02-tajweed.md).
 
 ## Audio with `AVPlayer`
 

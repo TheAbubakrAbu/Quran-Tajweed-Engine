@@ -1,15 +1,13 @@
 # Changelog
 
-All notable changes to the Quran Tajweed Engine are documented here.
-The format is based on [Keep a Changelog](https://keepachangelog.com/).
+All notable changes to the Quran Tajweed Engine are documented here. The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [0.1.0] — Initial release
 
 The first public version: a complete, framework-agnostic Quran engine.
 
 ### Data (`/data`)
-- `quran.json` — 114 surahs / 6236 ayahs: Hafs Uthmani Arabic, transliteration, two English translations
-  (Saheeh International, Mustafa Khattab), per-ayah juz/page/word/letter counts.
+- `quran.json` — 114 surahs / 6236 ayahs: Hafs Uthmani Arabic, transliteration, two English translations (Saheeh International, Mustafa Khattab), per-ayah juz/page/word/letter counts.
 - `surah-info.json` — "About this surah" essays (Maududi, Ibn Ashur).
 - `names-of-allah.json` — the 99 Names of Allah.
 - `qiraat/qiraah-*.json` — 7 alternate readings (Warsh, Qaloon, Duri, Susi, Bazzi, Qunbul, Shubah).
@@ -21,8 +19,7 @@ The first public version: a complete, framework-agnostic Quran engine.
 
 ### Specifications (`/docs`)
 - Getting started, architecture, glossary, FAQ, recipes, and the porting contract.
-- Per-feature specs 01–08: Quran, Tajweed, Juz/Page, Surah recitations, Ayah recitations, Search,
-  Sorting, Caching.
+- Per-feature specs 01–08: Quran, Tajweed, Juz/Page, Surah recitations, Ayah recitations, Search, Sorting, Caching.
 - Platform integration guides.
 
 ### Language ports (`/packages`)
@@ -44,23 +41,13 @@ The first public version: a complete, framework-agnostic Quran engine.
 - Offline-audio caching helpers (paths + `AudioCache` in JS).
 
 ### Added after initial cut
-- **Fonts** (`data/fonts/`) — Uthmani (Hafs), Qiraat (Qunbul), and Indopak (Nastaliq) TTFs + `fonts.json`,
-  with [docs/fonts.md](docs/fonts.md) explaining the Uthmani-vs-Qiraat-vs-Indopak trade-offs for tajweed coloring.
-- **Arabic alphabet** (`data/arabic-alphabet.json`) — 28 letters with tajweed weight, extra/special letters,
-  non-Arabic letters, Eastern-Arabic numerals, 21 tashkeel marks, and the 9 waqf stopping signs; plus
-  [docs/arabic-alphabet.md](docs/arabic-alphabet.md).
-- **Detailed tajweed guide** — [docs/tajweed-rules-explained.md](docs/tajweed-rules-explained.md): plain-English
-  explanations of every rule (idgham, ikhfaa, ghunnah, qalqalah, madd types, tafkhim, waqf …), from the
-  app's "Tajweed Foundations" lessons.
-- **Single source of truth for tajweed** — `data/tajweed-rules.json` enriched with literal meanings + long
-  descriptions; `scripts/generate-tajweed.mjs` regenerates per-language constants (`tajweed-rules.generated.*`)
-  in all 7 ports plus `docs/tajweed-rules-reference.md` from that one file.
-- Precise upstream-source attribution (KFGQPC, Risan Bagja Pradana, Global Quran, Quran Foundation, MyIslam,
-  font authors, MP3 Quran, alquran.cloud) in [CREDITS.md](CREDITS.md), linking each app's own credits in its
-  repository. Added a *sadaqah jariyah* intent note. (Per-app credits live in each app's own repo.)
+- **Fonts** (`data/fonts/`) — Uthmani (Hafs), Qiraat (Qunbul), and Indopak (Nastaliq) TTFs + `fonts.json`, with [docs/fonts.md](docs/fonts.md) explaining the Uthmani-vs-Qiraat-vs-Indopak trade-offs for tajweed coloring.
+- **Arabic alphabet** (`data/arabic-alphabet.json`) — 28 letters with tajweed weight, extra/special letters, non-Arabic letters, Eastern-Arabic numerals, 21 tashkeel marks, and the 9 waqf stopping signs; plus [docs/arabic-alphabet.md](docs/arabic-alphabet.md).
+- **Detailed tajweed guide** — [docs/tajweed-rules-explained.md](docs/tajweed-rules-explained.md): plain-English explanations of every rule (idgham, ikhfaa, ghunnah, qalqalah, madd types, tafkhim, waqf …), from the app's "Tajweed Foundations" lessons.
+- **Single source of truth for tajweed** — `data/tajweed-rules.json` enriched with literal meanings + long descriptions; `scripts/generate-tajweed.mjs` regenerates per-language constants (`tajweed-rules.generated.*`) in all 7 ports plus `docs/tajweed-rules-reference.md` from that one file.
+- Precise upstream-source attribution (KFGQPC, Risan Bagja Pradana, Global Quran, Quran Foundation, MyIslam, font authors, MP3 Quran, alquran.cloud) in [CREDITS.md](CREDITS.md), linking each app's own credits in its repository. Added a *sadaqah jariyah* intent note. (Per-app credits live in each app's own repo.)
 
 ### Known limitations
-- Tajweed detector simplifies full final-`ر` vowel context and muqatta'at lazim-harfi sub-typing
-  (see [docs/02-tajweed.md](docs/02-tajweed.md)).
+- Tajweed detector simplifies full final-`ر` vowel context and muqatta'at lazim-harfi sub-typing (see [docs/02-tajweed.md](docs/02-tajweed.md)).
 - Boolean search grammar is implemented in the JS port; native ports implement the core search path.
 - No audio files are bundled; the engine builds URLs to third-party CDNs.

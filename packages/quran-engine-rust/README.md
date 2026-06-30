@@ -1,13 +1,8 @@
 # quran-engine (Rust)
 
-A Rust port of the open-source **Quran Tajweed Engine**. The engine is *data-first*: it is a
-thin, idiomatic wrapper over the JSON corpus in the repository's [`/data`](../../data) directory
-plus a handful of pure functions. No network, database, or framework is required.
+A Rust port of the open-source **Quran Tajweed Engine**. The engine is *data-first*: it is a thin, idiomatic wrapper over the JSON corpus in the repository's [`/data`](../../data) directory plus a handful of pure functions. No network, database, or framework is required.
 
-This crate follows the shared porting contract in [`../../docs/PORTING.md`](../../docs/PORTING.md)
-and the per-feature specs in [`../../docs/01-quran.md`](../../docs/01-quran.md) …
-[`../../docs/08-caching.md`](../../docs/08-caching.md). The reference implementation is the JS
-package in [`../quran-engine-js`](../quran-engine-js).
+This crate follows the shared porting contract in [`../../docs/PORTING.md`](../../docs/PORTING.md) and the per-feature specs in [`../../docs/01-quran.md`](../../docs/01-quran.md) … [`../../docs/08-caching.md`](../../docs/08-caching.md). The reference implementation is the JS package in [`../quran-engine-js`](../quran-engine-js).
 
 ## Install
 
@@ -66,32 +61,21 @@ for span in engine.tajweed(1, 1) {
 
 ## Tajweed strategy (A)
 
-Tajweed coloring uses **strategy (A)** from the porting guide: it consumes the pre-computed
-corpus in [`data/tajweed-annotations.json`](../../data/tajweed-annotations.json) and maps each
-annotation's `rule` to the category color (`colorHex`) in
-[`data/tajweed-rules.json`](../../data/tajweed-rules.json).
+Tajweed coloring uses **strategy (A)** from the porting guide: it consumes the pre-computed corpus in [`data/tajweed-annotations.json`](../../data/tajweed-annotations.json) and maps each annotation's `rule` to the category color (`colorHex`) in [`data/tajweed-rules.json`](../../data/tajweed-rules.json).
 
-Annotation `start`/`end` are **UTF-16 code-unit offsets** (the reference engine is UTF-16). Rust
-strings are UTF-8/byte indexed, so [`utf16_slice`](src/util.rs) decodes the ayah to `Vec<u16>`,
-slices, and re-encodes with `String::from_utf16`. The test suite asserts that every span's
-reconstructed slice equals its recorded text.
+Annotation `start`/`end` are **UTF-16 code-unit offsets** (the reference engine is UTF-16). Rust strings are UTF-8/byte indexed, so [`utf16_slice`](src/util.rs) decodes the ayah to `Vec<u16>`, slices, and re-encodes with `String::from_utf16`. The test suite asserts that every span's reconstructed slice equals its recorded text.
 
-The full heuristic tajweed detector (strategy B in
-[`docs/02-tajweed.md`](../../docs/02-tajweed.md)) is **not** ported here.
+The full heuristic tajweed detector (strategy B in [`docs/02-tajweed.md`](../../docs/02-tajweed.md)) is **not** ported here.
 
 ## Search: what is implemented and what is omitted
 
 The **core search path** is implemented:
 
-- `search_verses` — unranked verse-text search in mushaf order. A verse matches when the cleaned
-  query is a substring of the relevant (Arabic or English) folded blob, **or** the query tokens
-  phrase-prefix-match the verse tokens. Verse search rejects any query containing a digit.
+- `search_verses` — unranked verse-text search in mushaf order. A verse matches when the cleaned query is a substring of the relevant (Arabic or English) folded blob, **or** the query tokens phrase-prefix-match the verse tokens. Verse search rejects any query containing a digit.
 - `search_surahs` — name / alias / number / `"2:255"` / makkan-madani lookup.
 - `parse_reference` — `"2:255"`, `"2 255"`, `"baqarah 10"`, and Arabic-digit forms.
 
-**Omitted (documented divergence):** the **boolean grammar** (`& | ! # ^ % $`) and its dedicated
-tashkeel / exact-phrase / silent-letter index blobs are not ported. A query containing a boolean
-operator is treated as plain text. This matches the "minimal port" allowance in the porting guide.
+**Omitted (documented divergence):** the **boolean grammar** (`& | ! # ^ % $`) and its dedicated tashkeel / exact-phrase / silent-letter index blobs are not ported. A query containing a boolean operator is treated as plain text. This matches the "minimal port" allowance in the porting guide.
 
 ## Layout
 
@@ -112,13 +96,8 @@ operator is treated as plain text. This matches the "minimal port" allowance in 
 cargo test
 ```
 
-The test module asserts the canonical cases from the porting guide: `total_ayahs == 6236`;
-`global_ayah_number` for `(1,1)`, `(2,1)`, `(114,6)`; the Alafasy surah/ayah audio URLs; juz 1/30
-boundaries; `sort_surahs("ayahs","descending")[0].id == 2`; `parse_reference("2:255")`; and that
-each tajweed span's reconstructed UTF-16 slice equals its recorded text.
+The test module asserts the canonical cases from the porting guide: `total_ayahs == 6236`; `global_ayah_number` for `(1,1)`, `(2,1)`, `(114,6)`; the Alafasy surah/ayah audio URLs; juz 1/30 boundaries; `sort_surahs("ayahs","descending")[0].id == 2`; `parse_reference("2:255")`; and that each tajweed span's reconstructed UTF-16 slice equals its recorded text.
 
 ## License & attribution
 
-MIT. All data and algorithms are extracted from the open-source **Al-Islam | Islamic Pillars** app
-by Abubakr Elmallah. Please preserve the attribution in [`../../CREDITS.md`](../../CREDITS.md).
-The Quran's Arabic text must be preserved exactly and never altered.
+MIT. All data and algorithms are extracted from the open-source **Al-Islam | Islamic Pillars** app by Abubakr Elmallah. Please preserve the attribution in [`../../CREDITS.md`](../../CREDITS.md). The Quran's Arabic text must be preserved exactly and never altered.

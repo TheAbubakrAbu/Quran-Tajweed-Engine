@@ -1,8 +1,6 @@
 # 08 · Caching & offline downloads
 
-Optional layer for offline full-surah audio. The engine stays **storage-agnostic**: it gives you the
-canonical cache paths/keys and a small `CacheStore` interface; you plug in any backend (filesystem,
-IndexedDB, React-Native FS, the browser Cache API). Mirrors `ReciterDownloadManager` in `QuranPlayer.swift`.
+Optional layer for offline full-surah audio. The engine stays **storage-agnostic**: it gives you the canonical cache paths/keys and a small `CacheStore` interface; you plug in any backend (filesystem, IndexedDB, React-Native FS, the browser Cache API). Mirrors `ReciterDownloadManager` in `QuranPlayer.swift`.
 
 > Only **full-surah** audio is cached in the reference app. Ayah-by-ayah audio is streamed.
 
@@ -13,12 +11,9 @@ IndexedDB, React-Native FS, the browser Cache API). Mirrors `ReciterDownloadMana
 <root>/SharedAudio/<sha256hex(content)>.<ext>           content-addressed dedup store
 ```
 
-- `sanitize(reciter.id)`: keep `[A-Za-z0-9-_]`, replace everything else with `_`, cap at 180 chars.
-  Recall `reciter.id = "{name}|{qiraah??Hafs}|{surahLink}"`, so `|`, `/`, `:`, `.` all become `_`.
+- `sanitize(reciter.id)`: keep `[A-Za-z0-9-_]`, replace everything else with `_`, cap at 180 chars. Recall `reciter.id = "{name}|{qiraah??Hafs}|{surahLink}"`, so `|`, `/`, `:`, `.` all become `_`.
 - Per-surah filename is the surah number zero-padded to 3 digits.
-- **Content-addressed dedup**: each downloaded file is stored once in `SharedAudio/` keyed by the SHA-256
-  of its bytes, and each reciter's `NNN.mp3` is a hard link to it. Identical audio shared across reciters is
-  stored once. (Hard-linking is a filesystem optimization; a browser/IndexedDB backend can skip it.)
+- **Content-addressed dedup**: each downloaded file is stored once in `SharedAudio/` keyed by the SHA-256 of its bytes, and each reciter's `NNN.mp3` is a hard link to it. Identical audio shared across reciters is stored once. (Hard-linking is a filesystem optimization; a browser/IndexedDB backend can skip it.)
 
 ## Path helpers
 
@@ -51,8 +46,7 @@ await cache.hasSurah(reciter, 57);                          // true
 await cache.removeSurah(reciter, 57);
 ```
 
-`AudioCache` works in any environment with `fetch` (browser, Node 18+, Deno, Bun) — pass `{ fetch }` to
-inject one explicitly. `memoryStore()` is provided for tests and ephemeral use.
+`AudioCache` works in any environment with `fetch` (browser, Node 18+, Deno, Bun) — pass `{ fetch }` to inject one explicitly. `memoryStore()` is provided for tests and ephemeral use.
 
 ## Backend sketches
 
@@ -62,7 +56,6 @@ inject one explicitly. `memoryStore()` is provided for tests and ephemeral use.
 
 ## In-app playback prefetch (not persisted)
 
-For gapless playback the reference app also prewarms the next surah ~10 s before the current ends and keeps
-current+next ayah items buffered. That's a playback concern, not a cache concern — build it in your player.
+For gapless playback the reference app also prewarms the next surah ~10 s before the current ends and keeps current+next ayah items buffered. That's a playback concern, not a cache concern — build it in your player.
 
 Reference: [`src/cache.js`](../packages/quran-engine-js/src/cache.js).
