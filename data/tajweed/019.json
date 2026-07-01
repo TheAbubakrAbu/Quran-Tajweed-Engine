@@ -7391,11 +7391,6 @@
     "rule": "generalGhunnah"
    },
    {
-    "start": 100,
-    "end": 103,
-    "rule": "iqlaab"
-   },
-   {
     "start": 103,
     "end": 104,
     "rule": "maddNatural"

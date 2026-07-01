@@ -37,6 +37,24 @@ def test_juz():
     assert s.id == 1 and a.id == 1
 
 
+def test_juz_from_end_and_stats():
+    jp = engine.juz_page
+    assert jp.juz_from_end(1).id == 30
+    assert jp.juz_from_end(30).id == 1
+    assert jp.juz_from_end(0) is None
+    assert jp.juz_from_end(31) is None
+
+    stats = jp.juz_stats(30)
+    assert stats is not None
+    assert stats.ayah_count == len(jp.ayahs_in_juz(30))
+    assert stats.surah_count >= 1 and stats.page_count >= 1
+    assert stats.word_count > 0 and stats.letter_count > 0
+    assert jp.juz_stats(99) is None
+
+    # Every juz's ayah_count sums to all 6236 ayahs.
+    assert sum(jp.juz_stats(i).ayah_count for i in range(1, 31)) == 6236
+
+
 def test_audio_urls():
     alafasy = next(r for r in engine.reciters.all() if r.name == "Mishary Alafasy")
     assert surah_audio_url(alafasy, 1) == "https://server8.mp3quran.net/afs/001.mp3"
@@ -55,6 +73,19 @@ def test_search():
     assert engine.search.search_verses("2 255") == []
     assert any(s.id == 1 for s in engine.search.search_surahs("fatihah"))
     assert engine.search.parse_reference("2:255") == {"surah": 2, "ayah": 255}
+
+
+def test_search_behavior():
+    sv = engine.search.search_verses
+    # Regular search is pure substring — a mid-word substring still hits.
+    assert any(r["id"] == "1:2" for r in sv("orld"))  # inside "world(s)"
+    # `=lord` whole-word hits 1:2, but `=lor` (partial) does NOT.
+    assert any(r["id"] == "1:2" for r in sv("=lord"))
+    assert not any(r["id"] == "1:2" for r in sv("=lor"))
+    # plain `lor` (contains) DOES match.
+    assert any(r["id"] == "1:2" for r in sv("lor"))
+    # A digit inside a boolean query returns nothing.
+    assert sv("allah & 2") == []
 
 
 def test_tajweed():

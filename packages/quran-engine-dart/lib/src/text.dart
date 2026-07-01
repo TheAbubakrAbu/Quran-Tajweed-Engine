@@ -87,6 +87,96 @@ String cleanSearch(String text, {bool whitespace = false}) {
   return cleaned;
 }
 
+/// Combining marks that count as Arabic "tashkeel" (diacritics).
+const _tashkeelRanges = [
+  [0x0610, 0x061a],
+  [0x064b, 0x065f],
+  [0x0670, 0x0670],
+  [0x06d6, 0x06ed],
+];
+
+bool _inTashkeel(int cp) {
+  for (final r in _tashkeelRanges) {
+    if (cp >= r[0] && cp <= r[1]) return true;
+  }
+  return false;
+}
+
+/// Keep ONLY tashkeel scalars (inverse of [cleanSearch]). Mirrors
+/// `arabicTashkeelBlob`.
+String arabicTashkeelBlob(String text) {
+  final buf = StringBuffer();
+  for (final rune in text.runes) {
+    if (_inTashkeel(rune)) buf.writeCharCode(rune);
+  }
+  return buf.toString();
+}
+
+/// Lowercase + whitespace-collapse without stripping marks. Mirrors
+/// `exactPhraseBlob`.
+String exactPhraseBlob(String text) => collapsingWhitespace(text.toLowerCase());
+
+/// Drop "silent" Arabic letters for the lenient Arabic search variant.
+/// Mirrors `removingSilentArabicLettersForSearch` (grapheme-cluster walk).
+String removingSilentArabicLettersForSearch(String text) {
+  const vowels = {
+    0x064e, 0x064f, 0x0650, 0x064b, 0x064c, 0x064d, 0x0656, 0x0657, 0x065a
+  };
+  final clusters = _splitGraphemeClusters(text);
+  final buf = StringBuffer();
+  for (final cluster in clusters) {
+    final scalars = cluster.runes.toList();
+    final base = scalars.first;
+    bool has(int cp) => scalars.contains(cp);
+    final hasStdSukoon = has(0x0652) && !has(0x06e1);
+    // hamzatul wasl is always silent
+    if (base == 0x0671) continue;
+    // alif/waw/ya/alif-maqsura with a plain sukoon
+    if ((base == 0x0627 ||
+            base == 0x0648 ||
+            base == 0x064a ||
+            base == 0x0649) &&
+        hasStdSukoon) {
+      continue;
+    }
+    // lam with a plain sukoon
+    if (base == 0x0644 && hasStdSukoon) continue;
+    // waw carrying a dagger alif with no vowel/shadda/sukoon
+    if (base == 0x0648 &&
+        has(0x0670) &&
+        !scalars.any((s) => vowels.contains(s) || s == 0x0651 || s == 0x0652)) {
+      continue;
+    }
+    buf.write(cluster);
+  }
+  return buf.toString();
+}
+
+/// Split a string into base-letter + trailing combining-mark clusters,
+/// matching Swift's `Character` iteration for Arabic Quranic text.
+List<String> _splitGraphemeClusters(String text) {
+  final out = <String>[];
+  for (final rune in text.runes) {
+    final ch = String.fromCharCode(rune);
+    if (out.isNotEmpty && _isMark(rune)) {
+      out[out.length - 1] += ch;
+    } else {
+      out.add(ch);
+    }
+  }
+  return out;
+}
+
+/// True for Unicode general-category M (combining mark) — sufficient subset for
+/// Arabic Quranic text (tashkeel + recitation signs).
+bool _isMark(int cp) =>
+    (cp >= 0x0610 && cp <= 0x061a) ||
+    (cp >= 0x064b && cp <= 0x065f) ||
+    cp == 0x0670 ||
+    (cp >= 0x06d6 && cp <= 0x06ed) ||
+    (cp >= 0x08e3 && cp <= 0x08ff) ||
+    cp == 0x0674;
+
 /// Tokenize a cleaned blob on spaces.
 List<String> searchTokens(String cleanedText) =>
     cleanedText.split(' ').where((s) => s.isNotEmpty).toList();

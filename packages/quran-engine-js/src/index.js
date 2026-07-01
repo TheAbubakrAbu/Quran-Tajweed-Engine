@@ -21,6 +21,8 @@ import { Quran } from "./quran.js";
 import { JuzPage } from "./juzPage.js";
 import { Reciters } from "./audio.js";
 import { Search } from "./search.js";
+import { NamesOfAllah } from "./names.js";
+import { Muqattaat } from "./muqattaat.js";
 import { tajweedSpans, detectPaintOps, resolveSpans } from "./tajweed.js";
 
 export * from "./text.js";
@@ -30,6 +32,8 @@ export * from "./juzPage.js";
 export * from "./sorting.js";
 export * from "./audio.js";
 export * from "./search.js";
+export * from "./names.js";
+export * from "./muqattaat.js";
 export * from "./cache.js";
 
 /**
@@ -40,14 +44,17 @@ export * from "./cache.js";
  * @param {import('./audio.js').Reciter[]} data.reciters            data/reciters.json
  * @param {any} [data.tajweedRules]                                 data/tajweed-rules.json
  * @param {Array<{id:number,sources:Array<{name:string,contents:string}>}>} [data.surahInfo] data/surah-info.json
+ * @param {import('./names.js').NameOfAllah[]} [data.namesOfAllah]    data/names-of-allah.json
  * @param {Record<string, Record<string, {id:number,text:string}[]>>} [data.qiraat]  riwayah -> qiraah JSON
  * @param {{ riwayah?: string }} [opts]
  */
 export function createEngine(data, opts = {}) {
-  const quran = new Quran({ surahs: data.quran, surahInfo: data.surahInfo, qiraat: data.qiraat });
+  const quran = new Quran({ surahs: data.quran, surahInfo: data.surahInfo, qiraat: data.qiraat, qiraatCounts: data.qiraatCounts });
   const juzPage = new JuzPage(quran, data.juz);
   const reciters = new Reciters(data.reciters);
   const search = new Search(quran, opts);
+  const namesOfAllah = new NamesOfAllah(data.namesOfAllah);
+  const muqattaat = new Muqattaat(data.muqattaat);
   const tajweedRules = data.tajweedRules ?? null;
 
   return {
@@ -55,6 +62,8 @@ export function createEngine(data, opts = {}) {
     juzPage,
     reciters,
     search,
+    namesOfAllah,
+    muqattaat,
     tajweedRules,
     /**
      * Detect tajweed spans for any Arabic ayah text.

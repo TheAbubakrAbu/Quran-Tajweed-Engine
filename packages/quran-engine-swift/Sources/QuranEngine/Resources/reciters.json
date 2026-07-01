@@ -1,0 +1,560 @@
+[
+  {
+    "id": "Abdul Basit|Warsh an Nafi|https://server7.mp3quran.net/basit/Rewayat-Warsh-A-n-Nafi/",
+    "name": "Abdul Basit",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server7.mp3quran.net/basit/Rewayat-Warsh-A-n-Nafi/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Abdul Basit (Mujawwad)|Hafs|https://server7.mp3quran.net/basit/Almusshaf-Al-Mojawwad/",
+    "name": "Abdul Basit (Mujawwad)",
+    "ayahIdentifier": "ar.abdulsamad",
+    "ayahBitrate": "64",
+    "surahLink": "https://server7.mp3quran.net/basit/Almusshaf-Al-Mojawwad/",
+    "qiraah": null,
+    "group": "Mujawwad"
+  },
+  {
+    "id": "Abdul Basit (Murattal)|Hafs|https://server7.mp3quran.net/basit/",
+    "name": "Abdul Basit (Murattal)",
+    "ayahIdentifier": "ar.abdulbasitmurattal",
+    "ayahBitrate": "192",
+    "surahLink": "https://server7.mp3quran.net/basit/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Abdul Rahman Al-Sudais|Hafs|https://server11.mp3quran.net/sds/",
+    "name": "Abdul Rahman Al-Sudais",
+    "ayahIdentifier": "ar.abdurrahmaansudais",
+    "ayahBitrate": "192",
+    "surahLink": "https://server11.mp3quran.net/sds/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Abdullah Al Qarafi|Hafs|https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem/",
+    "name": "Abdullah Al Qarafi",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/a_alqrafi/Rewayat-Hafs-A-n-Assem/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Abdullah Al-Juhany|Hafs|https://server13.mp3quran.net/jhn/",
+    "name": "Abdullah Al-Juhany",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server13.mp3quran.net/jhn/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Abdullah Al-Mattrod|Hafs|https://server8.mp3quran.net/mtrod/",
+    "name": "Abdullah Al-Mattrod",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/mtrod/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Abdulrahman Aloosi|Hafs|https://server6.mp3quran.net/aloosi/",
+    "name": "Abdulrahman Aloosi",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server6.mp3quran.net/aloosi/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Abdurrasheed Sufi|Hafs|https://server16.mp3quran.net/soufi/Rewayat-Hafs-A-n-Assem/",
+    "name": "Abdurrasheed Sufi",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/soufi/Rewayat-Hafs-A-n-Assem/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Abdurrasheed Sufi|Khalaf an Hamzah|https://server16.mp3quran.net/soufi/Rewayat-Khalaf-A-n-Hamzah/",
+    "name": "Abdurrasheed Sufi",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/soufi/Rewayat-Khalaf-A-n-Hamzah/",
+    "qiraah": "Khalaf an Hamzah",
+    "group": "Khalaf"
+  },
+  {
+    "id": "Abu Bakr Al-Shatri|Hafs|https://server11.mp3quran.net/shatri/",
+    "name": "Abu Bakr Al-Shatri",
+    "ayahIdentifier": "ar.shaatree",
+    "ayahBitrate": "128",
+    "surahLink": "https://server11.mp3quran.net/shatri/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Ahmad Al-Ajmy|Hafs|https://server10.mp3quran.net/ajm/",
+    "name": "Ahmad Al-Ajmy",
+    "ayahIdentifier": "ar.ahmedajamy",
+    "ayahBitrate": "128",
+    "surahLink": "https://server10.mp3quran.net/ajm/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Ahmad Al-Nufais|Hafs|https://server16.mp3quran.net/nufais/Rewayat-Hafs-A-n-Assem/",
+    "name": "Ahmad Al-Nufais",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/nufais/Rewayat-Hafs-A-n-Assem/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Ahmad Deban|Hafs|https://server16.mp3quran.net/deban/Rewayat-Hafs-A-n-Assem/",
+    "name": "Ahmad Deban",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/deban/Rewayat-Hafs-A-n-Assem/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Ahmad Deban|Shubah an Asim|https://server16.mp3quran.net/deban/Rewayat-Sho-bah-A-n-Asim/001.mp3",
+    "name": "Ahmad Deban",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/deban/Rewayat-Sho-bah-A-n-Asim/001.mp3",
+    "qiraah": "Shubah an Asim",
+    "group": "Shubah"
+  },
+  {
+    "id": "Ahmad Deban|Warsh an Nafi|https://server16.mp3quran.net/deban/Rewayat-Warsh-A-n-Nafi-Men-Tariq-Alazraq/",
+    "name": "Ahmad Deban",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/deban/Rewayat-Warsh-A-n-Nafi-Men-Tariq-Alazraq/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Ahmad Deban|al-Bazzi an Ibn Kathir|https://server16.mp3quran.net/deban/Rewayat-Albizi-A-n-Ibn-Katheer/",
+    "name": "Ahmad Deban",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/deban/Rewayat-Albizi-A-n-Ibn-Katheer/",
+    "qiraah": "al-Bazzi an Ibn Kathir",
+    "group": "Buzzi"
+  },
+  {
+    "id": "Ahmad Deban|Qunbul an Ibn Kathir|https://server16.mp3quran.net/deban/Rewayat-Qunbol-A-n-Ibn-Katheer/",
+    "name": "Ahmad Deban",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/deban/Rewayat-Qunbol-A-n-Ibn-Katheer/",
+    "qiraah": "Qunbul an Ibn Kathir",
+    "group": "Qunbul"
+  },
+  {
+    "id": "Ahmad Deban|Qalun an Nafi|https://server16.mp3quran.net/deban/Rewayat-Qalon-A-n-Nafi/",
+    "name": "Ahmad Deban",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/deban/Rewayat-Qalon-A-n-Nafi/",
+    "qiraah": "Qalun an Nafi",
+    "group": "Qaloon"
+  },
+  {
+    "id": "Ahmad Deban|ad-Duri an Abi Amr|https://server16.mp3quran.net/deban/Rewayat-Aldori-A-n-Abi-Amr/",
+    "name": "Ahmad Deban",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/deban/Rewayat-Aldori-A-n-Abi-Amr/",
+    "qiraah": "ad-Duri an Abi Amr",
+    "group": "Duri"
+  },
+  {
+    "id": "Ahmed Al-Trabulsi|Qalun an Nafi|https://server10.mp3quran.net/trablsi/",
+    "name": "Ahmed Al-Trabulsi",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server10.mp3quran.net/trablsi/",
+    "qiraah": "Qalun an Nafi",
+    "group": "Qaloon"
+  },
+  {
+    "id": "Al-Qari Yassin|Warsh an Nafi|https://server11.mp3quran.net/qari/",
+    "name": "Al-Qari Yassin",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server11.mp3quran.net/qari/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Al-Uyoun Al-Koshi|Warsh an Nafi|https://server11.mp3quran.net/koshi/",
+    "name": "Al-Uyoun Al-Koshi",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server11.mp3quran.net/koshi/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Ali Jaber|Hafs|https://server11.mp3quran.net/a_jbr/",
+    "name": "Ali Jaber",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server11.mp3quran.net/a_jbr/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Badr Al-Turki|Hafs|https://server10.mp3quran.net/bader/Rewayat-Hafs-A-n-Assem/",
+    "name": "Badr Al-Turki",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server10.mp3quran.net/bader/Rewayat-Hafs-A-n-Assem/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Bandar Baleela|Hafs|https://server6.mp3quran.net/balilah/",
+    "name": "Bandar Baleela",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server6.mp3quran.net/balilah/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Hani Al-Rifai|Hafs|https://server8.mp3quran.net/hani/",
+    "name": "Hani Al-Rifai",
+    "ayahIdentifier": "ar.hanirifai",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/hani/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Hazza Al-Balushi|Hafs|https://server11.mp3quran.net/hazza/",
+    "name": "Hazza Al-Balushi",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server11.mp3quran.net/hazza/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Hisham Al Haraz|Warsh an Nafi|https://server16.mp3quran.net/H-Lharraz/Rewayat-Warsh-A-n-Nafi/",
+    "name": "Hisham Al Haraz",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/H-Lharraz/Rewayat-Warsh-A-n-Nafi/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Ibrahim Al-Dossary|Warsh an Nafi|https://server10.mp3quran.net/ibrahim_dosri/Rewayat-Warsh-A-n-Nafi/",
+    "name": "Ibrahim Al-Dossary",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server10.mp3quran.net/ibrahim_dosri/Rewayat-Warsh-A-n-Nafi/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Ibrahim Qushaydan|Qalun an Nafi|https://server16.mp3quran.net/i_kshidan/Rewayat-Qalon-A-n-Nafi/",
+    "name": "Ibrahim Qushaydan",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/i_kshidan/Rewayat-Qalon-A-n-Nafi/",
+    "qiraah": "Qalun an Nafi",
+    "group": "Qaloon"
+  },
+  {
+    "id": "Maher Al-Muaiqly (Muallim)|Hafs|https://server12.mp3quran.net/maher/Almusshaf-Al-Mo-lim/",
+    "name": "Maher Al-Muaiqly (Muallim)",
+    "ayahIdentifier": "ar.mahermuaiqly",
+    "ayahBitrate": "128",
+    "surahLink": "https://server12.mp3quran.net/maher/Almusshaf-Al-Mo-lim/",
+    "qiraah": null,
+    "group": "Muallim"
+  },
+  {
+    "id": "Maher Al-Muaiqly (Mujawwad)|Hafs|https://server12.mp3quran.net/maher/Almusshaf-Al-Mojawwad/",
+    "name": "Maher Al-Muaiqly (Mujawwad)",
+    "ayahIdentifier": "ar.mahermuaiqly",
+    "ayahBitrate": "128",
+    "surahLink": "https://server12.mp3quran.net/maher/Almusshaf-Al-Mojawwad/",
+    "qiraah": null,
+    "group": "Mujawwad"
+  },
+  {
+    "id": "Maher Al-Muaiqly (Murattal)|Hafs|https://server12.mp3quran.net/maher/",
+    "name": "Maher Al-Muaiqly (Murattal)",
+    "ayahIdentifier": "ar.mahermuaiqly",
+    "ayahBitrate": "128",
+    "surahLink": "https://server12.mp3quran.net/maher/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Mahmoud Al-Hussary|Warsh an Nafi|https://server13.mp3quran.net/husr/Rewayat-Warsh-A-n-Nafi/",
+    "name": "Mahmoud Al-Hussary",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server13.mp3quran.net/husr/Rewayat-Warsh-A-n-Nafi/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Mahmoud Al-Hussary|Qalun an Nafi|https://server13.mp3quran.net/husr/Rewayat-Qalon-A-n-Nafi/",
+    "name": "Mahmoud Al-Hussary",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server13.mp3quran.net/husr/Rewayat-Qalon-A-n-Nafi/",
+    "qiraah": "Qalun an Nafi",
+    "group": "Qaloon"
+  },
+  {
+    "id": "Mahmoud Al-Hussary|ad-Duri an Abi Amr|https://server13.mp3quran.net/husr/Rewayat-Aldori-A-n-Abi-Amr/",
+    "name": "Mahmoud Al-Hussary",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server13.mp3quran.net/husr/Rewayat-Aldori-A-n-Abi-Amr/",
+    "qiraah": "ad-Duri an Abi Amr",
+    "group": "Duri"
+  },
+  {
+    "id": "Mahmoud Al-Hussary (Mujawwad)|Hafs|https://server13.mp3quran.net/husr/Almusshaf-Al-Mojawwad/",
+    "name": "Mahmoud Al-Hussary (Mujawwad)",
+    "ayahIdentifier": "ar.husarymujawwad",
+    "ayahBitrate": "128",
+    "surahLink": "https://server13.mp3quran.net/husr/Almusshaf-Al-Mojawwad/",
+    "qiraah": null,
+    "group": "Mujawwad"
+  },
+  {
+    "id": "Mahmoud Al-Hussary (Murattal)|Hafs|https://server13.mp3quran.net/husr/",
+    "name": "Mahmoud Al-Hussary (Murattal)",
+    "ayahIdentifier": "ar.husary",
+    "ayahBitrate": "128",
+    "surahLink": "https://server13.mp3quran.net/husr/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Mahmoud Ali Al-Banna (Mujawwad)|Hafs|https://server8.mp3quran.net/bna/Almusshaf-Al-Mojawwad/",
+    "name": "Mahmoud Ali Al-Banna (Mujawwad)",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/bna/Almusshaf-Al-Mojawwad/",
+    "qiraah": null,
+    "group": "Mujawwad"
+  },
+  {
+    "id": "Mahmoud Ali Al-Banna (Murattal)|Hafs|https://server8.mp3quran.net/bna/",
+    "name": "Mahmoud Ali Al-Banna (Murattal)",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/bna/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Mishary Alafasy|Hafs|https://server8.mp3quran.net/afs/",
+    "name": "Mishary Alafasy",
+    "ayahIdentifier": "ar.alafasy",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/afs/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Muhammad Al-Luhaidan|Hafs|https://server8.mp3quran.net/lhdan/",
+    "name": "Muhammad Al-Luhaidan",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/lhdan/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Muhammad Al-Minshawi (Muallim)|Hafs|https://server10.mp3quran.net/minsh/Almusshaf-Al-Mo-lim/",
+    "name": "Muhammad Al-Minshawi (Muallim)",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server10.mp3quran.net/minsh/Almusshaf-Al-Mo-lim/",
+    "qiraah": null,
+    "group": "Minshawi"
+  },
+  {
+    "id": "Muhammad Al-Minshawi (Mujawwad)|Hafs|https://server10.mp3quran.net/minsh/Almusshaf-Al-Mojawwad/",
+    "name": "Muhammad Al-Minshawi (Mujawwad)",
+    "ayahIdentifier": "ar.minshawimujawwad",
+    "ayahBitrate": "64",
+    "surahLink": "https://server10.mp3quran.net/minsh/Almusshaf-Al-Mojawwad/",
+    "qiraah": null,
+    "group": "Minshawi"
+  },
+  {
+    "id": "Muhammad Al-Minshawi (Murattal)|Hafs|https://server10.mp3quran.net/minsh/",
+    "name": "Muhammad Al-Minshawi (Murattal)",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server10.mp3quran.net/minsh/",
+    "qiraah": null,
+    "group": "Minshawi"
+  },
+  {
+    "id": "Muhammad Ayyub|Hafs|https://server8.mp3quran.net/ayyub/",
+    "name": "Muhammad Ayyub",
+    "ayahIdentifier": "ar.muhammadayyoub",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/ayyub/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Muhammad Ayyub (Special)|Hafs|https://server16.mp3quran.net/ayyoub2/Rewayat-Hafs-A-n-Assem/",
+    "name": "Muhammad Ayyub (Special)",
+    "ayahIdentifier": "ar.muhammadayyoub",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/ayyoub2/Rewayat-Hafs-A-n-Assem/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Muhammad Jibreel|Hafs|https://server8.mp3quran.net/jbrl/",
+    "name": "Muhammad Jibreel",
+    "ayahIdentifier": "ar.muhammadjibreel",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/jbrl/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Muhammad Sayed|Warsh an Nafi|https://server16.mp3quran.net/m_sayed/Rewayat-Warsh-A-n-Nafi/",
+    "name": "Muhammad Sayed",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/m_sayed/Rewayat-Warsh-A-n-Nafi/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Mustafa Ismail (Mujawwad)|Hafs|https://server8.mp3quran.net/mustafa/Almusshaf-Al-Mojawwad/",
+    "name": "Mustafa Ismail (Mujawwad)",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/mustafa/Almusshaf-Al-Mojawwad/",
+    "qiraah": null,
+    "group": "Mujawwad"
+  },
+  {
+    "id": "Mustafa Ismail (Murattal)|Hafs|https://server8.mp3quran.net/mustafa/",
+    "name": "Mustafa Ismail (Murattal)",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server8.mp3quran.net/mustafa/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Noreen Mohammad Siddiq|ad-Duri an Abi Amr|https://server16.mp3quran.net/nourin_siddig/Rewayat-Aldori-A-n-Abi-Amr/",
+    "name": "Noreen Mohammad Siddiq",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/nourin_siddig/Rewayat-Aldori-A-n-Abi-Amr/",
+    "qiraah": "ad-Duri an Abi Amr",
+    "group": "Duri"
+  },
+  {
+    "id": "Okasha Kameny|al-Bazzi an Ibn Kathir|https://server16.mp3quran.net/okasha/Rewayat-Albizi-A-n-Ibn-Katheer/",
+    "name": "Okasha Kameny",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/okasha/Rewayat-Albizi-A-n-Ibn-Katheer/",
+    "qiraah": "al-Bazzi an Ibn Kathir",
+    "group": "Buzzi"
+  },
+  {
+    "id": "Omar Al-Qazabri|Warsh an Nafi|https://server9.mp3quran.net/omar_warsh/",
+    "name": "Omar Al-Qazabri",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server9.mp3quran.net/omar_warsh/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Rachid Belalya|Warsh an Nafi|https://server6.mp3quran.net/bl3/Rewayat-Warsh-A-n-Nafi/",
+    "name": "Rachid Belalya",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server6.mp3quran.net/bl3/Rewayat-Warsh-A-n-Nafi/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Rachid Ifrad|Warsh an Nafi|https://server12.mp3quran.net/ifrad/",
+    "name": "Rachid Ifrad",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server12.mp3quran.net/ifrad/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  },
+  {
+    "id": "Saad Al-Ghamdi|Hafs|https://server7.mp3quran.net/s_gmd/",
+    "name": "Saad Al-Ghamdi",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server7.mp3quran.net/s_gmd/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Saud Al-Shuraim|Hafs|https://server7.mp3quran.net/shur/",
+    "name": "Saud Al-Shuraim",
+    "ayahIdentifier": "ar.saoodshuraym",
+    "ayahBitrate": "64",
+    "surahLink": "https://server7.mp3quran.net/shur/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Tareq Daawob|Qalun an Nafi|https://server10.mp3quran.net/tareq/",
+    "name": "Tareq Daawob",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server10.mp3quran.net/tareq/",
+    "qiraah": "Qalun an Nafi",
+    "group": "Qaloon"
+  },
+  {
+    "id": "Yasser Al-Dosari|Hafs|https://server11.mp3quran.net/yasser/",
+    "name": "Yasser Al-Dosari",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server11.mp3quran.net/yasser/",
+    "qiraah": null,
+    "group": "Murattal"
+  },
+  {
+    "id": "Younes Souilass|Warsh an Nafi|https://server16.mp3quran.net/souilass/Rewayat-Warsh-A-n-Nafi/",
+    "name": "Younes Souilass",
+    "ayahIdentifier": "ar.minshawi",
+    "ayahBitrate": "128",
+    "surahLink": "https://server16.mp3quran.net/souilass/Rewayat-Warsh-A-n-Nafi/",
+    "qiraah": "Warsh an Nafi",
+    "group": "Warsh"
+  }
+]

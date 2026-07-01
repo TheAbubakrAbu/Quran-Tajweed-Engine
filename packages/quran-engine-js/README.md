@@ -54,11 +54,14 @@ tajweedSpans("ٱلضَّآلِّينَ");   // → spans incl. { category: "madd
 `createEngine(...)` / `loadFromDisk(...)` returns:
 
 ```ts
-engine.quran      // Quran:    surah(), ayah(), arabicText(.., riwayah), globalAyahNumber(), info(), eachAyah()
-engine.juzPage    // JuzPage:  juz(), ayahsInJuz(), ayahsOnPage(), firstAyahOf*(), juzForAyah(), totalPages()
-engine.reciters   // Reciters: all(), byId(), byQiraah(), withSurahFeed(), qiraat()
-engine.search     // Search:   searchVerses(), searchSurahs(), parseReference()
+engine.quran        // Quran:    surah(), ayah(), arabicText(.., riwayah), globalAyahNumber(), info(), eachAyah(),
+                    //           surahFromEnd(), isSajdahAyah(), sajdahAyahs()
+engine.juzPage      // JuzPage:  juz(), ayahsInJuz(), ayahsOnPage(), firstAyahOf*(), juzForAyah(), totalPages(), juzFromEnd(), juzStats()
+engine.reciters     // Reciters: all(), byId(), byQiraah(), withSurahFeed(), qiraat()
+engine.search       // Search:   searchVerses(), searchSurahs(), parseReference()
+engine.namesOfAllah // NamesOfAllah: all(), byNumber()   — the 99 Names
 engine.tajweed(text, opts?)   // → colored spans (category + colorHex + text + range)
+// also: sortSurahs(), filterByRevelationType(), filterByCounts()  (named exports)
 ```
 
 Plus standalone functions: `surahAudioUrl`, `ayahAudioUrl`, `sortSurahs`, `detectPaintOps`, `resolveSpans`, `AudioCache`, `localSurahPath`, and the `text.js` normalizers.

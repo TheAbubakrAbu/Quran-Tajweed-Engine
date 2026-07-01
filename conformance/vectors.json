@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "description": "Single source of behavioral truth for the engine. Every language port SHOULD run these vectors against its own engine so a behavior is specified ONCE here instead of re-asserted in 7 hand-written test files. Add or change a case here, then each port's conformance test picks it up. Reference consumer: packages/quran-engine-js/test/conformance.test.js. See docs/PORTING.md → 'Conformance vectors'.",
+  "searchVerses": [
+    { "query": "orld", "contains": ["1:2"], "note": "regular search is a PURE substring — mid-word fragments match (\"orld\" in \"worlds\")" },
+    { "query": "=lord", "contains": ["1:2"], "note": "the `=` whole-word operator matches the whole token \"lord\"" },
+    { "query": "=lor", "excludes": ["1:2"], "note": "whole-word: a partial token does NOT match" },
+    { "query": "lor", "contains": ["1:2"], "note": "plain (non-boolean) substring still matches" },
+    { "query": "allah & 2", "empty": true, "note": "any decimal digit is rejected BEFORE the boolean path" },
+    { "query": "2 255", "empty": true, "note": "numeric verse queries are rejected (they are surah/reference search)" }
+  ],
+  "juzFromEnd": [
+    { "n": 1, "id": 30 },
+    { "n": 30, "id": 1 },
+    { "n": 0, "id": null },
+    { "n": 31, "id": null }
+  ],
+  "juzStats": [
+    { "juz": 30, "surahCount": 37, "ayahCount": 564, "wordCount": 2309, "letterCount": 9699, "pageCount": 23 },
+    { "juz": 99, "isNull": true }
+  ],
+  "juzStatsInvariant": { "sumAyahCountAllJuz": 6236, "note": "the 30 juz partition the 6236 ayahs exactly" },
+  "surahFromEnd": [
+    { "n": 1, "id": 114 },
+    { "n": 2, "id": 113 },
+    { "n": 114, "id": 1 },
+    { "n": 0, "id": null },
+    { "n": 115, "id": null }
+  ],
+  "sajdah": {
+    "count": 15,
+    "contains": ["7:206", "32:15", "96:19"],
+    "excludes": ["1:1"],
+    "note": "the 15 prostration ayahs, detected by the ۩ mark (U+06E9)"
+  },
+  "surahInfo": [
+    { "surah": 1, "minSources": 1, "hasSourceName": "Maududi" },
+    { "surah": 114, "minSources": 1 }
+  ],
+  "namesOfAllah": {
+    "count": 99,
+    "byNumber": [
+      { "number": 1, "transliteration": "Ar-Rahman" }
+    ]
+  },
+  "filterByCounts": [
+    { "ayahs": { "op": "==", "value": 286 }, "ids": [2] },
+    { "ayahs": { "op": ">", "value": 200 }, "ids": [2, 7, 26] }
+  ],
+  "surahFlags": [
+    { "surah": 1, "pageChanges": false, "juzChanges": false, "pageOrJuz": false },
+    { "surah": 2, "pageChanges": true, "juzChanges": true, "pageOrJuz": true },
+    { "surah": 112, "pageChanges": false, "juzChanges": false, "pageOrJuz": false }
+  ],
+  "existsInQiraah": [
+    { "surah": 2, "ayah": 285, "riwayah": "warsh", "exists": true },
+    { "surah": 2, "ayah": 286, "riwayah": "warsh", "exists": false },
+    { "surah": 2, "ayah": 286, "riwayah": "shubah", "exists": true },
+    { "surah": 2, "ayah": 286, "riwayah": "hafs", "exists": true },
+    { "surah": 5, "ayah": 120, "riwayah": "warsh", "exists": true }
+  ],
+  "numberOfAyahsInQiraah": [
+    { "surah": 2, "riwayah": "hafs", "count": 286 },
+    { "surah": 2, "riwayah": "warsh", "count": 285 },
+    { "surah": 2, "riwayah": "shubah", "count": 286 },
+    { "surah": 5, "riwayah": "warsh", "count": 120 }
+  ],
+  "muqattaat": {
+    "count": 30,
+    "_spelledNote": "spelledOutArabic is exact data (hard to assert literally cross-language); instead we check it carries the madd-lāzim maddah U+0653 so the tajweed pass colours it. The JS engine test checks the literal.",
+    "pronunciations": [
+      { "surah": 2, "ayah": 1, "transliteration": "Alif Lām Mīm", "spelledContainsMaddah": true },
+      { "surah": 42, "ayah": 2, "transliteration": "ʿAyn Sīn Qāf" },
+      { "surah": 19, "ayah": 1, "transliteration": "Kāf Hā Yā ʿAyn Ṣād", "spelledContainsMaddah": true }
+    ],
+    "absent": [
+      { "surah": 1, "ayah": 1 }
+    ]
+  },
+  "tajweed": [
+    {
+      "surah": 86, "ayah": 17,
+      "excludesRule": "iqlaab",
+      "lastSpanRule": "maddNatural",
+      "note": "At-Tariq ends in رُوَيۡدَۢا — tanwin-fath in the iqlaab form. At the stop the iqlaab is dropped and the final alif is a 2-count madd 'iwad."
+    }
+  ]
+}

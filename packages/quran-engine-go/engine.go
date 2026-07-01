@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 )
 
 // Engine holds all parsed data and the derived lookup tables. Construct it with
@@ -19,15 +20,26 @@ type Engine struct {
 	juzList  []JuzEntry
 	reciters []Reciter
 
+	surahInfo     map[int][]SurahInfoSource // surah id -> "About this surah" sources
+	names         []NameOfAllah             // 99 Names, ordered by number
+	namesByNumber map[int]*NameOfAllah      // number -> name
+
 	ruleColors map[string]string              // category id -> colorHex
 	annotByKey map[[2]int][]tajweedAnnotation // (surah,ayah) -> annotations
+
+	muqattaat        []MuqattaatPronunciation            // 30 openings, in file order
+	muqattaatByKey   map[string]*MuqattaatPronunciation  // "surah:ayah" -> pronunciation
+	muqattaatLetters map[string]string                   // bare letter -> transliteration
+
+	qiraatCounts map[string]map[string]int // riwayah -> surahId(str) -> ayah count
 
 	search *searchIndex
 }
 
 // LoadFrom parses the JSON data files in dataDir and returns a ready Engine.
 //
-// Required: quran.json, juz.json, reciters.json, tajweed-rules.json.
+// Required: quran.json, juz.json, reciters.json, surah-info.json,
+// names-of-allah.json, tajweed-rules.json, muqattaat.json, qiraat-counts.json.
 // Optional: tajweed-annotations.json (needed for TajweedSpans).
 func LoadFrom(dataDir string) (*Engine, error) {
 	e := &Engine{}
@@ -42,8 +54,25 @@ func LoadFrom(dataDir string) (*Engine, error) {
 		return nil, err
 	}
 
+	var infoEntries []surahInfoEntry
+	if err := readJSON(filepath.Join(dataDir, "surah-info.json"), &infoEntries); err != nil {
+		return nil, err
+	}
+	if err := readJSON(filepath.Join(dataDir, "names-of-allah.json"), &e.names); err != nil {
+		return nil, err
+	}
+
 	var rules tajweedRulesFile
 	if err := readJSON(filepath.Join(dataDir, "tajweed-rules.json"), &rules); err != nil {
+		return nil, err
+	}
+
+	var muq muqattaatFile
+	if err := readJSON(filepath.Join(dataDir, "muqattaat.json"), &muq); err != nil {
+		return nil, err
+	}
+
+	if err := readJSON(filepath.Join(dataDir, "qiraat-counts.json"), &e.qiraatCounts); err != nil {
 		return nil, err
 	}
 
@@ -62,10 +91,36 @@ func LoadFrom(dataDir string) (*Engine, error) {
 	// Reciters: keep stable (file) order; sorting is exposed via SortReciters/All.
 	// (The JS port sorts by name for display; we keep file order and offer helpers.)
 
+	// Surah info ("About this surah") index: surah id -> sources.
+	e.surahInfo = make(map[int][]SurahInfoSource, len(infoEntries))
+	for _, ent := range infoEntries {
+		e.surahInfo[ent.ID] = ent.Sources
+	}
+
+	// 99 Names: order by number (mirrors the JS NamesOfAllah constructor) and index.
+	sort.SliceStable(e.names, func(i, j int) bool { return e.names[i].Number < e.names[j].Number })
+	e.namesByNumber = make(map[int]*NameOfAllah, len(e.names))
+	for i := range e.names {
+		n := &e.names[i]
+		e.namesByNumber[n.Number] = n
+	}
+
 	// Tajweed rule color map.
 	e.ruleColors = make(map[string]string, len(rules.Categories))
 	for _, c := range rules.Categories {
 		e.ruleColors[c.ID] = c.ColorHex
+	}
+
+	// Muqattaʿāt: keep file order; index by "surah:ayah" and keep the letter names.
+	e.muqattaat = muq.Ayahs
+	e.muqattaatLetters = muq.LetterNames
+	if e.muqattaatLetters == nil {
+		e.muqattaatLetters = map[string]string{}
+	}
+	e.muqattaatByKey = make(map[string]*MuqattaatPronunciation, len(e.muqattaat))
+	for i := range e.muqattaat {
+		p := &e.muqattaat[i]
+		e.muqattaatByKey[fmt.Sprintf("%d:%d", p.Surah, p.Ayah)] = p
 	}
 
 	// Tajweed annotations (optional).

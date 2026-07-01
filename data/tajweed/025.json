@@ -1215,7 +1215,7 @@
    {
     "start": 128,
     "end": 131,
-    "rule": "iqlaab"
+    "rule": "tafkhim"
    },
    {
     "start": 131,
@@ -7528,11 +7528,6 @@
     "start": 96,
     "end": 97,
     "rule": "maddNatural"
-   },
-   {
-    "start": 97,
-    "end": 100,
-    "rule": "iqlaab"
    },
    {
     "start": 100,

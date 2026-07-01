@@ -36,7 +36,7 @@ import {
  * @property {string[]} englishTokens
  */
 
-const BOOLEAN_CHARS = /[&|!#^%$]/;
+const BOOLEAN_CHARS = /[&|!#^%$=]/;
 
 export class Search {
   /**
@@ -73,28 +73,29 @@ export class Search {
     const cleaned = cleanSearch(query, { whitespace: true });
     if (!cleaned) return [];
 
+    // Reject any query containing a digit (numeric/refs go via surah search). Done BEFORE the boolean
+    // path — exactly as QuranData.search(term:) does — so even a boolean query with a digit returns [].
+    if (/\p{Nd}/u.test(cleaned)) return [];
+
     // Boolean grammar?
     if (BOOLEAN_CHARS.test(query)) return this._booleanSearch(query, opts);
-
-    // Verse-text search rejects any query containing a digit (numeric/refs go via surah search).
-    if (/[0-9]/.test(cleaned)) return [];
 
     const useArabic = containsArabicLetters(query);
     const silentQuery = useArabic && opts.ignoreSilentLetters
       ? cleanSearch(removingSilentArabicLettersForSearch(query), { whitespace: true })
       : "";
 
-    const qTokens = searchTokens(cleaned);
-    const sTokens = silentQuery ? searchTokens(silentQuery) : [];
-
+    // Plain substring search in mushaf order — word/sentence boundaries DON'T matter (a query matches
+    // anywhere it appears, e.g. "رب" inside "ربهم"). Whole-word / phrase matching lives in the `=`
+    // operator; `#` does an exact (case/tashkeel-sensitive) match. Mirrors regularSearchEntryMatches().
     /** @param {VerseIndexEntry} e */
     const matches = (e) => {
       if (useArabic) {
-        if (e.arabicBlob.includes(cleaned) || phrasePrefixMatch(e.arabicTokens, qTokens)) return true;
+        if (e.arabicBlob.includes(cleaned)) return true;
         if (!silentQuery) return false;
-        return e.silentArabicBlob.includes(silentQuery) || phrasePrefixMatch(e.silentArabicTokens, sTokens);
+        return e.silentArabicBlob.includes(silentQuery);
       }
-      return e.englishBlob.includes(cleaned) || phrasePrefixMatch(e.englishTokens, qTokens);
+      return e.englishBlob.includes(cleaned);
     };
 
     return paginate(this.index.filter(matches), opts);
@@ -104,8 +105,9 @@ export class Search {
   _booleanSearch(query, opts) {
     const useArabic = containsArabicLetters(query);
     const normalized = query.replace(/&&/g, "&").replace(/\|\|/g, "|");
+    // Drop any term whose cleaned value is empty — booleanAyahSearchTerm() returns nil in that case.
     const orGroups = normalized.split("|").map((g) =>
-      g.split("&").map((t) => parseTerm(t)).filter((t) => t.value !== "" || t.tashkeel)
+      g.split("&").map((t) => parseTerm(t)).filter((t) => t.value !== "")
     ).filter((g) => g.length);
     if (!orGroups.length) return [];
 
@@ -198,17 +200,18 @@ function makeEntry(surahId, ayahId, raw, clean, saheeh, mustafa, translit) {
 }
 
 /**
- * Phrase-prefix match: query tokens match a consecutive run of haystack tokens, all-but-last exact,
- * last is a prefix. Mirrors phrasePrefixMatch.
- * @param {string[]} haystack @param {string[]} query
+ * Consecutive-token match: query tokens appear as a consecutive run of haystack tokens. The leading
+ * tokens must match exactly; the final token must match exactly when `lastMustBeExact`, otherwise it
+ * only has to be a prefix. Mirrors consecutiveTokenMatch().
+ * @param {string[]} haystack @param {string[]} query @param {boolean} lastMustBeExact
  */
-function phrasePrefixMatch(haystack, query) {
+function consecutiveTokenMatch(haystack, query, lastMustBeExact) {
   if (!query.length || haystack.length < query.length) return false;
   for (let start = 0; start <= haystack.length - query.length; start++) {
     let ok = true;
     for (let k = 0; k < query.length; k++) {
       const word = haystack[start + k], term = query[k];
-      if (k === query.length - 1) { if (!word.startsWith(term)) { ok = false; break; } }
+      if (k === query.length - 1 && !lastMustBeExact) { if (!word.startsWith(term)) { ok = false; break; } }
       else if (word !== term) { ok = false; break; }
     }
     if (ok) return true;
@@ -228,30 +231,71 @@ function toNumber(s) {
   return Number.isInteger(n) && s.trim() !== "" ? n : null;
 }
 
-/** Parse a single boolean term: prefixes !, #, ^ and suffix %/$. */
+/**
+ * Parse a single boolean term. Mirrors booleanAyahSearchTerm(): strips (in order) leading `!` (negate,
+ * toggles), `#` (exact / tashkeel-sensitive), `=` (whole-word), one `^` (starts-with), one trailing
+ * `%`/`$` (ends-with); the leftover text becomes the value + the tashkeel/exact-phrase patterns.
+ */
 function parseTerm(rawTerm) {
   let t = rawTerm.trim();
-  let negate = false, exact = false, startsWith = false, endsWith = false;
-  while (t.startsWith("!")) { negate = !negate; t = t.slice(1); }
-  if (t.startsWith("#")) { exact = true; t = t.slice(1); }
-  if (t.startsWith("^")) { startsWith = true; t = t.slice(1); }
-  if (t.endsWith("%") || t.endsWith("$")) { endsWith = true; t = t.slice(0, -1); }
-  const value = cleanSearch(t);
-  return { value, negate, exact, startsWith, endsWith, tashkeel: exact ? arabicTashkeelBlob(t) : "", exactPhrase: exact ? exactPhraseBlob(t) : "" };
+  let negate = false;
+  while (t.startsWith("!")) { negate = !negate; t = t.slice(1).trim(); }
+  let requiresTashkeel = false;
+  while (t.startsWith("#")) { requiresTashkeel = true; t = t.slice(1).trim(); }
+  let wholeWord = false;
+  while (t.startsWith("=")) { wholeWord = true; t = t.slice(1).trim(); }
+  let startsWith = false;
+  if (t.startsWith("^")) { startsWith = true; t = t.slice(1).trim(); }
+  let endsWith = false;
+  if (t.endsWith("%") || t.endsWith("$")) { endsWith = true; t = t.slice(0, -1).trim(); }
+
+  const value = cleanSearch(t, { whitespace: true });
+  let matchMode;
+  if (wholeWord) matchMode = "wholeWord";
+  else if (startsWith && endsWith) matchMode = "exact";
+  else if (startsWith) matchMode = "startsWith";
+  else if (endsWith) matchMode = "endsWith";
+  else matchMode = "contains";
+
+  const isArabic = containsArabicLetters(t);
+  return {
+    value,
+    negate,
+    matchMode,
+    requiresTashkeelMatch: requiresTashkeel && isArabic,
+    tashkeelPattern: arabicTashkeelBlob(t),
+    requiresExactEnglishMatch: requiresTashkeel && !isArabic,
+    exactEnglishPhrase: exactPhraseBlob(t),
+  };
 }
 
+/**
+ * Match a single term's value against a blob/token list under one of the five modes. Mirrors
+ * ayahTermMatch().
+ */
+function ayahTermMatch(haystack, tokens, term, mode) {
+  switch (mode) {
+    case "startsWith": return haystack.startsWith(term) || tokens.some((w) => w.startsWith(term));
+    case "endsWith": return haystack.endsWith(term) || tokens.some((w) => w.endsWith(term));
+    case "exact": return haystack === term || tokens.includes(term);
+    case "wholeWord": return consecutiveTokenMatch(tokens, searchTokens(term), true);
+    case "contains":
+    default: return haystack.includes(term);
+  }
+}
+
+/** Per-term match (un-negated). Mirrors the per-term branch of matchesBooleanAyahSearch(). */
 function termMatch(e, term, useArabic) {
+  if (useArabic && term.requiresTashkeelMatch) {
+    const lettersMatch = ayahTermMatch(e.arabicBlob, e.arabicTokens, term.value, term.matchMode);
+    const tashkeelMatch = term.tashkeelPattern === "" || e.arabicTashkeelBlob.includes(term.tashkeelPattern);
+    return lettersMatch && tashkeelMatch;
+  }
+  if (!useArabic && term.requiresExactEnglishMatch) {
+    const exactTokens = searchTokens(term.exactEnglishPhrase);
+    return term.exactEnglishPhrase !== "" && ayahTermMatch(e.englishExactBlob, exactTokens, term.exactEnglishPhrase, term.matchMode);
+  }
   const haystack = useArabic ? e.arabicBlob : e.englishBlob;
   const tokens = useArabic ? e.arabicTokens : e.englishTokens;
-  if (term.exact) {
-    if (useArabic) {
-      const base = haystack === term.value || tokens.includes(term.value) || haystack.includes(term.value);
-      return base && (!term.tashkeel || e.arabicTashkeelBlob.includes(term.tashkeel));
-    }
-    return e.englishExactBlob.includes(term.exactPhrase);
-  }
-  if (term.startsWith && term.endsWith) return haystack === term.value || tokens.includes(term.value);
-  if (term.startsWith) return haystack.startsWith(term.value) || tokens.some((w) => w.startsWith(term.value));
-  if (term.endsWith) return haystack.endsWith(term.value) || tokens.some((w) => w.endsWith(term.value));
-  return haystack.includes(term.value);
+  return ayahTermMatch(haystack, tokens, term.value, term.matchMode);
 }

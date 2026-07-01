@@ -15,11 +15,11 @@ dependencies: [
 
 Or in Xcode: **File ▸ Add Package Dependencies…** and point at the `quran-engine-swift` directory (or its git URL). Then `import QuranEngine`.
 
-Bundle the `/data` JSON in your app target (drag the `data` folder into Xcode as a *folder reference* so it keeps its structure) and point the loader at it with `dataDirectory:`.
+**The data ships inside the package.** The core JSON corpus (`quran.json`, `juz.json`, `reciters.json`, `tajweed-rules.json`, `tajweed-annotations.json`, plus `surah-info` / `names-of-allah` / `arabic-alphabet`) is bundled as a SwiftPM resource (`Sources/QuranEngine/Resources/`, generated from [`/data`](../../data) by `scripts/sync-package-resources.mjs`). So `try Engine.load()` works with **zero filesystem setup** — you do NOT copy `/data` into your app. Pass `dataDirectory:` only to override with your own corpus.
 
 ## Minimal working example (canonical load + a SwiftUI view)
 
-`Engine.load` resolves `/data` from an explicit `dataDirectory:`, the `QURAN_ENGINE_DATA` env var, or the repo path. In an app, pass the bundle URL of your bundled data folder:
+`Engine.load()` resolves each data file from (in order) an explicit `dataDirectory:`, the **bundled package resources**, then a discovered repo `/data` (monorepo dev). In an app you just call `try Engine.load()`:
 
 ```swift
 import SwiftUI
@@ -29,9 +29,8 @@ import QuranEngine
 final class QuranStore: ObservableObject {
     let engine: Engine
     init() {
-        // `data` bundled as a folder reference → Bundle.main.url(forResource:withExtension:)
-        let dataURL = Bundle.main.url(forResource: "data", withExtension: nil)
-        engine = try! Engine.load(dataDirectory: dataURL)
+        // Data is bundled inside the package — no app-side data setup needed.
+        engine = try! Engine.load()
     }
 }
 

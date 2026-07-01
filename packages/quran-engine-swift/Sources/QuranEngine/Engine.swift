@@ -27,13 +27,17 @@ public final class Engine {
     public let reciters: Reciters
     public let tajweed: Tajweed
     public let search: Search
+    public let namesOfAllah: NamesOfAllah
+    public let muqattaat: Muqattaat
 
-    public init(quran: Quran, juzPage: JuzPage, reciters: Reciters, tajweed: Tajweed, search: Search) {
+    public init(quran: Quran, juzPage: JuzPage, reciters: Reciters, tajweed: Tajweed, search: Search, namesOfAllah: NamesOfAllah, muqattaat: Muqattaat) {
         self.quran = quran
         self.juzPage = juzPage
         self.reciters = reciters
         self.tajweed = tajweed
         self.search = search
+        self.namesOfAllah = namesOfAllah
+        self.muqattaat = muqattaat
     }
 
     /// Load the engine from a `/data` directory.
@@ -44,13 +48,36 @@ public final class Engine {
     ///     the repo root + `/data`, and `<cwd>/data` plus a few parent-relative fallbacks.
     ///   - riwayah: optional qiraah label for text/search (default Hafs).
     public static func load(dataDirectory: URL? = nil, riwayah: String? = nil) throws -> Engine {
-        let dataURL = try resolveDataDirectory(explicit: dataDirectory)
         let decoder = JSONDecoder()
 
+        // Resolve each data file from (in order): an explicit dir, the resources BUNDLED in the package
+        // (so the engine works as a SwiftPM dependency with zero filesystem setup), then a discovered
+        // repo /data dir (monorepo dev). `dataDirectory` is resolved lazily so a consuming app never
+        // needs the repo on disk.
+        let explicitDir = dataDirectory
+        var discoveredDir: URL?
+
         func decode<T: Decodable>(_ type: T.Type, _ file: String) throws -> T {
-            let url = dataURL.appendingPathComponent(file)
-            guard let data = try? Data(contentsOf: url) else { throw EngineError.missingFile(url.path) }
-            return try decoder.decode(T.self, from: data)
+            let name = (file as NSString).deletingPathExtension
+            let ext = (file as NSString).pathExtension
+            // 1. explicit dir
+            if let explicitDir {
+                let url = explicitDir.appendingPathComponent(file)
+                if let data = try? Data(contentsOf: url) { return try decoder.decode(T.self, from: data) }
+            }
+            // 2. bundled resource (Resources/ inside the package)
+            if let url = Bundle.module.url(forResource: name, withExtension: ext, subdirectory: "Resources")
+                ?? Bundle.module.url(forResource: name, withExtension: ext),
+               let data = try? Data(contentsOf: url) {
+                return try decoder.decode(T.self, from: data)
+            }
+            // 3. discovered repo /data (dev / monorepo)
+            if discoveredDir == nil { discoveredDir = try? resolveDataDirectory(explicit: nil) }
+            if let discoveredDir {
+                let url = discoveredDir.appendingPathComponent(file)
+                if let data = try? Data(contentsOf: url) { return try decoder.decode(T.self, from: data) }
+            }
+            throw EngineError.missingFile(file)
         }
 
         let surahs = try decode([Surah].self, "quran.json")
@@ -58,14 +85,19 @@ public final class Engine {
         let reciterList = try decode([Reciter].self, "reciters.json")
         let rules = try decode(TajweedRules.self, "tajweed-rules.json")
         let annotations = try decode([TajweedAyahRecord].self, "tajweed-annotations.json")
+        let surahInfo = try decode([SurahInfo].self, "surah-info.json")
+        let names = try decode([NameOfAllah].self, "names-of-allah.json")
+        let muqattaat = try decode(Muqattaat.self, "muqattaat.json")
+        let qiraatCounts = try decode([String: [String: Int]].self, "qiraat-counts.json")
 
-        let quran = Quran(surahs: surahs)
+        let quran = Quran(surahs: surahs, surahInfo: surahInfo, qiraatCounts: qiraatCounts)
         let juzPage = JuzPage(quran: quran, juzList: juzList)
         let reciters = Reciters(reciterList)
         let tajweed = Tajweed(quran: quran, categories: rules.categories, records: annotations)
         let search = Search(quran: quran, riwayah: riwayah)
+        let namesOfAllah = NamesOfAllah(names)
 
-        return Engine(quran: quran, juzPage: juzPage, reciters: reciters, tajweed: tajweed, search: search)
+        return Engine(quran: quran, juzPage: juzPage, reciters: reciters, tajweed: tajweed, search: search, namesOfAllah: namesOfAllah, muqattaat: muqattaat)
     }
 
     /// Resolve the `/data` directory, trying several strategies.

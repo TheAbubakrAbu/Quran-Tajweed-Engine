@@ -151,11 +151,6 @@
     "rule": "maddNatural"
    },
    {
-    "start": 65,
-    "end": 68,
-    "rule": "iqlaab"
-   },
-   {
     "start": 68,
     "end": 69,
     "rule": "maddNatural"

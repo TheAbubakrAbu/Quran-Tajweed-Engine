@@ -111,6 +111,113 @@ func searchTokens(cleaned string) []string {
 	return strings.Fields(cleaned)
 }
 
+// tashkeelRanges are the combining-mark ranges that count as Arabic "tashkeel"
+// (diacritics) for the search normalizer. Mirrors TASHKEEL_RANGES in text.js.
+var tashkeelRanges = [][2]int{
+	{0x0610, 0x061a},
+	{0x064b, 0x065f},
+	{0x0670, 0x0670},
+	{0x06d6, 0x06ed},
+}
+
+func inTashkeel(cp int) bool {
+	for _, r := range tashkeelRanges {
+		if cp >= r[0] && cp <= r[1] {
+			return true
+		}
+	}
+	return false
+}
+
+// arabicTashkeelBlob keeps ONLY tashkeel scalars (inverse of cleanSearch).
+// Mirrors arabicTashkeelBlob() in text.js.
+func arabicTashkeelBlob(text string) string {
+	var b strings.Builder
+	for _, ch := range text {
+		if inTashkeel(int(ch)) {
+			b.WriteRune(ch)
+		}
+	}
+	return b.String()
+}
+
+// exactPhraseBlob lowercases + whitespace-collapses without stripping marks.
+// Mirrors exactPhraseBlob() in text.js.
+func exactPhraseBlob(text string) string {
+	return collapsingWhitespace(strings.ToLower(text))
+}
+
+// silentVowels are the diacritics that keep a carrier letter "voiced" so it is
+// NOT dropped by removingSilentArabicLettersForSearch.
+var silentVowels = map[rune]bool{
+	0x064e: true, 0x064f: true, 0x0650: true, 0x064b: true, 0x064c: true,
+	0x064d: true, 0x0656: true, 0x0657: true, 0x065a: true,
+}
+
+// splitGraphemeClusters splits text into base-letter + trailing combining marks.
+// Combining-mark fallback that is sufficient for Arabic Quranic text. Mirrors
+// the fallback branch of splitGraphemeClusters() in text.js.
+func splitGraphemeClusters(text string) []string {
+	var out []string
+	for _, ch := range text {
+		if len(out) > 0 && unicode.IsMark(ch) {
+			out[len(out)-1] += string(ch)
+		} else {
+			out = append(out, string(ch))
+		}
+	}
+	return out
+}
+
+// removingSilentArabicLettersForSearch drops "silent" Arabic letters for the
+// lenient Arabic search variant. Mirrors removingSilentArabicLettersForSearch().
+func removingSilentArabicLettersForSearch(text string) string {
+	var out strings.Builder
+	for _, cluster := range splitGraphemeClusters(text) {
+		runes := []rune(cluster)
+		if len(runes) == 0 {
+			continue
+		}
+		base := runes[0]
+		has := func(cp rune) bool {
+			for _, r := range runes {
+				if r == cp {
+					return true
+				}
+			}
+			return false
+		}
+		hasStdSukoon := has(0x0652) && !has(0x06e1)
+		// hamzatul wasl is always silent
+		if base == 0x0671 {
+			continue
+		}
+		// alif/waw/ya/alif-maqsura with a plain sukoon
+		if (base == 0x0627 || base == 0x0648 || base == 0x064a || base == 0x0649) && hasStdSukoon {
+			continue
+		}
+		// lam with a plain sukoon
+		if base == 0x0644 && hasStdSukoon {
+			continue
+		}
+		// waw carrying a dagger alif with no vowel/shadda/sukoon
+		if base == 0x0648 && has(0x0670) {
+			voiced := false
+			for _, r := range runes {
+				if silentVowels[r] || r == 0x0651 || r == 0x0652 {
+					voiced = true
+					break
+				}
+			}
+			if !voiced {
+				continue
+			}
+		}
+		out.WriteString(cluster)
+	}
+	return out.String()
+}
+
 var arabicLetterRanges = [][2]int{
 	{0x0600, 0x06ff}, {0x0750, 0x077f}, {0x08a0, 0x08ff},
 	{0xfb50, 0xfdff}, {0xfe70, 0xfeff}, {0x1ee00, 0x1eeff},
@@ -129,10 +236,11 @@ func containsArabicLetters(text string) bool {
 	return false
 }
 
-// hasDigit reports whether s contains an ASCII digit.
+// hasDigit reports whether s contains any Unicode decimal digit (category Nd),
+// which catches Arabic-Indic digits too. Mirrors the /\p{Nd}/u test in search.js.
 func hasDigit(s string) bool {
 	for _, ch := range s {
-		if ch >= '0' && ch <= '9' {
+		if unicode.IsDigit(ch) {
 			return true
 		}
 	}

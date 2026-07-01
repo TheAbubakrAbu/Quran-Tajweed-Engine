@@ -97,3 +97,49 @@ func (e *Engine) TotalPages() int {
 	})
 	return max
 }
+
+// JuzFromEnd resolves a juz counted from the end of the Quran: 1 -> juz 30, 2 -> juz 29 ... 30 -> juz 1.
+// Mirrors the search-bar "-N" shorthand in QuranView.swift. Returns nil for n outside 1..30.
+func (e *Engine) JuzFromEnd(n int) *JuzEntry {
+	if n < 1 || n > 30 {
+		return nil
+	}
+	return e.Juz(31 - n)
+}
+
+// JuzStats holds aggregate counts for a single juz. Mirrors QuranData.JuzStats.
+type JuzStats struct {
+	SurahCount  int
+	AyahCount   int
+	WordCount   int
+	LetterCount int
+	PageCount   int
+}
+
+// JuzStatsFor returns aggregate counts for a single juz, computed from the ayahs actually
+// assigned to it (ayah.Juz == juz) so surahs that straddle a juz boundary are split correctly.
+// Mirrors QuranData.juzStats(for:). Returns nil for an unknown juz id.
+func (e *Engine) JuzStatsFor(juz int) *JuzStats {
+	if e.Juz(juz) == nil {
+		return nil
+	}
+	surahIDs := map[int]bool{}
+	pages := map[int]bool{}
+	stats := JuzStats{}
+	e.EachAyah(func(s *Surah, a *Ayah) bool {
+		if a.Juz != juz {
+			return true
+		}
+		surahIDs[s.ID] = true
+		stats.AyahCount++
+		stats.WordCount += a.WordCount
+		stats.LetterCount += a.LetterCount
+		if a.Page != 0 {
+			pages[a.Page] = true
+		}
+		return true
+	})
+	stats.SurahCount = len(surahIDs)
+	stats.PageCount = len(pages)
+	return &stats
+}

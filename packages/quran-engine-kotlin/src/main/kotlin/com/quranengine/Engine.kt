@@ -1,5 +1,7 @@
 package com.quranengine
 
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -22,6 +24,8 @@ class Engine internal constructor(
     val juzPage: JuzPage,
     val reciters: Reciters,
     val search: Search,
+    val namesOfAllah: NamesOfAllah,
+    val muqattaat: Muqattaat,
     private val tajweedImpl: Tajweed,
 ) {
     /** Colored tajweed spans for an ayah (empty if the ayah or its annotations are unknown). */
@@ -55,6 +59,8 @@ class Engine internal constructor(
             val surahs: List<Surah> = json.decodeFromString(text("quran.json"))
             val juzList: List<JuzEntry> = json.decodeFromString(text("juz.json"))
             val reciterList: List<Reciter> = json.decodeFromString(text("reciters.json"))
+            val nameList: List<NameOfAllah> = json.decodeFromString(text("names-of-allah.json"))
+            val muqattaatData: MuqattaatData = json.decodeFromString(text("muqattaat.json"))
             val rules: TajweedRules = json.decodeFromString(text("tajweed-rules.json"))
             val colors: Map<String, String> = rules.categories
                 .mapNotNull { c -> c.colorHex?.let { c.id to it } }
@@ -68,7 +74,14 @@ class Engine internal constructor(
             val surahInfo: Map<Int, List<Quran.SurahInfoSource>> =
                 if (loadSurahInfo) parseSurahInfo(text("surah-info.json")) else emptyMap()
 
-            val quran = Quran(surahs, qiraat = qiraat, surahInfo = surahInfo)
+            // riwayah key -> ("surahId" -> ayah count); always available (a sibling of quran.json).
+            val qiraatCounts: Map<String, Map<String, Int>> =
+                json.decodeFromString(
+                    MapSerializer(String.serializer(), MapSerializer(String.serializer(), Int.serializer())),
+                    text("qiraat-counts.json"),
+                )
+
+            val quran = Quran(surahs, qiraat = qiraat, surahInfo = surahInfo, qiraatCounts = qiraatCounts)
 
             val ann = LinkedHashMap<Pair<Int, Int>, List<TajweedAnnotation>>()
             if (loadTajweed) {
@@ -82,6 +95,8 @@ class Engine internal constructor(
                 juzPage = JuzPage(quran, juzList),
                 reciters = Reciters(reciterList),
                 search = Search(quran, riwayah = riwayah),
+                namesOfAllah = NamesOfAllah(nameList),
+                muqattaat = Muqattaat(muqattaatData),
                 tajweedImpl = Tajweed(ann, colors),
             )
         }

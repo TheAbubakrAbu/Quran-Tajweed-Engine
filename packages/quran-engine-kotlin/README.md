@@ -41,6 +41,8 @@ engine.quran.cleanArabicText(1, 1)                // diacritics stripped
 engine.juzPage.juz(30)?.endSurah                  // 114
 engine.juzPage.firstAyahOfJuz(2)
 engine.juzPage.totalPages()
+engine.juzPage.juzFromEnd(1)?.id                  // 30  (juz from the end: -1 → juz 30)
+engine.juzPage.juzStats(30)                        // JuzStats(surahCount, ayahCount, wordCount, letterCount, pageCount)
 
 // --- Audio URLs ---
 val alafasy = engine.reciters.all().first { it.ayahIdentifier == "ar.alafasy" }

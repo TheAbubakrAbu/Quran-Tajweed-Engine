@@ -17,7 +17,7 @@
 //! Licensed MIT. Data and algorithms are extracted from the Al-Islam | Islamic Pillars app;
 //! see `../../CREDITS.md`.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 
 pub mod audio;
@@ -30,20 +30,42 @@ pub mod util;
 
 pub use audio::{ayah_audio_url, ayah_now_playing_name, defaults_to_minshawi, surah_audio_url};
 pub use cache::{local_surah_path, sanitize_reciter_dir, shared_audio_path};
-pub use model::{Ayah, JuzEntry, Reciter, Surah, TajweedSpan};
+pub use model::{
+    Ayah, JuzEntry, MuqattaatPronunciation, NameOfAllah, Reciter, Surah, SurahInfoSource,
+    TajweedSpan,
+};
 pub use search::{Reference, SearchOpts, VerseHit};
 pub use sorting::{
-    filter_by_revelation_type, sort_surahs, SortDirection, SortMode,
+    filter_by_counts, filter_by_revelation_type, sort_surahs, CountFilter, CountOp, SortDirection,
+    SortMode,
 };
 pub use util::{utf16_slice, zero_pad3};
 
-use model::{AyahAnnotations, TajweedRules};
+use model::{AyahAnnotations, MuqattaatData, SurahInfoEntry, TajweedRules};
 use search::SearchIndex;
+
+/// ۩ ARABIC PLACE OF SAJDAH (U+06E9) — marks the 15 sajdah (prostration) ayahs.
+const SAJDAH_MARK: char = '\u{06E9}';
 
 /// A single annotation flattened to `(utf16_start, utf16_end, rule_id)`.
 type AnnotationSpan = (usize, usize, String);
 /// Map of `(surah, ayah)` -> the ayah's flattened annotations.
 type AnnotationMap = HashMap<(u32, u32), Vec<AnnotationSpan>>;
+
+/// Aggregate counts for a single juz. Mirrors `QuranData.JuzStats`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct JuzStats {
+    /// Number of distinct surahs that have at least one ayah in this juz.
+    pub surah_count: u32,
+    /// Number of ayahs assigned to this juz.
+    pub ayah_count: u32,
+    /// Total words across the juz's ayahs.
+    pub word_count: u32,
+    /// Total letters across the juz's ayahs.
+    pub letter_count: u32,
+    /// Number of distinct mushaf pages the juz spans.
+    pub page_count: u32,
+}
 
 /// Errors that can occur while loading the engine.
 #[derive(Debug)]
@@ -81,6 +103,16 @@ pub struct Engine {
     cumulative_offset: HashMap<u32, u32>,
     /// Total ayah count across the mushaf (6236).
     total_ayahs: u32,
+    /// Map surah id -> "About this surah" sources, from `surah-info.json` (empty if absent).
+    surah_info: HashMap<u32, Vec<SurahInfoSource>>,
+    /// The 99 Names of Allah, sorted by number, from `names-of-allah.json` (empty if absent).
+    names_of_allah: Vec<NameOfAllah>,
+    /// Muqaṭṭaʿāt opening ayahs, from `muqattaat.json` (empty if absent).
+    muqattaat: Vec<MuqattaatPronunciation>,
+    /// Map muqaṭṭaʿāt letter -> transliteration, from `muqattaat.json` (empty if absent).
+    muqattaat_letter_names: HashMap<String, String>,
+    /// Map riwayah -> surahId(str) -> ayah count, from `qiraat-counts.json` (empty if absent).
+    qiraat_counts: HashMap<String, HashMap<String, u32>>,
     search: SearchIndex,
 }
 
@@ -141,6 +173,41 @@ impl Engine {
         }
         let total_ayahs = acc;
 
+        // surah-info.json is optional ("About this surah" write-ups).
+        let mut surah_info: HashMap<u32, Vec<SurahInfoSource>> = HashMap::new();
+        let info_path = data_dir.join("surah-info.json");
+        if info_path.exists() {
+            let entries: Vec<SurahInfoEntry> = read_json(&info_path)?;
+            for e in entries {
+                surah_info.insert(e.id, e.sources);
+            }
+        }
+
+        // names-of-allah.json is optional (the 99 Names); sort by number to mirror the JS port.
+        let mut names_of_allah: Vec<NameOfAllah> = Vec::new();
+        let names_path = data_dir.join("names-of-allah.json");
+        if names_path.exists() {
+            names_of_allah = read_json(&names_path)?;
+            names_of_allah.sort_by_key(|n| n.number);
+        }
+
+        // muqattaat.json is optional (disconnected-letter opening pronunciations).
+        let mut muqattaat: Vec<MuqattaatPronunciation> = Vec::new();
+        let mut muqattaat_letter_names: HashMap<String, String> = HashMap::new();
+        let muqattaat_path = data_dir.join("muqattaat.json");
+        if muqattaat_path.exists() {
+            let data: MuqattaatData = read_json(&muqattaat_path)?;
+            muqattaat = data.ayahs;
+            muqattaat_letter_names = data.letter_names;
+        }
+
+        // qiraat-counts.json is optional (riwayah -> surahId -> ayah count).
+        let mut qiraat_counts: HashMap<String, HashMap<String, u32>> = HashMap::new();
+        let counts_path = data_dir.join("qiraat-counts.json");
+        if counts_path.exists() {
+            qiraat_counts = read_json(&counts_path)?;
+        }
+
         let search = SearchIndex::build(&surahs);
 
         Ok(Engine {
@@ -151,6 +218,11 @@ impl Engine {
             annotations,
             cumulative_offset,
             total_ayahs,
+            surah_info,
+            names_of_allah,
+            muqattaat,
+            muqattaat_letter_names,
+            qiraat_counts,
             search,
         })
     }
@@ -196,9 +268,158 @@ impl Engine {
         self.ayah(surah, ayah).map(|a| a.text_arabic.as_str())
     }
 
+    /// Whether a Hafs ayah exists as its own verse in the given riwayah. In Hafs every ayah
+    /// exists; other riwayat merge/split some ayahs, so a Hafs ayah "exists" iff the riwayah's
+    /// feed carries an ayah with that id (feeds are numbered contiguously 1..=count, so this is
+    /// `ayah <= count`). Mirrors `Quran.existsInQiraah`. `riwayah` `""`/`"hafs"` (case-insensitive)
+    /// and an unknown/unloaded riwayah fall back to Hafs (exists).
+    pub fn exists_in_qiraah(&self, surah: u32, ayah: u32, riwayah: &str) -> bool {
+        if self.ayah(surah, ayah).is_none() {
+            return false;
+        }
+        let r = riwayah.to_lowercase();
+        if r.is_empty() || r == "hafs" {
+            return true;
+        }
+        match self
+            .qiraat_counts
+            .get(&r)
+            .and_then(|m| m.get(&surah.to_string()))
+        {
+            None => true,
+            Some(&count) => ayah <= count,
+        }
+    }
+
+    /// Ayah count of a surah in the given riwayah — the number of Hafs ayahs that exist there
+    /// (e.g. Baqarah is 286 in Hafs but 285 in Warsh). Mirrors `Quran.numberOfAyahsInQiraah`.
+    /// Returns 0 for an unknown surah. `riwayah` `""`/`"hafs"` and a missing count fall back to
+    /// the surah's Hafs `number_of_ayahs`.
+    pub fn number_of_ayahs_in_qiraah(&self, surah: u32, riwayah: &str) -> u32 {
+        let s = match self.surah(surah) {
+            Some(s) => s,
+            None => return 0,
+        };
+        let r = riwayah.to_lowercase();
+        if r.is_empty() || r == "hafs" {
+            return s.number_of_ayahs;
+        }
+        match self
+            .qiraat_counts
+            .get(&r)
+            .and_then(|m| m.get(&surah.to_string()))
+        {
+            None => s.number_of_ayahs,
+            Some(&count) => s.number_of_ayahs.min(count),
+        }
+    }
+
     /// Iterate every `(surah, ayah)` pair in mushaf order.
     pub fn each_ayah(&self) -> impl Iterator<Item = (&Surah, &Ayah)> {
         self.surahs.iter().flat_map(|s| s.ayahs.iter().map(move |a| (s, a)))
+    }
+
+    /// Resolve a surah counted from the END of the mushaf: 1 → An-Nās (114), 2 → Al-Falaq …
+    /// 114 → Al-Fātiḥah. Mirrors `Quran.surahFromEnd`. Returns `None` for n outside 1..=114.
+    pub fn surah_from_end(&self, n: u32) -> Option<&Surah> {
+        let len = self.surahs.len() as u32;
+        if n < 1 || n > len {
+            return None;
+        }
+        self.surah(len + 1 - n)
+    }
+
+    /// "About this surah" write-ups (Maududi / Ibn Ashur) for a surah id; empty slice if none.
+    /// Mirrors `Quran.info`.
+    pub fn surah_info(&self, id: u32) -> &[SurahInfoSource] {
+        self.surah_info.get(&id).map(Vec::as_slice).unwrap_or(&[])
+    }
+
+    /// Whether an ayah is a sajdah (prostration) ayah — its Arabic text carries the ۩ mark
+    /// (U+06E9). Mirrors `Quran.isSajdahAyah`.
+    pub fn is_sajdah_ayah(&self, surah: u32, ayah: u32) -> bool {
+        self.ayah(surah, ayah)
+            .is_some_and(|a| a.text_arabic.contains(SAJDAH_MARK))
+    }
+
+    /// The 15 sajdah (prostration) ayahs, in mushaf order, detected by the ۩ mark in the
+    /// Arabic text. Mirrors `Quran.sajdahAyahs`.
+    pub fn sajdah_ayahs(&self) -> Vec<(&Surah, &Ayah)> {
+        self.each_ayah()
+            .filter(|(_, a)| a.text_arabic.contains(SAJDAH_MARK))
+            .collect()
+    }
+
+    /// Whether a mushaf page boundary falls inside this surah. Mirrors
+    /// `Quran.pageChangesWithinSurah`.
+    pub fn page_changes_within_surah(&self, surah: u32) -> bool {
+        let s = match self.surah(surah) {
+            Some(s) => s,
+            None => return false,
+        };
+        if s.number_of_pages.unwrap_or(1) > 1 {
+            return true;
+        }
+        let pages: HashSet<u32> = s.ayahs.iter().filter_map(|a| a.page).collect();
+        pages.len() > 1
+    }
+
+    /// Whether a juz boundary falls inside this surah. Mirrors `Quran.juzChangesWithinSurah`.
+    pub fn juz_changes_within_surah(&self, surah: u32) -> bool {
+        let s = match self.surah(surah) {
+            Some(s) => s,
+            None => return false,
+        };
+        if s.juzs.len() > 1 {
+            return true;
+        }
+        if let (Some(first), Some(last)) = (s.first_juz, s.last_juz) {
+            if first != last {
+                return true;
+            }
+        }
+        let juzs: HashSet<u32> = s.ayahs.iter().filter_map(|a| a.juz).collect();
+        juzs.len() > 1
+    }
+
+    /// Whether a page OR juz boundary falls inside this surah. Mirrors
+    /// `Quran.pageOrJuzChangesWithinSurah`.
+    pub fn page_or_juz_changes_within_surah(&self, surah: u32) -> bool {
+        self.page_changes_within_surah(surah) || self.juz_changes_within_surah(surah)
+    }
+
+    // ---- Names of Allah --------------------------------------------------------
+
+    /// All 99 Names of Allah, ordered by number. Mirrors `NamesOfAllah.all`.
+    pub fn names_of_allah(&self) -> &[NameOfAllah] {
+        &self.names_of_allah
+    }
+
+    /// A Name of Allah by number (1..=99). Mirrors `NamesOfAllah.byNumber`.
+    pub fn name_of_allah(&self, number: u32) -> Option<&NameOfAllah> {
+        self.names_of_allah.iter().find(|n| n.number == number)
+    }
+
+    // ---- Muqaṭṭaʿāt ------------------------------------------------------------
+
+    /// Every muqaṭṭaʿāt opening (30 entries: one per surah, plus Ash-Shūra's 2nd ayah).
+    /// Mirrors `Muqattaat.all`.
+    pub fn muqattaat(&self) -> &[MuqattaatPronunciation] {
+        &self.muqattaat
+    }
+
+    /// Pronunciation for a muqaṭṭaʿāt ayah, or `None` if that ayah doesn't open with them.
+    /// Mirrors `Muqattaat.pronunciation`.
+    pub fn muqattaat_pronunciation(&self, surah: u32, ayah: u32) -> Option<&MuqattaatPronunciation> {
+        self.muqattaat
+            .iter()
+            .find(|p| p.surah == surah && p.ayah == ayah)
+    }
+
+    /// Transliteration of a single muqaṭṭaʿāt letter, e.g. `"ا"` → `"Alif"`. Mirrors
+    /// `Muqattaat.letterName`.
+    pub fn muqattaat_letter_name(&self, letter: &str) -> Option<&str> {
+        self.muqattaat_letter_names.get(letter).map(String::as_str)
     }
 
     // ---- Juz / Page ------------------------------------------------------------
@@ -261,6 +482,46 @@ impl Engine {
         }
     }
 
+    /// Resolve a juz counted from the end of the Quran: 1 → juz 30, 2 → juz 29 … 30 → juz 1.
+    /// Mirrors the search-bar `-N` shorthand in QuranView.swift. Returns `None` for n outside 1..=30.
+    pub fn juz_from_end(&self, n: u32) -> Option<&JuzEntry> {
+        if !(1..=30).contains(&n) {
+            return None;
+        }
+        self.juz(31 - n)
+    }
+
+    /// Aggregate counts for a single juz, computed from the ayahs actually assigned to it
+    /// (`ayah.juz == Some(juz)`) so surahs that straddle a juz boundary are split correctly.
+    /// Mirrors `QuranData.juzStats(for:)`. Returns `None` for an unknown juz id.
+    pub fn juz_stats(&self, juz: u32) -> Option<JuzStats> {
+        self.juz(juz)?;
+        let mut surah_ids: HashSet<u32> = HashSet::new();
+        let mut pages: HashSet<u32> = HashSet::new();
+        let mut ayah_count = 0u32;
+        let mut word_count = 0u32;
+        let mut letter_count = 0u32;
+        for (s, a) in self.each_ayah() {
+            if a.juz != Some(juz) {
+                continue;
+            }
+            surah_ids.insert(s.id);
+            ayah_count += 1;
+            word_count += a.word_count.unwrap_or(0);
+            letter_count += a.letter_count.unwrap_or(0);
+            if let Some(p) = a.page {
+                pages.insert(p);
+            }
+        }
+        Some(JuzStats {
+            surah_count: surah_ids.len() as u32,
+            ayah_count,
+            word_count,
+            letter_count,
+            page_count: pages.len() as u32,
+        })
+    }
+
     // ---- Reciters / audio ------------------------------------------------------
 
     /// All reciters (sorted by name).
@@ -306,6 +567,17 @@ impl Engine {
     /// Filter surahs by revelation type (`"makkan"` / `"madinan"`).
     pub fn filter_by_revelation_type(&self, r#type: &str) -> Vec<&Surah> {
         sorting::filter_by_revelation_type(&self.surahs, r#type)
+    }
+
+    /// Filter surahs by ayah-count and/or page-count predicates. A surah passes when it
+    /// satisfies BOTH provided filters; an omitted (`None`) filter is ignored. Mirrors
+    /// `filterByCounts` in `sorting.js`.
+    pub fn filter_by_counts(
+        &self,
+        ayahs: Option<CountFilter>,
+        pages: Option<CountFilter>,
+    ) -> Vec<&Surah> {
+        sorting::filter_by_counts(&self.surahs, ayahs, pages)
     }
 
     // ---- Search ----------------------------------------------------------------
@@ -436,6 +708,24 @@ mod tests {
     }
 
     #[test]
+    fn juz_from_end_and_stats() {
+        let e = engine();
+        assert_eq!(e.juz_from_end(1).unwrap().id, 30);
+        assert_eq!(e.juz_from_end(30).unwrap().id, 1);
+        assert!(e.juz_from_end(0).is_none());
+        assert!(e.juz_from_end(31).is_none());
+
+        let stats = e.juz_stats(30).unwrap();
+        assert_eq!(stats.ayah_count as usize, e.ayahs_in_juz(30).len());
+        assert!(stats.surah_count >= 1 && stats.page_count >= 1);
+        assert!(stats.word_count > 0 && stats.letter_count > 0);
+        assert!(e.juz_stats(99).is_none());
+
+        let sum: u32 = (1..=30).map(|i| e.juz_stats(i).unwrap().ayah_count).sum();
+        assert_eq!(sum, 6236);
+    }
+
+    #[test]
     fn sort_surahs_ayahs_descending() {
         let e = engine();
         let sorted = e.sort_surahs("ayahs", "descending");
@@ -483,6 +773,47 @@ mod tests {
     }
 
     #[test]
+    fn surah_from_end_and_sajdah() {
+        let e = engine();
+        assert_eq!(e.surah_from_end(1).unwrap().id, 114);
+        assert_eq!(e.surah_from_end(2).unwrap().id, 113);
+        assert_eq!(e.surah_from_end(114).unwrap().id, 1);
+        assert!(e.surah_from_end(0).is_none());
+        assert!(e.surah_from_end(115).is_none());
+
+        assert_eq!(e.sajdah_ayahs().len(), 15);
+        assert!(e.is_sajdah_ayah(32, 15));
+        assert!(!e.is_sajdah_ayah(1, 1));
+    }
+
+    #[test]
+    fn surah_info_and_names() {
+        let e = engine();
+        assert!(!e.surah_info(1).is_empty());
+        assert!(e.surah_info(1).iter().any(|s| s.name == "Maududi"));
+
+        assert_eq!(e.names_of_allah().len(), 99);
+        assert_eq!(e.name_of_allah(1).unwrap().transliteration, "Ar-Rahman");
+        assert!(e.name_of_allah(0).is_none());
+        assert!(e.name_of_allah(100).is_none());
+    }
+
+    #[test]
+    fn filter_by_counts_matches_js() {
+        let e = engine();
+        let only_baqarah = e.filter_by_counts(Some(CountFilter::new(CountOp::Eq, 286)), None);
+        assert_eq!(only_baqarah.iter().map(|s| s.id).collect::<Vec<_>>(), vec![2]);
+
+        let mut over200: Vec<u32> = e
+            .filter_by_counts(Some(CountFilter::new(CountOp::Gt, 200)), None)
+            .iter()
+            .map(|s| s.id)
+            .collect();
+        over200.sort_unstable();
+        assert_eq!(over200, vec![2, 7, 26]);
+    }
+
+    #[test]
     fn search_core_paths() {
         let e = engine();
         // English substring search.
@@ -493,5 +824,24 @@ mod tests {
         // Surah search by name + reference.
         assert!(e.search_surahs("fatihah").contains(&1));
         assert!(e.search_surahs("baqarah").contains(&2));
+    }
+
+    #[test]
+    fn search_behavior_matches_js() {
+        let e = engine();
+        let opts = SearchOpts::default();
+        let hits_1_2 = |hits: &[VerseHit]| hits.iter().any(|h| h.surah == 1 && h.ayah == 2);
+
+        // Regular (non-boolean) search is a PURE SUBSTRING — mid-word match: "orld" hits 1:2.
+        assert!(hits_1_2(&e.search_verses("orld", &opts)));
+
+        // `=lord` (whole-word) hits 1:2; `=lor` does NOT (no whole word "lor")...
+        assert!(hits_1_2(&e.search_verses("=lord", &opts)));
+        assert!(!hits_1_2(&e.search_verses("=lor", &opts)));
+        // ...while a plain `lor` substring DOES hit 1:2.
+        assert!(hits_1_2(&e.search_verses("lor", &opts)));
+
+        // Digit rejection happens BEFORE the boolean branch: `allah & 2` returns 0.
+        assert!(e.search_verses("allah & 2", &opts).is_empty());
     }
 }

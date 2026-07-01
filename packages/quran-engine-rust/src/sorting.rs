@@ -97,3 +97,78 @@ pub fn sort_surahs(
 pub fn filter_by_revelation_type<'a>(surahs: &'a [Surah], r#type: &str) -> Vec<&'a Surah> {
     surahs.iter().filter(|s| s.r#type == r#type).collect()
 }
+
+/// Comparison operator for a [`CountFilter`]. Mirrors the JS `'<'|'<='|'>'|'>='|'=='`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CountOp {
+    Lt,
+    Le,
+    Gt,
+    Ge,
+    Eq,
+}
+
+impl CountOp {
+    /// Parse a JS-style operator string; unknown strings fall back to `Eq` (matching the
+    /// `case "==": default:` branch in `sorting.js`).
+    pub fn parse(s: &str) -> CountOp {
+        match s {
+            "<" => CountOp::Lt,
+            "<=" => CountOp::Le,
+            ">" => CountOp::Gt,
+            ">=" => CountOp::Ge,
+            _ => CountOp::Eq,
+        }
+    }
+
+    /// Apply the operator to `n` against the filter's `value`.
+    fn matches(self, n: u32, value: u32) -> bool {
+        match self {
+            CountOp::Lt => n < value,
+            CountOp::Le => n <= value,
+            CountOp::Gt => n > value,
+            CountOp::Ge => n >= value,
+            CountOp::Eq => n == value,
+        }
+    }
+}
+
+/// A single count predicate, e.g. `{ op: '>', value: 200 }`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct CountFilter {
+    pub op: CountOp,
+    pub value: u32,
+}
+
+impl CountFilter {
+    /// Construct a filter from an op + value.
+    pub fn new(op: CountOp, value: u32) -> CountFilter {
+        CountFilter { op, value }
+    }
+}
+
+/// Whether `n` passes the (optional) filter. An absent filter always passes.
+fn passes_count(n: u32, f: Option<CountFilter>) -> bool {
+    match f {
+        None => true,
+        Some(f) => f.op.matches(n, f.value),
+    }
+}
+
+/// Filter surahs by ayah-count and/or page-count predicates. Mirrors `filterByCounts` in
+/// `sorting.js`. A surah passes when it satisfies BOTH provided filters; an omitted filter
+/// (`None`) is ignored. `value` is compared against `number_of_ayahs` / `number_of_pages`
+/// (the latter defaulting to 0 when absent, as in the JS `?? 0`).
+pub fn filter_by_counts(
+    surahs: &[Surah],
+    ayahs: Option<CountFilter>,
+    pages: Option<CountFilter>,
+) -> Vec<&Surah> {
+    surahs
+        .iter()
+        .filter(|s| {
+            passes_count(s.number_of_ayahs, ayahs)
+                && passes_count(s.number_of_pages.unwrap_or(0), pages)
+        })
+        .collect()
+}

@@ -33,17 +33,20 @@ export async function loadFromDisk(opts = {}) {
   const dir = opts.dataDir ?? DATA_DIR;
   const read = async (rel) => JSON.parse(await readFile(join(dir, rel), "utf-8"));
 
-  const [quran, juz, reciters, tajweedRules] = await Promise.all([
+  const [quran, juz, reciters, tajweedRules, surahInfo, namesOfAllah, muqattaat, qiraatCounts] = await Promise.all([
     read("quran.json"),
     read("juz.json"),
     read("reciters.json"),
     read("tajweed-rules.json"),
+    read("surah-info.json"),
+    read("names-of-allah.json"),
+    read("muqattaat.json"),
+    read("qiraat-counts.json"),
   ]);
 
   /** @type {any} */
-  const data = { quran, juz, reciters, tajweedRules };
+  const data = { quran, juz, reciters, tajweedRules, surahInfo, namesOfAllah, muqattaat, qiraatCounts };
 
-  if (opts.loadSurahInfo) data.surahInfo = await read("surah-info.json");
   if (opts.loadQiraat) {
     /** @type {Record<string, any>} */
     const qiraat = {};

@@ -2,6 +2,7 @@ package com.quranengine
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -62,6 +63,24 @@ class EngineTest {
     }
 
     @Test
+    fun juzFromEndAndStats() {
+        val jp = engine.juzPage
+        assertEquals(30, jp.juzFromEnd(1)?.id)
+        assertEquals(1, jp.juzFromEnd(30)?.id)
+        assertNull(jp.juzFromEnd(0))
+        assertNull(jp.juzFromEnd(31))
+
+        val stats = jp.juzStats(30)!!
+        assertEquals(jp.ayahsInJuz(30).size, stats.ayahCount)
+        assertTrue(stats.surahCount >= 1 && stats.pageCount >= 1)
+        assertTrue(stats.wordCount > 0 && stats.letterCount > 0)
+        assertNull(jp.juzStats(99))
+
+        val sum = (1..30).sumOf { jp.juzStats(it)!!.ayahCount }
+        assertEquals(6236, sum)
+    }
+
+    @Test
     fun sorting() {
         val sorted = sortSurahs(engine.quran.all(), "ayahs", "descending")
         assertEquals(2, sorted[0].id) // Al-Baqarah, 286 ayahs
@@ -90,6 +109,27 @@ class EngineTest {
         // Spot-check known annotations from data/tajweed/001.json:
         assertEquals("hamzatWaslSilent", spans[0].rule)
         assertEquals("#B4B4B4", spans[0].colorHex)
+    }
+
+    @Test
+    fun verseSearchSubstringAndBooleanOperators() {
+        val search = engine.search
+        fun ids(results: List<Search.VerseIndexEntry>) = results.map { it.id }.toSet()
+
+        // Regular (non-boolean) search is a PURE mid-word substring match: "orld" hits "worlds" in 1:2.
+        assertTrue("1:2" in ids(search.searchVerses("orld")), "mid-word substring 'orld' should hit 1:2")
+
+        // Whole-word operator `=`: `=lord` matches the token "lord" in 1:2.
+        assertTrue("1:2" in ids(search.searchVerses("=lord")), "=lord should hit 1:2 (whole word)")
+
+        // `=lor` is whole-word so it must NOT match (no token equals "lor")...
+        assertTrue("1:2" !in ids(search.searchVerses("=lor")), "=lor should NOT hit 1:2 (not a whole word)")
+
+        // ...but plain substring `lor` DOES match ("lord" contains "lor").
+        assertTrue("1:2" in ids(search.searchVerses("lor")), "plain 'lor' substring should hit 1:2")
+
+        // Digit rejection happens BEFORE the boolean branch: `allah & 2` returns no results.
+        assertEquals(0, search.searchVerses("allah & 2").size, "a boolean query with a digit returns 0")
     }
 
     @Test

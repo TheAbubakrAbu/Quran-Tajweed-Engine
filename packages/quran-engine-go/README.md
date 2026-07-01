@@ -29,7 +29,7 @@ e, err = quranengine.LoadFrom("/path/to/data")
 | **Load** | `Load()`, `LoadFrom(dataDir)`, `FindDataDir()` |
 | **Quran** | `Surahs()`, `Surah(id)`, `Ayah(s,a)`, `GlobalAyahNumber(s,a)`, `ArabicText(s,a,riwayah)`, `CleanArabicText(...)`, `EachAyah(fn)`, `TotalAyahs()` |
 | **Tajweed** | `TajweedSpans(s,a)` → colored spans (strategy A: pre-computed annotations + `rule`→`colorHex`), `RuleColor(rule)` |
-| **Juz/Page** | `Juzes()`, `Juz(id)`, `AyahsInJuz(n)`, `AyahsOnPage(n)`, `FirstAyahOfJuz(n)`, `FirstAyahOfPage(n)`, `JuzForAyah(s,a)`, `PageForAyah(s,a)`, `TotalPages()` |
+| **Juz/Page** | `Juzes()`, `Juz(id)`, `AyahsInJuz(n)`, `AyahsOnPage(n)`, `FirstAyahOfJuz(n)`, `FirstAyahOfPage(n)`, `JuzForAyah(s,a)`, `PageForAyah(s,a)`, `TotalPages()`, `JuzFromEnd(n)`, `JuzStatsFor(n)` |
 | **Audio** | `SurahAudioURL(r,s)`, `AyahAudioURL(r,globalAyah)`, `Reciters()`, `ReciterByID(id)`, `AyahNowPlayingName(r)`, `DefaultsToMinshawi(r)` |
 | **Search** | `SearchVerses(q,opts)`, `SearchSurahs(q)`, `ParseReference("2:255")` |
 | **Sorting** | `SortSurahs(mode,direction)`, `FilterByRevelationType(type)`, `SupportsDirection(mode)` |

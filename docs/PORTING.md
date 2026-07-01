@@ -9,13 +9,15 @@ The philosophy: **the data is the engine.** A port is a thin, idiomatic wrapper 
 | Area | Functions / methods | Spec |
 |---|---|---|
 | **Load** | parse `quran.json`, `juz.json`, `reciters.json`, `tajweed-rules.json` (+ optional `surah-info.json`, `qiraat/*`, `tajweed-annotations.json`) | 01 |
-| **Quran** | `surah(id)`, `ayah(surah, ayah)`, `globalAyahNumber(surah, ayah)`, `arabicText(surah, ayah, riwayah?)`, `cleanArabicText(...)`, iterate ayahs | 01 |
+| **Quran** | `surah(id)`, `ayah(surah, ayah)`, `globalAyahNumber(surah, ayah)`, `arabicText(surah, ayah, riwayah?)`, `cleanArabicText(...)`, iterate ayahs, `info(surah)`, `surahFromEnd(n)`, `isSajdahAyah(s,a)`, `sajdahAyahs()`, `pageChangesWithinSurah(id)`, `juzChangesWithinSurah(id)`, `pageOrJuzChangesWithinSurah(id)`, `existsInQiraah(s,a,riwayah)`, `numberOfAyahsInQiraah(s,riwayah)` | 01 |
 | **Tajweed** | `tajweedSpans(surah, ayah)` → colored spans, by loading the pre-computed annotations and mapping `rule`→`colorHex`. (Full detector port is optional — see "Tajweed strategy".) | 02 |
-| **Juz/Page** | `juz(id)`, `ayahsInJuz(n)`, `ayahsOnPage(n)`, `firstAyahOfJuz(n)`, `firstAyahOfPage(n)`, `juzForAyah(...)`, `pageForAyah(...)`, `totalPages()` | 03 |
+| **Juz/Page** | `juz(id)`, `ayahsInJuz(n)`, `ayahsOnPage(n)`, `firstAyahOfJuz(n)`, `firstAyahOfPage(n)`, `juzForAyah(...)`, `pageForAyah(...)`, `totalPages()`, `juzFromEnd(n)`, `juzStats(n)` | 03 |
 | **Surah audio** | `surahAudioUrl(reciter, surah)` = `surahLink + zeroPad3(surah) + ".mp3"` | 04 |
 | **Ayah audio** | `ayahAudioUrl(reciter, globalAyah)` = `https://cdn.islamic.network/quran/audio/{bitrate}/{identifier}/{globalAyah}.mp3` | 05 |
 | **Search** | `searchVerses(query, opts)`, `searchSurahs(query)`, `parseReference("2:255")` | 06 |
-| **Sorting** | `sortSurahs(mode, direction)`, `filterByRevelationType(type)` | 07 |
+| **Sorting** | `sortSurahs(mode, direction)`, `filterByRevelationType(type)`, `filterByCounts({ayahs, pages})` | 07 |
+| **Names of Allah** | `namesOfAllah.all()`, `byNumber(n)` over `names-of-allah.json` | 01 |
+| **Muqaṭṭaʿāt** | `muqattaat.all()`, `pronunciation(s,a)`, `letterName(c)` over `muqattaat.json` | 01 |
 | **Caching** | `localSurahPath(reciter, surah)`, `sanitizeReciterDir(id)` (storage backend is host-specific) | 08 |
 
 A port is "complete" when it implements Load + Quran + Tajweed(via annotations) + Juz/Page + audio URLs + sorting + reference parsing. Search (full normalization) and caching are "extended" — nice to have.
@@ -78,6 +80,14 @@ parseReference("2:255")                   == { surah: 2, ayah: 255 }
 ```
 
 Every port should ship a tiny test asserting these.
+
+## Conformance vectors — the single source of behavioral truth
+
+`/conformance/vectors.json` is a language-agnostic file of `input → expected output` cases (verse search, `juzFromEnd`, `juzStats`, tajweed checkpoints). It exists so a behavior is specified **once** instead of being re-asserted by hand in seven test files — the thing that lets the ports drift apart.
+
+**Every port should ship a `conformance` test that loads `/conformance/vectors.json` and runs it against its own engine.** The JS reference consumer is [`packages/quran-engine-js/test/conformance.test.js`](../packages/quran-engine-js/src/) — mirror its tiny interpreter (each section maps to one engine call; assert `contains` / `excludes` / `empty` / scalar equality). When you change behavior, add or edit a vector here and *every* port's conformance test picks it up — no per-language test edits.
+
+Field guide: `searchVerses[].query` with `contains` (ids that must appear), `excludes` (must not), or `empty:true`; `juzFromEnd[]` `{n,id}` (`id:null` = out of range); `juzStats[]` exact counts or `{juz,isNull:true}`; `tajweed[]` `{surah,ayah,excludesRule,lastSpanRule}` (a port maps "rule" to whatever field its spans expose — the JS port calls it `category`).
 
 ## Directory convention
 

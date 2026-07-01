@@ -166,3 +166,43 @@ List<Surah> sortSurahs(
 /// Filter by revelation type ("makkan" | "madinan").
 List<Surah> filterByRevelationType(List<Surah> surahs, String type) =>
     surahs.where((s) => s.type == type).toList();
+
+/// A numeric count predicate: [op] is one of `<`, `<=`, `>`, `>=`, `==`.
+class CountFilter {
+  final String op;
+  final int value;
+  const CountFilter(this.op, this.value);
+}
+
+bool _passesCount(int n, CountFilter? f) {
+  if (f == null) return true;
+  switch (f.op) {
+    case '<':
+      return n < f.value;
+    case '<=':
+      return n <= f.value;
+    case '>':
+      return n > f.value;
+    case '>=':
+      return n >= f.value;
+    case '==':
+    default:
+      return n == f.value;
+  }
+}
+
+/// Filter surahs by ayah-count and/or page-count predicates.
+///
+/// A surah passes when it satisfies BOTH provided filters; an omitted (null)
+/// filter is ignored. Compared against `numberOfAyahs` / `numberOfPages`
+/// (missing page count counts as 0). Mirrors `filterByCounts` in sorting.js.
+List<Surah> filterByCounts(
+  List<Surah> surahs, {
+  CountFilter? ayahs,
+  CountFilter? pages,
+}) =>
+    surahs
+        .where((s) =>
+            _passesCount(s.numberOfAyahs, ayahs) &&
+            _passesCount(s.numberOfPages ?? 0, pages))
+        .toList();

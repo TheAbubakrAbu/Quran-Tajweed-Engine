@@ -78,12 +78,20 @@ export type SortDirection = "surahOrder" | "ascending" | "descending";
 export class Quran {
   surahs: Surah[];
   totalAyahs: number;
-  constructor(opts: { surahs: Surah[]; surahInfo?: any[]; qiraat?: Record<string, Record<string, { id: number; text: string }[]>> });
+  constructor(opts: { surahs: Surah[]; surahInfo?: any[]; qiraat?: Record<string, Record<string, { id: number; text: string }[]>>; qiraatCounts?: Record<string, Record<string, number>> });
   all(): Surah[];
   surah(id: number): Surah | undefined;
   ayah(surahId: number, ayahId: number): Ayah | undefined;
   globalAyahNumber(surahId: number, ayahId: number): number;
   info(surahId: number): { name: string; contents: string }[];
+  surahFromEnd(n: number): Surah | undefined;
+  isSajdahAyah(surahId: number, ayahId: number): boolean;
+  sajdahAyahs(): { surah: Surah; ayah: Ayah }[];
+  pageChangesWithinSurah(surahId: number): boolean;
+  juzChangesWithinSurah(surahId: number): boolean;
+  pageOrJuzChangesWithinSurah(surahId: number): boolean;
+  existsInQiraah(surahId: number, ayahId: number, riwayah?: string): boolean;
+  numberOfAyahsInQiraah(surahId: number, riwayah?: string): number;
   arabicText(surahId: number, ayahId: number, riwayah?: string): string | undefined;
   cleanArabicText(surahId: number, ayahId: number, riwayah?: string): string | undefined;
   eachAyah(): Generator<{ surah: Surah; ayah: Ayah }>;
@@ -111,12 +119,50 @@ export class JuzPage {
   pageForAyah(surahId: number, ayahId: number): number | undefined;
   totalPages(): number;
   surahsInJuz(juz: number): number[];
+  juzFromEnd(n: number): JuzEntry | undefined;
+  juzStats(juz: number): { surahCount: number; ayahCount: number; wordCount: number; letterCount: number; pageCount: number } | undefined;
 }
 
 // ---- Sorting ----
 export function sortSurahs(surahs: Surah[], mode?: SortMode, direction?: SortDirection): Surah[];
 export function supportsDirection(mode: SortMode): boolean;
 export function filterByRevelationType(surahs: Surah[], type: "makkan" | "madinan"): Surah[];
+export type CountFilter = { op: "<" | "<=" | ">" | ">=" | "=="; value: number };
+export function filterByCounts(surahs: Surah[], filters?: { ayahs?: CountFilter; pages?: CountFilter }): Surah[];
+
+// ---- Names of Allah ----
+export interface NameOfAllah {
+  name: string;
+  transliteration: string;
+  number: number;
+  found: string;
+  meaning: string;
+  desc: string;
+  otherNames: string[];
+}
+export class NamesOfAllah {
+  list: NameOfAllah[];
+  constructor(list?: NameOfAllah[]);
+  all(): NameOfAllah[];
+  byNumber(number: number): NameOfAllah | undefined;
+}
+
+// ---- Muqatta'at ----
+export interface MuqattaatPronunciation {
+  surah: number;
+  ayah: number;
+  letters: string[];
+  transliteration: string;
+  spelledOutArabic: string;
+}
+export class Muqattaat {
+  letterNames: Record<string, string>;
+  ayahs: MuqattaatPronunciation[];
+  constructor(data?: { letterNames?: Record<string, string>; ayahs?: MuqattaatPronunciation[] });
+  all(): MuqattaatPronunciation[];
+  pronunciation(surahId: number, ayahId: number): MuqattaatPronunciation | undefined;
+  letterName(letter: string): string | undefined;
+}
 
 // ---- Audio ----
 export function surahAudioUrl(reciter: Reciter, surahNumber: number): string;
@@ -180,6 +226,8 @@ export interface Engine {
   juzPage: JuzPage;
   reciters: Reciters;
   search: Search;
+  namesOfAllah: NamesOfAllah;
+  muqattaat: Muqattaat;
   tajweedRules: any;
   tajweed(arabicText: string, opts?: object): ColoredTajweedSpan[];
   detectPaintOps: typeof detectPaintOps;
@@ -191,5 +239,7 @@ export function createEngine(data: {
   reciters: Reciter[];
   tajweedRules?: any;
   surahInfo?: any[];
+  namesOfAllah?: NameOfAllah[];
+  muqattaat?: { letterNames?: Record<string, string>; ayahs?: MuqattaatPronunciation[] };
   qiraat?: Record<string, Record<string, { id: number; text: string }[]>>;
 }, opts?: { riwayah?: string }): Engine;

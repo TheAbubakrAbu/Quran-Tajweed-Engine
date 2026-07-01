@@ -86,7 +86,7 @@ Future<Engine> buildEngine() async {
 |---|---|
 | Quran | `Quran.surah`, `.ayah`, `.globalAyahNumber`, `.arabicText`, `.cleanArabicText`, `.eachAyah` |
 | Tajweed | `Tajweed.tajweedSpans(surah, ayah)` → `List<TajweedSpan>` (strategy A) |
-| Juz / Page | `JuzPage.juz`, `.ayahsInJuz`, `.ayahsOnPage`, `.firstAyahOfJuz`, `.firstAyahOfPage`, `.juzForAyah`, `.pageForAyah`, `.totalPages` |
+| Juz / Page | `JuzPage.juz`, `.ayahsInJuz`, `.ayahsOnPage`, `.firstAyahOfJuz`, `.firstAyahOfPage`, `.juzForAyah`, `.pageForAyah`, `.totalPages`, `.juzFromEnd`, `.juzStats` |
 | Surah audio | `surahAudioUrl(reciter, surah)` |
 | Ayah audio | `ayahAudioUrl(reciter, globalAyah)` |
 | Search | `Search.searchVerses`, `.searchSurahs`, `.parseReference` |

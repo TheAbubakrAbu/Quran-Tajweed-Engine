@@ -38,4 +38,6 @@ export 'src/juz_page.dart';
 export 'src/reciters.dart';
 export 'src/tajweed.dart';
 export 'src/search.dart';
+export 'src/names.dart';
+export 'src/muqattaat.dart';
 export 'src/engine.dart';

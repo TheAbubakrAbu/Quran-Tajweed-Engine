@@ -46,6 +46,25 @@ final class QuranEngineTests: XCTestCase {
         XCTAssertEqual(j30.endAyah, 6)
     }
 
+    func testJuzFromEndAndStats() throws {
+        let jp = engine.juzPage
+        XCTAssertEqual(jp.juzFromEnd(1)?.id, 30)
+        XCTAssertEqual(jp.juzFromEnd(30)?.id, 1)
+        XCTAssertNil(jp.juzFromEnd(0))
+        XCTAssertNil(jp.juzFromEnd(31))
+
+        let stats = try XCTUnwrap(jp.juzStats(30))
+        XCTAssertEqual(stats.ayahCount, jp.ayahsInJuz(30).count)
+        XCTAssertGreaterThanOrEqual(stats.surahCount, 1)
+        XCTAssertGreaterThanOrEqual(stats.pageCount, 1)
+        XCTAssertGreaterThan(stats.wordCount, 0)
+        XCTAssertGreaterThan(stats.letterCount, 0)
+        XCTAssertNil(jp.juzStats(99))
+
+        let sum = (1...30).reduce(0) { $0 + (jp.juzStats($1)?.ayahCount ?? 0) }
+        XCTAssertEqual(sum, 6236)
+    }
+
     func testSortSurahsAyahsDescending() {
         let sorted = sortSurahs(engine.quran.all(), .ayahs, .descending)
         XCTAssertEqual(sorted.first?.id, 2) // Al-Baqarah, 286 ayahs
@@ -113,12 +132,88 @@ final class QuranEngineTests: XCTestCase {
         XCTAssertTrue(engine.search.searchVerses("255").isEmpty)
     }
 
+    func testSearchVersesBehaviorMatchesJSReference() {
+        func hits(_ q: String) -> [String] { engine.search.searchVerses(q).map { $0.id } }
+
+        // 1) Regular (non-boolean) search is a PURE mid-word substring match: "orld" matches "worlds".
+        XCTAssertTrue(hits("orld").contains("1:2"), "mid-word substring 'orld' should hit 1:2")
+
+        // 2) The `=` whole-word operator matches whole tokens only: "=lord" hits 1:2, "=lor" does not,
+        //    while the plain substring "lor" still does (it appears inside "lord"/"worlds").
+        XCTAssertTrue(hits("=lord").contains("1:2"), "whole-word '=lord' should hit 1:2")
+        XCTAssertFalse(hits("=lor").contains("1:2"), "whole-word '=lor' should NOT hit 1:2")
+        XCTAssertTrue(hits("lor").contains("1:2"), "substring 'lor' should hit 1:2")
+
+        // 3) Any decimal digit anywhere (even in a boolean query) returns []. `=` triggers boolean,
+        //    but the digit check runs first.
+        XCTAssertTrue(engine.search.searchVerses("allah & 2").isEmpty, "'allah & 2' should return 0")
+    }
+
+    // MARK: - Parity features (mirroring the JS reference)
+
+    func testSajdahAyahs() {
+        XCTAssertEqual(engine.quran.sajdahAyahs().count, 15)
+        XCTAssertTrue(engine.quran.isSajdahAyah(32, 15))
+        XCTAssertFalse(engine.quran.isSajdahAyah(1, 1))
+    }
+
+    func testSurahFromEnd() {
+        XCTAssertEqual(engine.quran.surahFromEnd(1)?.id, 114)
+        XCTAssertNil(engine.quran.surahFromEnd(115))
+    }
+
+    func testExistsInQiraah() {
+        // Baqarah is 285 ayahs in Warsh, 286 in Hafs.
+        XCTAssertTrue(engine.quran.existsInQiraah(2, 285, riwayah: "warsh"))
+        XCTAssertFalse(engine.quran.existsInQiraah(2, 286, riwayah: "warsh"))
+        // Shubah keeps Baqarah at 286, so 286 exists there.
+        XCTAssertTrue(engine.quran.existsInQiraah(2, 286, riwayah: "shubah"))
+        // No riwayah / Hafs: every ayah exists.
+        XCTAssertTrue(engine.quran.existsInQiraah(2, 286, riwayah: nil))
+    }
+
+    func testNumberOfAyahsInQiraah() {
+        XCTAssertEqual(engine.quran.numberOfAyahsInQiraah(2, riwayah: nil), 286)
+        XCTAssertEqual(engine.quran.numberOfAyahsInQiraah(2, riwayah: "warsh"), 285)
+    }
+
+    func testNamesOfAllah() {
+        XCTAssertEqual(engine.namesOfAllah.all().count, 99)
+        XCTAssertEqual(engine.namesOfAllah.byNumber(1)?.transliteration, "Ar-Rahman")
+    }
+
+    func testSurahInfo() {
+        XCTAssertGreaterThanOrEqual(engine.quran.info(1).count, 1)
+    }
+
+    func testFilterByCounts() {
+        let ids = filterByCounts(engine.quran.all(), ayahs: CountFilter(.equal, 286)).map { $0.id }
+        XCTAssertEqual(ids, [2])
+    }
+
     func testSearchVersesEnglishReturnsMushafOrder() {
         let results = engine.search.searchVerses("mercy", limit: 5)
         XCTAssertFalse(results.isEmpty)
         // mushaf order: surah then ayah ascending. Encode each (surah, ayah) as surah*1000+ayah.
         let keys = results.map { $0.surah * 1000 + $0.ayah }
         XCTAssertEqual(keys, keys.sorted())
+    }
+
+    func testMuqattaat() {
+        let m = engine.muqattaat
+        XCTAssertEqual(m.all().count, 30)
+        XCTAssertEqual(m.pronunciation(2, 1)?.transliteration, "Alif Lām Mīm")
+        XCTAssertEqual(m.pronunciation(42, 2)?.transliteration, "ʿAyn Sīn Qāf")
+        XCTAssertNil(m.pronunciation(1, 1))
+        XCTAssertEqual(m.letterName("ا"), "Alif")
+        // Long vowels carry the madd-lāzim maddah U+0653.
+        XCTAssertTrue(m.pronunciation(2, 1)?.spelledOutArabic.contains("\u{0653}") ?? false)
+    }
+
+    func testSurahFlags() {
+        XCTAssertTrue(engine.quran.juzChangesWithinSurah(2))
+        XCTAssertFalse(engine.quran.juzChangesWithinSurah(1))
+        XCTAssertFalse(engine.quran.pageOrJuzChangesWithinSurah(112))
     }
 }
 

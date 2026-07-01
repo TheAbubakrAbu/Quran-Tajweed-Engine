@@ -18,6 +18,14 @@ _ARABIC_RANGES = [
     (0xFB50, 0xFDFF), (0xFE70, 0xFEFF), (0x1EE00, 0x1EEFF),
 ]
 
+_TASHKEEL_RANGES = [
+    (0x0610, 0x061A), (0x064B, 0x065F), (0x0670, 0x0670), (0x06D6, 0x06ED),
+]
+
+
+def _in_tashkeel(cp: int) -> bool:
+    return any(lo <= cp <= hi for lo, hi in _TASHKEEL_RANGES)
+
 
 def collapsing_whitespace(text: str) -> str:
     return " ".join(text.split())
@@ -45,6 +53,54 @@ def clean_search(text: str, whitespace: bool = False) -> str:
 
 def search_tokens(cleaned: str) -> list[str]:
     return [t for t in cleaned.split(" ") if t]
+
+
+def arabic_tashkeel_blob(text: str) -> str:
+    """Keep ONLY tashkeel scalars (inverse of clean_search). Mirrors arabicTashkeelBlob()."""
+    return "".join(ch for ch in text if _in_tashkeel(ord(ch)))
+
+
+def exact_phrase_blob(text: str) -> str:
+    """Lowercase + whitespace-collapse without stripping marks. Mirrors exactPhraseBlob()."""
+    return collapsing_whitespace(text.lower())
+
+
+def removing_silent_arabic_letters_for_search(text: str) -> str:
+    """Drop "silent" Arabic letters for the lenient Arabic search variant.
+    Mirrors Globals.removingSilentArabicLettersForSearch (grapheme-cluster walk)."""
+    vowels = {0x064E, 0x064F, 0x0650, 0x064B, 0x064C, 0x064D, 0x0656, 0x0657, 0x065A}
+    out = []
+    for cluster in _grapheme_clusters(text):
+        scalars = [ord(c) for c in cluster]
+        base = scalars[0]
+        has_std_sukoon = (0x0652 in scalars) and (0x06E1 not in scalars)
+        # hamzatul wasl is always silent
+        if base == 0x0671:
+            continue
+        # alif/waw/ya/alif-maqsura with a plain sukoon
+        if base in (0x0627, 0x0648, 0x064A, 0x0649) and has_std_sukoon:
+            continue
+        # lam with a plain sukoon
+        if base == 0x0644 and has_std_sukoon:
+            continue
+        # waw carrying a dagger alif with no vowel/shadda/sukoon
+        if base == 0x0648 and 0x0670 in scalars and not any(
+            s in vowels or s == 0x0651 or s == 0x0652 for s in scalars
+        ):
+            continue
+        out.append(cluster)
+    return "".join(out)
+
+
+def _grapheme_clusters(text: str) -> list[str]:
+    """Split into base-letter + trailing combining-mark clusters (matches Swift Character iteration)."""
+    clusters: list[str] = []
+    for ch in text:
+        if clusters and unicodedata.category(ch).startswith("M"):
+            clusters[-1] += ch
+        else:
+            clusters.append(ch)
+    return clusters
 
 
 def contains_arabic_letters(text: str) -> bool:

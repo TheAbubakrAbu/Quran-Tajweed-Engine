@@ -2384,11 +2384,6 @@
     "rule": "maddNatural"
    },
    {
-    "start": 84,
-    "end": 87,
-    "rule": "iqlaab"
-   },
-   {
     "start": 87,
     "end": 88,
     "rule": "maddNatural"

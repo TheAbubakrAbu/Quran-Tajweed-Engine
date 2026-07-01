@@ -194,12 +194,25 @@ export function detectPaintOps(arabicText, opts = {}) {
     }
   }
 
+  // At a stop (ayah end) the tanwin isn't pronounced, so its iqlaab is dropped and the carrier
+  // alif/alif-maqsura becomes madd 'iwad (مد العِوَض) instead — e.g. رُوَيۡدَۢا ending an ayah. Suppress
+  // the tiny-meem iqlaab when nothing but that silent carrier follows to the ayah end. Mirrors
+  // shouldSuppressTinyMeemIqlaab in QuranData.swift.
+  const tinyMeemIqlaabSuppressedAtStop = (idx) => {
+    for (let j = nextLetterIndex(idx); j !== -1; j = nextLetterIndex(j)) {
+      const c = clusters[j];
+      if ((c.base === 0x0627 || c.base === 0x0649) && !hasAnyTashkeel(c)) continue; // silent madd-'iwad carrier
+      return false; // a real pronounced letter follows → genuine iqlaab
+    }
+    return true; // only silent carriers (or nothing) follow → a stop, iqlaab dropped
+  };
+
   // ---- Noon / Meem / Tanwin nasal family ---------------------------------------
   for (let i = 0; i < clusters.length; i++) {
     const cl = clusters[i];
     // tiny iqlaab meem
     if (has(cl, S.smallHighMeem) || has(cl, S.smallLowMeem)) {
-      push(cl.start, cl.end, PRIORITY.tinyMeemIqlaab, "iqlaab");
+      if (!tinyMeemIqlaabSuppressedAtStop(i)) push(cl.start, cl.end, PRIORITY.tinyMeemIqlaab, "iqlaab");
       continue;
     }
     // noon or meem with shadda -> general ghunnah

@@ -18,7 +18,8 @@ All of them read the same canonical JSON in [`/data`](../../data) — see [getti
 - **[web.md](web.md)** — Import the JSON, `createEngine`, lazy-load per-surah files, render colored tajweed spans, search, and an `<audio>` player; framework-agnostic + a React hook component.
 - **[react-native.md](react-native.md)** — Bundle JSON as assets or pull from a CDN; the Hermes `Intl.Segmenter` caveat (prefer the corpus), `expo-av` audio, and an `expo-file-system` `CacheStore`.
 - **[flutter.md](flutter.md)** — Bundle `/data` via `pubspec` assets, `Engine.fromJson`, `RichText`/`TextSpan` from tajweed spans, `just_audio`.
-- **[ios.md](ios.md)** — Add the SwiftPM package, point the loader at bundled `/data`, `AttributedString` from tajweed spans, `AVPlayer`.
+- **[ios.md](ios.md)** — Add the SwiftPM package (data bundled in the package, `try Engine.load()` with zero setup), `AttributedString` from tajweed spans, `AVPlayer`.
+- **[al-islam-migration.md](al-islam-migration.md)** — staged roadmap for moving the **Al-Islam** app off its own Quran code and onto the engine package (parity gaps, API mapping, what stays in the app).
 - **[android.md](android.md)** — Add the module, load data from `assets/`, `buildAnnotatedString` with `SpanStyle` colors, `ExoPlayer`.
 - **[server.md](server.md)** — Build a tiny JSON HTTP API (`/surah/:id`, `/ayah/:s/:a`, `/search`, `/audio/...`) in Node, with equivalent notes for Go / Rust / Python.
 

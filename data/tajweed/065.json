@@ -2140,11 +2140,6 @@
     "rule": "tafkhim"
    },
    {
-    "start": 210,
-    "end": 213,
-    "rule": "iqlaab"
-   },
-   {
     "start": 213,
     "end": 214,
     "rule": "maddNatural"

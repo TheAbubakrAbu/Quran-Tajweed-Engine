@@ -36,6 +36,8 @@ engine.ayahs_in_juz(30);                          // every ayah in juz 30
 engine.first_ayah_of_page(50);                    // jump target
 engine.juz_for_ayah(2, 255);                      // Some(3)
 engine.total_pages();                             // 604
+engine.juz_from_end(1).unwrap().id;               // 30  (juz counted from the end: -1 → juz 30)
+engine.juz_stats(30).unwrap().ayah_count;         // per-juz surah/ayah/word/letter/page counts
 
 // Audio
 let reciter = engine.reciter_by_id("Mishary Alafasy|Hafs|https://server8.mp3quran.net/afs/").unwrap();

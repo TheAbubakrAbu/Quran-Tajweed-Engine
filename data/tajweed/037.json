@@ -601,7 +601,7 @@
    {
     "start": 98,
     "end": 101,
-    "rule": "iqlaab"
+    "rule": "qalqalah"
    }
   ]
  },
@@ -1777,11 +1777,6 @@
     "start": 66,
     "end": 67,
     "rule": "maddNatural"
-   },
-   {
-    "start": 67,
-    "end": 70,
-    "rule": "iqlaab"
    }
   ]
  },
@@ -2131,11 +2126,6 @@
     "start": 37,
     "end": 38,
     "rule": "maddNatural"
-   },
-   {
-    "start": 38,
-    "end": 41,
-    "rule": "iqlaab"
    }
   ]
  },

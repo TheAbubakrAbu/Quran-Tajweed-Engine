@@ -88,4 +88,37 @@ export class JuzPage {
     if (!j) return [];
     return this.quran.all().filter((s) => s.id >= j.startSurah && s.id <= j.endSurah).map((s) => s.id);
   }
+
+  /**
+   * Resolve a juz counted from the end of the Quran: 1 → juz 30, 2 → juz 29 … 30 → juz 1.
+   * Mirrors the search-bar `-N` shorthand in QuranView.swift. Returns undefined for n outside 1..30.
+   * @param {number} n @returns {JuzEntry|undefined}
+   */
+  juzFromEnd(n) {
+    if (!Number.isInteger(n) || n < 1 || n > 30) return undefined;
+    return this.juz(31 - n);
+  }
+
+  /**
+   * Aggregate counts for a single juz, computed from the ayahs actually assigned to it
+   * (`ayah.juz === juz`) so surahs that straddle a juz boundary are split correctly.
+   * Mirrors QuranData.juzStats(for:). Returns undefined for an unknown juz id.
+   * @param {number} juz
+   * @returns {{surahCount:number, ayahCount:number, wordCount:number, letterCount:number, pageCount:number}|undefined}
+   */
+  juzStats(juz) {
+    if (!this.juz(juz)) return undefined;
+    const surahIds = new Set();
+    const pages = new Set();
+    let ayahCount = 0, wordCount = 0, letterCount = 0;
+    for (const { surah, ayah } of this.quran.eachAyah()) {
+      if (ayah.juz !== juz) continue;
+      surahIds.add(surah.id);
+      ayahCount += 1;
+      wordCount += ayah.wordCount ?? 0;
+      letterCount += ayah.letterCount ?? 0;
+      if (ayah.page != null) pages.add(ayah.page);
+    }
+    return { surahCount: surahIds.size, ayahCount, wordCount, letterCount, pageCount: pages.size };
+  }
 }

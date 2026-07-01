@@ -24,6 +24,8 @@ for sp in engine.tajweed(1, 1):
 
 # Juz / Page
 engine.juz_page.first_ayah_of_juz(30)                    # (Surah, Ayah)
+engine.juz_page.juz_from_end(1).id                       # 30  (juz from the end: -1 → juz 30)
+engine.juz_page.juz_stats(30)                            # JuzStats(surah_count, ayah_count, word_count, letter_count, page_count)
 
 # Recitations
 from quran_engine import surah_audio_url, ayah_audio_url

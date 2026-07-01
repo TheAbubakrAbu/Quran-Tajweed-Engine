@@ -1,6 +1,8 @@
 # Tajweed rule reference (generated)
 
-> Generated from [`data/tajweed-rules.json`](../data/tajweed-rules.json) by `scripts/generate-tajweed.mjs`. **Do not edit by hand** — edit the master and regenerate. For plain-English explanations of each rule, see [tajweed-rules-explained.md](tajweed-rules-explained.md).
+> Generated from [`data/tajweed-rules.json`](../data/tajweed-rules.json) by
+> `scripts/generate-tajweed.mjs`. **Do not edit by hand** — edit the master and regenerate.
+> For plain-English explanations of each rule, see [tajweed-rules-explained.md](tajweed-rules-explained.md).
 
 17 rule categories across 4 sections.
 

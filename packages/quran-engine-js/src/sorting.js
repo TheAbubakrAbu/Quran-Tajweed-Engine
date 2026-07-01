@@ -59,3 +59,29 @@ export function supportsDirection(mode) {
 export function filterByRevelationType(surahs, type) {
   return surahs.filter((s) => s.type === type);
 }
+
+/** @typedef {{ op: '<'|'<='|'>'|'>='|'==', value: number }} CountFilter */
+
+/** @param {number} n @param {CountFilter} [f] */
+function passesCount(n, f) {
+  if (!f) return true;
+  switch (f.op) {
+    case "<": return n < f.value;
+    case "<=": return n <= f.value;
+    case ">": return n > f.value;
+    case ">=": return n >= f.value;
+    case "==": default: return n === f.value;
+  }
+}
+
+/**
+ * Filter surahs by ayah-count and/or page-count predicates. Mirrors surahsMatchingCount in
+ * QuranData.swift (the search-bar "286 ayahs" / "<10 pages" filters). A surah passes when it
+ * satisfies BOTH provided filters; an omitted filter is ignored. `value` is compared against the
+ * surah's `numberOfAyahs` / `numberOfPages`.
+ * @param {import('./quran.js').Surah[]} surahs
+ * @param {{ ayahs?: CountFilter, pages?: CountFilter }} [filters]
+ */
+export function filterByCounts(surahs, { ayahs, pages } = {}) {
+  return surahs.filter((s) => passesCount(s.numberOfAyahs, ayahs) && passesCount(s.numberOfPages ?? 0, pages));
+}

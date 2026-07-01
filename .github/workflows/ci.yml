@@ -1,0 +1,84 @@
+name: CI
+
+# Protects the engine once apps (e.g. Al-Islam) depend on it: every port's tests + the shared
+# conformance vectors run on every push/PR, and the GENERATED artifacts (tajweed annotations,
+# bundled package resources) are verified in sync with the canonical /data — so a change to the
+# detector or data can't land without regenerating.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: JS tests (incl. conformance)
+        run: cd packages/quran-engine-js && node --test
+
+  generated-artifacts-in-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      # Regenerate everything derived from /data and the detector; fail if the tree changed,
+      # i.e. someone edited tajweed.js or /data without committing the regenerated outputs.
+      - run: node scripts/build-data.mjs
+      - run: node scripts/generate-tajweed.mjs
+      - run: node scripts/sync-package-resources.mjs
+      - name: Verify generated files are committed and in sync
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Generated artifacts are stale or uncommitted. Run scripts/build-data.mjs, generate-tajweed.mjs, sync-package-resources.mjs and commit the result."
+            git status --porcelain
+            git --no-pager diff
+            exit 1
+          fi
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install pytest
+      - run: cd packages/quran-engine-py && python -m pytest -q
+
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cd packages/quran-engine-rust && cargo test
+
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with: { go-version: "1.22" }
+      - run: cd packages/quran-engine-go && go test ./...
+
+  swift:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - run: cd packages/quran-engine-swift && swift test
+
+  kotlin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: "temurin", java-version: "17" }
+      - run: cd packages/quran-engine-kotlin && gradle test --no-daemon
+
+  dart:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - run: cd packages/quran-engine-dart && dart pub get && dart test

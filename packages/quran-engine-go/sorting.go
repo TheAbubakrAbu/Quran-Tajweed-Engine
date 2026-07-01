@@ -71,3 +71,43 @@ func (e *Engine) FilterByRevelationType(typ string) []Surah {
 	}
 	return out
 }
+
+// CountFilter is a numeric predicate for FilterByCounts. Op is one of
+// "<", "<=", ">", ">=", "==" (anything else is treated as "==").
+type CountFilter struct {
+	Op    string
+	Value int
+}
+
+// passesCount reports whether n satisfies f. A nil filter always passes.
+func passesCount(n int, f *CountFilter) bool {
+	if f == nil {
+		return true
+	}
+	switch f.Op {
+	case "<":
+		return n < f.Value
+	case "<=":
+		return n <= f.Value
+	case ">":
+		return n > f.Value
+	case ">=":
+		return n >= f.Value
+	default: // "==" and any unknown op
+		return n == f.Value
+	}
+}
+
+// FilterByCounts filters surahs by ayah-count and/or page-count predicates. Mirrors
+// surahsMatchingCount in QuranData.swift (the search-bar "286 ayahs" / "<10 pages"
+// filters). A surah passes when it satisfies BOTH provided filters; a nil filter is
+// ignored. Values are compared against NumberOfAyahs / NumberOfPages.
+func FilterByCounts(surahs []Surah, ayahs, pages *CountFilter) []Surah {
+	var out []Surah
+	for _, s := range surahs {
+		if passesCount(s.NumberOfAyahs, ayahs) && passesCount(s.NumberOfPages, pages) {
+			out = append(out, s)
+		}
+	}
+	return out
+}

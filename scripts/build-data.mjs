@@ -58,3 +58,27 @@ for (const surah of quran) {
 }
 await writeFile(data("tajweed-annotations.json"), JSON.stringify(combined), "utf-8");
 console.log(`tajweed/: ${quran.length} files + tajweed-annotations.json (${total} annotations)`);
+
+// ---- qiraat ayah-count index ---------------------------------------------------
+// A compact per-riwayah × per-surah ayah count, derived from the qiraat/*.json feeds. This is all an
+// engine needs to answer existsInQiraah / numberOfAyahs(for:) WITHOUT loading the ~11 MB of qiraah
+// text: the qiraah files are numbered contiguously 1..count, so a Hafs ayah N exists in riwayah R iff
+// N <= count[R][surah] (exactly what QuranData.swift's id-matching merge does). We assert contiguity so
+// the count model stays valid.
+const RIWAYAT = ["warsh", "qaloon", "duri", "susi", "buzzi", "qunbul", "shubah"];
+const qiraatCounts = {};
+for (const r of RIWAYAT) {
+  const feed = JSON.parse(await readFile(data(`qiraat/qiraah-${r}.json`), "utf-8"));
+  const perSurah = {};
+  for (const [surahStr, ayahs] of Object.entries(feed)) {
+    const ids = ayahs.filter((a) => (a.text ?? "").trim() !== "").map((a) => a.id).sort((a, b) => a - b);
+    // must be contiguous 1..N for the count to fully determine existence
+    if (ids.length && (ids[0] !== 1 || ids[ids.length - 1] !== ids.length)) {
+      throw new Error(`qiraat ${r} surah ${surahStr}: ids not contiguous 1..N — the count index would be wrong`);
+    }
+    perSurah[surahStr] = ids.length;
+  }
+  qiraatCounts[r] = perSurah;
+}
+await writeFile(data("qiraat-counts.json"), JSON.stringify(qiraatCounts));
+console.log(`qiraat-counts.json: ${RIWAYAT.length} riwayat`);

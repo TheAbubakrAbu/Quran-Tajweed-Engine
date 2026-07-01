@@ -91,6 +91,40 @@ func TestJuzBoundaries(t *testing.T) {
 	}
 }
 
+func TestJuzFromEndAndStats(t *testing.T) {
+	e := loadTestEngine(t)
+	if j := e.JuzFromEnd(1); j == nil || j.ID != 30 {
+		t.Errorf("JuzFromEnd(1) = %+v, want id=30", j)
+	}
+	if j := e.JuzFromEnd(30); j == nil || j.ID != 1 {
+		t.Errorf("JuzFromEnd(30) = %+v, want id=1", j)
+	}
+	if e.JuzFromEnd(0) != nil || e.JuzFromEnd(31) != nil {
+		t.Errorf("JuzFromEnd out of range should be nil")
+	}
+
+	stats := e.JuzStatsFor(30)
+	if stats == nil {
+		t.Fatal("JuzStatsFor(30) = nil")
+	}
+	if stats.AyahCount != len(e.AyahsInJuz(30)) {
+		t.Errorf("AyahCount = %d, want %d", stats.AyahCount, len(e.AyahsInJuz(30)))
+	}
+	if stats.SurahCount < 1 || stats.PageCount < 1 || stats.WordCount == 0 || stats.LetterCount == 0 {
+		t.Errorf("JuzStatsFor(30) has zero aggregate: %+v", stats)
+	}
+	if e.JuzStatsFor(99) != nil {
+		t.Errorf("JuzStatsFor(99) should be nil")
+	}
+	sum := 0
+	for i := 1; i <= 30; i++ {
+		sum += e.JuzStatsFor(i).AyahCount
+	}
+	if sum != 6236 {
+		t.Errorf("sum of juz ayah counts = %d, want 6236", sum)
+	}
+}
+
 func TestSortSurahsAyahsDescending(t *testing.T) {
 	e := loadTestEngine(t)
 	sorted := e.SortSurahs("ayahs", "descending")
@@ -163,6 +197,44 @@ func TestSearchVersesAndSurahs(t *testing.T) {
 	}
 	if len(makkan) == 0 {
 		t.Errorf("expected makkan surahs")
+	}
+}
+
+// hasMatch reports whether hits include surah:ayah.
+func hasMatch(hits []VerseMatch, surah, ayah int) bool {
+	for _, h := range hits {
+		if h.Surah == surah && h.Ayah == ayah {
+			return true
+		}
+	}
+	return false
+}
+
+func TestSearchVersesBehavior(t *testing.T) {
+	e := loadTestEngine(t)
+
+	// Regular search is pure substring: a mid-word fragment hits. 1:2 contains
+	// "...Lord of the worlds...", so "orld" (inside "worlds") matches.
+	if got := e.SearchVerses("orld", SearchOptions{}); !hasMatch(got, 1, 2) {
+		t.Errorf("SearchVerses(\"orld\") should match 1:2, got %v", got)
+	}
+
+	// Whole-word operator `=` requires a full token match: `=lord` matches 1:2
+	// (token "lord" exists) but `=lor` does NOT (no token "lor").
+	if got := e.SearchVerses("=lord", SearchOptions{}); !hasMatch(got, 1, 2) {
+		t.Errorf("SearchVerses(\"=lord\") should match 1:2, got %v", got)
+	}
+	if got := e.SearchVerses("=lor", SearchOptions{}); hasMatch(got, 1, 2) {
+		t.Errorf("SearchVerses(\"=lor\") should NOT match 1:2 (whole-word), got %v", got)
+	}
+	// ...while plain (non-boolean) "lor" DOES match 1:2 as a substring of "lord".
+	if got := e.SearchVerses("lor", SearchOptions{}); !hasMatch(got, 1, 2) {
+		t.Errorf("SearchVerses(\"lor\") should match 1:2 as substring, got %v", got)
+	}
+
+	// A boolean query containing a digit is rejected before the boolean path.
+	if got := e.SearchVerses("allah & 2", SearchOptions{}); got != nil {
+		t.Errorf("SearchVerses(\"allah & 2\") should return nil (digit), got %d hits", len(got))
 	}
 }
 

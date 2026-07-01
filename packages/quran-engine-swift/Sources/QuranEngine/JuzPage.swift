@@ -56,4 +56,52 @@ public final class JuzPage {
         guard let j = juz(juzNumber) else { return [] }
         return quran.all().filter { $0.id >= j.startSurah && $0.id <= j.endSurah }.map { $0.id }
     }
+
+    /// Resolve a juz counted from the end of the Quran: 1 → juz 30, 2 → juz 29 … 30 → juz 1.
+    /// Mirrors the search-bar `-N` shorthand in QuranView.swift. Returns nil for n outside 1...30.
+    public func juzFromEnd(_ n: Int) -> JuzEntry? {
+        guard (1...30).contains(n) else { return nil }
+        return juz(31 - n)
+    }
+
+    /// Aggregate counts for a single juz, computed from the ayahs actually assigned to it
+    /// (`ayah.juz == juz`) so surahs that straddle a juz boundary are split correctly.
+    /// Mirrors `QuranData.juzStats(for:)`. Returns nil for an unknown juz id.
+    public func juzStats(_ juz: Int) -> JuzStats? {
+        guard self.juz(juz) != nil else { return nil }
+        var surahIds = Set<Int>()
+        var pages = Set<Int>()
+        var ayahCount = 0, wordCount = 0, letterCount = 0
+        for (surah, ayah) in quran.eachAyah() where ayah.juz == juz {
+            surahIds.insert(surah.id)
+            ayahCount += 1
+            wordCount += ayah.wordCount ?? 0
+            letterCount += ayah.letterCount ?? 0
+            if let page = ayah.page { pages.insert(page) }
+        }
+        return JuzStats(
+            surahCount: surahIds.count,
+            ayahCount: ayahCount,
+            wordCount: wordCount,
+            letterCount: letterCount,
+            pageCount: pages.count
+        )
+    }
+}
+
+/// Aggregate counts for a single juz. Mirrors `QuranData.JuzStats`.
+public struct JuzStats: Equatable {
+    public let surahCount: Int
+    public let ayahCount: Int
+    public let wordCount: Int
+    public let letterCount: Int
+    public let pageCount: Int
+
+    public init(surahCount: Int, ayahCount: Int, wordCount: Int, letterCount: Int, pageCount: Int) {
+        self.surahCount = surahCount
+        self.ayahCount = ayahCount
+        self.wordCount = wordCount
+        self.letterCount = letterCount
+        self.pageCount = pageCount
+    }
 }

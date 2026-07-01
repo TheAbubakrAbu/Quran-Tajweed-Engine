@@ -10606,11 +10606,6 @@
     "rule": "maddNatural"
    },
    {
-    "start": 177,
-    "end": 180,
-    "rule": "iqlaab"
-   },
-   {
     "start": 180,
     "end": 181,
     "rule": "maddNatural"

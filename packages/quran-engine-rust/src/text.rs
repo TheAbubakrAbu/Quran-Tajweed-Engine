@@ -136,3 +136,73 @@ pub fn contains_arabic_letters(text: &str) -> bool {
 pub fn search_tokens(cleaned: &str) -> Vec<String> {
     cleaned.split(' ').filter(|t| !t.is_empty()).map(|t| t.to_string()).collect()
 }
+
+/// True if a code point is an Arabic "tashkeel" (diacritic) mark. Mirrors `inTashkeel`.
+fn in_tashkeel(cp: u32) -> bool {
+    (0x0610..=0x061A).contains(&cp)
+        || (0x064B..=0x065F).contains(&cp)
+        || cp == 0x0670
+        || (0x06D6..=0x06ED).contains(&cp)
+}
+
+/// Keep ONLY tashkeel scalars (inverse of `clean_search`). Mirrors `arabicTashkeelBlob`.
+pub fn arabic_tashkeel_blob(text: &str) -> String {
+    text.chars().filter(|c| in_tashkeel(*c as u32)).collect()
+}
+
+/// Lowercase + whitespace-collapse without stripping marks. Mirrors `exactPhraseBlob`.
+pub fn exact_phrase_blob(text: &str) -> String {
+    collapsing_whitespace(&text.to_lowercase())
+}
+
+/// Split a string into grapheme clusters (base char + trailing combining marks). Sufficient for
+/// Arabic Quranic text; mirrors the combining-mark fallback of `splitGraphemeClusters`.
+fn split_grapheme_clusters(text: &str) -> Vec<String> {
+    let mut out: Vec<String> = Vec::new();
+    for c in text.chars() {
+        if !out.is_empty() && is_combining_mark(c) {
+            out.last_mut().unwrap().push(c);
+        } else {
+            out.push(c.to_string());
+        }
+    }
+    out
+}
+
+/// Drop "silent" Arabic letters for the lenient Arabic search variant. Mirrors
+/// `removingSilentArabicLettersForSearch` (grapheme-cluster walk).
+pub fn removing_silent_arabic_letters_for_search(text: &str) -> String {
+    const VOWELS: [u32; 9] = [
+        0x064E, 0x064F, 0x0650, 0x064B, 0x064C, 0x064D, 0x0656, 0x0657, 0x065A,
+    ];
+    let mut out = String::new();
+    for cluster in split_grapheme_clusters(text) {
+        let scalars: Vec<u32> = cluster.chars().map(|c| c as u32).collect();
+        let base = scalars[0];
+        let has = |cp: u32| scalars.contains(&cp);
+        let has_std_sukoon = has(0x0652) && !has(0x06E1);
+        // hamzatul wasl is always silent
+        if base == 0x0671 {
+            continue;
+        }
+        // alif/waw/ya/alif-maqsura with a plain sukoon
+        if matches!(base, 0x0627 | 0x0648 | 0x064A | 0x0649) && has_std_sukoon {
+            continue;
+        }
+        // lam with a plain sukoon
+        if base == 0x0644 && has_std_sukoon {
+            continue;
+        }
+        // waw carrying a dagger alif with no vowel/shadda/sukoon
+        if base == 0x0648
+            && has(0x0670)
+            && !scalars
+                .iter()
+                .any(|s| VOWELS.contains(s) || *s == 0x0651 || *s == 0x0652)
+        {
+            continue;
+        }
+        out.push_str(&cluster);
+    }
+    out
+}

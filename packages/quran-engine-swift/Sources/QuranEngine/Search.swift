@@ -13,22 +13,43 @@ public struct AyahReference: Equatable, Sendable {
     public let ayah: Int?
 }
 
-/// Search verses & surahs. Port of the core path in `search.js`.
+/// How a boolean term's value is matched against a verse blob/token list.
+enum MatchMode {
+    case contains
+    case startsWith
+    case endsWith
+    case exact
+    case wholeWord
+}
+
+/// A single parsed boolean search term. Mirrors `parseTerm` in search.js.
+private struct BooleanTerm {
+    let value: String
+    let negate: Bool
+    let matchMode: MatchMode
+    let requiresTashkeelMatch: Bool
+    let tashkeelPattern: String
+    let requiresExactEnglishMatch: Bool
+    let exactEnglishPhrase: String
+}
+
+/// Search verses & surahs. Faithful port of the core path in `search.js`.
 ///
-/// IMPORTANT — scope of this port:
-///   • Implemented: cleaned-blob substring match, phrase-prefix token match, mushaf-order results,
-///     digit-rejection for verse text, optional "ignore silent letters" Arabic variant,
-///     surah search by name / number / `2:255` reference / makkan-madani, `parseReference`.
-///   • OMITTED: the boolean grammar (`& | ! # ^ % $`). A query containing those operators is
-///     treated as plain text (operators are stripped by `cleanSearch`, except `& | ! #` which are
-///     kept and matched literally). This matches the "minimal port" allowance in docs/PORTING.md.
+/// Verse matching is unranked (mushaf order). A regular query is a pure substring match against the
+/// cleaned blobs; a query containing a boolean operator (`& | ! # ^ % $ =`) is run through the small
+/// boolean grammar. Queries containing any decimal digit (including Arabic-Indic) return [].
 public final class Search {
     private let quran: Quran
     private let riwayah: String?
 
+    /// Characters that trigger the boolean grammar (mirrors `BOOLEAN_CHARS` in search.js).
+    private static let booleanChars: Set<Character> = ["&", "|", "!", "#", "^", "%", "$", "="]
+
     private struct VerseEntry {
         let surah: Int
         let ayah: Int
+        let arabicTashkeelBlob: String
+        let englishExactBlob: String
         let arabicBlob: String
         let silentArabicBlob: String
         let englishBlob: String
@@ -72,6 +93,8 @@ public final class Search {
 
             idx.append(VerseEntry(
                 surah: surah.id, ayah: ayah.id,
+                arabicTashkeelBlob: ArabicText.arabicTashkeelBlob(raw),
+                englishExactBlob: ArabicText.exactPhraseBlob([saheeh, mustafa, translit].joined(separator: " ")),
                 arabicBlob: arabicBlob, silentArabicBlob: silentArabicBlob, englishBlob: englishBlob,
                 arabicTokens: ArabicText.searchTokens(arabicBlob),
                 silentArabicTokens: ArabicText.searchTokens(silentArabicBlob),
@@ -97,29 +120,66 @@ public final class Search {
     }
 
     /// Search verse text. Returns matches in mushaf order. Empty when the query (after cleaning)
-    /// contains a digit.
+    /// is empty or contains any decimal digit.
     public func searchVerses(_ query: String, offset: Int = 0, limit: Int? = nil,
                              ignoreSilentLetters: Bool = false) -> [VerseMatch] {
         let cleaned = ArabicText.cleanSearch(query, whitespace: true)
         if cleaned.isEmpty { return [] }
-        // Verse-text search rejects any query containing a digit.
-        if cleaned.unicodeScalars.contains(where: { ("0"..."9").contains(Character($0)) }) { return [] }
+
+        // Reject any query containing a decimal digit (numeric/refs go via surah search). Done BEFORE
+        // the boolean path — exactly as QuranData.search(term:) does — so even a boolean query with a
+        // digit returns []. `.decimalDigits` also catches Arabic-Indic digits (mirrors `\p{Nd}`).
+        if cleaned.rangeOfCharacter(from: .decimalDigits) != nil { return [] }
+
+        // Boolean grammar?
+        if query.contains(where: { Search.booleanChars.contains($0) }) {
+            return booleanSearch(query, offset: offset, limit: limit)
+        }
 
         let useArabic = ArabicText.containsArabicLetters(query)
         let silentQuery: String = (useArabic && ignoreSilentLetters)
             ? ArabicText.cleanSearch(ArabicText.removingSilentArabicLettersForSearch(query), whitespace: true)
             : ""
 
-        let qTokens = ArabicText.searchTokens(cleaned)
-        let sTokens = silentQuery.isEmpty ? [] : ArabicText.searchTokens(silentQuery)
-
+        // Plain substring search in mushaf order — word/sentence boundaries DON'T matter (a query
+        // matches anywhere it appears, e.g. "رب" inside "ربهم"). Whole-word / phrase matching lives in
+        // the boolean `=` operator. Mirrors the regular path in search.js.
         let matched = index.filter { e in
             if useArabic {
-                if e.arabicBlob.contains(cleaned) || Search.phrasePrefixMatch(e.arabicTokens, qTokens) { return true }
+                if e.arabicBlob.contains(cleaned) { return true }
                 if silentQuery.isEmpty { return false }
-                return e.silentArabicBlob.contains(silentQuery) || Search.phrasePrefixMatch(e.silentArabicTokens, sTokens)
+                return e.silentArabicBlob.contains(silentQuery)
             }
-            return e.englishBlob.contains(cleaned) || Search.phrasePrefixMatch(e.englishTokens, qTokens)
+            return e.englishBlob.contains(cleaned)
+        }.map { VerseMatch(id: "\($0.surah):\($0.ayah)", surah: $0.surah, ayah: $0.ayah) }
+
+        return Search.paginate(matched, offset: offset, limit: limit)
+    }
+
+    // MARK: - Boolean search
+
+    private func booleanSearch(_ query: String, offset: Int, limit: Int?) -> [VerseMatch] {
+        let useArabic = ArabicText.containsArabicLetters(query)
+        let normalized = query
+            .replacingOccurrences(of: "&&", with: "&")
+            .replacingOccurrences(of: "||", with: "|")
+
+        // Split into OR-groups of AND-terms. Drop any term whose cleaned value is empty
+        // (booleanAyahSearchTerm() returns nil in that case), then drop emptied groups.
+        let orGroups: [[BooleanTerm]] = normalized.components(separatedBy: "|").map { group in
+            group.components(separatedBy: "&")
+                .map { Search.parseTerm($0) }
+                .filter { !$0.value.isEmpty }
+        }.filter { !$0.isEmpty }
+        if orGroups.isEmpty { return [] }
+
+        let matched = index.filter { e in
+            orGroups.contains { andTerms in
+                andTerms.allSatisfy { term in
+                    let hit = Search.termMatch(e, term, useArabic: useArabic)
+                    return term.negate ? !hit : hit
+                }
+            }
         }.map { VerseMatch(id: "\($0.surah):\($0.ayah)", surah: $0.surah, ayah: $0.ayah) }
 
         return Search.paginate(matched, offset: offset, limit: limit)
@@ -178,16 +238,17 @@ public final class Search {
 
     // MARK: - helpers
 
-    /// Phrase-prefix match: query tokens match a consecutive run of haystack tokens; all-but-last
-    /// exact, last is a prefix. Mirrors `phrasePrefixMatch`.
-    static func phrasePrefixMatch(_ haystack: [String], _ query: [String]) -> Bool {
+    /// Consecutive-token match: query tokens appear as a consecutive run of haystack tokens. Leading
+    /// tokens must match exactly; the final token must match exactly when `lastMustBeExact`, otherwise
+    /// it only has to be a prefix. Mirrors `consecutiveTokenMatch`.
+    static func consecutiveTokenMatch(_ haystack: [String], _ query: [String], lastMustBeExact: Bool) -> Bool {
         if query.isEmpty || haystack.count < query.count { return false }
         var start = 0
         while start <= haystack.count - query.count {
             var ok = true
             for k in 0..<query.count {
                 let word = haystack[start + k], term = query[k]
-                if k == query.count - 1 {
+                if k == query.count - 1 && !lastMustBeExact {
                     if !word.hasPrefix(term) { ok = false; break }
                 } else if word != term {
                     ok = false; break
@@ -197,6 +258,71 @@ public final class Search {
             start += 1
         }
         return false
+    }
+
+    /// Parse a single boolean term. Mirrors `parseTerm`: strips (in order) leading `!` (negate,
+    /// toggles), `#` (tashkeel-sensitive), `=` (whole-word), one `^` (starts-with), one trailing
+    /// `%`/`$` (ends-with); the leftover text becomes the value + tashkeel/exact-phrase patterns.
+    private static func parseTerm(_ rawTerm: String) -> BooleanTerm {
+        var t = rawTerm.trimmingCharacters(in: .whitespaces)
+        var negate = false
+        while t.hasPrefix("!") { negate.toggle(); t = String(t.dropFirst()).trimmingCharacters(in: .whitespaces) }
+        var requiresTashkeel = false
+        while t.hasPrefix("#") { requiresTashkeel = true; t = String(t.dropFirst()).trimmingCharacters(in: .whitespaces) }
+        var wholeWord = false
+        while t.hasPrefix("=") { wholeWord = true; t = String(t.dropFirst()).trimmingCharacters(in: .whitespaces) }
+        var startsWith = false
+        if t.hasPrefix("^") { startsWith = true; t = String(t.dropFirst()).trimmingCharacters(in: .whitespaces) }
+        var endsWith = false
+        if t.hasSuffix("%") || t.hasSuffix("$") { endsWith = true; t = String(t.dropLast()).trimmingCharacters(in: .whitespaces) }
+
+        let value = ArabicText.cleanSearch(t, whitespace: true)
+        let matchMode: MatchMode
+        if wholeWord { matchMode = .wholeWord }
+        else if startsWith && endsWith { matchMode = .exact }
+        else if startsWith { matchMode = .startsWith }
+        else if endsWith { matchMode = .endsWith }
+        else { matchMode = .contains }
+
+        let isArabic = ArabicText.containsArabicLetters(t)
+        return BooleanTerm(
+            value: value,
+            negate: negate,
+            matchMode: matchMode,
+            requiresTashkeelMatch: requiresTashkeel && isArabic,
+            tashkeelPattern: ArabicText.arabicTashkeelBlob(t),
+            requiresExactEnglishMatch: requiresTashkeel && !isArabic,
+            exactEnglishPhrase: ArabicText.exactPhraseBlob(t)
+        )
+    }
+
+    /// Match a single term's value against a blob/token list under one of the five modes. Mirrors
+    /// `ayahTermMatch`.
+    static func ayahTermMatch(_ haystack: String, _ tokens: [String], _ term: String, _ mode: MatchMode) -> Bool {
+        switch mode {
+        case .startsWith: return haystack.hasPrefix(term) || tokens.contains { $0.hasPrefix(term) }
+        case .endsWith: return haystack.hasSuffix(term) || tokens.contains { $0.hasSuffix(term) }
+        case .exact: return haystack == term || tokens.contains(term)
+        case .wholeWord: return consecutiveTokenMatch(tokens, ArabicText.searchTokens(term), lastMustBeExact: true)
+        case .contains: return haystack.contains(term)
+        }
+    }
+
+    /// Per-term match (un-negated). Mirrors the per-term branch of `termMatch`/`matchesBooleanAyahSearch`.
+    private static func termMatch(_ e: VerseEntry, _ term: BooleanTerm, useArabic: Bool) -> Bool {
+        if useArabic && term.requiresTashkeelMatch {
+            let lettersMatch = ayahTermMatch(e.arabicBlob, e.arabicTokens, term.value, term.matchMode)
+            let tashkeelMatch = term.tashkeelPattern.isEmpty || e.arabicTashkeelBlob.contains(term.tashkeelPattern)
+            return lettersMatch && tashkeelMatch
+        }
+        if !useArabic && term.requiresExactEnglishMatch {
+            let exactTokens = ArabicText.searchTokens(term.exactEnglishPhrase)
+            return !term.exactEnglishPhrase.isEmpty
+                && ayahTermMatch(e.englishExactBlob, exactTokens, term.exactEnglishPhrase, term.matchMode)
+        }
+        let haystack = useArabic ? e.arabicBlob : e.englishBlob
+        let tokens = useArabic ? e.arabicTokens : e.englishTokens
+        return ayahTermMatch(haystack, tokens, term.value, term.matchMode)
     }
 
     static func paginate(_ arr: [VerseMatch], offset: Int, limit: Int?) -> [VerseMatch] {

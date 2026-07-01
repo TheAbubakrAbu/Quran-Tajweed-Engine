@@ -13,6 +13,8 @@ import 'juz_page.dart';
 import 'reciters.dart';
 import 'search.dart';
 import 'tajweed.dart';
+import 'names.dart';
+import 'muqattaat.dart';
 import 'models.dart';
 
 class Engine {
@@ -21,13 +23,19 @@ class Engine {
   final Reciters reciters;
   final Search search;
   final Tajweed tajweed;
+  final NamesOfAllah namesOfAllah;
+  final Muqattaat muqattaat;
 
   Engine({
     required this.quran,
     required this.juzPage,
     required this.reciters,
     required this.tajweed,
-  }) : search = Search(quran);
+    NamesOfAllah? namesOfAllah,
+    Muqattaat? muqattaat,
+  })  : search = Search(quran),
+        namesOfAllah = namesOfAllah ?? NamesOfAllah(),
+        muqattaat = muqattaat ?? Muqattaat();
 
   /// Build from already-decoded JSON. Pass the parsed contents of each file.
   ///
@@ -36,19 +44,32 @@ class Engine {
   /// [recitersJson]         — `data/reciters.json` (a List).
   /// [tajweedRulesJson]     — `data/tajweed-rules.json` (a Map).
   /// [tajweedAnnotationsJson] — `tajweed-annotations.json` (a List).
+  /// [surahInfoJson]        — `data/surah-info.json` (a List), optional.
+  /// [namesOfAllahJson]     — `data/names-of-allah.json` (a List), optional.
+  /// [muqattaatJson]        — `data/muqattaat.json` (a Map), optional.
+  /// [qiraatCountsJson]     — `data/qiraat-counts.json` (a Map), optional.
   factory Engine.fromJson({
     required List<dynamic> quranJson,
     required List<dynamic> juzJson,
     required List<dynamic> recitersJson,
     required Map<String, dynamic> tajweedRulesJson,
     required List<dynamic> tajweedAnnotationsJson,
+    List<dynamic>? surahInfoJson,
+    List<dynamic>? namesOfAllahJson,
+    Map<String, dynamic>? muqattaatJson,
+    Map<String, dynamic>? qiraatCountsJson,
   }) {
-    final quran = Quran.fromJson(quranJson);
+    final quran = Quran.fromJson(quranJson, surahInfoJson, qiraatCountsJson);
     return Engine(
       quran: quran,
       juzPage: JuzPage.fromJson(quran, juzJson),
       reciters: Reciters.fromJson(recitersJson),
       tajweed: Tajweed.fromJson(quran, tajweedRulesJson, tajweedAnnotationsJson),
+      namesOfAllah: namesOfAllahJson == null
+          ? NamesOfAllah()
+          : NamesOfAllah.fromJson(namesOfAllahJson),
+      muqattaat:
+          muqattaatJson == null ? Muqattaat() : Muqattaat.fromJson(muqattaatJson),
     );
   }
 
@@ -76,6 +97,10 @@ class Engine {
       read('reciters.json'),
       read('tajweed-rules.json'),
       read('tajweed-annotations.json'),
+      read('surah-info.json'),
+      read('names-of-allah.json'),
+      read('muqattaat.json'),
+      read('qiraat-counts.json'),
     ]);
 
     return Engine.fromJson(
@@ -84,6 +109,10 @@ class Engine {
       recitersJson: results[2] as List<dynamic>,
       tajweedRulesJson: results[3] as Map<String, dynamic>,
       tajweedAnnotationsJson: results[4] as List<dynamic>,
+      surahInfoJson: results[5] as List<dynamic>,
+      namesOfAllahJson: results[6] as List<dynamic>,
+      muqattaatJson: results[7] as Map<String, dynamic>,
+      qiraatCountsJson: results[8] as Map<String, dynamic>,
     );
   }
 

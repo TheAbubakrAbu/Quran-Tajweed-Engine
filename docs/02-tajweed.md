@@ -112,7 +112,7 @@ The full list is documented inline in `TajweedRules.swift` (the `TAJWEED ENGINE 
 - **Madd Munfasil Hukmi** — 21 exact words (`يَٰٓأَيُّهَا`, `هَٰٓؤُلَآءِ`, …) where a superscript carrier + hamza inside one word is recited Munfasil. A *real* madd letter + hamza elsewhere in the same word stays Muttasil.
 - **Genuine Muttasil with a dagger alif** — `أُوْلَٰٓئِكَ`, `مَلَٰٓئِكَة`, `إِسۡرَٰٓءِيل` are ordinary Muttasil; the override is gated by the exact-word set, not the dagger alif alone.
 - **Ayah-final lone madd** — read as natural madd at waqf, not the Lazim catch-all.
-- **Madd 'Iwad** — a word ending in tanwin-fath has a silent final alif (2-count 'iwad at waqf, not aarid).
+- **Madd 'Iwad** — a word ending in **tanwin-fath at the end of an ayah** drops the tanwin at the stop and elongates the helper alif / alif-maqsura as a 2-count natural madd (not silent, not aarid). This covers **both** written forms of the tanwin: plain fathatayn (ـً / Uthmani ٗ, e.g. `غَفُورًا`) **and** the Uthmani iqlaab form — a fatha + tiny high/low meem where the meem stands in for the tanwin's noon (e.g. `رُوَيۡدَۢا` ending At-Tariq 86:17). In the iqlaab form the tiny-meem **iqlaab is suppressed at the stop** (no noon→meem sound at waqf) and only the 2-count madd on the alif remains.
 - **Muqatta'at** — disconnected opening letters; surah tables in `data/tajweed-rules.json`. Ash-Shura's letters span two ayahs.
 - **Lazim Kalimi** — a madd letter immediately before shadda/permanent sukoon (`ٱلضَّآلِّينَ`) → 6 counts.
 - **Final Raa tafkhim** — a word-final `ر` with tafkhim uses a dedicated higher priority.

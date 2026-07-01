@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { loadFromDisk } from "../src/node.js";
 import { surahAudioUrl, ayahAudioUrl } from "../src/audio.js";
-import { sortSurahs } from "../src/sorting.js";
+import { sortSurahs, filterByCounts } from "../src/sorting.js";
 import { localSurahPath, sanitizeReciterDir } from "../src/cache.js";
 
 const engine = await loadFromDisk();
@@ -32,6 +32,67 @@ test("juz: 30 entries, membership", () => {
   const first = engine.juzPage.firstAyahOfJuz(1);
   assert.equal(first?.surah.id, 1);
   assert.equal(first?.ayah.id, 1);
+});
+
+test("quran: sajdah, surahFromEnd, surahInfo", () => {
+  const sj = engine.quran.sajdahAyahs();
+  assert.equal(sj.length, 15);
+  assert.ok(engine.quran.isSajdahAyah(32, 15));
+  assert.ok(!engine.quran.isSajdahAyah(1, 1));
+  assert.equal(engine.quran.surahFromEnd(1)?.id, 114);
+  assert.equal(engine.quran.surahFromEnd(115), undefined);
+  assert.ok(engine.quran.info(1).length >= 1);
+});
+
+test("qiraah existence + per-qiraah counts", () => {
+  const q = engine.quran;
+  assert.equal(q.existsInQiraah(2, 285, "warsh"), true);
+  assert.equal(q.existsInQiraah(2, 286, "warsh"), false); // Baqarah is 285 in Warsh
+  assert.equal(q.existsInQiraah(2, 286, "shubah"), true); // Shubah matches Hafs (6236)
+  assert.equal(q.existsInQiraah(2, 286), true);            // no riwayah → Hafs
+  assert.equal(q.numberOfAyahsInQiraah(2), 286);
+  assert.equal(q.numberOfAyahsInQiraah(2, "warsh"), 285);
+});
+
+test("muqattaat + surah flags", () => {
+  assert.equal(engine.muqattaat.all().length, 30);
+  assert.equal(engine.muqattaat.pronunciation(2, 1)?.transliteration, "Alif Lām Mīm");
+  assert.equal(engine.muqattaat.pronunciation(42, 2)?.transliteration, "ʿAyn Sīn Qāf");
+  assert.equal(engine.muqattaat.pronunciation(1, 1), undefined);
+  assert.equal(engine.muqattaat.letterName("ا"), "Alif");
+  assert.equal(engine.quran.juzChangesWithinSurah(2), true);
+  assert.equal(engine.quran.juzChangesWithinSurah(1), false);
+  assert.equal(engine.quran.pageOrJuzChangesWithinSurah(112), false);
+});
+
+test("names of Allah: 99, by number", () => {
+  assert.equal(engine.namesOfAllah.all().length, 99);
+  assert.equal(engine.namesOfAllah.byNumber(1)?.transliteration, "Ar-Rahman");
+  assert.equal(engine.namesOfAllah.byNumber(100), undefined);
+});
+
+test("sorting: filterByCounts", () => {
+  assert.deepEqual(filterByCounts(engine.quran.all(), { ayahs: { op: "==", value: 286 } }).map((s) => s.id), [2]);
+});
+
+test("juz: from-the-end shorthand + per-juz stats", () => {
+  // "-1" → juz 30, "-2" → juz 29 … "-30" → juz 1
+  assert.equal(engine.juzPage.juzFromEnd(1)?.id, 30);
+  assert.equal(engine.juzPage.juzFromEnd(30)?.id, 1);
+  assert.equal(engine.juzPage.juzFromEnd(0), undefined);
+  assert.equal(engine.juzPage.juzFromEnd(31), undefined);
+
+  const stats = engine.juzPage.juzStats(30);
+  assert.ok(stats);
+  assert.equal(stats.ayahCount, engine.juzPage.ayahsInJuz(30).length);
+  assert.ok(stats.surahCount >= 1 && stats.pageCount >= 1);
+  assert.ok(stats.wordCount > 0 && stats.letterCount > 0);
+  assert.equal(engine.juzPage.juzStats(99), undefined);
+
+  // Every juz's ayahCount sums to all 6236 ayahs (boundary split is exhaustive & disjoint).
+  let sum = 0;
+  for (let i = 1; i <= 30; i++) sum += engine.juzPage.juzStats(i).ayahCount;
+  assert.equal(sum, 6236);
 });
 
 test("page: lookup is consistent", () => {
@@ -98,6 +159,27 @@ test("search: makkan/madani filter", () => {
 test("search: boolean AND/OR/NOT", () => {
   const r = engine.search.searchVerses("allah & lord");
   assert.ok(r.length > 0);
+});
+
+test("search: regular search is pure substring (no phrase boundaries)", () => {
+  // A mid-word substring must still match — regular search ignores word boundaries.
+  const r = engine.search.searchVerses("orld"); // inside "world(s)"
+  assert.ok(r.some((e) => e.id === "1:2"));
+});
+
+test("search: '=' whole-word operator", () => {
+  // "=lord" matches the whole word "lord" but a partial like "=lor" should not.
+  const whole = engine.search.searchVerses("=lord");
+  assert.ok(whole.some((e) => e.id === "1:2"));
+  const partial = engine.search.searchVerses("=lor");
+  assert.ok(!partial.some((e) => e.id === "1:2"));
+  // Contrast: plain "lor" (contains) DOES hit via substring.
+  assert.ok(engine.search.searchVerses("lor").some((e) => e.id === "1:2"));
+});
+
+test("search: digit rejected even inside a boolean query", () => {
+  // Digit check runs before the boolean path (matches QuranData.search).
+  assert.equal(engine.search.searchVerses("allah & 2").length, 0);
 });
 
 test("tajweed: produces colored spans for Al-Fatiha ayah 1", () => {

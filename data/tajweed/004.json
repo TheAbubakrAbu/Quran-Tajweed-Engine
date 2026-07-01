@@ -23655,11 +23655,6 @@
     "rule": "maddNatural"
    },
    {
-    "start": 167,
-    "end": 170,
-    "rule": "iqlaab"
-   },
-   {
     "start": 170,
     "end": 171,
     "rule": "maddNatural"
@@ -26605,11 +26600,6 @@
     "rule": "maddNatural"
    },
    {
-    "start": 270,
-    "end": 273,
-    "rule": "iqlaab"
-   },
-   {
     "start": 273,
     "end": 274,
     "rule": "maddNatural"
@@ -29542,11 +29532,6 @@
     "start": 416,
     "end": 417,
     "rule": "maddNatural"
-   },
-   {
-    "start": 417,
-    "end": 420,
-    "rule": "iqlaab"
    }
   ]
  }

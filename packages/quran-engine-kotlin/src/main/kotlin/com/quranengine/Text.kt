@@ -25,6 +25,16 @@ object Text {
 
     private val KEPT_OPERATORS = setOf('&', '|', '!', '#')
 
+    /** Combining-mark ranges that count as Arabic "tashkeel" (diacritics). Mirrors TASHKEEL_RANGES. */
+    private val TASHKEEL_RANGES = listOf(
+        0x0610 to 0x061a,
+        0x064b to 0x065f,
+        0x0670 to 0x0670,
+        0x06d6 to 0x06ed,
+    )
+
+    private fun inTashkeel(cp: Int): Boolean = TASHKEEL_RANGES.any { (lo, hi) -> cp in lo..hi }
+
     /**
      * Remove Quranic recitation marks / diacritics (the "clean Arabic" used for display + search).
      * Mirrors `removingArabicDiacriticsAndSigns`.
@@ -108,6 +118,102 @@ object Text {
     /** Tokenize a cleaned blob on spaces. */
     fun searchTokens(cleanedText: String): List<String> =
         cleanedText.split(" ").filter { it.isNotEmpty() }
+
+    /** Keep ONLY tashkeel scalars (inverse of cleanSearch). Mirrors arabicTashkeelBlob(). */
+    fun arabicTashkeelBlob(text: String): String {
+        val sb = StringBuilder()
+        var i = 0
+        while (i < text.length) {
+            val cp = text.codePointAt(i)
+            if (inTashkeel(cp)) sb.appendCodePoint(cp)
+            i += Character.charCount(cp)
+        }
+        return sb.toString()
+    }
+
+    /** Lowercase + whitespace-collapse without stripping marks. Mirrors exactPhraseBlob(). */
+    fun exactPhraseBlob(text: String): String = collapsingWhitespace(text.lowercase())
+
+    /**
+     * Remove the marks the surah-name search treats as noise. Mirrors removingArabicMarks().
+     */
+    fun removingArabicMarks(text: String): String {
+        val sb = StringBuilder()
+        var i = 0
+        while (i < text.length) {
+            val cp = text.codePointAt(i)
+            val drop = cp == 0x0640 ||
+                (cp in 0x0610..0x061a) ||
+                (cp in 0x064b..0x065f) ||
+                (cp in 0x06d6..0x06ed)
+            if (!drop) sb.appendCodePoint(cp)
+            i += Character.charCount(cp)
+        }
+        return sb.toString()
+    }
+
+    private val SILENT_VOWELS = setOf(
+        0x064e, 0x064f, 0x0650, 0x064b, 0x064c, 0x064d, 0x0656, 0x0657, 0x065a,
+    )
+
+    /**
+     * Drop "silent" Arabic letters for the lenient Arabic search variant. Mirrors
+     * removingSilentArabicLettersForSearch (grapheme-cluster walk: base letter + trailing marks).
+     */
+    fun removingSilentArabicLettersForSearch(text: String): String {
+        val sb = StringBuilder()
+        for (cluster in splitGraphemeClusters(text)) {
+            val scalars = ArrayList<Int>()
+            var i = 0
+            while (i < cluster.length) {
+                val cp = cluster.codePointAt(i)
+                scalars.add(cp)
+                i += Character.charCount(cp)
+            }
+            if (scalars.isEmpty()) continue
+            val base = scalars[0]
+            fun has(cp: Int) = scalars.contains(cp)
+            val hasStdSukoon = has(0x0652) && !has(0x06e1)
+            // hamzatul wasl is always silent
+            if (base == 0x0671) continue
+            // alif/waw/ya/alif-maqsura with a plain sukoon
+            if (base in intArrayOf(0x0627, 0x0648, 0x064a, 0x0649) && hasStdSukoon) continue
+            // lam with a plain sukoon
+            if (base == 0x0644 && hasStdSukoon) continue
+            // waw carrying a dagger alif with no vowel/shadda/sukoon
+            if (base == 0x0648 && has(0x0670) &&
+                scalars.none { it in SILENT_VOWELS || it == 0x0651 || it == 0x0652 }
+            ) continue
+            sb.append(cluster)
+        }
+        return sb.toString()
+    }
+
+    /**
+     * Split a string into combining-mark grapheme clusters (base + trailing Unicode marks),
+     * sufficient for Arabic Quranic text. Mirrors splitGraphemeClusters().
+     */
+    fun splitGraphemeClusters(text: String): List<String> {
+        val out = ArrayList<String>()
+        var i = 0
+        while (i < text.length) {
+            val cp = text.codePointAt(i)
+            val charCount = Character.charCount(cp)
+            val isMark = when (Character.getType(cp)) {
+                Character.NON_SPACING_MARK.toInt(),
+                Character.COMBINING_SPACING_MARK.toInt(),
+                Character.ENCLOSING_MARK.toInt() -> true
+                else -> false
+            }
+            if (isMark && out.isNotEmpty()) {
+                out[out.size - 1] = out[out.size - 1] + text.substring(i, i + charCount)
+            } else {
+                out.add(text.substring(i, i + charCount))
+            }
+            i += charCount
+        }
+        return out
+    }
 
     private val ARABIC_LETTER_RANGES = listOf(
         0x0600 to 0x06ff, 0x0750 to 0x077f, 0x08a0 to 0x08ff,

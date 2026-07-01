@@ -10,6 +10,8 @@ from .juz_page import JuzPage
 from .audio import Reciters
 from .search import Search
 from .tajweed import Tajweed
+from .names import NamesOfAllah, NameOfAllah
+from .muqattaat import Muqattaat
 
 _RIWAYAT = ["warsh", "qaloon", "duri", "susi", "buzzi", "qunbul", "shubah"]
 
@@ -21,12 +23,16 @@ def _default_data_dir() -> Path:
 
 class Engine:
     def __init__(self, quran: Quran, juz_page: JuzPage, reciters: Reciters,
-                 search: Search, tajweed: Tajweed):
+                 search: Search, tajweed: Tajweed,
+                 names_of_allah: Optional[NamesOfAllah] = None,
+                 muqattaat: Optional[Muqattaat] = None):
         self.quran = quran
         self.juz_page = juz_page
         self.reciters = reciters
         self.search = search
         self._tajweed = tajweed
+        self.names_of_allah = names_of_allah or NamesOfAllah()
+        self.muqattaat = muqattaat or Muqattaat()
 
     def tajweed(self, surah_id: int, ayah_id: int) -> list[TajweedSpan]:
         a = self.quran.ayah(surah_id, ayah_id)
@@ -36,7 +42,9 @@ class Engine:
 
     @staticmethod
     def load(data_dir: Optional[str | Path] = None, *,
-             load_qiraat: bool = False, load_surah_info: bool = False,
+             load_qiraat: bool = False, load_surah_info: bool = True,
+             load_names_of_allah: bool = True,
+             load_muqattaat: bool = True,
              load_tajweed: bool = True, riwayah: Optional[str] = None) -> "Engine":
         d = Path(data_dir) if data_dir else _default_data_dir()
 
@@ -53,8 +61,17 @@ class Engine:
         if load_qiraat:
             qiraat = {r: read(f"qiraat/qiraah-{r}.json") for r in _RIWAYAT}
         surah_info = read("surah-info.json") if load_surah_info else None
+        qiraat_counts = read("qiraat-counts.json")
 
-        quran = Quran(surahs, qiraat=qiraat, surah_info=surah_info)
+        names = None
+        if load_names_of_allah:
+            names = NamesOfAllah([NameOfAllah.from_json(n) for n in read("names-of-allah.json")])
+
+        muqattaat = None
+        if load_muqattaat:
+            muqattaat = Muqattaat(read("muqattaat.json"))
+
+        quran = Quran(surahs, qiraat=qiraat, surah_info=surah_info, qiraat_counts=qiraat_counts)
 
         ann: dict[tuple[int, int], list[dict]] = {}
         if load_tajweed:
@@ -67,4 +84,6 @@ class Engine:
             reciters=Reciters(reciters),
             search=Search(quran, riwayah=riwayah),
             tajweed=Tajweed(ann, colors),
+            names_of_allah=names,
+            muqattaat=muqattaat,
         )

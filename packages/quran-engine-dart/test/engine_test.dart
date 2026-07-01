@@ -59,6 +59,26 @@ void main() {
     expect(engine.juz(30)!.endAyah, 6);
   });
 
+  test('juz from end + per-juz stats', () {
+    final jp = engine.juzPage;
+    expect(jp.juzFromEnd(1)!.id, 30);
+    expect(jp.juzFromEnd(30)!.id, 1);
+    expect(jp.juzFromEnd(0), isNull);
+    expect(jp.juzFromEnd(31), isNull);
+
+    final stats = jp.juzStats(30)!;
+    expect(stats.ayahCount, jp.ayahsInJuz(30).length);
+    expect(stats.surahCount >= 1 && stats.pageCount >= 1, isTrue);
+    expect(stats.wordCount > 0 && stats.letterCount > 0, isTrue);
+    expect(jp.juzStats(99), isNull);
+
+    var sum = 0;
+    for (var i = 1; i <= 30; i++) {
+      sum += jp.juzStats(i)!.ayahCount;
+    }
+    expect(sum, 6236);
+  });
+
   test('sortSurahs("ayahs","descending")[0].id == 2', () {
     final sorted = sortSurahs(engine.quran.all(), 'ayahs', 'descending');
     expect(sorted.first.id, 2);
@@ -69,6 +89,28 @@ void main() {
     expect(ref, isNotNull);
     expect(ref!.surah, 2);
     expect(ref.ayah, 255);
+  });
+
+  bool hits(List<VerseHit> r, int surah, int ayah) =>
+      r.any((h) => h.surah == surah && h.ayah == ayah);
+
+  test('regular search is pure substring (mid-word "orld" hits 1:2)', () {
+    // "world" appears in the English translation of al-Fatihah 1:2
+    // ("Lord of the worlds"); a mid-word substring must still match.
+    final r = engine.search.searchVerses('orld');
+    expect(hits(r, 1, 2), isTrue);
+  });
+
+  test('=lord (whole-word) hits 1:2 but =lor does not; plain lor does', () {
+    expect(hits(engine.search.searchVerses('=lord'), 1, 2), isTrue);
+    // whole-word: "lor" is not a complete token, so it must NOT match.
+    expect(hits(engine.search.searchVerses('=lor'), 1, 2), isFalse);
+    // plain substring: "lor" is inside "lord", so it DOES match.
+    expect(hits(engine.search.searchVerses('lor'), 1, 2), isTrue);
+  });
+
+  test('"allah & 2" returns 0 (digit rejected before boolean path)', () {
+    expect(engine.search.searchVerses('allah & 2'), isEmpty);
   });
 
   test('tajweed(1,1) span substrings match recorded text', () {

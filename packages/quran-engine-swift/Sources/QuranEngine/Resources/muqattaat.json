@@ -1,0 +1,339 @@
+{
+  "_note": "Muqattaat (disconnected opening letters). Vocalized names carry the mushaf madd-lāzim maddah (U+0653) so the tajweed detector colours them like the real ayah. Mirrors Muqattaat.swift.",
+  "letterNames": {
+    "ا": "Alif",
+    "ل": "Lām",
+    "م": "Mīm",
+    "ص": "Ṣād",
+    "ر": "Rā",
+    "ك": "Kāf",
+    "ه": "Hā",
+    "ي": "Yā",
+    "ع": "ʿAyn",
+    "ط": "Ṭā",
+    "س": "Sīn",
+    "ح": "Ḥā",
+    "ق": "Qāf",
+    "ن": "Nūn"
+  },
+  "ayahs": [
+    {
+      "surah": 2,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "م"
+      ],
+      "transliteration": "Alif Lām Mīm",
+      "spelledOutArabic": "أَلِفۡ لَآم مِيٓمۡ"
+    },
+    {
+      "surah": 3,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "م"
+      ],
+      "transliteration": "Alif Lām Mīm",
+      "spelledOutArabic": "أَلِفۡ لَآم مِيٓمۡ"
+    },
+    {
+      "surah": 7,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "م",
+        "ص"
+      ],
+      "transliteration": "Alif Lām Mīm Ṣād",
+      "spelledOutArabic": "أَلِفۡ لَآم مِيٓمۡ صَآدۡ"
+    },
+    {
+      "surah": 10,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "ر"
+      ],
+      "transliteration": "Alif Lām Rā",
+      "spelledOutArabic": "أَلِفۡ لَآمۡ رَا"
+    },
+    {
+      "surah": 11,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "ر"
+      ],
+      "transliteration": "Alif Lām Rā",
+      "spelledOutArabic": "أَلِفۡ لَآمۡ رَا"
+    },
+    {
+      "surah": 12,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "ر"
+      ],
+      "transliteration": "Alif Lām Rā",
+      "spelledOutArabic": "أَلِفۡ لَآمۡ رَا"
+    },
+    {
+      "surah": 13,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "م",
+        "ر"
+      ],
+      "transliteration": "Alif Lām Mīm Rā",
+      "spelledOutArabic": "أَلِفۡ لَآم مِيٓمۡ رَا"
+    },
+    {
+      "surah": 14,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "ر"
+      ],
+      "transliteration": "Alif Lām Rā",
+      "spelledOutArabic": "أَلِفۡ لَآمۡ رَا"
+    },
+    {
+      "surah": 15,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "ر"
+      ],
+      "transliteration": "Alif Lām Rā",
+      "spelledOutArabic": "أَلِفۡ لَآمۡ رَا"
+    },
+    {
+      "surah": 19,
+      "ayah": 1,
+      "letters": [
+        "ك",
+        "ه",
+        "ي",
+        "ع",
+        "ص"
+      ],
+      "transliteration": "Kāf Hā Yā ʿAyn Ṣād",
+      "spelledOutArabic": "كَآفۡ هَا يَا عَيٓن صَآدۡ"
+    },
+    {
+      "surah": 20,
+      "ayah": 1,
+      "letters": [
+        "ط",
+        "ه"
+      ],
+      "transliteration": "Ṭā Hā",
+      "spelledOutArabic": "طَا هَا"
+    },
+    {
+      "surah": 26,
+      "ayah": 1,
+      "letters": [
+        "ط",
+        "س",
+        "م"
+      ],
+      "transliteration": "Ṭā Sīn Mīm",
+      "spelledOutArabic": "طَا سِيٓن مِيٓمۡ"
+    },
+    {
+      "surah": 27,
+      "ayah": 1,
+      "letters": [
+        "ط",
+        "س"
+      ],
+      "transliteration": "Ṭā Sīn",
+      "spelledOutArabic": "طَا سِيٓنۡ"
+    },
+    {
+      "surah": 28,
+      "ayah": 1,
+      "letters": [
+        "ط",
+        "س",
+        "م"
+      ],
+      "transliteration": "Ṭā Sīn Mīm",
+      "spelledOutArabic": "طَا سِيٓن مِيٓمۡ"
+    },
+    {
+      "surah": 29,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "م"
+      ],
+      "transliteration": "Alif Lām Mīm",
+      "spelledOutArabic": "أَلِفۡ لَآم مِيٓمۡ"
+    },
+    {
+      "surah": 30,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "م"
+      ],
+      "transliteration": "Alif Lām Mīm",
+      "spelledOutArabic": "أَلِفۡ لَآم مِيٓمۡ"
+    },
+    {
+      "surah": 31,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "م"
+      ],
+      "transliteration": "Alif Lām Mīm",
+      "spelledOutArabic": "أَلِفۡ لَآم مِيٓمۡ"
+    },
+    {
+      "surah": 32,
+      "ayah": 1,
+      "letters": [
+        "ا",
+        "ل",
+        "م"
+      ],
+      "transliteration": "Alif Lām Mīm",
+      "spelledOutArabic": "أَلِفۡ لَآم مِيٓمۡ"
+    },
+    {
+      "surah": 36,
+      "ayah": 1,
+      "letters": [
+        "ي",
+        "س"
+      ],
+      "transliteration": "Yā Sīn",
+      "spelledOutArabic": "يَا سِيٓنۡ"
+    },
+    {
+      "surah": 38,
+      "ayah": 1,
+      "letters": [
+        "ص"
+      ],
+      "transliteration": "Ṣād",
+      "spelledOutArabic": "صَآدۡ"
+    },
+    {
+      "surah": 40,
+      "ayah": 1,
+      "letters": [
+        "ح",
+        "م"
+      ],
+      "transliteration": "Ḥā Mīm",
+      "spelledOutArabic": "حَا مِيٓمۡ"
+    },
+    {
+      "surah": 41,
+      "ayah": 1,
+      "letters": [
+        "ح",
+        "م"
+      ],
+      "transliteration": "Ḥā Mīm",
+      "spelledOutArabic": "حَا مِيٓمۡ"
+    },
+    {
+      "surah": 42,
+      "ayah": 1,
+      "letters": [
+        "ح",
+        "م"
+      ],
+      "transliteration": "Ḥā Mīm",
+      "spelledOutArabic": "حَا مِيٓمۡ"
+    },
+    {
+      "surah": 42,
+      "ayah": 2,
+      "letters": [
+        "ع",
+        "س",
+        "ق"
+      ],
+      "transliteration": "ʿAyn Sīn Qāf",
+      "spelledOutArabic": "عَيٓن سِيٓن قَآفۡ"
+    },
+    {
+      "surah": 43,
+      "ayah": 1,
+      "letters": [
+        "ح",
+        "م"
+      ],
+      "transliteration": "Ḥā Mīm",
+      "spelledOutArabic": "حَا مِيٓمۡ"
+    },
+    {
+      "surah": 44,
+      "ayah": 1,
+      "letters": [
+        "ح",
+        "م"
+      ],
+      "transliteration": "Ḥā Mīm",
+      "spelledOutArabic": "حَا مِيٓمۡ"
+    },
+    {
+      "surah": 45,
+      "ayah": 1,
+      "letters": [
+        "ح",
+        "م"
+      ],
+      "transliteration": "Ḥā Mīm",
+      "spelledOutArabic": "حَا مِيٓمۡ"
+    },
+    {
+      "surah": 46,
+      "ayah": 1,
+      "letters": [
+        "ح",
+        "م"
+      ],
+      "transliteration": "Ḥā Mīm",
+      "spelledOutArabic": "حَا مِيٓمۡ"
+    },
+    {
+      "surah": 50,
+      "ayah": 1,
+      "letters": [
+        "ق"
+      ],
+      "transliteration": "Qāf",
+      "spelledOutArabic": "قَآفۡ"
+    },
+    {
+      "surah": 68,
+      "ayah": 1,
+      "letters": [
+        "ن"
+      ],
+      "transliteration": "Nūn",
+      "spelledOutArabic": "نُوٓنۡ"
+    }
+  ]
+}

@@ -45,3 +45,30 @@ fun supportsDirection(mode: String): Boolean = DIRECTIONAL.contains(mode)
 /** Filter by revelation type ("makkan" | "madinan"). */
 fun filterByRevelationType(surahs: List<Surah>, type: String): List<Surah> =
     surahs.filter { it.type == type }
+
+/** A count predicate: `op` in `< <= > >= ==`, compared against `value`. */
+data class CountFilter(val op: String, val value: Int)
+
+/** Whether [n] passes the optional count filter [f]. An absent filter passes. */
+private fun passesCount(n: Int, f: CountFilter?): Boolean {
+    if (f == null) return true
+    return when (f.op) {
+        "<" -> n < f.value
+        "<=" -> n <= f.value
+        ">" -> n > f.value
+        ">=" -> n >= f.value
+        else -> n == f.value // "==" and any unknown op fall back to equality
+    }
+}
+
+/**
+ * Filter surahs by ayah-count and/or page-count predicates. Ported from `filterByCounts` in
+ * `sorting.js`. A surah passes when it satisfies BOTH provided filters; an omitted (null) filter is
+ * ignored. `value` is compared against the surah's `numberOfAyahs` / `numberOfPages` (0 when absent).
+ */
+fun filterByCounts(
+    surahs: List<Surah>,
+    ayahs: CountFilter? = null,
+    pages: CountFilter? = null,
+): List<Surah> =
+    surahs.filter { passesCount(it.numberOfAyahs, ayahs) && passesCount(it.numberOfPages ?: 0, pages) }

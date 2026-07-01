@@ -48,3 +48,34 @@ public func sortSurahs(_ surahs: [Surah], _ mode: SortMode = .surah, _ direction
 public func filterByRevelationType(_ surahs: [Surah], _ type: String) -> [Surah] {
     surahs.filter { $0.type == type }
 }
+
+/// Comparison operator for a count predicate. Mirrors the JS `<`/`<=`/`>`/`>=`/`==` ops.
+public enum CountOperator: Sendable {
+    case lessThan, lessThanOrEqual, greaterThan, greaterThanOrEqual, equal
+}
+
+/// A count predicate: `op` applied to a surah count against `value`. Mirrors JS `CountFilter`.
+public struct CountFilter: Sendable {
+    public let op: CountOperator
+    public let value: Int
+    public init(_ op: CountOperator, _ value: Int) { self.op = op; self.value = value }
+}
+
+private func passesCount(_ n: Int, _ f: CountFilter?) -> Bool {
+    guard let f else { return true }
+    switch f.op {
+    case .lessThan: return n < f.value
+    case .lessThanOrEqual: return n <= f.value
+    case .greaterThan: return n > f.value
+    case .greaterThanOrEqual: return n >= f.value
+    case .equal: return n == f.value
+    }
+}
+
+/// Filter surahs by ayah-count and/or page-count predicates. Mirrors `filterByCounts` in
+/// `sorting.js` (the search-bar "286 ayahs" / "<10 pages" filters). A surah passes when it
+/// satisfies BOTH provided filters; an omitted (`nil`) filter is ignored. Values are compared
+/// against `numberOfAyahs` / `numberOfPages` (missing page counts treated as 0).
+public func filterByCounts(_ surahs: [Surah], ayahs: CountFilter? = nil, pages: CountFilter? = nil) -> [Surah] {
+    surahs.filter { passesCount($0.numberOfAyahs, ayahs) && passesCount($0.numberOfPages ?? 0, pages) }
+}

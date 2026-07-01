@@ -17,18 +17,23 @@ Quick start:
 
 from .engine import Engine
 from .models import Surah, Ayah, JuzEntry, Reciter, TajweedSpan
+from .juz_page import JuzStats
 from .text import clean_search, contains_arabic_letters, arabic_digits_to_western
 from .audio import surah_audio_url, ayah_audio_url, ayah_now_playing_name, defaults_to_minshawi
-from .sorting import sort_surahs, filter_by_revelation_type
+from .sorting import sort_surahs, filter_by_revelation_type, filter_by_counts, CountFilter
+from .names import NamesOfAllah, NameOfAllah
+from .muqattaat import Muqattaat, MuqattaatPronunciation
 from .cache import sanitize_reciter_dir, local_surah_path, shared_audio_path
 
 __version__ = "0.1.0"
 
 __all__ = [
     "Engine",
-    "Surah", "Ayah", "JuzEntry", "Reciter", "TajweedSpan",
+    "Surah", "Ayah", "JuzEntry", "Reciter", "TajweedSpan", "JuzStats",
     "clean_search", "contains_arabic_letters", "arabic_digits_to_western",
     "surah_audio_url", "ayah_audio_url", "ayah_now_playing_name", "defaults_to_minshawi",
-    "sort_surahs", "filter_by_revelation_type",
+    "sort_surahs", "filter_by_revelation_type", "filter_by_counts", "CountFilter",
+    "NamesOfAllah", "NameOfAllah",
+    "Muqattaat", "MuqattaatPronunciation",
     "sanitize_reciter_dir", "local_surah_path", "shared_audio_path",
 ]

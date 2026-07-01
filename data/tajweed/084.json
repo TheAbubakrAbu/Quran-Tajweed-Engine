@@ -936,11 +936,6 @@
     "start": 81,
     "end": 82,
     "rule": "maddNatural"
-   },
-   {
-    "start": 82,
-    "end": 85,
-    "rule": "iqlaab"
    }
   ]
  }

@@ -42,6 +42,38 @@ type Surah struct {
 	Ayahs               []Ayah   `json:"ayahs"`
 }
 
+// MuqattaatPronunciation is one muqattaʿāt opening — the disconnected letters
+// (e.g. الٓمٓ) that open 29 surahs, recited letter by letter. It carries the bare
+// letters, a transliteration ("Alif Lām Mīm"), and the fully vocalized Arabic
+// spelling whose long vowels keep the madd-lāzim maddah (U+0653). From
+// data/muqattaat.json.
+type MuqattaatPronunciation struct {
+	Surah            int      `json:"surah"`
+	Ayah             int      `json:"ayah"`
+	Letters          []string `json:"letters"` // bare letters, e.g. ["ا","ل","م"]
+	Transliteration  string   `json:"transliteration"`
+	SpelledOutArabic string   `json:"spelledOutArabic"` // fully vocalized
+}
+
+// SurahInfoSource is one "About this surah" write-up (e.g. Maududi, Ibn Ashur)
+// from data/surah-info.json.
+type SurahInfoSource struct {
+	Name     string `json:"name"`
+	Contents string `json:"contents"`
+}
+
+// NameOfAllah is one of the 99 Names of Allah (Asma' ul-Husna) from
+// data/names-of-allah.json.
+type NameOfAllah struct {
+	Name            string   `json:"name"` // Arabic
+	Transliteration string   `json:"transliteration"`
+	Number          int      `json:"number"` // 1..99
+	Found           string   `json:"found"`  // ayah references, e.g. "(1:3) (17:110)"
+	Meaning         string   `json:"meaning"`
+	Desc            string   `json:"desc"`
+	OtherNames      []string `json:"otherNames"`
+}
+
 // JuzEntry is a static juz (para) boundary entry from data/juz.json.
 type JuzEntry struct {
 	ID                  int    `json:"id"`
@@ -89,6 +121,20 @@ type Reference struct {
 }
 
 // --- raw on-disk shapes used only during Load -------------------------------
+
+// surahInfoEntry is the on-disk shape of one element of data/surah-info.json:
+// [{ id, sources: [{ name, contents }] }].
+type surahInfoEntry struct {
+	ID      int               `json:"id"`
+	Sources []SurahInfoSource `json:"sources"`
+}
+
+// muqattaatFile is the on-disk shape of data/muqattaat.json:
+// { letterNames: {char: translit}, ayahs: [MuqattaatPronunciation] }.
+type muqattaatFile struct {
+	LetterNames map[string]string        `json:"letterNames"`
+	Ayahs       []MuqattaatPronunciation `json:"ayahs"`
+}
 
 type tajweedRule struct {
 	ID       string `json:"id"`

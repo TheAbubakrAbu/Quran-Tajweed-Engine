@@ -2231,11 +2231,6 @@
     "rule": "maddNaturalMiniature"
    },
    {
-    "start": 109,
-    "end": 112,
-    "rule": "iqlaab"
-   },
-   {
     "start": 112,
     "end": 113,
     "rule": "maddNatural"

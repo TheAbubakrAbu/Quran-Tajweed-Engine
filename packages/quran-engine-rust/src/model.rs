@@ -4,6 +4,8 @@
 //! JSON keys (`textArabic`, `nameEnglish`, `ayahIdentifier`, …). Optional fields are
 //! `Option<T>` so the structs survive minor schema variation.
 
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 /// A single ayah (verse) within a surah. Mirrors an element of `surah.ayahs` in `quran.json`.
@@ -68,6 +70,36 @@ pub struct Surah {
     pub ayahs: Vec<Ayah>,
 }
 
+/// One "About this surah" write-up source (Maududi / Ibn Ashur). Element of a
+/// `surah-info.json` entry's `sources` array.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SurahInfoSource {
+    /// Source name, e.g. `"Maududi"`.
+    pub name: String,
+    /// Markdown body of the write-up.
+    pub contents: String,
+}
+
+/// A single Name of Allah (Asmā’ ul-Ḥusnā). Element of the `names-of-allah.json` array.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NameOfAllah {
+    /// Arabic spelling.
+    pub name: String,
+    pub transliteration: String,
+    /// 1..=99.
+    pub number: u32,
+    /// Ayah references where it appears, e.g. `"(1:3) (17:110)"`.
+    #[serde(default)]
+    pub found: String,
+    #[serde(default)]
+    pub meaning: String,
+    #[serde(default)]
+    pub desc: String,
+    #[serde(default)]
+    pub other_names: Vec<String>,
+}
+
 /// A juz (para) boundary entry. Top-level element of the `juz.json` array.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -120,7 +152,43 @@ pub struct TajweedSpan {
     pub text: String,
 }
 
+/// Pronunciation of a muqaṭṭaʿāt (disconnected letters) opening ayah. Element of the `ayahs`
+/// array in `muqattaat.json`. The mushaf prints these letters joined with maddah marks but they
+/// are recited letter by letter; `spelled_out_arabic` is the fully-vocalized spelling whose long
+/// vowels carry the madd-lāzim maddah (U+0653).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MuqattaatPronunciation {
+    pub surah: u32,
+    pub ayah: u32,
+    /// Bare letters, e.g. `["ا","ل","م"]`.
+    #[serde(default)]
+    pub letters: Vec<String>,
+    /// Transliteration, e.g. `"Alif Lām Mīm"`.
+    pub transliteration: String,
+    /// Fully vocalized Arabic spelling, e.g. `"أَلِفۡ لَآم مِيٓمۡ"` (maps from `spelledOutArabic`).
+    pub spelled_out_arabic: String,
+}
+
+/// The `muqattaat.json` file shape: a `letterNames` map plus the per-ayah `ayahs` list.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MuqattaatData {
+    #[serde(default)]
+    pub letter_names: HashMap<String, String>,
+    #[serde(default)]
+    pub ayahs: Vec<MuqattaatPronunciation>,
+}
+
 // ---- internal-only deserialization helpers ---------------------------------------
+
+/// One top-level `surah-info.json` entry: a surah id + its write-up sources.
+#[derive(Debug, Clone, Deserialize)]
+pub(crate) struct SurahInfoEntry {
+    pub id: u32,
+    #[serde(default)]
+    pub sources: Vec<SurahInfoSource>,
+}
 
 /// One ayah's pre-computed annotations (`tajweed-annotations.json` / `tajweed/NNN.json`).
 #[derive(Debug, Clone, Deserialize)]

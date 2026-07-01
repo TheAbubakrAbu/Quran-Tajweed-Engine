@@ -1,25 +1,39 @@
-//! Ayah & surah search — **core path only**. Mirrors the non-boolean path of `src/search.js`.
+//! Ayah & surah search. Faithful port of `src/search.js` — matches its behaviour byte-for-byte.
 //!
 //! ## What is implemented
-//! - `search_verses`: unranked verse-text search in mushaf order. A verse matches when the whole
-//!   cleaned query is a substring of the relevant (Arabic or English) blob, OR the query tokens
-//!   phrase-prefix-match the verse tokens (all-but-last exact, last is a prefix). Verse search
-//!   rejects any query containing a digit.
+//! - `search_verses`: unranked verse-text search in mushaf order. The regular (non-boolean) path is
+//!   a **pure substring** match on the relevant (Arabic or English) folded blob, with an optional
+//!   lenient "silent letters ignored" Arabic variant. Verse search rejects any query containing a
+//!   Unicode decimal digit BEFORE branching into the boolean path.
+//! - `_boolean_search`: the boolean grammar (`& | ! # ^ % $ =`) with per-term whole-word /
+//!   starts-with / ends-with / exact / contains matching, plus tashkeel-sensitive Arabic and
+//!   exact-phrase English matching.
 //! - `search_surahs`: name / alias / number / `"2:255"` / makkan-madani lookup.
 //! - `parse_reference`: `"2:255"`, `"2 255"`, `"baqarah 10"`, Arabic-digit forms.
-//!
-//! ## What is intentionally omitted (documented divergence)
-//! The **boolean grammar** (`& | ! # ^ % $`) and its dedicated tashkeel / exact-phrase /
-//! silent-letter blobs are **not** ported. A query containing a boolean operator is treated as
-//! plain text here. This matches the "minimal port" allowance in `docs/06-ayah-search.md` /
-//! `docs/PORTING.md` ("A minimal port may implement substring matching on the folded blobs and
-//! skip the boolean grammar; document what you skipped.").
 
 use crate::model::Surah;
 use crate::text::{
-    arabic_digits_to_western, clean_search, contains_arabic_letters,
-    removing_arabic_diacritics_and_signs, search_tokens,
+    arabic_digits_to_western, arabic_tashkeel_blob, clean_search, contains_arabic_letters,
+    exact_phrase_blob, removing_arabic_diacritics_and_signs,
+    removing_silent_arabic_letters_for_search, search_tokens,
 };
+
+/// Boolean-search operators that trigger the boolean grammar. Mirrors `BOOLEAN_CHARS`.
+fn has_boolean_char(query: &str) -> bool {
+    query
+        .chars()
+        .any(|c| matches!(c, '&' | '|' | '!' | '#' | '^' | '%' | '$' | '='))
+}
+
+/// Per-term match mode. Mirrors the JS `matchMode` string union.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum MatchMode {
+    Contains,
+    StartsWith,
+    EndsWith,
+    Exact,
+    WholeWord,
+}
 
 /// A verse search result (mushaf order).
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -40,15 +54,30 @@ pub struct Reference {
 pub struct SearchOpts {
     pub offset: Option<usize>,
     pub limit: Option<usize>,
+    pub ignore_silent_letters: bool,
 }
 
 struct VerseEntry {
     surah: u32,
     ayah: u32,
+    arabic_tashkeel_blob: String,
+    english_exact_blob: String,
     arabic_blob: String,
+    silent_arabic_blob: String,
     english_blob: String,
     arabic_tokens: Vec<String>,
     english_tokens: Vec<String>,
+}
+
+/// A parsed boolean search term. Mirrors the object returned by `parseTerm`.
+struct Term {
+    value: String,
+    negate: bool,
+    match_mode: MatchMode,
+    requires_tashkeel_match: bool,
+    tashkeel_pattern: String,
+    requires_exact_english_match: bool,
+    exact_english_phrase: String,
 }
 
 struct SurahEntry {
@@ -73,6 +102,15 @@ impl SearchIndex {
                 let raw = &a.text_arabic;
                 let clean = removing_arabic_diacritics_and_signs(raw);
                 let arabic_blob = format!("{} {}", clean_search(raw), clean_search(&clean));
+                let silent_arabic_blob = format!(
+                    "{} {}",
+                    clean_search(&removing_silent_arabic_letters_for_search(raw)),
+                    clean_search(&removing_silent_arabic_letters_for_search(&clean)),
+                );
+                let english_joined = format!(
+                    "{} {} {}",
+                    a.text_english_saheeh, a.text_english_mustafa, a.text_transliteration
+                );
                 let english_blob = format!(
                     "{} {} {}",
                     clean_search(&a.text_english_saheeh),
@@ -84,7 +122,10 @@ impl SearchIndex {
                 verses.push(VerseEntry {
                     surah: s.id,
                     ayah: a.id,
+                    arabic_tashkeel_blob: arabic_tashkeel_blob(raw),
+                    english_exact_blob: exact_phrase_blob(&english_joined),
                     arabic_blob,
+                    silent_arabic_blob,
                     english_blob,
                     arabic_tokens,
                     english_tokens,
@@ -118,24 +159,83 @@ impl SearchIndex {
         if cleaned.is_empty() {
             return Vec::new();
         }
-        // Verse-text search rejects any query containing a digit.
-        if cleaned.chars().any(|c| c.is_ascii_digit()) {
+        // Reject any query containing a Unicode decimal digit (numeric/refs go via surah search).
+        // Done BEFORE the boolean path — so even a boolean query with a digit returns []. Uses a
+        // Unicode-aware check so Arabic-Indic digits are caught too.
+        if cleaned.chars().any(|c| c.is_numeric()) {
             return Vec::new();
         }
 
-        let use_arabic = contains_arabic_letters(query);
-        let q_tokens = search_tokens(&cleaned);
+        // Boolean grammar?
+        if has_boolean_char(query) {
+            return self.boolean_search(query, opts);
+        }
 
+        let use_arabic = contains_arabic_letters(query);
+        let silent_query = if use_arabic && opts.ignore_silent_letters {
+            clean_search(&removing_silent_arabic_letters_for_search(query))
+        } else {
+            String::new()
+        };
+
+        // Pure substring search in mushaf order — word/sentence boundaries DON'T matter (a query
+        // matches anywhere it appears). Whole-word / phrase matching lives in the boolean operators.
         let hits = self.verses.iter().filter(|e| {
             if use_arabic {
-                e.arabic_blob.contains(&cleaned)
-                    || phrase_prefix_match(&e.arabic_tokens, &q_tokens)
+                if e.arabic_blob.contains(&cleaned) {
+                    return true;
+                }
+                if silent_query.is_empty() {
+                    return false;
+                }
+                e.silent_arabic_blob.contains(&silent_query)
             } else {
                 e.english_blob.contains(&cleaned)
-                    || phrase_prefix_match(&e.english_tokens, &q_tokens)
             }
         });
 
+        Self::paginate(hits, opts)
+    }
+
+    // ---- Boolean search -----------------------------------------------------
+    fn boolean_search(&self, query: &str, opts: &SearchOpts) -> Vec<VerseHit> {
+        let use_arabic = contains_arabic_letters(query);
+        let normalized = query.replace("&&", "&").replace("||", "|");
+        // Drop any term whose cleaned value is empty — `parseTerm` yields nil there.
+        let or_groups: Vec<Vec<Term>> = normalized
+            .split('|')
+            .map(|g| {
+                g.split('&')
+                    .map(parse_term)
+                    .filter(|t| !t.value.is_empty())
+                    .collect::<Vec<Term>>()
+            })
+            .filter(|g| !g.is_empty())
+            .collect();
+        if or_groups.is_empty() {
+            return Vec::new();
+        }
+
+        let hits = self.verses.iter().filter(|e| {
+            or_groups.iter().any(|and_terms| {
+                and_terms.iter().all(|term| {
+                    let hit = term_match(e, term, use_arabic);
+                    if term.negate {
+                        !hit
+                    } else {
+                        hit
+                    }
+                })
+            })
+        });
+
+        Self::paginate(hits, opts)
+    }
+
+    fn paginate<'a>(
+        hits: impl Iterator<Item = &'a VerseEntry>,
+        opts: &SearchOpts,
+    ) -> Vec<VerseHit> {
         let offset = opts.offset.unwrap_or(0);
         let mut out: Vec<VerseHit> = hits
             .skip(offset)
@@ -230,9 +330,10 @@ impl SearchIndex {
     }
 }
 
-/// Phrase-prefix match: query tokens match a consecutive run of haystack tokens, all-but-last
-/// exact-equal, last is a prefix. Mirrors `phrasePrefixMatch`.
-fn phrase_prefix_match(haystack: &[String], query: &[String]) -> bool {
+/// Consecutive-token match: query tokens appear as a consecutive run of haystack tokens. Leading
+/// tokens match exactly; the final token must match exactly when `last_must_be_exact`, otherwise it
+/// only has to be a prefix. Mirrors `consecutiveTokenMatch`.
+fn consecutive_token_match(haystack: &[String], query: &[String], last_must_be_exact: bool) -> bool {
     if query.is_empty() || haystack.len() < query.len() {
         return false;
     }
@@ -241,7 +342,7 @@ fn phrase_prefix_match(haystack: &[String], query: &[String]) -> bool {
         let mut ok = true;
         for (k, term) in query.iter().enumerate() {
             let word = &haystack[start + k];
-            if k == last {
+            if k == last && !last_must_be_exact {
                 if !word.starts_with(term) {
                     ok = false;
                     break;
@@ -256,6 +357,107 @@ fn phrase_prefix_match(haystack: &[String], query: &[String]) -> bool {
         }
     }
     false
+}
+
+/// Parse a single boolean term. Mirrors `parseTerm`: strips (in order) leading `!` (negate,
+/// toggles), `#` (requires-tashkeel), `=` (whole-word), one `^` (starts-with), one trailing `%`/`$`
+/// (ends-with); the leftover text becomes the value + the tashkeel/exact-phrase patterns.
+fn parse_term(raw_term: &str) -> Term {
+    let mut t = raw_term.trim().to_string();
+    let mut negate = false;
+    while t.starts_with('!') {
+        negate = !negate;
+        t = t[1..].trim().to_string();
+    }
+    let mut requires_tashkeel = false;
+    while t.starts_with('#') {
+        requires_tashkeel = true;
+        t = t[1..].trim().to_string();
+    }
+    let mut whole_word = false;
+    while t.starts_with('=') {
+        whole_word = true;
+        t = t[1..].trim().to_string();
+    }
+    let mut starts_with = false;
+    if t.starts_with('^') {
+        starts_with = true;
+        t = t[1..].trim().to_string();
+    }
+    let mut ends_with = false;
+    if t.ends_with('%') || t.ends_with('$') {
+        ends_with = true;
+        t = t[..t.len() - 1].trim().to_string();
+    }
+
+    let value = clean_search(&t);
+    let match_mode = if whole_word {
+        MatchMode::WholeWord
+    } else if starts_with && ends_with {
+        MatchMode::Exact
+    } else if starts_with {
+        MatchMode::StartsWith
+    } else if ends_with {
+        MatchMode::EndsWith
+    } else {
+        MatchMode::Contains
+    };
+
+    let is_arabic = contains_arabic_letters(&t);
+    Term {
+        value,
+        negate,
+        match_mode,
+        requires_tashkeel_match: requires_tashkeel && is_arabic,
+        tashkeel_pattern: arabic_tashkeel_blob(&t),
+        requires_exact_english_match: requires_tashkeel && !is_arabic,
+        exact_english_phrase: exact_phrase_blob(&t),
+    }
+}
+
+/// Match a single term's value against a blob/token list under one of the five modes. Mirrors
+/// `ayahTermMatch`.
+fn ayah_term_match(haystack: &str, tokens: &[String], term: &str, mode: MatchMode) -> bool {
+    match mode {
+        MatchMode::StartsWith => {
+            haystack.starts_with(term) || tokens.iter().any(|w| w.starts_with(term))
+        }
+        MatchMode::EndsWith => {
+            haystack.ends_with(term) || tokens.iter().any(|w| w.ends_with(term))
+        }
+        MatchMode::Exact => haystack == term || tokens.iter().any(|w| w == term),
+        MatchMode::WholeWord => {
+            consecutive_token_match(tokens, &search_tokens(term), true)
+        }
+        MatchMode::Contains => haystack.contains(term),
+    }
+}
+
+/// Per-term match (un-negated). Mirrors `termMatch`.
+fn term_match(e: &VerseEntry, term: &Term, use_arabic: bool) -> bool {
+    if use_arabic && term.requires_tashkeel_match {
+        let letters_match =
+            ayah_term_match(&e.arabic_blob, &e.arabic_tokens, &term.value, term.match_mode);
+        let tashkeel_match = term.tashkeel_pattern.is_empty()
+            || e.arabic_tashkeel_blob.contains(&term.tashkeel_pattern);
+        return letters_match && tashkeel_match;
+    }
+    if !use_arabic && term.requires_exact_english_match {
+        let exact_tokens = search_tokens(&term.exact_english_phrase);
+        return !term.exact_english_phrase.is_empty()
+            && ayah_term_match(
+                &e.english_exact_blob,
+                &exact_tokens,
+                &term.exact_english_phrase,
+                term.match_mode,
+            );
+    }
+    let (haystack, tokens) = if use_arabic {
+        (&e.arabic_blob, &e.arabic_tokens)
+    } else {
+        (&e.english_blob, &e.english_tokens)
+    };
+    ayah_term_match(haystack, tokens, &term.value, term.match_mode)
 }
 
 fn to_number(s: &str) -> Option<u32> {

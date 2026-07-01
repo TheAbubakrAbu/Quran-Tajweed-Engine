@@ -1713,11 +1713,6 @@
     "rule": "maddNaturalMiniature"
    },
    {
-    "start": 133,
-    "end": 136,
-    "rule": "iqlaab"
-   },
-   {
     "start": 136,
     "end": 137,
     "rule": "maddNatural"

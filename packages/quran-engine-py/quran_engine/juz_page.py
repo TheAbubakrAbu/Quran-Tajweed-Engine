@@ -1,8 +1,19 @@
 """Juz & mushaf-page navigation. Mirrors src/juzPage.js / docs 03."""
 from __future__ import annotations
+from dataclasses import dataclass
 from typing import Optional
 from .models import JuzEntry, Surah, Ayah
 from .quran import Quran
+
+
+@dataclass(frozen=True)
+class JuzStats:
+    """Aggregate counts for a single juz. Mirrors QuranData.JuzStats."""
+    surah_count: int
+    ayah_count: int
+    word_count: int
+    letter_count: int
+    page_count: int
 
 
 class JuzPage:
@@ -50,3 +61,39 @@ class JuzPage:
         if not j:
             return []
         return [s.id for s in self.quran.all() if j.start_surah <= s.id <= j.end_surah]
+
+    def juz_from_end(self, n: int) -> Optional[JuzEntry]:
+        """Resolve a juz counted from the end of the Quran: 1 -> juz 30 ... 30 -> juz 1.
+
+        Mirrors the search-bar ``-N`` shorthand in QuranView.swift. Returns None for n outside 1..30.
+        """
+        if not 1 <= n <= 30:
+            return None
+        return self.juz(31 - n)
+
+    def juz_stats(self, juz: int) -> Optional[JuzStats]:
+        """Aggregate counts for a single juz, computed from the ayahs actually assigned to it
+        (``ayah.juz == juz``) so surahs that straddle a juz boundary are split correctly.
+        Mirrors ``QuranData.juzStats(for:)``. Returns None for an unknown juz id.
+        """
+        if not self.juz(juz):
+            return None
+        surah_ids: set[int] = set()
+        pages: set[int] = set()
+        ayah_count = word_count = letter_count = 0
+        for s, a in self.quran.each_ayah():
+            if a.juz != juz:
+                continue
+            surah_ids.add(s.id)
+            ayah_count += 1
+            word_count += a.word_count or 0
+            letter_count += a.letter_count or 0
+            if a.page is not None:
+                pages.add(a.page)
+        return JuzStats(
+            surah_count=len(surah_ids),
+            ayah_count=ayah_count,
+            word_count=word_count,
+            letter_count=letter_count,
+            page_count=len(pages),
+        )

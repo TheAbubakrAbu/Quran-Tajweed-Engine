@@ -13,7 +13,7 @@
 | | |
 |---|---|
 | **6,236** ayahs | **114** surahs |
-| **113,642** pre-computed tajweed annotations | **17** tajweed rule categories |
+| **113,611** pre-computed tajweed annotations | **17** tajweed rule categories |
 | **62** reciters | **8** riwayat |
 | **7** alternate qiraat readings | **7** language ports |
 | **3** Quran fonts (Uthmani / Qiraat / Indopak) | **99** Names of Allah |
@@ -23,7 +23,7 @@
 
 ## Why this exists
 
-**Most Quran apps re-solve the same hard problems:** a clean Uthmani dataset, *correct* tajweed coloring — the genuinely difficult part — juz/page boundaries, reciter feeds, and diacritic-aware search. The tajweed in particular is the hard one, so this engine ships it **pre-computed for all 6,236 ayahs (113,642 annotated spans)**, eliminating the single most error-prone piece of building a Quran application. You get all of it as:
+**Most Quran apps re-solve the same hard problems:** a clean Uthmani dataset, *correct* tajweed coloring — the genuinely difficult part — juz/page boundaries, reciter feeds, and diacritic-aware search. The tajweed in particular is the hard one, so this engine ships it **pre-computed for all 6,236 ayahs (113,611 annotated spans)**, eliminating the single most error-prone piece of building a Quran application. You get all of it as:
 
 1. **Data** — JSON any language can read. This is the heart of the engine.
 2. **Specs** — every feature documented precisely enough to reimplement from scratch.
@@ -39,13 +39,15 @@ Quran Tajweed Engine/
 │   ├── quran.json              114 surahs · 6236 ayahs · Arabic + 2 English + transliteration
 │   ├── surah-info.json         "About this surah" (Maududi, Ibn Ashur)
 │   ├── names-of-allah.json     99 Names of Allah
+│   ├── muqattaat.json          disconnected opening letters (29 surahs) + vocalized names
 │   ├── juz.json                30 juz boundaries
 │   ├── reciters.json           62 reciters across 8 riwayat
 │   ├── tajweed-rules.json      rule catalogue: categories, colors, trigger letters
-│   ├── tajweed-annotations.json  pre-computed tajweed spans for all 6236 ayahs (113,642 spans)
+│   ├── tajweed-annotations.json  pre-computed tajweed spans for all 6236 ayahs (113,611 spans)
 │   ├── arabic-alphabet.json    letters (+tajweed weight), numbers, tashkeel, waqf stopping signs
 │   ├── fonts/                  Uthmani, Qiraat, Indopak TTFs + fonts.json
 │   ├── qiraat/                 7 alternate readings (Warsh, Qaloon, Duri, Susi, Bazzi, Qunbul, Shubah)
+│   ├── qiraat-counts.json      per-riwayah ayah counts → existsInQiraah / numberOfAyahs(for:)
 │   ├── surahs/                 per-surah split (NNN.json) + lightweight index.json
 │   └── tajweed/                per-surah pre-computed tajweed (NNN.json)
 ├── docs/                       ← comprehensive documentation
@@ -148,7 +150,7 @@ Everything runs locally with no network calls. Indicative figures from the JavaS
 - **Full engine load:** ~0.8 s to parse the entire Quran and build the in-memory search index over all 6,236 ayahs (qiraat and surah-info are opt-in, not loaded by default).
 - **Tajweed coloring:** ~0.1 ms per ayah with the live detector; instant when reading the pre-computed `tajweed-annotations.json` corpus.
 - **Search:** single-digit milliseconds for a full Arabic/English query across the whole Quran.
-- **On-disk data:** `quran.json` ~5 MB · `tajweed-annotations.json` ~5 MB (113,642 spans) · whole `data/` directory ~37 MB including all qiraat, fonts, and per-surah splits.
+- **On-disk data:** `quran.json` ~5 MB · `tajweed-annotations.json` ~5 MB (113,611 spans) · whole `data/` directory ~37 MB including all qiraat, fonts, and per-surah splits.
 
 ## Modular architecture
 

@@ -660,11 +660,6 @@
     "rule": "tafkhim"
    },
    {
-    "start": 43,
-    "end": 46,
-    "rule": "iqlaab"
-   },
-   {
     "start": 46,
     "end": 47,
     "rule": "maddNatural"
