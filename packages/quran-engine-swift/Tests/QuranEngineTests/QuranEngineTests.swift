@@ -206,8 +206,9 @@ final class QuranEngineTests: XCTestCase {
         XCTAssertEqual(m.pronunciation(42, 2)?.transliteration, "ʿAyn Sīn Qāf")
         XCTAssertNil(m.pronunciation(1, 1))
         XCTAssertEqual(m.letterName("ا"), "Alif")
-        // Long vowels carry the madd-lāzim maddah U+0653.
-        XCTAssertTrue(m.pronunciation(2, 1)?.spelledOutArabic.contains("\u{0653}") ?? false)
+        // Long vowels carry the madd-lāzim maddah U+0653. Check by scalar: Swift's String.contains is
+        // grapheme-cluster-aware, so a lone combining mark won't match once it's fused into a cluster.
+        XCTAssertTrue(m.pronunciation(2, 1)?.spelledOutArabic.unicodeScalars.contains(Unicode.Scalar(0x0653)!) ?? false)
     }
 
     func testSurahFlags() {

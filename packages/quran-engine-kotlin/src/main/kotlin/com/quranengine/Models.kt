@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 /**
  * Data models for the Quran Tajweed Engine. Mirrors the JSON shapes in `/data` and the JS reference
- * (`packages/quran-engine-js/src/*.js`). `@SerialName` annotations map to the camelCase JSON keys.
+ * in `packages/quran-engine-js/src/`. `@SerialName` annotations map to the camelCase JSON keys.
  *
  * All models tolerate unknown/extra keys (the loader uses `Json { ignoreUnknownKeys = true }`), so the
  * data files can carry fields a given port does not model (e.g. `revelationExceptions`, `juzChangesWithinSurah`).
