@@ -13,18 +13,18 @@ jobs:
   js:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: "20" }
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with: { node-version: "lts/*" }
       - name: JS tests (incl. conformance)
         run: cd packages/quran-engine-js && node --test
 
   generated-artifacts-in-sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: "20" }
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with: { node-version: "lts/*" }
       # Regenerate everything derived from /data and the detector; fail if the tree changed,
       # i.e. someone edited tajweed.js or /data without committing the regenerated outputs.
       - run: node scripts/build-data.mjs
@@ -42,8 +42,8 @@ jobs:
   python:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with: { python-version: "3.11" }
       - run: pip install pytest
       - run: cd packages/quran-engine-py && python -m pytest -q
@@ -51,34 +51,34 @@ jobs:
   rust:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: cd packages/quran-engine-rust && cargo test
 
   go:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
         with: { go-version: "1.22", cache: false }  # no go.sum (zero deps) — skip cache lookup
       - run: cd packages/quran-engine-go && go test ./...
 
   swift:
     runs-on: macos-14
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: cd packages/quran-engine-swift && swift test
 
   kotlin:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
         with: { distribution: "temurin", java-version: "17" }
       - run: cd packages/quran-engine-kotlin && gradle test --no-daemon
 
   dart:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dart-lang/setup-dart@v1
       - run: cd packages/quran-engine-dart && dart pub get && dart test
