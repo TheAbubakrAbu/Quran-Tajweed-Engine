@@ -12,7 +12,7 @@
 
 ## Data
 
-**Where does the data come from?** Extracted, with attribution, from the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars) app by Abubakr Elmallah. Full provenance in [CREDITS.md](../CREDITS.md).
+**Where does the data come from?** Extracted, with attribution, from the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-iOS) app by Abubakr Elmallah. Full provenance in [CREDITS.md](../CREDITS.md).
 
 **How big is it?** `quran.json` ≈ 5 MB; each qiraah file ≈ 1.6 MB; `surah-info.json` ≈ 1.8 MB; the tajweed corpus ≈ 5 MB. For web, use the per-surah files in `data/surahs/` and `data/tajweed/` and load on demand; the lightweight `data/surahs/index.json` (no verse text) is enough for a surah list.
 

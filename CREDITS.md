@@ -1,6 +1,6 @@
 # Credits & data provenance
 
-This engine would not exist without the people and projects below. Please preserve this attribution in any redistribution. Each upstream app keeps its own full credits in its repository — [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars/blob/main/CREDITS.md) · [Al-Adhan](https://github.com/TheAbubakrAbu/Al-Adhan-Prayer-Times/blob/main/CREDITS.md) · [Al-Quran](https://github.com/TheAbubakrAbu/Al-Quran-Beginner-Quran/blob/main/CREDITS.md).
+This engine would not exist without the people and projects below. Please preserve this attribution in any redistribution. Each upstream app keeps its own full credits in its repository — [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-iOS/blob/main/CREDITS.md) · [Al-Adhan](https://github.com/TheAbubakrAbu/Al-Adhan-iOS/blob/main/CREDITS.md) · [Al-Quran](https://github.com/TheAbubakrAbu/Al-Quran-iOS/blob/main/CREDITS.md).
 
 <a href="https://apps.apple.com/us/app/al-islam-islamic-pillars/id6449729655?platform=iphone">
   <img src="Logo.png" alt="Logo" width="120" style="border-radius:10px;"/>
@@ -11,7 +11,7 @@ This engine would not exist without the people and projects below. Please preser
 All data and algorithms in this repository are extracted from the open-source **Al-Islam | Islamic Pillars** app, with full credit to its author:
 
 - **Author:** Abubakr Elmallah (أبوبكر الملاح)
-- **Project:** Al-Islam | Islamic Pillars — <https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars>
+- **Project:** Al-Islam | Islamic Pillars — <https://github.com/TheAbubakrAbu/Al-Islam-iOS>
 - **License:** MIT (© 2025 Abubakr Elmallah)
 - **App Store:** <https://apps.apple.com/us/app/al-islam-islamic-pillars/id6449729655>
 - **Website:** <https://abubakrelmallah.com/>

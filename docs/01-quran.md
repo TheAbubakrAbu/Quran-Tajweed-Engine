@@ -116,4 +116,4 @@ engine.namesOfAllah.byNumber(1).transliteration;   // "Ar-Rahman"  (99 Names of 
 
 ## Provenance
 
-See [CREDITS.md](../CREDITS.md). Arabic text is the Hafs an Asim Uthmani script; English translations are Saheeh International and Dr. Mustafa Khattab's *The Clear Quran*. All data is extracted, unmodified, from the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars) app.
+See [CREDITS.md](../CREDITS.md). Arabic text is the Hafs an Asim Uthmani script; English translations are Saheeh International and Dr. Mustafa Khattab's *The Clear Quran*. All data is extracted, unmodified, from the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-iOS) app.

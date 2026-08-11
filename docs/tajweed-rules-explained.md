@@ -4,7 +4,7 @@ A plain-English, teaching-oriented explanation of **what every tajweed rule mean
 
 > **Scope:** This guide applies specifically to **riwayat Hafs an Asim**, the most widely recited reading today and the standard in most printed mushafs. Other riwayat (Warsh, Qaloon, Khalaf, …) differ in some details — elongation lengths, treatment of hamzah, and certain pronunciations — so not every rule here applies identically to them.
 >
-> **Source:** the "Tajweed Foundations" lessons in the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars) app (see [CREDITS.md](../CREDITS.md)); stopping-sign meanings from [Studio Arabiya](https://studioarabiya.com/blog/tajweed-rules-stopping-pausing-signs/). The per-rule color and trigger-letter tables are generated from [`data/tajweed-rules.json`](../data/tajweed-rules.json) into [tajweed-rules-reference.md](tajweed-rules-reference.md).
+> **Source:** the "Tajweed Foundations" lessons in the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-iOS) app (see [CREDITS.md](../CREDITS.md)); stopping-sign meanings from [Studio Arabiya](https://studioarabiya.com/blog/tajweed-rules-stopping-pausing-signs/). The per-rule color and trigger-letter tables are generated from [`data/tajweed-rules.json`](../data/tajweed-rules.json) into [tajweed-rules-reference.md](tajweed-rules-reference.md).
 
 ## What is tajweed?
 

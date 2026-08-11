@@ -2,7 +2,7 @@
 
 **An open-source, offline-first, framework-agnostic Quran engine.** Complete Quran text, *correct* pre-computed tajweed coloring for every ayah, juz/page navigation, surah & ayah recitations, full-text search, sorting, and offline caching — shipped as **portable data + precise specifications + reference implementations in 7 languages**, so anyone can build a Quran app in *any* language or framework: iOS, Android, web, React Native, Flutter, Node, Deno, Bun, Python, Go, Rust — whatever you use. No network required; everything ships in the box.
 
-> Data and algorithms are extracted, with attribution, from the open-source **[Al-Islam | Islamic Pillars](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars)** app by **Abubakr Elmallah**. This repository repackages them as a standalone, reusable engine. See [CREDITS.md](CREDITS.md).
+> Data and algorithms are extracted, with attribution, from the open-source **[Al-Islam | Islamic Pillars](https://github.com/TheAbubakrAbu/Al-Islam-iOS)** app by **Abubakr Elmallah**. This repository repackages them as a standalone, reusable engine. See [CREDITS.md](CREDITS.md).
 
 <a href="https://apps.apple.com/us/app/al-islam-islamic-pillars/id6449729655?platform=iphone">
   <img src="Logo.png" alt="Logo" width="120" style="border-radius:10px;"/>
@@ -160,11 +160,20 @@ One comprehensive engine with feature submodules you pull in à la carte. Within
 
 The data is plain UTF-8 JSON — load it natively and follow the specs. The one cross-language subtlety is that tajweed offsets are UTF-16 units (trivial in JS/Swift/Kotlin/Dart, a one-line convert in Python/Go/Rust). Full details: [docs/PORTING.md](docs/PORTING.md).
 
-## Apps by the author
+## The Al-Islamic Apps
 
-- [**Al-Islam | Islamic Pillars**](https://github.com/TheAbubakrAbu/Al-Islam-iOS)
-- [**Al-Adhan | Prayer Times**](https://github.com/TheAbubakrAbu/Al-Adhan-iOS)
-- [**Al-Quran | Beginner Quran**](https://github.com/TheAbubakrAbu/Al-Quran-iOS)
+Five repositories by the same author: three apps, and the two engines the apps are built on. Everything is free, offline-first, and open source.
+
+**Apps**
+
+- [**Al-Islam | Islamic Pillars**](https://github.com/TheAbubakrAbu/Al-Islam-iOS) — prayer times, the Quran, hadith, tafsir, and the Islamic essentials in one app
+- [**Al-Adhan | Prayer Times**](https://github.com/TheAbubakrAbu/Al-Adhan-iOS) — prayer times, adhan notifications, and the Qibla
+- [**Al-Quran | Beginner Quran**](https://github.com/TheAbubakrAbu/Al-Quran-iOS) — the Quran for beginners and Arabic learners
+
+**Engines** — the data layers behind those apps, extracted so anyone can build on them in any language
+
+- [**Quran Tajweed Engine**](https://github.com/TheAbubakrAbu/Quran-Tajweed-Engine) — *this repository*. 6,236 ayahs with pre-computed tajweed, qiraat, and recitations
+- [**Hadith JSON Engine**](https://github.com/TheAbubakrAbu/Hadith-JSON-Engine) — the same idea for hadith: 50,884 hadiths across 17 collections, repaired, graded, cited, and packed
 
 ## License & attribution
 
@@ -176,6 +185,6 @@ New language ports, better tajweed accuracy, more data, and examples are all wel
 
 ## A note on intent
 
-This project — like the apps it draws from, **[Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars)**, **[Al-Adhan](https://github.com/TheAbubakrAbu/Al-Adhan-Prayer-Times)**, and **[Al-Quran](https://github.com/TheAbubakrAbu/Al-Quran-Beginner-Quran)** — is offered as *sadaqah jariyah*: a continuing charity for the benefit of the Muslim community and anyone building tools to read, learn, and listen to the Quran. If it helps you, please keep the chain of attribution intact and consider contributing improvements back, so the reward continues for everyone who came before you.
+This project — like the apps it draws from, **[Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-iOS)**, **[Al-Adhan](https://github.com/TheAbubakrAbu/Al-Adhan-iOS)**, and **[Al-Quran](https://github.com/TheAbubakrAbu/Al-Quran-iOS)**, and its sibling the **[Hadith JSON Engine](https://github.com/TheAbubakrAbu/Hadith-JSON-Engine)** — is offered as *sadaqah jariyah*: a continuing charity for the benefit of the Muslim community and anyone building tools to read, learn, and listen to the Quran. If it helps you, please keep the chain of attribution intact and consider contributing improvements back, so the reward continues for everyone who came before you.
 
 > *"When a person dies, all their deeds end except three: a continuing charity (sadaqah jariyah), beneficial knowledge, or a righteous child who prays for them."* — Prophet Muhammad ﷺ (Sahih Muslim)

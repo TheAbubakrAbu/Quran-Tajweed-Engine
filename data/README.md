@@ -18,7 +18,7 @@ Canonical, language-agnostic data for the Quran Tajweed Engine. Plain UTF-8 JSON
 
 ## Provenance
 
-All files are extracted **unmodified** from the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-Islamic-Pillars) app, except three derived files generated from its source for portability:
+All files are extracted **unmodified** from the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-iOS) app, except three derived files generated from its source for portability:
 
 - `juz.json` — from `QuranData.juzList`.
 - `reciters.json` — from the reciter tables in `QuranStructs.swift` (riwayah labels resolved to text; `id` = `"{name}|{qiraah??Hafs}|{surahLink}"`; `qiraah: null` means Hafs).
