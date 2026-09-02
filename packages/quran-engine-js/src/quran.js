@@ -185,6 +185,26 @@ export class Quran {
   }
 
   /**
+   * A riwayah's own verses for a surah, in ITS numbering - which is not always Hafs'. Warsh's
+   * al-Baqarah has 285 verses to Hafs' 286, because it reads الٓمٓ and ذٰلك الكتٰب as one; pairing the
+   * two by ayah id past that point compares different verses. Anything walking a whole reading
+   * (`QiraatComparison`, an exporter) wants this rather than `arabicText` per Hafs ayah, which
+   * falls back to Hafs whenever the riwayah has no verse with that id.
+   *
+   * Empty when the riwayah's text is not loaded, and for "hafs", whose text is `quran.json` itself.
+   * @param {number} surahId @param {string} riwayah
+   * @returns {{id:number, text:string}[]}
+   */
+  qiraahVerses(surahId, riwayah) {
+    return this._qiraat[riwayah.toLowerCase()]?.[String(surahId)] ?? [];
+  }
+
+  /** The riwayat whose text is loaded, in slug order. */
+  loadedRiwayat() {
+    return Object.keys(this._qiraat).sort();
+  }
+
+  /**
    * Whether a Hafs ayah exists as its own verse in the given riwayah. In Hafs every ayah exists; other
    * riwayat merge/split some ayahs, so a Hafs ayah "exists" iff the riwayah's feed carries an ayah with
    * that id (its feeds are numbered contiguously 1..count, so this is `ayahId <= count`). Mirrors

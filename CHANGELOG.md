@@ -6,6 +6,49 @@ All notable changes to the Quran Tajweed Engine are documented here. The format 
 
 Synced from upstream **Al-Islam** search/navigation updates.
 
+### Added — parity batch 4: surah sections, the alphabet, and a measured qiraat comparison
+
+Three modules that close a gap the last batch left: `data/` shipped files no accessor could reach.
+
+- **Surah sections** — `engine.surahSections`, over the already-shipped `data/surah-sections.json`: **741 titled passages across 111 surahs**, answering "what is this passage doing here" in one lookup. The outline is a **tree stored flat** — a broad passage followed by the sections inside it — and it does *not* tile the surah, so an ayah has a *chain* of sections (`sectionsFor`), or none. `outline` rebuilds the tree; `search` turns the titles into a table of contents for the whole book. Spec: [docs/15-surah-sections.md](docs/15-surah-sections.md).
+- **The Arabic alphabet** — `engine.alphabet`, over the already-shipped `data/arabic-alphabet.json`: the 28 letters with their joining forms and, the reason it belongs in a *tajweed* engine, their **weight** — thin, full, conditional, or (alif alone) inheriting the letter before it. Plus the tashkeel marks, the waqf signs, and the Eastern-Arabic numerals. `letter()` resolves a medial or final form, so a letter sliced out of a word still looks up. Spec: [docs/16-arabic-alphabet.md](docs/16-arabic-alphabet.md).
+- **Qiraat comparison** — the new `engine.qiraatComparison`: two readings **aligned word by word** and sorted into identical / same-skeleton / different. Warsh against Ḥafṣ is 63.5% identical, 27,546 words sharing a skeleton, and **717 words — under 1% — differing in skeleton**: the readings differ in sound, not in wording, which is exactly what the Uthmanic rasm was built to allow. Alignment, never indexing: Warsh's al-Baqarah has 285 verses to Ḥafṣ' 286, so a two-pointer walk over the surah's word stream with one-sided lookahead is the only honest way to pair them. Needs the qiraah text (`loadQiraat`); only the eight published readings can be compared. Spec: [docs/17-qiraat-comparison.md](docs/17-qiraat-comparison.md).
+- `Quran.qiraahVerses(surah, riwayah)` and `loadedRiwayat()` — a reading's own verses in ITS numbering, which the per-ayah text accessor cannot give you (it falls back to Ḥafṣ for ids a reading does not have).
+- A test pins **`surah-stats.json` to `quran.json`**. It ships as an 8 KB index for consumers who do not want to parse 30 MB of text, so nothing reads it through the API — which is precisely why it needed something to keep it honest.
+
+Recorded while writing the comparison, because both cost real time: allowing the resync to skip on *both* sides at once silently reclassifies every substitution as an insertion plus a deletion, and pins `different` at zero for every riwayah. And of the three surahs with no outline, two carry the literal placeholder `"Surah overview"` upstream — the engine mirrors it rather than papering over it, and [the spec](docs/15-surah-sections.md) says so.
+
+### Added — parity batch 3: the printed mushaf, word by word, and Ask AI
+
+The largest data drop since 1.0. Six new corpora, six new engine modules, and five new specs. Everything is extracted from the app by the new [`scripts/import-al-islam-data.py`](scripts/import-al-islam-data.py), which decompresses the packs the app ships them in and reshapes them as plain JSON — so a future app-side correction is one command away.
+
+- **The printed mushaf** — `engine.mushaf`, over the new `data/mushaf/`: all **20 riwayat of the Ten Qiraat as page-exact 604-page facsimiles** (`pdfs/*.pdf.xz`, ~23 MB for the set as solid xz streams, losslessly a third of the plain PDFs), each with **its own `ayah → page` table** and, for the eight whose text ships, its **line-break table**. A riwayah is not paginated like Ḥafṣ — readings merge ayahs and spell words differently — so paging a Warsh reader by Madani page numbers drifts; this fixes that. `page` / `ayahsOnPage` / `firstAyahOfPage` / `lineBreaks` / `pdfPath`. Spec: [docs/10-mushaf.md](docs/10-mushaf.md).
+- **Riwayah tajweed** — `engine.qiraatTajweed`, over `data/tajweed-qiraat/`: seven packs carrying each printed muṣḥaf's **own coloured marks and its own legend** (Warsh's taqlīl and raa/lam rules, al-Bazzī's doubled tāʾ, the ṣilah mīm, the sakt places…), plus a **shared rule catalogue** explaining all 17 rule keys once for all seven. A different layer from `tajweed.js`: these differences cannot be detected from the text, because they *are* the text's difference. `legend` / `wordRules` / `khilafAyahs` / `describe`. Spec: [docs/11-qiraat-tajweed.md](docs/11-qiraat-tajweed.md).
+- **Word by word, now with transliteration** — `engine.wordByWord`, over `data/word-by-word.json`: **77,629 tokens carrying both an English gloss and a Latin transliteration**, aligned by the same build-time walk to the *ayah's own whitespace tokens*, so a consumer splits on whitespace and indexes straight in. The transliteration layer is new in this batch (fetched and aligned upstream in the app, then imported). `words` / `glosses` / `transliterations` / `find`. Spec: [docs/12-word-by-word.md](docs/12-word-by-word.md).
+- **Similar ayahs** — `engine.similarAyahs`, over `data/similar-ayahs.json`: the mutashābihāt corpus for **5,446 ayahs**, merged and ranked at build time, each row flagged `verified` (the classical corpus) or carrying the labels that explain a generated match.
+- **Themes** — `engine.themes`, over `data/themes.json`: **323 curated topics** across categories and domains, indexed both ways (`topic(id).ayahs` and `topicsFor(surah, ayah)`). Loaded by default.
+- **The tajweed course** — `engine.tajweedLessons`, over `data/tajweed-lessons.json`: 8 chapters, 34 lessons with prose, drills and Quranic examples. Loaded by default. Also `data/surah-sections.json` (per-surah outlines) and `data/surah-stats.json`.
+- **Meaning search** — the new `Semantic` module: **word-vector MaxSim**, not sentence embeddings, because a single vector per verse ranks this corpus close to randomly (measured, not assumed). Embedder-agnostic: hand it `embed(word)` and it does the rest, so the engine ships no model.
+- **Ask AI** — `engine.askAI` + `chatPrompt`: the **retrieval and the prompt** behind a grounded question box, with no model shipped. Four lanes, interleaved round-robin so each gets a voice: what the question *names* (marked `isSubject` — the fix for a model explaining the wrong verse), **IDF-weighted** keywords (plain term counting ranked questions by whichever verse said "the" most), the curated themes, and — only when you supply a semantic index — meaning. `CHAT_INSTRUCTIONS` is the system prompt whose rules 2, 3 and 5 stop a model inventing verse numbers, "quoting" scripture it half-remembers, and issuing rulings. Spec: [docs/14-ask-ai.md](docs/14-ask-ai.md).
+- **The app's build tooling** — `scripts/al-islam/`: the Python (and one Swift) scripts that produce these corpora, copied verbatim from the app with a [README](scripts/al-islam/README.md) mapping each one to the data it feeds. Provenance and reproducibility, not part of the API.
+
+### Changed — the qiraat text feeds
+
+- **ad-Duri, as-Susi and Qalun refreshed** from the app: the imālah/taqlīl mark on ad-Duri and as-Susi was corrected across **1,213 and 1,085 ayahs** respectively, and Qalun in one (9:110). al-Bazzī, Qunbul, Shubah and Warsh were already byte-identical. `qiraat-counts.json` regenerated.
+
+### Ports
+
+The batch landed in **all seven ports**. Each ships a deliberate translation of the same ~20 cases (`test/parity.test.js`, `tests/test_parity.py`, `ParityTests.swift`, `tests/parity.rs`, `parity_test.go`, `ParityTest.kt`, `test/parity_test.dart`), so a divergence between them fails a test rather than surprising an app.
+
+Two divergences the suites caught on the way in, both recorded in [docs/PORTING.md](docs/PORTING.md#module-coverage-per-port): Java's `\s` is ASCII-only, so Kotlin tokenized 2:26 (which separates two words with U+00A0) one word short of the pack until the regex was made Unicode-aware; and Go's RE2 has no lookbehind, so its ayah-reference scanner is hand-rolled like Rust's.
+
+The Swift package now bundles the new corpora too (`scripts/sync-package-resources.mjs` keeps subdirectories, so `mushaf/pages/warsh.json` resolves from `Bundle.module`), minus the facsimiles: 23 MB of PDFs the engine never loads itself belong to the consumer, not to the package.
+
+### Not published, on purpose
+
+- **The text of the twelve remaining riwayat.** It is machine-extracted from printed muṣḥafs and not yet proofread word by word; text in that state is not something to hand other developers as engine data. Their **line tables and tajweed packs index into that text**, so those stay out with it. Their **printed muṣḥafs and page tables do ship** — a facsimile is exact whatever the state of the extraction — so all twenty are readable and navigable by ayah. `mushaf.riwayah(slug).textIncluded` is the flag.
+
+
 ### Added — parity batch 2
 - **Muqaṭṭaʿāt** — `engine.muqattaat`: the disconnected opening letters of 29 surahs (`all()` = 30 entries, `pronunciation(s,a)`, `letterName(c)`). New `data/muqattaat.json` carries each opening's letters, transliteration, and the fully-vocalized Arabic spelling whose long vowels keep the madd-lāzim maddah (U+0653) so a tajweed pass colours them like the real ayah. Ported from `Muqattaat.swift` to all 7 ports.
 - **Surah boundary flags** — `Quran.pageChangesWithinSurah(id)` / `juzChangesWithinSurah(id)` / `pageOrJuzChangesWithinSurah(id)`, for divider layout. All 7 ports.

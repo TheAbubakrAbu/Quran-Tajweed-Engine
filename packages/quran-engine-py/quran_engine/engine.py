@@ -12,8 +12,20 @@ from .search import Search
 from .tajweed import Tajweed
 from .names import NamesOfAllah, NameOfAllah
 from .muqattaat import Muqattaat
+from .mushaf import Mushaf
+from .qiraat_tajweed import QiraatTajweed
+from .word_by_word import WordByWord
+from .similar import SimilarAyahs
+from .themes import Themes
+from .lessons import TajweedLessons
+from .ask_ai import AskAI
+from .sections import SurahSections
+from .alphabet import ArabicAlphabet
+from .qiraat_comparison import QiraatComparison
 
 _RIWAYAT = ["warsh", "qaloon", "duri", "susi", "buzzi", "qunbul", "shubah"]
+#: The eight riwayat whose text this engine publishes - the ones with line tables.
+_RIWAYAT_WITH_TEXT = ["hafs"] + _RIWAYAT
 
 
 def _default_data_dir() -> Path:
@@ -25,7 +37,15 @@ class Engine:
     def __init__(self, quran: Quran, juz_page: JuzPage, reciters: Reciters,
                  search: Search, tajweed: Tajweed,
                  names_of_allah: Optional[NamesOfAllah] = None,
-                 muqattaat: Optional[Muqattaat] = None):
+                 muqattaat: Optional[Muqattaat] = None,
+                 mushaf: Optional[Mushaf] = None,
+                 qiraat_tajweed: Optional[QiraatTajweed] = None,
+                 word_by_word: Optional[WordByWord] = None,
+                 similar_ayahs: Optional[SimilarAyahs] = None,
+                 themes: Optional[Themes] = None,
+                 tajweed_lessons: Optional[TajweedLessons] = None,
+                 surah_sections: Optional[SurahSections] = None,
+                 alphabet: Optional[ArabicAlphabet] = None):
         self.quran = quran
         self.juz_page = juz_page
         self.reciters = reciters
@@ -33,6 +53,17 @@ class Engine:
         self._tajweed = tajweed
         self.names_of_allah = names_of_allah or NamesOfAllah()
         self.muqattaat = muqattaat or Muqattaat()
+        self.mushaf = mushaf or Mushaf()
+        self.qiraat_tajweed = qiraat_tajweed or QiraatTajweed()
+        self.word_by_word = word_by_word or WordByWord(quran=quran)
+        self.similar_ayahs = similar_ayahs or SimilarAyahs()
+        self.themes = themes or Themes()
+        self.tajweed_lessons = tajweed_lessons or TajweedLessons()
+        self.surah_sections = surah_sections or SurahSections()
+        self.alphabet = alphabet or ArabicAlphabet()
+        self.ask_ai = AskAI(quran, search, themes=self.themes)
+        #: Needs ``load_qiraat`` to say anything; with none it reports "hafs" alone.
+        self.qiraat_comparison = QiraatComparison(quran)
 
     def tajweed(self, surah_id: int, ayah_id: int) -> list[TajweedSpan]:
         a = self.quran.ayah(surah_id, ayah_id)
@@ -45,7 +76,12 @@ class Engine:
              load_qiraat: bool = False, load_surah_info: bool = True,
              load_names_of_allah: bool = True,
              load_muqattaat: bool = True,
-             load_tajweed: bool = True, riwayah: Optional[str] = None) -> "Engine":
+             load_tajweed: bool = True,
+             load_mushaf: bool = False,
+             load_qiraat_tajweed: bool = False,
+             load_word_by_word: bool = False,
+             load_similar_ayahs: bool = False,
+             riwayah: Optional[str] = None) -> "Engine":
         d = Path(data_dir) if data_dir else _default_data_dir()
 
         def read(rel: str):
@@ -78,6 +114,39 @@ class Engine:
             for entry in read("tajweed-annotations.json"):
                 ann[(entry["surah"], entry["ayah"])] = entry["annotations"]
 
+        # Themes and lessons load by default: together they are ~250 KB, and a topic list is
+        # exactly the kind of thing a consumer wants without having to know it needed a flag.
+        themes = Themes(read("themes.json"))
+        lessons = TajweedLessons(read("tajweed-lessons.json"))
+
+        mushaf = None
+        if load_mushaf:
+            index = read("mushaf/index.json")
+            pages = {e["riwayah"]: read(f"mushaf/{e['pages']}") for e in index["riwayat"]}
+            lines = {e["riwayah"]: read(f"mushaf/{e['lines']}")
+                     for e in index["riwayat"] if e.get("lines")}
+            mushaf = Mushaf(index=index, pages=pages, lines=lines)
+
+        qiraat_tajweed = None
+        if load_qiraat_tajweed:
+            qiraat_tajweed = QiraatTajweed(
+                rules=read("tajweed-qiraat/rules.json"),
+                riwayat={r: read(f"tajweed-qiraat/{r}.json") for r in _RIWAYAT},
+            )
+
+        word_by_word = None
+        if load_word_by_word:
+            pack = read("word-by-word.json")
+            word_by_word = WordByWord(english=pack["english"],
+                                      transliteration=pack["transliteration"], quran=quran)
+
+        similar = SimilarAyahs(read("similar-ayahs.json")) if load_similar_ayahs else None
+
+        # Sections (80 KB) and the alphabet (18 KB) load by default, like themes and lessons: small,
+        # and both answer questions a consumer should not have to opt into.
+        surah_sections = SurahSections(read("surah-sections.json"))
+        alphabet = ArabicAlphabet(read("arabic-alphabet.json"))
+
         return Engine(
             quran=quran,
             juz_page=JuzPage(quran, juz_list),
@@ -86,4 +155,12 @@ class Engine:
             tajweed=Tajweed(ann, colors),
             names_of_allah=names,
             muqattaat=muqattaat,
+            mushaf=mushaf,
+            qiraat_tajweed=qiraat_tajweed,
+            word_by_word=word_by_word,
+            similar_ayahs=similar,
+            themes=themes,
+            tajweed_lessons=lessons,
+            surah_sections=surah_sections,
+            alphabet=alphabet,
         )

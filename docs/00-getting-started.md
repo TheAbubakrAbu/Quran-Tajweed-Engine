@@ -90,6 +90,19 @@ Build them in any order — each stands alone:
 
 Plus **[caching](08-caching.md)** for offline audio.
 
+And, beyond the core:
+
+| I want to… | Read |
+|---|---|
+| show the printed muṣḥaf — 20 riwayat as page-exact facsimiles, each with its own pagination | [10 · The printed muṣḥaf](10-mushaf.md) |
+| show where a reading differs from Ḥafṣ, and explain why | [11 · Riwayah tajweed](11-qiraat-tajweed.md) |
+| tap a word for its meaning and its pronunciation | [12 · Word by word](12-word-by-word.md) |
+| show similar ayahs, browse by theme, or teach tajwīd | [13 · Similar ayahs, themes, lessons](13-similar-and-themes.md) |
+| build a question box that answers from the text, with citations | [14 · Ask AI](14-ask-ai.md) |
+| say what passage an ayah belongs to, and where the surah changes subject | [15 · Surah sections](15-surah-sections.md) |
+| look a letter up: its forms, its name, and whether it is read heavy or light | [16 · Arabic alphabet](16-arabic-alphabet.md) |
+| measure how far apart two readings are, word by word | [17 · Qiraat comparison](17-qiraat-comparison.md) |
+
 ## New to the terminology?
 
 If words like *ayah, juz, riwayah, ghunnah, ikhfaa, madd* are unfamiliar, skim the **[glossary](glossary.md)** first — it explains every term in plain English.

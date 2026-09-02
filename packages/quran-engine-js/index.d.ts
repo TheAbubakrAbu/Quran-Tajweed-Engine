@@ -92,6 +92,9 @@ export class Quran {
   pageOrJuzChangesWithinSurah(surahId: number): boolean;
   existsInQiraah(surahId: number, ayahId: number, riwayah?: string): boolean;
   numberOfAyahsInQiraah(surahId: number, riwayah?: string): number;
+  /** A reading's own verses, in ITS numbering. Empty unless the qiraah text is loaded. */
+  qiraahVerses(surahId: number, riwayah: string): { id: number; text: string }[];
+  loadedRiwayat(): string[];
   arabicText(surahId: number, ayahId: number, riwayah?: string): string | undefined;
   cleanArabicText(surahId: number, ayahId: number, riwayah?: string): string | undefined;
   eachAyah(): Generator<{ surah: Surah; ayah: Ayah }>;
@@ -220,6 +223,259 @@ export function collapsingWhitespace(text: string): string;
 export function removingSilentArabicLettersForSearch(text: string): string;
 export function splitGraphemeClusters(text: string): string[];
 
+// ---- The printed mushaf ----
+export interface RiwayahEntry {
+  riwayah: string;
+  tag: string;
+  name: string;
+  nameArabic: string;
+  imam: string;
+  imamArabic: string;
+  narratorDiedAH: number;
+  pdf: string;
+  pdfBytes: number;
+  pages: string;
+  lines: string | null;
+  tajweed: string | null;
+  /** False for the twelve riwayat whose machine-extracted text is not published. */
+  textIncluded: boolean;
+}
+export class Mushaf {
+  constructor(data?: { index?: any; pages?: Record<string, any>; lines?: Record<string, any> });
+  riwayat(): RiwayahEntry[];
+  riwayatWithText(): RiwayahEntry[];
+  riwayah(slug: string): RiwayahEntry | null;
+  totalPages(): number;
+  pdfPath(slug: string): string | null;
+  page(surahId: number, ayahId: number, riwayah?: string): number | null;
+  ayahsOnPage(page: number, riwayah?: string): { surah: number; ayah: number }[];
+  firstAyahOfPage(page: number, riwayah?: string): { surah: number; ayah: number } | null;
+  lineBreaks(surahId: number, ayahId: number, riwayah?: string): number[] | null;
+  hasTajweedPack(riwayah: string): boolean;
+}
+
+// ---- Riwayah tajweed ----
+export interface LegendEntry {
+  code: string;
+  rule: string;
+  arabic: string;
+  english: string;
+  short?: string;
+  long?: string;
+}
+export interface WordRule {
+  word: number;
+  rule: string;
+  code: string;
+  arabic: string;
+  english: string;
+  /** Inclusive base-letter index in reading order, or -1 for the whole word. */
+  firstLetter: number;
+  lastLetter: number;
+  wholeWord: boolean;
+}
+export class QiraatTajweed {
+  constructor(data?: { rules?: Record<string, { short: string; long: string }>; riwayat?: Record<string, any> });
+  available(): string[];
+  legend(riwayah: string): LegendEntry[];
+  wordRules(surahId: number, ayahId: number, riwayah: string): WordRule[];
+  khilafAyahs(surahId: number, riwayah: string): number[];
+  hasKhilaf(surahId: number, ayahId: number, riwayah: string): boolean;
+  describe(rule: string): { short: string; long: string } | null;
+  ruleKeys(): string[];
+}
+
+// ---- Word by word ----
+export interface Word {
+  position: number;
+  arabic: string;
+  english: string;
+  transliteration: string;
+}
+export class WordByWord {
+  constructor(data?: { english?: Record<string, string[][]>; transliteration?: Record<string, string[][]> }, quran?: Quran);
+  readonly isLoaded: boolean;
+  words(surahId: number, ayahId: number): Word[];
+  word(surahId: number, ayahId: number, position: number): Word | null;
+  glosses(surahId: number, ayahId: number): string[] | null;
+  transliterations(surahId: number, ayahId: number): string[] | null;
+  find(term: string, opts?: { limit?: number }): { surah: number; ayah: number; position: number; english: string; transliteration: string }[];
+}
+
+// ---- Similar ayahs, themes, lessons ----
+export interface SimilarMatch {
+  surah: number;
+  ayah: number;
+  phrase: string;
+  verified: boolean;
+  labels: string[];
+}
+export class SimilarAyahs {
+  constructor(data?: Record<string, any[]>);
+  matches(surahId: number, ayahId: number): SimilarMatch[];
+  has(surahId: number, ayahId: number): boolean;
+  count(): number;
+}
+export interface Topic {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  domain: string;
+  ayahs: string[];
+}
+export class Themes {
+  constructor(data?: { topics: Topic[] });
+  all(): Topic[];
+  topic(id: string): Topic | null;
+  domains(): string[];
+  categories(domain?: string): string[];
+  inDomain(domain: string): Topic[];
+  inCategory(category: string): Topic[];
+  topicsFor(surahId: number, ayahId: number): Topic[];
+  search(query: string): Topic[];
+}
+export interface Lesson {
+  id: string;
+  titleEn: string;
+  titleAr: string;
+  summary: string;
+  body: string[];
+  drills?: { caption: string; text: string }[];
+  examples: { surahId: number; ayahNumber: number; focus: string }[];
+  mushafCard?: { fragments: { caption: string; text: string }[]; countEn?: string; countAr?: string };
+  color?: string;
+}
+export interface Chapter { id: string; title: string; subtitle: string; lessons: Lesson[] }
+export class TajweedLessons {
+  constructor(data?: { chapters: Chapter[] });
+  chapters(): Chapter[];
+  chapter(id: string): Chapter | null;
+  allLessons(): Lesson[];
+  lesson(id: string): Lesson | null;
+  chapterOf(id: string): Chapter | null;
+  next(id: string): Lesson | null;
+  previous(id: string): Lesson | null;
+}
+
+// ---- Surah sections ----
+export interface SurahSection { from: number; to: number; english: string; arabic: string }
+export interface OutlineNode extends SurahSection { children: OutlineNode[] }
+export class SurahSections {
+  constructor(data?: Record<string, { overview?: string; sections?: [number, number, string, string][] }>);
+  overview(surahId: number): string;
+  sections(surahId: number): SurahSection[];
+  outline(surahId: number): OutlineNode[];
+  sectionsFor(surahId: number, ayahId: number): SurahSection[];
+  sectionFor(surahId: number, ayahId: number): SurahSection | null;
+  hasSections(surahId: number): boolean;
+  count(): number;
+  search(query: string): (SurahSection & { surah: number })[];
+}
+
+// ---- Arabic alphabet ----
+export interface ArabicLetter {
+  id: number;
+  letter: string;
+  forms: string[];
+  name: string;
+  transliteration: string;
+  showTashkeel: boolean;
+  sound: string;
+  weight?: "light" | "heavy" | "conditional" | "followsPrevious";
+  weightRule?: string;
+}
+export interface Tashkeel { english: string; arabic: string; mark: string; transliteration: string }
+export interface StoppingSign { symbol: string; title: string }
+export interface ArabicNumeral { number: string; name: string; transliteration: string; englishNumber: string }
+export class ArabicAlphabet {
+  constructor(data?: any);
+  letters(): ArabicLetter[];
+  otherLetters(): ArabicLetter[];
+  nonArabicScriptLetters(): ArabicLetter[];
+  allLetters(): ArabicLetter[];
+  letter(letter: string): ArabicLetter | null;
+  letterById(id: number): ArabicLetter | null;
+  weight(letter: string): string | null;
+  weightDescriptions(): Record<string, string>;
+  heavyLetters(): ArabicLetter[];
+  tashkeel(): Tashkeel[];
+  stoppingSigns(): StoppingSign[];
+  stoppingSign(symbol: string): StoppingSign | null;
+  numbers(): ArabicNumeral[];
+  stoppingSignsSource(): string;
+}
+
+// ---- Qiraat comparison ----
+export interface WordDifference {
+  position: number;
+  base: string;
+  other: string;
+  kind: "sameSkeleton" | "different" | "added" | "dropped";
+}
+export interface ComparisonTotals {
+  words: number;
+  identical: number;
+  sameSkeleton: number;
+  different: number;
+  added: number;
+  dropped: number;
+  identicalPercent: number;
+}
+export class QiraatComparison {
+  constructor(quran: Quran);
+  available(): string[];
+  words(surahId: number, riwayah: string): string[];
+  compareSurah(surahId: number, riwayah: string, opts?: { against?: string }): ComparisonTotals;
+  compare(riwayah: string, opts?: { against?: string }): ComparisonTotals;
+  differences(surahId: number, riwayah: string, opts?: { against?: string; limit?: number }): WordDifference[];
+}
+export function skeleton(word: string): string;
+
+// ---- Meaning search ----
+export type Embedder = (word: string) => number[] | Float32Array | null | undefined;
+export interface SemanticHit { id: string; score: number; meta?: any }
+export class Semantic {
+  constructor(opts: { embed: Embedder; minWordLength?: number });
+  readonly size: number;
+  index(documents: Iterable<{ id: string; text: string; meta?: any }>): this;
+  search(query: string, opts?: { limit?: number; minScore?: number }): SemanticHit[];
+  clear(): this;
+}
+export function cosine(a: Float32Array, b: Float32Array): number;
+
+// ---- Ask AI ----
+export interface Passage {
+  kind: "ayah" | "surah" | "topic";
+  reference: string;
+  text: string;
+  maxCharacters: number;
+  isSubject: boolean;
+  surah?: number;
+  ayah?: number;
+}
+export class AskAI {
+  constructor(parts: { quran: Quran; search: Search; themes?: Themes; semantic?: Semantic; translation?: "textEnglishSaheeh" | "textEnglishMustafa" });
+  semantic: Semantic | null;
+  buildSemanticIndex(embed: Embedder): Semantic;
+  retrieve(question: string, opts?: { previousQuestion?: string; carried?: Passage[]; limit?: number }): Passage[];
+  referencePassages(question: string): Passage[];
+  keywordPassages(question: string, opts?: { limit?: number }): Passage[];
+  themePassages(question: string, opts?: { limit?: number }): Passage[];
+  semanticPassages(question: string, opts?: { limit?: number; minScore?: number }): Passage[];
+  ayahPassage(surahId: number, ayahId: number, opts?: { isSubject?: boolean; maxCharacters?: number }): Passage | null;
+  surahPassage(surahId: number): Passage | null;
+  contentWords(question: string): string[];
+  isBareFollowUp(question: string): boolean;
+  termWeights(terms: string[]): number[];
+}
+export const QUESTION_WORDS: Set<string>;
+export const PASSAGE_LIMIT: number;
+export const PASSAGE_CHARACTER_LIMIT: number;
+export const SUBJECT_CHARACTER_LIMIT: number;
+export const CHAT_INSTRUCTIONS: string;
+export function chatPrompt(question: string, passages: Passage[], opts?: { transcript?: { question: string; answer: string }[]; passageLimit?: number }): { instructions: string; prompt: string };
+
 // ---- Engine facade ----
 export interface Engine {
   quran: Quran;
@@ -228,6 +484,16 @@ export interface Engine {
   search: Search;
   namesOfAllah: NamesOfAllah;
   muqattaat: Muqattaat;
+  mushaf: Mushaf;
+  qiraatTajweed: QiraatTajweed;
+  wordByWord: WordByWord;
+  similarAyahs: SimilarAyahs;
+  themes: Themes;
+  tajweedLessons: TajweedLessons;
+  askAI: AskAI;
+  surahSections: SurahSections;
+  alphabet: ArabicAlphabet;
+  qiraatComparison: QiraatComparison;
   tajweedRules: any;
   tajweed(arabicText: string, opts?: object): ColoredTajweedSpan[];
   detectPaintOps: typeof detectPaintOps;
@@ -242,4 +508,26 @@ export function createEngine(data: {
   namesOfAllah?: NameOfAllah[];
   muqattaat?: { letterNames?: Record<string, string>; ayahs?: MuqattaatPronunciation[] };
   qiraat?: Record<string, Record<string, { id: number; text: string }[]>>;
+  qiraatCounts?: Record<string, Record<string, number>>;
+  mushafIndex?: { totalPages: number; note?: string; riwayat: RiwayahEntry[] };
+  mushafPages?: Record<string, any>;
+  mushafLines?: Record<string, any>;
+  qiraatTajweedRules?: Record<string, { short: string; long: string }>;
+  qiraatTajweed?: Record<string, any>;
+  wordByWord?: { english: Record<string, string[][]>; transliteration: Record<string, string[][]> };
+  similarAyahs?: Record<string, any[]>;
+  themes?: { topics: Topic[] };
+  tajweedLessons?: { chapters: Chapter[] };
 }, opts?: { riwayah?: string }): Engine;
+
+/** Node-only loader (`@quran-tajweed-engine/core/node`). */
+export function loadFromDisk(opts?: {
+  dataDir?: string;
+  loadQiraat?: boolean;
+  loadSurahInfo?: boolean;
+  loadMushaf?: boolean;
+  loadQiraatTajweed?: boolean;
+  loadWordByWord?: boolean;
+  loadSimilarAyahs?: boolean;
+  riwayah?: string;
+}): Promise<Engine>;

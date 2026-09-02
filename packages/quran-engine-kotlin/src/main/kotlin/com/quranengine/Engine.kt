@@ -27,7 +27,32 @@ class Engine internal constructor(
     val namesOfAllah: NamesOfAllah,
     val muqattaat: Muqattaat,
     private val tajweedImpl: Tajweed,
+    /** The printed facsimiles and their page tables. Empty unless `loadMushaf`. */
+    val mushaf: Mushaf = Mushaf(),
+    /** Per-riwayah printed tajweed. Empty unless `loadQiraatTajweed`. */
+    val qiraatTajweed: QiraatTajweed = QiraatTajweed(),
+    /** The two aligned gloss layers. Empty unless `loadWordByWord`. */
+    val wordByWord: WordByWord = WordByWord(),
+    /** Mutashabihat. Empty unless `loadSimilarAyahs`. */
+    val similarAyahs: SimilarAyahs = SimilarAyahs(),
+    /** The curated topics; loaded by default. */
+    val themes: Themes = Themes(),
+    /** The tajweed course; loaded by default. */
+    val tajweedLessons: TajweedLessons = TajweedLessons(),
+    /** The per-surah outlines; loaded by default. */
+    val surahSections: SurahSections = SurahSections(),
+    /** The letter/tashkeel/waqf reference; loaded by default. */
+    val alphabet: ArabicAlphabet = ArabicAlphabet(),
 ) {
+    /** Needs `loadQiraat`; with no qiraah text it reports "hafs" alone and compares nothing. */
+    val qiraatComparison: QiraatComparison by lazy { QiraatComparison(quran) }
+
+    /**
+     * Ask AI's retrieval and prompt. Built lazily because it holds the IDF table, which is only
+     * worth computing for a consumer that actually asks a question.
+     */
+    val askAI: AskAI by lazy { AskAI(quran, search, themes) }
+
     /** Colored tajweed spans for an ayah (empty if the ayah or its annotations are unknown). */
     fun tajweed(surahId: Int, ayahId: Int): List<TajweedSpan> {
         val a = quran.ayah(surahId, ayahId) ?: return emptyList()
@@ -50,6 +75,13 @@ class Engine internal constructor(
             loadSurahInfo: Boolean = false,
             loadTajweed: Boolean = true,
             riwayah: String? = null,
+            /** mushaf/index.json plus every riwayah's page table (and line table, where it ships). */
+            loadMushaf: Boolean = false,
+            /** The shared rule catalogue and the seven verified riwayah packs. */
+            loadQiraatTajweed: Boolean = false,
+            /** Both aligned layers of word-by-word.json. */
+            loadWordByWord: Boolean = false,
+            loadSimilarAyahs: Boolean = false,
         ): Engine {
             val dir = dataDir ?: findDefaultDataDir()
                 ?: throw IllegalStateException("Could not locate the repo /data directory; pass dataDir explicitly")
@@ -90,6 +122,53 @@ class Engine internal constructor(
                 for (e in entries) ann[e.surah to e.ayah] = e.annotations
             }
 
+            // themes.json and tajweed-lessons.json are optional but load by default: together they
+            // are ~250 KB, and a topic list is the kind of thing a consumer wants without a flag.
+            val themes = Themes(optional<ThemesFile>(dir, "themes.json")?.topics ?: emptyList())
+            val lessons = TajweedLessons(
+                optional<TajweedLessonsFile>(dir, "tajweed-lessons.json")?.chapters ?: emptyList()
+            )
+            // Sections (80 KB) and the alphabet (18 KB) join them: small, and both answer questions
+            // a consumer should not have to opt into.
+            val sections = SurahSections(
+                optional<Map<String, SurahSectionsEntry>>(dir, "surah-sections.json") ?: emptyMap()
+            )
+            val alphabet = ArabicAlphabet(
+                optional<ArabicAlphabetFile>(dir, "arabic-alphabet.json") ?: ArabicAlphabetFile()
+            )
+
+            var mushaf = Mushaf()
+            if (loadMushaf) {
+                val index: MushafIndex = json.decodeFromString(text("mushaf/index.json"))
+                val pages = LinkedHashMap<String, MushafPageTable>()
+                val lines = LinkedHashMap<String, MushafLineTable>()
+                for (entry in index.riwayat) {
+                    pages[entry.riwayah] = json.decodeFromString(text("mushaf/${entry.pages}"))
+                    entry.lines?.let { lines[entry.riwayah] = json.decodeFromString(text("mushaf/$it")) }
+                }
+                mushaf = Mushaf(index, pages, lines)
+            }
+
+            var qiraatTajweed = QiraatTajweed()
+            if (loadQiraatTajweed) {
+                val descriptions: Map<String, RuleDescription> =
+                    json.decodeFromString(text("tajweed-qiraat/rules.json"))
+                val packs = RIWAYAT.associateWith { slug ->
+                    json.decodeFromString<QiraatTajweedPack>(text("tajweed-qiraat/$slug.json"))
+                }
+                qiraatTajweed = QiraatTajweed(descriptions, packs)
+            }
+
+            val wordByWord =
+                if (loadWordByWord) {
+                    WordByWord(json.decodeFromString<WordByWordPack>(text("word-by-word.json")), quran)
+                } else WordByWord()
+
+            val similar =
+                if (loadSimilarAyahs) {
+                    SimilarAyahs(json.decodeFromString(text("similar-ayahs.json")))
+                } else SimilarAyahs()
+
             return Engine(
                 quran = quran,
                 juzPage = JuzPage(quran, juzList),
@@ -98,7 +177,26 @@ class Engine internal constructor(
                 namesOfAllah = NamesOfAllah(nameList),
                 muqattaat = Muqattaat(muqattaatData),
                 tajweedImpl = Tajweed(ann, colors),
+                mushaf = mushaf,
+                qiraatTajweed = qiraatTajweed,
+                wordByWord = wordByWord,
+                similarAyahs = similar,
+                themes = themes,
+                tajweedLessons = lessons,
+                surahSections = sections,
+                alphabet = alphabet,
             )
+        }
+
+        /**
+         * Decode a file that may not be there. A missing optional corpus is not an error — the
+         * accessors simply return nothing — but a file that IS there and will not parse still throws,
+         * so a corrupt pack fails loudly instead of silently disappearing.
+         */
+        private inline fun <reified T> optional(dir: File, rel: String): T? {
+            val file = File(dir, rel)
+            if (!file.isFile) return null
+            return json.decodeFromString<T>(file.readText(Charsets.UTF_8))
         }
 
         /**

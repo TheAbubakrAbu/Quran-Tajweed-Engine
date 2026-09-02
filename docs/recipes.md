@@ -177,4 +177,4 @@ a.wordCount; a.letterCount;
 
 ---
 
-Need something not here? The features are small and composable — check the per-feature specs ([01](01-quran.md)–[08](08-caching.md)) or open an issue.
+Need something not here? The features are small and composable — check the per-feature specs ([01](01-quran.md)–[17](17-qiraat-comparison.md)) or open an issue.

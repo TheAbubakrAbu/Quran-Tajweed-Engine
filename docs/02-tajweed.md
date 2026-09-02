@@ -2,6 +2,8 @@
 
 A scalar-driven engine that classifies and colors tajweed rules directly from the Uthmani text — no pre-annotated corpus required. This is the most intricate part of the engine; this document is the full specification so it can be re-implemented in any language. The canonical reference implementation is Al-Islam's `QuranData.swift` + `TajweedRules.swift`; the JS port lives in [`src/tajweed.js`](../packages/quran-engine-js/src/tajweed.js).
 
+> Looking for where a **riwayah** differs from Ḥafṣ (Warsh's taqlīl, al-Bazzī's doubled tāʾ)? That is a different layer, and it is data rather than detection: see [11 · Riwayah tajweed](11-qiraat-tajweed.md).
+
 The rule catalogue (categories, canonical colors, trigger letters) is shipped as data in [`data/tajweed-rules.json`](../data/tajweed-rules.json).
 
 ## Output model

@@ -20,15 +20,37 @@
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 
+pub mod ask_ai;
 pub mod audio;
 pub mod cache;
+pub mod corpora;
 pub mod model;
+pub mod mushaf;
+pub mod alphabet;
+pub mod qiraat_comparison;
+pub mod qiraat_tajweed;
+pub mod sections;
 pub mod search;
+pub mod semantic;
 pub mod sorting;
 pub mod text;
 pub mod util;
+pub mod word_by_word;
 
+pub use ask_ai::{chat_prompt, Passage, PassageKind, CHAT_INSTRUCTIONS, PASSAGE_CHARACTER_LIMIT,
+                 PASSAGE_LIMIT, QUESTION_WORDS, SUBJECT_CHARACTER_LIMIT};
 pub use audio::{ayah_audio_url, ayah_now_playing_name, defaults_to_minshawi, surah_audio_url};
+pub use corpora::{
+    SimilarMatch, TajweedChapter, TajweedDrill, TajweedExample, TajweedLesson, TajweedMushafCard,
+    Topic,
+};
+pub use mushaf::RiwayahEntry;
+pub use alphabet::{ArabicLetter, ArabicNumeral, StoppingSign, Tashkeel};
+pub use qiraat_comparison::{ComparisonTotals, DifferenceKind, WordDifference};
+pub use qiraat_tajweed::{LegendEntry, RuleDescription, WordRule};
+pub use sections::{OutlineNode, SurahSection};
+pub use semantic::{cosine, Semantic, SemanticHit};
+pub use word_by_word::{GlossHit, GlossedWord};
 pub use cache::{local_surah_path, sanitize_reciter_dir, shared_audio_path};
 pub use model::{
     Ayah, JuzEntry, MuqattaatPronunciation, NameOfAllah, Reciter, Surah, SurahInfoSource,
@@ -113,7 +135,57 @@ pub struct Engine {
     muqattaat_letter_names: HashMap<String, String>,
     /// Map riwayah -> surahId(str) -> ayah count, from `qiraat-counts.json` (empty if absent).
     qiraat_counts: HashMap<String, HashMap<String, u32>>,
+    /// `data/mushaf/index.json` (absent unless `LoadOptions::mushaf`).
+    mushaf_index: Option<mushaf::MushafIndex>,
+    /// riwayah -> `data/mushaf/pages/<slug>.json`.
+    mushaf_pages: HashMap<String, mushaf::MushafPageTable>,
+    /// riwayah -> `data/mushaf/lines/<slug>.json`, for the eight whose text ships.
+    mushaf_lines: HashMap<String, mushaf::MushafLineTable>,
+    /// Rule key -> the shared explanation, from `data/tajweed-qiraat/rules.json`.
+    qiraat_rule_descriptions: HashMap<String, RuleDescription>,
+    /// riwayah -> `data/tajweed-qiraat/<slug>.json`.
+    qiraat_tajweed: HashMap<String, qiraat_tajweed::QiraatTajweedPack>,
+    /// riwayah -> surah id (as a string) -> that reading's own verses (empty unless
+    /// `LoadOptions::qiraat`).
+    qiraat: HashMap<String, HashMap<String, Vec<QiraahVerse>>>,
+    /// `data/surah-sections.json`; loaded by default.
+    surah_sections: sections::SurahSectionsFile,
+    /// `data/arabic-alphabet.json`; loaded by default.
+    alphabet: alphabet::ArabicAlphabetFile,
+    /// The two aligned word-by-word layers (empty unless `LoadOptions::word_by_word`).
+    word_by_word: word_by_word::WordByWordPack,
+    /// `data/similar-ayahs.json` (empty unless `LoadOptions::similar_ayahs`).
+    similar_ayahs: HashMap<String, Vec<Vec<corpora::SimilarField>>>,
+    /// The curated topics; loaded by default.
+    topics: Vec<Topic>,
+    /// The tajweed course; loaded by default.
+    tajweed_chapters: Vec<TajweedChapter>,
     search: SearchIndex,
+}
+
+/// Which of the heavier corpora to load. All default to `false`; `Engine::load` uses the default,
+/// so the corpora that cost a few hundred kilobytes (themes, the tajweed course) always load and
+/// the megabyte-scale ones are opt-in.
+#[derive(Debug, Clone, Copy, Default)]
+pub struct LoadOptions {
+    /// The mushaf index, page and line tables (~2 MB). The 604-page facsimiles themselves are never
+    /// loaded by the engine — `mushaf_pdf_path` hands you the path.
+    pub mushaf: bool,
+    /// The seven riwayah tajweed packs (~0.9 MB).
+    pub qiraat_tajweed: bool,
+    /// The per-word gloss + transliteration pack (~1.8 MB).
+    pub word_by_word: bool,
+    /// The mutashabihat corpus (~3.5 MB).
+    pub similar_ayahs: bool,
+    /// The seven non-Hafs riwayat's own text (~11 MB) — what `compare_surah` compares.
+    pub qiraat: bool,
+}
+
+/// One verse of a riwayah's own text, in ITS numbering.
+#[derive(Debug, Clone, serde::Deserialize, PartialEq, Eq)]
+pub struct QiraahVerse {
+    pub id: u32,
+    pub text: String,
 }
 
 fn read_json<T: serde::de::DeserializeOwned>(path: &Path) -> Result<T, LoadError> {
@@ -132,6 +204,11 @@ impl Engine {
     /// `reciters.json`, `tajweed-rules.json`. `tajweed-annotations.json` is optional (tajweed
     /// spans are empty without it).
     pub fn load(data_dir: &Path) -> Result<Engine, LoadError> {
+        Engine::load_with(data_dir, LoadOptions::default())
+    }
+
+    /// Load with the heavier corpora selected. See [`LoadOptions`].
+    pub fn load_with(data_dir: &Path, options: LoadOptions) -> Result<Engine, LoadError> {
         let surahs: Vec<Surah> = read_json(&data_dir.join("quran.json"))?;
         let juz_list: Vec<JuzEntry> = read_json(&data_dir.join("juz.json"))?;
         let reciters: Vec<Reciter> = read_json(&data_dir.join("reciters.json"))?;
@@ -208,6 +285,85 @@ impl Engine {
             qiraat_counts = read_json(&counts_path)?;
         }
 
+        // themes.json and tajweed-lessons.json are optional but load by default: together they are
+        // ~250 KB, and a topic list is the kind of thing a consumer wants without a flag.
+        let mut topics: Vec<Topic> = Vec::new();
+        let themes_path = data_dir.join("themes.json");
+        if themes_path.exists() {
+            let file: corpora::ThemesFile = read_json(&themes_path)?;
+            topics = file.topics;
+        }
+        let mut tajweed_chapters: Vec<TajweedChapter> = Vec::new();
+        let lessons_path = data_dir.join("tajweed-lessons.json");
+        if lessons_path.exists() {
+            let file: corpora::TajweedLessonsFile = read_json(&lessons_path)?;
+            tajweed_chapters = file.chapters;
+        }
+
+        let mut mushaf_index = None;
+        let mut mushaf_pages = HashMap::new();
+        let mut mushaf_lines = HashMap::new();
+        if options.mushaf {
+            let index: mushaf::MushafIndex = read_json(&data_dir.join("mushaf/index.json"))?;
+            for entry in &index.riwayat {
+                let table: mushaf::MushafPageTable =
+                    read_json(&data_dir.join("mushaf").join(&entry.pages))?;
+                mushaf_pages.insert(entry.riwayah.clone(), table);
+                if let Some(lines) = &entry.lines {
+                    let table: mushaf::MushafLineTable =
+                        read_json(&data_dir.join("mushaf").join(lines))?;
+                    mushaf_lines.insert(entry.riwayah.clone(), table);
+                }
+            }
+            mushaf_index = Some(index);
+        }
+
+        let mut qiraat_rule_descriptions = HashMap::new();
+        let mut qiraat_tajweed_packs = HashMap::new();
+        if options.qiraat_tajweed {
+            qiraat_rule_descriptions = read_json(&data_dir.join("tajweed-qiraat/rules.json"))?;
+            for slug in ["warsh", "qaloon", "duri", "susi", "buzzi", "qunbul", "shubah"] {
+                let path = data_dir.join("tajweed-qiraat").join(format!("{slug}.json"));
+                let pack: qiraat_tajweed::QiraatTajweedPack = read_json(&path)?;
+                qiraat_tajweed_packs.insert(slug.to_string(), pack);
+            }
+        }
+
+        let word_by_word = if options.word_by_word {
+            read_json(&data_dir.join("word-by-word.json"))?
+        } else {
+            word_by_word::WordByWordPack::default()
+        };
+
+        // surah-sections.json (80 KB) and arabic-alphabet.json (18 KB) load by default, like
+        // themes and lessons: small, and both answer questions a consumer should not have to opt
+        // into. A missing file is not an error; the accessors simply return nothing.
+        let mut surah_sections = sections::SurahSectionsFile::new();
+        let sections_path = data_dir.join("surah-sections.json");
+        if sections_path.exists() {
+            surah_sections = read_json(&sections_path)?;
+        }
+        let mut alphabet = alphabet::ArabicAlphabetFile::default();
+        let alphabet_path = data_dir.join("arabic-alphabet.json");
+        if alphabet_path.exists() {
+            alphabet = read_json(&alphabet_path)?;
+        }
+
+        let mut qiraat = HashMap::new();
+        if options.qiraat {
+            for slug in ["warsh", "qaloon", "duri", "susi", "buzzi", "qunbul", "shubah"] {
+                let path = data_dir.join("qiraat").join(format!("qiraah-{slug}.json"));
+                let verses: HashMap<String, Vec<QiraahVerse>> = read_json(&path)?;
+                qiraat.insert(slug.to_string(), verses);
+            }
+        }
+
+        let similar_ayahs = if options.similar_ayahs {
+            read_json(&data_dir.join("similar-ayahs.json"))?
+        } else {
+            HashMap::new()
+        };
+
         let search = SearchIndex::build(&surahs);
 
         Ok(Engine {
@@ -223,6 +379,18 @@ impl Engine {
             muqattaat,
             muqattaat_letter_names,
             qiraat_counts,
+            mushaf_index,
+            mushaf_pages,
+            mushaf_lines,
+            qiraat_rule_descriptions,
+            qiraat_tajweed: qiraat_tajweed_packs,
+            qiraat,
+            surah_sections,
+            alphabet,
+            word_by_word,
+            similar_ayahs,
+            topics,
+            tajweed_chapters,
             search,
         })
     }
@@ -231,9 +399,14 @@ impl Engine {
     /// `CARGO_MANIFEST_DIR` (and the current working dir at runtime) until a `data/quran.json`
     /// is found.
     pub fn load_default() -> Result<Engine, LoadError> {
+        Engine::load_default_with(LoadOptions::default())
+    }
+
+    /// [`Engine::load_default`] with the heavier corpora selected.
+    pub fn load_default_with(options: LoadOptions) -> Result<Engine, LoadError> {
         let dir = find_data_dir()
             .ok_or_else(|| LoadError::NotFound("could not locate data/quran.json".into()))?;
-        Engine::load(&dir)
+        Engine::load_with(&dir, options)
     }
 
     // ---- Quran -----------------------------------------------------------------
@@ -331,6 +504,26 @@ impl Engine {
 
     /// "About this surah" write-ups (Maududi / Ibn Ashur) for a surah id; empty slice if none.
     /// Mirrors `Quran.info`.
+    /// A riwayah's own verses for a surah, in ITS numbering — which is not always Hafs'.
+    ///
+    /// Warsh's al-Baqarah has 285 verses to Hafs' 286, because it reads الٓمٓ and ذٰلك الكتٰب as
+    /// one; pairing the two by ayah id past that point compares different verses. Empty unless
+    /// [`LoadOptions::qiraat`], and for `"hafs"`, whose text is `quran.json` itself.
+    pub fn qiraah_verses(&self, surah: u32, riwayah: &str) -> &[QiraahVerse] {
+        self.qiraat
+            .get(&riwayah.to_lowercase())
+            .and_then(|s| s.get(&surah.to_string()))
+            .map(Vec::as_slice)
+            .unwrap_or(&[])
+    }
+
+    /// The riwayat whose text is loaded, in slug order.
+    pub fn loaded_riwayat(&self) -> Vec<&str> {
+        let mut slugs: Vec<&str> = self.qiraat.keys().map(String::as_str).collect();
+        slugs.sort_unstable();
+        slugs
+    }
+
     pub fn surah_info(&self, id: u32) -> &[SurahInfoSource] {
         self.surah_info.get(&id).map(Vec::as_slice).unwrap_or(&[])
     }

@@ -27,14 +27,67 @@ type Engine struct {
 	ruleColors map[string]string              // category id -> colorHex
 	annotByKey map[[2]int][]tajweedAnnotation // (surah,ayah) -> annotations
 
-	muqattaat        []MuqattaatPronunciation            // 30 openings, in file order
-	muqattaatByKey   map[string]*MuqattaatPronunciation  // "surah:ayah" -> pronunciation
-	muqattaatLetters map[string]string                   // bare letter -> transliteration
+	muqattaat        []MuqattaatPronunciation           // 30 openings, in file order
+	muqattaatByKey   map[string]*MuqattaatPronunciation // "surah:ayah" -> pronunciation
+	muqattaatLetters map[string]string                  // bare letter -> transliteration
 
 	qiraatCounts map[string]map[string]int // riwayah -> surahId(str) -> ayah count
 
+	// The batch loaded by LoadOptions. themes.json and tajweed-lessons.json are optional but load
+	// by default: together they are ~250 KB, and a topic list is the kind of thing a consumer
+	// wants without a flag.
+	topics          []Topic
+	tajweedChapters []TajweedChapter
+
+	mushafIndex *MushafIndex
+	mushafPages map[string]*MushafPageTable
+	mushafLines map[string]*MushafLineTable
+
+	qiraatRuleDescriptions map[string]RuleDescription
+	qiraatTajweed          map[string]*QiraatTajweedPack
+
+	wordByWord   WordByWordPack
+	similarAyahs map[string][][]json.RawMessage
+
+	// riwayah -> surah id (as a string) -> that reading's own verses (empty unless
+	// LoadOptions.Qiraat).
+	qiraat map[string]map[string][]QiraahVerse
+	// data/surah-sections.json and data/arabic-alphabet.json; both load by default.
+	surahSections map[string]surahSectionsEntry
+	alphabet      arabicAlphabetFile
+
+	// Lazily built by TermWeights, over the translations.
+	documentFrequency map[string]int
+	documentCount     int
+
 	search *searchIndex
 }
+
+// LoadOptions selects the heavier corpora. The zero value loads the core plus themes and the
+// tajweed course, which is what LoadFrom and Load use.
+type LoadOptions struct {
+	// Mushaf loads mushaf/index.json plus every riwayah's page table (and line table, where the
+	// text ships). ~9 MB.
+	Mushaf bool
+	// QiraatTajweed loads the shared rule catalogue and the seven verified riwayah packs.
+	QiraatTajweed bool
+	// WordByWord loads both aligned layers of word-by-word.json. ~9 MB.
+	WordByWord bool
+	// SimilarAyahs loads similar-ayahs.json.
+	SimilarAyahs bool
+	// Qiraat loads the seven non-Hafs riwayat's own text (~11 MB) - what CompareSurah compares.
+	Qiraat bool
+}
+
+// QiraahVerse is one verse of a riwayah's own text, in ITS numbering.
+type QiraahVerse struct {
+	ID   int    `json:"id"`
+	Text string `json:"text"`
+}
+
+// The seven verified non-Hafs riwayat that carry a tajweed pack. The twelve whose text is not
+// published have no pack: their rules index into that text.
+var qiraatTajweedSlugs = []string{"warsh", "qaloon", "duri", "susi", "buzzi", "qunbul", "shubah"}
 
 // LoadFrom parses the JSON data files in dataDir and returns a ready Engine.
 //
@@ -42,6 +95,11 @@ type Engine struct {
 // names-of-allah.json, tajweed-rules.json, muqattaat.json, qiraat-counts.json.
 // Optional: tajweed-annotations.json (needed for TajweedSpans).
 func LoadFrom(dataDir string) (*Engine, error) {
+	return LoadFromWith(dataDir, LoadOptions{})
+}
+
+// LoadFromWith is LoadFrom with the heavier corpora selected. See LoadOptions.
+func LoadFromWith(dataDir string, options LoadOptions) (*Engine, error) {
 	e := &Engine{}
 
 	if err := readJSON(filepath.Join(dataDir, "quran.json"), &e.surahs); err != nil {
@@ -136,8 +194,100 @@ func LoadFrom(dataDir string) (*Engine, error) {
 		}
 	}
 
+	if err := e.loadCorpora(dataDir, options); err != nil {
+		return nil, err
+	}
+
 	e.search = newSearchIndex(e)
 	return e, nil
+}
+
+// loadCorpora reads the optional data: themes and the tajweed course always, the rest on request.
+// A missing optional file is not an error — the accessors simply return nothing — but a file that
+// is present and unreadable is, so a corrupt pack fails loudly instead of silently disappearing.
+func (e *Engine) loadCorpora(dataDir string, options LoadOptions) error {
+	var themes themesFile
+	if err := readOptionalJSON(filepath.Join(dataDir, "themes.json"), &themes); err != nil {
+		return err
+	}
+	e.topics = themes.Topics
+
+	var lessons tajweedLessonsFile
+	if err := readOptionalJSON(filepath.Join(dataDir, "tajweed-lessons.json"), &lessons); err != nil {
+		return err
+	}
+	e.tajweedChapters = lessons.Chapters
+
+	e.mushafPages = map[string]*MushafPageTable{}
+	e.mushafLines = map[string]*MushafLineTable{}
+	if options.Mushaf {
+		var index MushafIndex
+		if err := readJSON(filepath.Join(dataDir, "mushaf", "index.json"), &index); err != nil {
+			return err
+		}
+		for _, entry := range index.Riwayat {
+			var pages MushafPageTable
+			if err := readJSON(filepath.Join(dataDir, "mushaf", entry.Pages), &pages); err != nil {
+				return err
+			}
+			e.mushafPages[entry.Riwayah] = &pages
+			if entry.Lines != "" {
+				var lines MushafLineTable
+				if err := readJSON(filepath.Join(dataDir, "mushaf", entry.Lines), &lines); err != nil {
+					return err
+				}
+				e.mushafLines[entry.Riwayah] = &lines
+			}
+		}
+		e.mushafIndex = &index
+	}
+
+	e.qiraatTajweed = map[string]*QiraatTajweedPack{}
+	if options.QiraatTajweed {
+		if err := readJSON(filepath.Join(dataDir, "tajweed-qiraat", "rules.json"), &e.qiraatRuleDescriptions); err != nil {
+			return err
+		}
+		for _, slug := range qiraatTajweedSlugs {
+			var pack QiraatTajweedPack
+			if err := readJSON(filepath.Join(dataDir, "tajweed-qiraat", slug+".json"), &pack); err != nil {
+				return err
+			}
+			e.qiraatTajweed[slug] = &pack
+		}
+	}
+
+	if options.WordByWord {
+		if err := readJSON(filepath.Join(dataDir, "word-by-word.json"), &e.wordByWord); err != nil {
+			return err
+		}
+	}
+
+	if options.SimilarAyahs {
+		if err := readJSON(filepath.Join(dataDir, "similar-ayahs.json"), &e.similarAyahs); err != nil {
+			return err
+		}
+	}
+
+	e.qiraat = map[string]map[string][]QiraahVerse{}
+	if options.Qiraat {
+		for _, slug := range qiraatTajweedSlugs {
+			var verses map[string][]QiraahVerse
+			if err := readJSON(filepath.Join(dataDir, "qiraat", "qiraah-"+slug+".json"), &verses); err != nil {
+				return err
+			}
+			e.qiraat[slug] = verses
+		}
+	}
+
+	// surah-sections.json (80 KB) and arabic-alphabet.json (18 KB) load by default, like themes and
+	// the tajweed course: small, and both answer questions a consumer should not have to opt into.
+	if err := readOptionalJSON(filepath.Join(dataDir, "surah-sections.json"), &e.surahSections); err != nil {
+		return err
+	}
+	if err := readOptionalJSON(filepath.Join(dataDir, "arabic-alphabet.json"), &e.alphabet); err != nil {
+		return err
+	}
+	return nil
 }
 
 // Load locates the data directory automatically and calls LoadFrom.
@@ -146,14 +296,19 @@ func LoadFrom(dataDir string) (*Engine, error) {
 //  1. the QURAN_ENGINE_DATA environment variable, if set;
 //  2. walking up from the current working directory until a data/quran.json is found.
 func Load() (*Engine, error) {
+	return LoadWith(LoadOptions{})
+}
+
+// LoadWith is Load with the heavier corpora selected. See LoadOptions.
+func LoadWith(options LoadOptions) (*Engine, error) {
 	if dir := os.Getenv("QURAN_ENGINE_DATA"); dir != "" {
-		return LoadFrom(dir)
+		return LoadFromWith(dir, options)
 	}
 	dir, err := FindDataDir()
 	if err != nil {
 		return nil, err
 	}
-	return LoadFrom(dir)
+	return LoadFromWith(dir, options)
 }
 
 // FindDataDir walks up from the current working directory looking for a sibling
@@ -179,6 +334,14 @@ func findDataDirFrom(start string) (string, error) {
 		}
 		dir = parent
 	}
+}
+
+// readOptionalJSON is readJSON that treats an absent file as "nothing to load".
+func readOptionalJSON(path string, v any) error {
+	if _, err := os.Stat(path); err != nil {
+		return nil
+	}
+	return readJSON(path, v)
 }
 
 func readJSON(path string, v any) error {

@@ -89,6 +89,38 @@ Every port should ship a tiny test asserting these.
 
 Field guide: `searchVerses[].query` with `contains` (ids that must appear), `excludes` (must not), or `empty:true`; `juzFromEnd[]` `{n,id}` (`id:null` = out of range); `juzStats[]` exact counts or `{juz,isNull:true}`; `tajweed[]` `{surah,ayah,excludesRule,lastSpanRule}` (a port maps "rule" to whatever field its spans expose — the JS port calls it `category`).
 
+## Module coverage per port
+
+The core modules — Quran, tajweed, juz/page, audio, search, sorting, caching, names, muqattaat — are in **all seven** ports and are covered by the conformance vectors.
+
+Everything beyond the core is in **all seven** too — the mushaf, riwayah tajweed, word by word, similar ayahs, themes, the tajweed course, meaning search and Ask AI retrieval (batch 3), then surah sections, the alphabet reference and the qiraat comparison (batch 4). Each port carries a parity suite that is a deliberate translation of the same cases:
+
+| Port | Core | Beyond the core | Parity tests |
+|---|---|---|---|
+| JavaScript | ✓ | ✓ | `test/parity.test.js` — 32 |
+| Python | ✓ | ✓ | `tests/test_parity.py` — 32 |
+| Swift | ✓ | ✓ | `ParityTests.swift` — 31 |
+| Rust | ✓ | ✓ | `tests/parity.rs` — 31 |
+| Go | ✓ | ✓ | `parity_test.go` — 31 |
+| Kotlin | ✓ | ✓ | `ParityTest.kt` — 31 |
+| Dart | ✓ | ✓ | `test/parity_test.dart` — 31 |
+
+A divergence between the ports fails a test rather than surprising an app. Two the suites caught, both worth knowing if you write an eighth port:
+
+- **Java's `\s` is ASCII-only.** 2:26 separates two of its words with U+00A0, so Kotlin tokenized one word short of the pack and every Arabic token after it shifted by one. `Regex("(?U)\\s+")` fixes it. Go's `strings.Fields`, Rust's `split_whitespace`, and JS, Dart and Python's `\s` are Unicode-aware already.
+- **Go's RE2 has no lookbehind**, so the `(?<![\d:])(\d{1,3}):(\d{1,3})` reference scanner cannot be a regexp there. Go and Rust both hand-roll it; the code is short and the tests pin it.
+- **A value-type tree needs a path, not a pointer.** The surah outline is a flat list that nests, so rebuilding the tree means appending into the node currently being filled. Rust will not lend you two mutable borrows of one tree, and Swift/Go trees are values that move when a slice grows — all three track the open chain as a *path of indices* and walk back down on each insert. JS, Python, Kotlin and Dart keep a stack of references.
+
+### What an eighth port needs
+
+Nothing algorithmically hard; the corpora do the work. In order of effort:
+
+1. **Data accessors** — mushaf (page/line tables + the index), riwayah tajweed (legend + word rules + khilaf markers), word by word (two aligned layers), similar ayahs, themes, lessons. Each is a JSON shape and a handful of lookups; see [10](10-mushaf.md)–[13](13-similar-and-themes.md) for the schemas and the invariants that matter (letter indices vs character offsets; the token alignment; which riwayat ship what).
+2. **`Semantic`** — a word-vector MaxSim index with a pluggable embedder. About 80 lines: tokenize, embed, normalize once, score as the mean over query words of the best-matching document word.
+3. **Ask AI retrieval** — four lanes, round-robin interleaved. The only fiddly parts are the reference scanner (`N:M`, `surah <name>`, `verse <n>`, the named verses) and the IDF weighting; the Rust port does both without a regex dependency if yours would rather avoid one.
+
+Keep the method names your language's ports already use (`page` / `mushaf_page` / `mushafPage` as the local convention dictates) but keep the **semantics** identical, and translate the parity suite: a divergence should fail a test, not surprise an app.
+
 ## Directory convention
 
 ```

@@ -28,6 +28,16 @@ class SurahInfoSource {
       );
 }
 
+/// One verse of a riwayah's own text, in ITS numbering.
+class QiraahVerse {
+  final int id;
+  final String text;
+  const QiraahVerse(this.id, this.text);
+
+  factory QiraahVerse.fromJson(Map<String, dynamic> json) =>
+      QiraahVerse(json['id'] as int? ?? 0, json['text'] as String? ?? '');
+}
+
 /// Data-driven Quran browser built from parsed `data/quran.json`.
 class Quran {
   final List<Surah> surahs;
@@ -39,6 +49,10 @@ class Quran {
   /// (parsed from `data/qiraat-counts.json`). Empty for the Hafs-only build.
   final Map<String, Map<String, int>> qiraatCounts;
 
+  /// A riwayah's own verses: `riwayah` -> `surahId(string)` -> that reading's verses, in ITS
+  /// numbering. Empty unless the qiraah text was loaded.
+  final Map<String, Map<String, List<QiraahVerse>>> qiraat;
+
   /// Total ayah count across the mushaf (6236 for the standard Hafs count).
   final int totalAyahs;
 
@@ -46,6 +60,7 @@ class Quran {
     this.surahs, [
     Map<int, List<SurahInfoSource>>? surahInfo,
     this.qiraatCounts = const {},
+    this.qiraat = const {},
   ])  : _byId = {for (final s in surahs) s.id: s},
         _cumulativeOffset = _buildOffsets(surahs),
         _info = surahInfo ?? const {},
@@ -70,6 +85,7 @@ class Quran {
     List<dynamic> json, [
     List<dynamic>? surahInfoJson,
     Map<String, dynamic>? qiraatCountsJson,
+    Map<String, Map<String, dynamic>> qiraatJson = const {},
   ]) {
     final surahs =
         json.map((e) => Surah.fromJson(e as Map<String, dynamic>)).toList();
@@ -90,8 +106,29 @@ class Quran {
                 (k2, v2) => MapEntry(k2 as String, v2 as int),
               ),
             ));
-    return Quran(surahs, info, counts);
+    final qiraat = <String, Map<String, List<QiraahVerse>>>{
+      for (final entry in qiraatJson.entries)
+        entry.key: {
+          for (final surah in entry.value.entries)
+            surah.key: (surah.value as List<dynamic>)
+                .map((v) => QiraahVerse.fromJson(v as Map<String, dynamic>))
+                .toList(growable: false),
+        },
+    };
+    return Quran(surahs, info, counts, qiraat);
   }
+
+  /// A riwayah's own verses for a surah, in ITS numbering - which is not always Hafs'.
+  ///
+  /// Warsh's al-Baqarah has 285 verses to Hafs' 286, because it reads الٓمٓ and ذٰلك الكتٰب as one;
+  /// pairing the two by ayah id past that point compares different verses.
+  ///
+  /// Empty when the riwayah's text is not loaded, and for "hafs", whose text is `quran.json`.
+  List<QiraahVerse> qiraahVerses(int surahId, String riwayah) =>
+      qiraat[riwayah.toLowerCase()]?['$surahId'] ?? const [];
+
+  /// The riwayat whose text is loaded, in slug order.
+  List<String> get loadedRiwayat => qiraat.keys.toList()..sort();
 
   /// All surahs in mushaf order (1..114).
   List<Surah> all() => surahs;

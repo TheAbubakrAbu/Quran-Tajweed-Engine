@@ -2,7 +2,7 @@
 
 A complete reference for the Arabic script as used in the Quran — the 28 letters (with their tajweed weight), extra/special letters, non-Arabic letters that appear in some scripts, Eastern-Arabic numerals, the tashkeel (diacritics), and the waqf (stopping) signs.
 
-All of it is data: [`data/arabic-alphabet.json`](../data/arabic-alphabet.json). Load it like any other file.
+All of it is data: [`data/arabic-alphabet.json`](../data/arabic-alphabet.json). This page documents the FILE, field by field, for a consumer reading it directly. For the engine's accessors over the same data - `letters()`, `weight()`, `stoppingSign()` - see **[16 · Arabic alphabet](16-arabic-alphabet.md)**.
 
 ## The 28 letters
 

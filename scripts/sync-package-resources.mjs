@@ -17,10 +17,13 @@ import { dirname, join } from "node:path";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const p = (...a) => join(ROOT, ...a);
 
-// The core JSON the engine actually decodes today, plus the data needed for near-term parity
-// (surah info, names of Allah, arabic alphabet). Excluded on purpose: the per-surah splits
-// (surahs/, tajweed/ — redundant with the combined files), fonts/ (TTFs the app bundles itself),
-// and qiraat/ (not yet wired into the Swift Quran loader — add when it is).
+// The JSON the engine decodes. Nested paths are kept nested — SwiftPM's `.copy("Resources")`
+// preserves the directory structure, and the Swift loader looks a file up under its own
+// subdirectory. Excluded on purpose: the per-surah splits (surahs/, tajweed/ — redundant with the
+// combined files), fonts/ (TTFs the app bundles itself), qiraat/ (11 MB of riwayah text: the Swift
+// loader reads it when `loadQiraat` is passed a `dataDirectory`, but bundling it would triple the
+// package for a feature most consumers do not use), and mushaf/pdfs/ (23 MB of facsimiles the engine
+// never loads itself: `mushaf.pdfPath(_:)` hands the consumer a path, and the consumer ships it).
 const FILES = [
   "quran.json",
   "juz.json",
@@ -32,6 +35,20 @@ const FILES = [
   "arabic-alphabet.json",
   "muqattaat.json",
   "qiraat-counts.json",
+  "themes.json",
+  "tajweed-lessons.json",
+  "surah-sections.json",
+  "surah-stats.json",
+  "word-by-word.json",
+  "similar-ayahs.json",
+  "mushaf/index.json",
+  "tajweed-qiraat/rules.json",
+  ...["hafs", "shubah", "warsh", "qaloon", "buzzi", "qunbul", "duri", "susi",
+      "hisham", "ibn-dhakwan", "khalaf", "khallad", "abu-harith", "duri-kisai",
+      "ibn-wardan", "ibn-jammaz", "ruways", "rawh", "ishaq", "idris"]
+    .map((slug) => `mushaf/pages/${slug}.json`),
+  ...["hafs", "shubah", "warsh", "qaloon", "buzzi", "qunbul", "duri", "susi"]
+    .flatMap((slug) => [`mushaf/lines/${slug}.json`, ...(slug === "hafs" ? [] : [`tajweed-qiraat/${slug}.json`])]),
 ];
 
 const targets = [
@@ -47,7 +64,9 @@ for (const dir of targets) {
   await mkdir(dir, { recursive: true });
   let bytes = 0;
   for (const f of FILES) {
-    await copyFile(p("data", f), join(dir, f));
+    const target = join(dir, f);
+    await mkdir(dirname(target), { recursive: true });
+    await copyFile(p("data", f), target);
     bytes += (await readFile(p("data", f))).length;
   }
   await writeFile(join(dir, "GENERATED.json"), JSON.stringify(BANNER, null, 2));

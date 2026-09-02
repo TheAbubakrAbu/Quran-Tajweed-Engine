@@ -120,6 +120,21 @@ public final class Quran {
     }
 
     /// Arabic text of an ayah for the requested riwayah. Falls back to the bundled Hafs
+    /// A riwayah's own verses for a surah, in ITS numbering - which is not always Hafs'.
+    ///
+    /// Warsh's al-Baqarah has 285 verses to Hafs' 286, because it reads الٓمٓ and ذٰلك الكتٰب as
+    /// one; pairing the two by ayah id past that point compares different verses. Anything walking
+    /// a whole reading (`QiraatComparison`, an exporter) wants this rather than `arabicText` per
+    /// Hafs ayah, which falls back to Hafs whenever the riwayah has no verse with that id.
+    ///
+    /// Empty when the riwayah's text is not loaded, and for "hafs", whose text is `quran.json`.
+    public func qiraahVerses(surah surahId: Int, riwayah: String) -> [QiraahVerse] {
+        qiraat[riwayah.lowercased()]?[String(surahId)] ?? []
+    }
+
+    /// The riwayat whose text is loaded, in slug order.
+    public var loadedRiwayat: [String] { qiraat.keys.sorted() }
+
     /// `textArabic` when no qiraah override exists.
     public func arabicText(_ surahId: Int, _ ayahId: Int, riwayah: String? = nil) -> String? {
         guard let ayah = ayah(surahId, ayahId) else { return nil }

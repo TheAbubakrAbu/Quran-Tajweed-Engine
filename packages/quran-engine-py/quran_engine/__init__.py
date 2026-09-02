@@ -13,6 +13,11 @@ Quick start:
     engine.juz_page.first_ayah_of_juz(30)        # jump target
     engine.audio.surah_url(reciter, 1)           # full-surah mp3 URL
     engine.search.search_verses("lord of the worlds")
+
+    engine = Engine.load(load_mushaf=True, load_word_by_word=True)
+    engine.mushaf.page(2, 255, "warsh")          # the page Warsh's own print puts it on
+    engine.word_by_word.words(112, 1)             # gloss + transliteration, word by word
+    engine.ask_ai.retrieve("explain ayat al-kursi")
 """
 
 from .engine import Engine
@@ -24,6 +29,17 @@ from .sorting import sort_surahs, filter_by_revelation_type, filter_by_counts, C
 from .names import NamesOfAllah, NameOfAllah
 from .muqattaat import Muqattaat, MuqattaatPronunciation
 from .cache import sanitize_reciter_dir, local_surah_path, shared_audio_path
+from .mushaf import Mushaf
+from .qiraat_tajweed import QiraatTajweed, LegendEntry, WordRule
+from .word_by_word import WordByWord, Word
+from .similar import SimilarAyahs, SimilarMatch
+from .themes import Themes
+from .lessons import TajweedLessons
+from .semantic import Semantic
+from .ask_ai import AskAI, Passage, chat_prompt, CHAT_INSTRUCTIONS, QUESTION_WORDS
+from .sections import SurahSections, SurahSection, OutlineNode
+from .alphabet import ArabicAlphabet, ArabicLetter, Tashkeel, StoppingSign, ArabicNumeral
+from .qiraat_comparison import QiraatComparison, ComparisonTotals, WordDifference, skeleton
 
 __version__ = "0.1.0"
 
@@ -36,4 +52,11 @@ __all__ = [
     "NamesOfAllah", "NameOfAllah",
     "Muqattaat", "MuqattaatPronunciation",
     "sanitize_reciter_dir", "local_surah_path", "shared_audio_path",
+    "Mushaf", "QiraatTajweed", "LegendEntry", "WordRule",
+    "WordByWord", "Word", "SimilarAyahs", "SimilarMatch",
+    "Themes", "TajweedLessons", "Semantic",
+    "AskAI", "Passage", "chat_prompt", "CHAT_INSTRUCTIONS", "QUESTION_WORDS",
+    "SurahSections", "SurahSection", "OutlineNode",
+    "ArabicAlphabet", "ArabicLetter", "Tashkeel", "StoppingSign", "ArabicNumeral",
+    "QiraatComparison", "ComparisonTotals", "WordDifference", "skeleton",
 ]

@@ -116,6 +116,22 @@ class Quran:
             return True
         return ayah_id <= count
 
+    def qiraah_verses(self, surah_id: int, riwayah: str) -> list[dict]:
+        """A riwayah's own verses for a surah, in ITS numbering - which is not always Hafs'.
+
+        Warsh's al-Baqarah has 285 verses to Hafs' 286, because it reads الٓمٓ and ذٰلك الكتٰب as
+        one; pairing the two by ayah id past that point compares different verses. Anything walking
+        a whole reading (``QiraatComparison``, an exporter) wants this rather than ``arabic_text``
+        per Hafs ayah, which falls back to Hafs whenever the riwayah has no verse with that id.
+
+        Empty when the riwayah's text is not loaded, and for "hafs", whose text is quran.json.
+        """
+        return self._qiraat.get(riwayah.lower(), {}).get(str(surah_id), [])
+
+    def loaded_riwayat(self) -> list[str]:
+        """The riwayat whose text is loaded, in slug order."""
+        return sorted(self._qiraat)
+
     def number_of_ayahs_in_qiraah(self, surah_id: int, riwayah: Optional[str] = None) -> int:
         """Ayah count of a surah in the given riwayah — the number of Hafs ayahs that exist there (e.g.
         Baqarah is 286 in Hafs but 285 in Warsh). Mirrors Surah.numberOfAyahs(for:)."""
