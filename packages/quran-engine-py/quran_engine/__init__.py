@@ -40,6 +40,12 @@ from .ask_ai import AskAI, Passage, chat_prompt, CHAT_INSTRUCTIONS, QUESTION_WOR
 from .sections import SurahSections, SurahSection, OutlineNode
 from .alphabet import ArabicAlphabet, ArabicLetter, Tashkeel, StoppingSign, ArabicNumeral
 from .qiraat_comparison import QiraatComparison, ComparisonTotals, WordDifference, skeleton
+from .morphology import Morphology, Root, Lemma, WordLocation, fold_for_morphology
+from .mutashabihat import Mutashabihat, Phrase
+from .topics import QuranTopics, AyahThemes, QulTopic, Passage as ThemePassage, TOPIC_TREES
+from .metadata import QuranMetadata, Division
+from .qiraat_variants import QiraatVariants, Juncture
+from .word_of_day import WordOfDay, WordEntry
 
 __version__ = "0.1.0"
 
@@ -59,4 +65,10 @@ __all__ = [
     "SurahSections", "SurahSection", "OutlineNode",
     "ArabicAlphabet", "ArabicLetter", "Tashkeel", "StoppingSign", "ArabicNumeral",
     "QiraatComparison", "ComparisonTotals", "WordDifference", "skeleton",
+    "Morphology", "Root", "Lemma", "WordLocation", "fold_for_morphology",
+    "Mutashabihat", "Phrase",
+    "QuranTopics", "AyahThemes", "QulTopic", "ThemePassage", "TOPIC_TREES",
+    "QuranMetadata", "Division",
+    "QiraatVariants", "Juncture",
+    "WordOfDay", "WordEntry",
 ]

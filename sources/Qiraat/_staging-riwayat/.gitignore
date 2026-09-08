@@ -1,0 +1,24 @@
+# Extraction input. The 22 volumes are 225 MB and live outside every repo; see pdfs/README.md
+# for the mirror they were fetched from and the slug-to-filename mapping.
+pdfs/*.pdf
+
+# Generated caches and intermediates: a deterministic function of the source PDF, so they are
+# regenerated rather than stored. See ../../README.md for which script remakes which file. A
+# stale copy silently poisons every later run, because raw_ayahs caches the PDF parse and never
+# checks whether the PDF changed.
+pipeline/pdfcache/
+pipeline/data/*.raw.json
+pipeline/data/*.surahs.json
+pipeline/data/*.final.json
+pipeline/data/*.text.json
+pipeline/data/*.colors.json
+pipeline/data/*.colorlayer.json
+pipeline/data/*.lines.json
+pipeline/data/*.nosep.json
+pipeline/data/detmap-*.json
+pipeline/data/detamb-*.json
+pipeline/data/zonespec.json
+
+__pycache__/
+venv/
+pipeline/emit/

@@ -33,6 +33,12 @@ import { AskAI } from "./askAI.js";
 import { SurahSections } from "./sections.js";
 import { ArabicAlphabet } from "./alphabet.js";
 import { QiraatComparison } from "./qiraatComparison.js";
+import { Morphology } from "./morphology.js";
+import { Mutashabihat } from "./mutashabihat.js";
+import { QuranTopics, AyahThemes } from "./topics.js";
+import { QuranMetadata } from "./metadata.js";
+import { QiraatVariants } from "./qiraatVariants.js";
+import { WordOfDay } from "./wordOfDay.js";
 import { tajweedSpans, detectPaintOps, resolveSpans } from "./tajweed.js";
 
 export * from "./text.js";
@@ -55,6 +61,12 @@ export * from "./askAI.js";
 export * from "./sections.js";
 export * from "./alphabet.js";
 export * from "./qiraatComparison.js";
+export * from "./morphology.js";
+export * from "./mutashabihat.js";
+export * from "./topics.js";
+export * from "./metadata.js";
+export * from "./qiraatVariants.js";
+export * from "./wordOfDay.js";
 export * from "./cache.js";
 
 /**
@@ -78,6 +90,15 @@ export * from "./cache.js";
  * @param {{chapters:any[]}} [data.tajweedLessons]                  data/tajweed-lessons.json
  * @param {Record<string, any>} [data.surahSections]                data/surah-sections.json
  * @param {any} [data.arabicAlphabet]                               data/arabic-alphabet.json
+ * @param {any} [data.morphology]                                   data/morphology.json
+ * @param {any} [data.mutashabihat]                                 data/mutashabihat.json
+ * @param {{topics:any[]}} [data.quranTopics]                       data/quran-topics.json
+ * @param {Record<string, any>} [data.ayahThemes]                   data/ayah-themes.json
+ * @param {any} [data.quranMetadata]                                data/quran-metadata.json
+ * @param {any} [data.qiraatVariants]                               data/qiraat-variants.json
+ * @param {any} [data.qiraatPlaces]                                 data/qiraat-places.json
+ * @param {any} [data.qiraatVariantAudio]                           data/qiraat-variant-audio.json
+ * @param {{words:any[]}} [data.wordOfDay]                          data/word-of-day.json
  * @param {{ riwayah?: string }} [opts]
  */
 export function createEngine(data, opts = {}) {
@@ -98,6 +119,15 @@ export function createEngine(data, opts = {}) {
   const alphabet = new ArabicAlphabet(data.arabicAlphabet);
   // Needs `qiraat` loaded to say anything; with none it reports "hafs" alone and compares nothing.
   const qiraatComparison = new QiraatComparison(quran);
+  const morphology = new Morphology(data.morphology ?? {});
+  const mutashabihat = new Mutashabihat(data.mutashabihat ?? {});
+  const quranTopics = new QuranTopics(data.quranTopics ?? {});
+  const ayahThemes = new AyahThemes(data.ayahThemes ?? {});
+  const quranMetadata = new QuranMetadata(data.quranMetadata ?? {});
+  const qiraatVariants = new QiraatVariants({
+    variants: data.qiraatVariants, places: data.qiraatPlaces, audio: data.qiraatVariantAudio,
+  });
+  const wordOfDay = new WordOfDay(data.wordOfDay ?? {});
   const tajweedRules = data.tajweedRules ?? null;
 
   return {
@@ -117,6 +147,13 @@ export function createEngine(data, opts = {}) {
     surahSections,
     alphabet,
     qiraatComparison,
+    morphology,
+    mutashabihat,
+    quranTopics,
+    ayahThemes,
+    quranMetadata,
+    qiraatVariants,
+    wordOfDay,
     tajweedRules,
     /**
      * Detect tajweed spans for any Arabic ayah text.

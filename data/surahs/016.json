@@ -26,7 +26,7 @@
     {
       "id": 1,
       "textArabic": "أَتَىٰٓ أَمۡرُ ٱللَّهِ فَلَا تَسۡتَعۡجِلُوهُۚ سُبۡحَٰنَهُۥ وَتَعَٰلَىٰ عَمَّا يُشۡرِكُونَ",
-      "textTransliteration": "Ata amru Allahi fala tastaAAjiloohu subhanahu wataAAala AAamma yushrikoona",
+      "textTransliteration": "Ataaa amrul laahi falaa tasta'jilooh; Subhaanahoo Wa-Ta'aalaa 'ammaa yushrikoon",
       "textEnglishSaheeh": "The command of Allah is coming, so be not impatient for it. Exalted is He and high above what they associate with Him.",
       "textEnglishMustafa": "The command of Allah is at hand, so do not hasten it. Glorified and Exalted is He above what they associate ˹with Him in worship˺!",
       "juz": 14,
@@ -37,7 +37,7 @@
     {
       "id": 2,
       "textArabic": "يُنَزِّلُ ٱلۡمَلَٰٓئِكَةَ بِٱلرُّوحِ مِنۡ أَمۡرِهِۦ عَلَىٰ مَن يَشَآءُ مِنۡ عِبَادِهِۦٓ أَنۡ أَنذِرُوٓاْ أَنَّهُۥ لَآ إِلَٰهَ إِلَّآ أَنَا۠ فَٱتَّقُونِ",
-      "textTransliteration": "Yunazzilu almalaikata bialrroohi min amrihi AAala man yashao min AAibadihi an anthiroo annahu la ilaha illa ana faittaqooni",
+      "textTransliteration": "Yunazzilul malaaa-'ikata birroohi min amrihee 'alaa mai yashaaa'u min 'ibaadiheee an anzirooo annahoo laaa ilaaha illaaa ana fattaqoon",
       "textEnglishSaheeh": "He sends down the angels, with the inspiration of His command, upon whom He wills of His servants, [telling them], \"Warn that there is no deity except Me; so fear Me.\"",
       "textEnglishMustafa": "He sends down the angels with revelation by His command to whoever He wills of His servants, ˹stating:˺ “Warn ˹humanity˺ that there is no god ˹worthy of worship˺ except Me, so be mindful of Me ˹alone˺.”",
       "juz": 14,
@@ -48,7 +48,7 @@
     {
       "id": 3,
       "textArabic": "خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضَ بِٱلۡحَقِّۚ تَعَٰلَىٰ عَمَّا يُشۡرِكُونَ",
-      "textTransliteration": "Khalaqa alssamawati waalarda bialhaqqi taAAala AAamma yushrikoona",
+      "textTransliteration": "Khalaqas samaawaati wal-arda bilhaqq; Ta'aalaa 'ammaa yushrikoon",
       "textEnglishSaheeh": "He created the heavens and earth in truth. High is He above what they associate with Him.",
       "textEnglishMustafa": "He created the heavens and the earth for a purpose. Exalted is He above what they associate with Him ˹in worship˺!",
       "juz": 14,
@@ -59,7 +59,7 @@
     {
       "id": 4,
       "textArabic": "خَلَقَ ٱلۡإِنسَٰنَ مِن نُّطۡفَةٖ فَإِذَا هُوَ خَصِيمٞ مُّبِينٞ",
-      "textTransliteration": "Khalaqa alinsana min nutfatin faitha huwa khaseemun mubeenun",
+      "textTransliteration": "Khalaqal insaana min nutfatin fa-izaa huwa khaseemum mubeen",
       "textEnglishSaheeh": "He created man from a sperm-drop; then at once, he is a clear adversary.",
       "textEnglishMustafa": "He created humans from a sperm-drop, then—behold!—they openly challenge ˹Him˺.",
       "juz": 14,
@@ -70,7 +70,7 @@
     {
       "id": 5,
       "textArabic": "وَٱلۡأَنۡعَٰمَ خَلَقَهَاۖ لَكُمۡ فِيهَا دِفۡءٞ وَمَنَٰفِعُ وَمِنۡهَا تَأۡكُلُونَ",
-      "textTransliteration": "WaalanAAama khalaqaha lakum feeha difon wamanafiAAu waminha takuloona",
+      "textTransliteration": "Wal-an-'amaa khalaqahaa; lakum feehaa dif'unw Wa-manaafi'u Wa-minhaa taakuloon",
       "textEnglishSaheeh": "And the grazing livestock He has created for you; in them is warmth and [numerous] benefits, and from them you eat.",
       "textEnglishMustafa": "And He created the cattle for you as a source of warmth, food, and ˹many other˺ benefits.",
       "juz": 14,
@@ -81,7 +81,7 @@
     {
       "id": 6,
       "textArabic": "وَلَكُمۡ فِيهَا جَمَالٌ حِينَ تُرِيحُونَ وَحِينَ تَسۡرَحُونَ",
-      "textTransliteration": "Walakum feeha jamalun heena tureehoona waheena tasrahoona",
+      "textTransliteration": "Wa-lakum feehaa jamaalun heena tureehoona Wa-heena tasrahoon",
       "textEnglishSaheeh": "And for you in them is [the enjoyment of] beauty when you bring them in [for the evening] and when you send them out [to pasture].",
       "textEnglishMustafa": "They are also pleasing to you when you bring them home and when you take them out to graze.",
       "juz": 14,
@@ -92,7 +92,7 @@
     {
       "id": 7,
       "textArabic": "وَتَحۡمِلُ أَثۡقَالَكُمۡ إِلَىٰ بَلَدٖ لَّمۡ تَكُونُواْ بَٰلِغِيهِ إِلَّا بِشِقِّ ٱلۡأَنفُسِۚ إِنَّ رَبَّكُمۡ لَرَءُوفٞ رَّحِيمٞ",
-      "textTransliteration": "Watahmilu athqalakum ila baladin lam takoonoo baligheehi illa bishiqqi alanfusi inna rabbakum laraoofun raheemun",
+      "textTransliteration": "Wa-tahmilu asqaalakum ilaa baladil lam takoonoo baaligheehi illaa bishiqqil anfus; inna Rabbakum la-Ra'oofur Raheem",
       "textEnglishSaheeh": "And they carry your loads to a land you could not have reached except with difficulty to yourselves. Indeed, your Lord is Kind and Merciful.",
       "textEnglishMustafa": "And they carry your loads to ˹distant˺ lands which you could not otherwise reach without great hardship. Surely your Lord is Ever Gracious, Most Merciful.",
       "juz": 14,
@@ -103,7 +103,7 @@
     {
       "id": 8,
       "textArabic": "وَٱلۡخَيۡلَ وَٱلۡبِغَالَ وَٱلۡحَمِيرَ لِتَرۡكَبُوهَا وَزِينَةٗۚ وَيَخۡلُقُ مَا لَا تَعۡلَمُونَ",
-      "textTransliteration": "Waalkhayla waalbighala waalhameera litarkabooha wazeenatan wayakhluqu ma la taAAlamoona",
+      "textTransliteration": "Walkhaila wal-bighaala wal-hameera litarkaboohaa Wa-zeenah; Wa-yakhluqu maa laa ta'lamoon",
       "textEnglishSaheeh": "And [He created] the horses, mules and donkeys for you to ride and [as] adornment. And He creates that which you do not know.",
       "textEnglishMustafa": "˹He also created˺ horses, mules, and donkeys for your transportation and adornment. And He creates what you do not know.",
       "juz": 14,
@@ -114,7 +114,7 @@
     {
       "id": 9,
       "textArabic": "وَعَلَى ٱللَّهِ قَصۡدُ ٱلسَّبِيلِ وَمِنۡهَا جَآئِرٞۚ وَلَوۡ شَآءَ لَهَدَىٰكُمۡ أَجۡمَعِينَ",
-      "textTransliteration": "WaAAala Allahi qasdu alssabeeli waminha jairun walaw shaa lahadakum ajmaAAeena",
+      "textTransliteration": "Wa-'alal laahi qasdus sabeeli Wa-minhaa jaaa'ir; Wa-law shaaa'a lahadaakum ajma'een",
       "textEnglishSaheeh": "And upon Allah is the direction of the [right] way, and among the various paths are those deviating. And if He willed, He could have guided you all.",
       "textEnglishMustafa": "It is upon Allah ˹alone˺ to ˹clearly˺ show the Straight Way. Other ways are deviant. Had He willed, He would have easily guided all of you.",
       "juz": 14,
@@ -125,7 +125,7 @@
     {
       "id": 10,
       "textArabic": "هُوَ ٱلَّذِيٓ أَنزَلَ مِنَ ٱلسَّمَآءِ مَآءٗۖ لَّكُم مِّنۡهُ شَرَابٞ وَمِنۡهُ شَجَرٞ فِيهِ تُسِيمُونَ",
-      "textTransliteration": "Huwa allathee anzala mina alssamai maan lakum minhu sharabun waminhu shajarun feehi tuseemoona",
+      "textTransliteration": "Huwal lazeee anzala minas samaaa'i maaa'al lakum minhu sharaabunw Wa-minhu shajarun feehi tuseemoon",
       "textEnglishSaheeh": "It is He who sends down rain from the sky; from it is drink and from it is foliage in which you pasture [animals].",
       "textEnglishMustafa": "He is the One Who sends down rain from the sky, from which you drink and by which plants grow for your cattle to graze.",
       "juz": 14,
@@ -136,7 +136,7 @@
     {
       "id": 11,
       "textArabic": "يُنۢبِتُ لَكُم بِهِ ٱلزَّرۡعَ وَٱلزَّيۡتُونَ وَٱلنَّخِيلَ وَٱلۡأَعۡنَٰبَ وَمِن كُلِّ ٱلثَّمَرَٰتِۚ إِنَّ فِي ذَٰلِكَ لَأٓيَةٗ لِّقَوۡمٖ يَتَفَكَّرُونَ",
-      "textTransliteration": "Yunbitu lakum bihi alzzarAAa waalzzaytoona waalnnakheela waalaAAnaba wamin kulli alththamarati inna fee thalika laayatan liqawmin yatafakkaroona",
+      "textTransliteration": "Yumbitu lakum bihiz zar'a wazzaitoona wanna-kheela wal-a'naaba Wa-min kullis samaraat, inna fee zaalika la-Aayatal liqawminy yatafakkaroon",
       "textEnglishSaheeh": "He causes to grow for you thereby the crops, olives, palm trees, grapevines, and from all the fruits. Indeed in that is a sign for a people who give thought.",
       "textEnglishMustafa": "With it He produces for you ˹various˺ crops, olives, palm trees, grapevines, and every type of fruit. Surely in this is a sign for those who reflect.",
       "juz": 14,
@@ -147,7 +147,7 @@
     {
       "id": 12,
       "textArabic": "وَسَخَّرَ لَكُمُ ٱلَّيۡلَ وَٱلنَّهَارَ وَٱلشَّمۡسَ وَٱلۡقَمَرَۖ وَٱلنُّجُومُ مُسَخَّرَٰتُۢ بِأَمۡرِهِۦٓۚ إِنَّ فِي ذَٰلِكَ لَأٓيَٰتٖ لِّقَوۡمٖ يَعۡقِلُونَ",
-      "textTransliteration": "Wasakhkhara lakumu allayla waalnnahara waalshshamsa waalqamara waalnnujoomu musakhkharatun biamrihi inna fee thalika laayatin liqawmin yaAAqiloona",
+      "textTransliteration": "Wa-sakkhkhara lakumul laila wannahaara wash-shamsa walqamara wannujoomu musakhkharaatum bi-amrih; inna fee zaalika la-Aayaatil liqawminy ya'qiloon",
       "textEnglishSaheeh": "And He has subjected for you the night and day and the sun and moon, and the stars are subjected by His command. Indeed in that are signs for a people who reason.",
       "textEnglishMustafa": "And He has subjected for your benefit the day and the night, the sun and the moon. And the stars have been subjected by His command. Surely in this are signs for those who understand.",
       "juz": 14,
@@ -158,7 +158,7 @@
     {
       "id": 13,
       "textArabic": "وَمَا ذَرَأَ لَكُمۡ فِي ٱلۡأَرۡضِ مُخۡتَلِفًا أَلۡوَٰنُهُۥٓۚ إِنَّ فِي ذَٰلِكَ لَأٓيَةٗ لِّقَوۡمٖ يَذَّكَّرُونَ",
-      "textTransliteration": "Wama tharaa lakum fee alardi mukhtalifan alwanuhu inna fee thalika laayatan liqawmin yaththakkaroona",
+      "textTransliteration": "Wa-maa zara-a lakum fil ardi mukhtalifan alwaanuh; inna fee zaalika la-Aayatal liqawminy yazakkaroon",
       "textEnglishSaheeh": "And [He has subjected] whatever He multiplied for you on the earth of varying colors. Indeed in that is a sign for a people who remember.",
       "textEnglishMustafa": "And ˹He subjected˺ for you whatever He has created on earth of varying colours. Surely in this is a sign for those who are mindful.",
       "juz": 14,
@@ -169,7 +169,7 @@
     {
       "id": 14,
       "textArabic": "وَهُوَ ٱلَّذِي سَخَّرَ ٱلۡبَحۡرَ لِتَأۡكُلُواْ مِنۡهُ لَحۡمٗا طَرِيّٗا وَتَسۡتَخۡرِجُواْ مِنۡهُ حِلۡيَةٗ تَلۡبَسُونَهَاۖ وَتَرَى ٱلۡفُلۡكَ مَوَاخِرَ فِيهِ وَلِتَبۡتَغُواْ مِن فَضۡلِهِۦ وَلَعَلَّكُمۡ تَشۡكُرُونَ",
-      "textTransliteration": "Wahuwa allathee sakhkhara albahra litakuloo minhu lahman tariyyan watastakhrijoo minhu hilyatan talbasoonaha watara alfulka mawakhira feehi walitabtaghoo min fadlihi walaAAallakum tashkuroona",
+      "textTransliteration": "Wa-Huwal lazee sakhkharal bahra litaakuloo minhu lahman tariyyanw Wa-tastakhrijoo minhu hilyatan talbasoonahaa Wa-taral fulka mawaakhira feehi Wa-litabtaghoo min fadlihee Wa-la'allakum tashkuroon",
       "textEnglishSaheeh": "And it is He who subjected the sea for you to eat from it tender meat and to extract from it ornaments which you wear. And you see the ships plowing through it, and [He subjected it] that you may seek of His bounty; and perhaps you will be grateful.",
       "textEnglishMustafa": "And He is the One Who has subjected the sea, so from it you may eat tender seafood and extract ornaments to wear. And you see the ships ploughing their way through it, so you may seek His bounty and give thanks ˹to Him˺.",
       "juz": 14,
@@ -180,7 +180,7 @@
     {
       "id": 15,
       "textArabic": "وَأَلۡقَىٰ فِي ٱلۡأَرۡضِ رَوَٰسِيَ أَن تَمِيدَ بِكُمۡ وَأَنۡهَٰرٗا وَسُبُلٗا لَّعَلَّكُمۡ تَهۡتَدُونَ",
-      "textTransliteration": "Waalqa fee alardi rawasiya an tameeda bikum waanharan wasubulan laAAallakum tahtadoona",
+      "textTransliteration": "Wa-alqaa fil ardi rawaasiya an tameeda bikum Wa-anhaaranw Wa-sublulal la-'allakum tahtadoon",
       "textEnglishSaheeh": "And He has cast into the earth firmly set mountains, lest it shift with you, and [made] rivers and roads, that you may be guided,",
       "textEnglishMustafa": "He has placed into the earth firm mountains, so it does not shake with you, as well as rivers, and pathways so you may find your way.",
       "juz": 14,
@@ -191,7 +191,7 @@
     {
       "id": 16,
       "textArabic": "وَعَلَٰمَٰتٖۚ وَبِٱلنَّجۡمِ هُمۡ يَهۡتَدُونَ",
-      "textTransliteration": "WaAAalamatin wabialnnajmi hum yahtadoona",
+      "textTransliteration": "Wa-'alaamaat; Wa-bin-najmi hum yahtadoon",
       "textEnglishSaheeh": "And landmarks. And by the stars they are [also] guided.",
       "textEnglishMustafa": "Also by landmarks and stars do people find their way.",
       "juz": 14,
@@ -202,7 +202,7 @@
     {
       "id": 17,
       "textArabic": "أَفَمَن يَخۡلُقُ كَمَن لَّا يَخۡلُقُۚ أَفَلَا تَذَكَّرُونَ",
-      "textTransliteration": "Afaman yakhluqu kaman la yakhluqu afala tathakkaroona",
+      "textTransliteration": "Afamany yakhluqu kamal laa yakhluq; afalaa tazak-karoon",
       "textEnglishSaheeh": "Then is He who creates like one who does not create? So will you not be reminded?",
       "textEnglishMustafa": "Can the One Who creates be equal to those who do not? Will you not then be mindful?",
       "juz": 14,
@@ -213,7 +213,7 @@
     {
       "id": 18,
       "textArabic": "وَإِن تَعُدُّواْ نِعۡمَةَ ٱللَّهِ لَا تُحۡصُوهَآۗ إِنَّ ٱللَّهَ لَغَفُورٞ رَّحِيمٞ",
-      "textTransliteration": "Wain taAAuddoo niAAmata Allahi la tuhsooha inna Allaha laghafoorun raheemun",
+      "textTransliteration": "Wa-in ta'uddoo ni'matal laahi laa tuhsoohaa; innal laaha la-Ghafoorur Raheem",
       "textEnglishSaheeh": "And if you should count the favors of Allah, you could not enumerate them. Indeed, Allah is Forgiving and Merciful.",
       "textEnglishMustafa": "If you tried to count Allah’s blessings, you would never be able to number them. Surely Allah is All-Forgiving, Most Merciful.",
       "juz": 14,
@@ -224,7 +224,7 @@
     {
       "id": 19,
       "textArabic": "وَٱللَّهُ يَعۡلَمُ مَا تُسِرُّونَ وَمَا تُعۡلِنُونَ",
-      "textTransliteration": "WaAllahu yaAAlamu ma tusirroona wama tuAAlinoona",
+      "textTransliteration": "Wallaahu ya'lamu maa tusirroona Wa-maa tu'linoon",
       "textEnglishSaheeh": "And Allah knows what you conceal and what you declare.",
       "textEnglishMustafa": "And Allah knows what you conceal and what you reveal.",
       "juz": 14,
@@ -235,7 +235,7 @@
     {
       "id": 20,
       "textArabic": "وَٱلَّذِينَ يَدۡعُونَ مِن دُونِ ٱللَّهِ لَا يَخۡلُقُونَ شَيۡـٔٗا وَهُمۡ يُخۡلَقُونَ",
-      "textTransliteration": "Waallatheena yadAAoona min dooni Allahi la yakhluqoona shayan wahum yukhlaqoona",
+      "textTransliteration": "Wallazeena yad'oona min doonil laahi laa yakhluqoona shai'anw Wa-hum yukhlaqoon",
       "textEnglishSaheeh": "And those they invoke other than Allah create nothing, and they [themselves] are created.",
       "textEnglishMustafa": "But those ˹idols˺ they invoke besides Allah cannot create anything—they themselves are created.",
       "juz": 14,
@@ -246,7 +246,7 @@
     {
       "id": 21,
       "textArabic": "أَمۡوَٰتٌ غَيۡرُ أَحۡيَآءٖۖ وَمَا يَشۡعُرُونَ أَيَّانَ يُبۡعَثُونَ",
-      "textTransliteration": "Amwatun ghayru ahyain wama yashAAuroona ayyana yubAAathoona",
+      "textTransliteration": "Amwaatun ghairu ahyaaa'inw Wa-maa yash'uroona aiyaana yub'asoon",
       "textEnglishSaheeh": "They are, [in fact], dead, not alive, and they do not perceive when they will be resurrected.",
       "textEnglishMustafa": "They are dead, not alive—not even knowing when their followers will be resurrected.",
       "juz": 14,
@@ -257,7 +257,7 @@
     {
       "id": 22,
       "textArabic": "إِلَٰهُكُمۡ إِلَٰهٞ وَٰحِدٞۚ فَٱلَّذِينَ لَا يُؤۡمِنُونَ بِٱلۡأٓخِرَةِ قُلُوبُهُم مُّنكِرَةٞ وَهُم مُّسۡتَكۡبِرُونَ",
-      "textTransliteration": "Ilahukum ilahun wahidun faallatheena la yuminoona bialakhirati quloobuhum munkiratun wahum mustakbiroona",
+      "textTransliteration": "Illahukum Ilaahunw Waahid; fallazeena laa yu'minoona bil-Aakhirati quloobuhum munkiratunw Wa-hum mustakbiroon",
       "textEnglishSaheeh": "Your god is one God. But those who do not believe in the Hereafter - their hearts are disapproving, and they are arrogant.",
       "textEnglishMustafa": "Your God is ˹only˺ One God. As for those who do not believe in the Hereafter, their hearts are in denial, and they are too proud.",
       "juz": 14,
@@ -268,7 +268,7 @@
     {
       "id": 23,
       "textArabic": "لَا جَرَمَ أَنَّ ٱللَّهَ يَعۡلَمُ مَا يُسِرُّونَ وَمَا يُعۡلِنُونَۚ إِنَّهُۥ لَا يُحِبُّ ٱلۡمُسۡتَكۡبِرِينَ",
-      "textTransliteration": "La jarama anna Allaha yaAAlamu ma yusirroona wama yuAAlinoona innahu la yuhibbu almustakbireena",
+      "textTransliteration": "Laa jarama annal laaha ya'lamu maa yusirrona Wa-ma yu'linoon; innahoo laa yuhibbul mustakbireen",
       "textEnglishSaheeh": "Assuredly, Allah knows what they conceal and what they declare. Indeed, He does not like the arrogant.",
       "textEnglishMustafa": "Without a doubt, Allah knows what they conceal and what they reveal. He certainly does not like those who are too proud.",
       "juz": 14,
@@ -279,7 +279,7 @@
     {
       "id": 24,
       "textArabic": "وَإِذَا قِيلَ لَهُم مَّاذَآ أَنزَلَ رَبُّكُمۡ قَالُوٓاْ أَسَٰطِيرُ ٱلۡأَوَّلِينَ",
-      "textTransliteration": "Waitha qeela lahum matha anzala rabbukum qaloo asateeru alawwaleena",
+      "textTransliteration": "Wa-izaa qeela lahum maazaaa anzala Rabbukum qaaloo asaateerul awwaleen",
       "textEnglishSaheeh": "And when it is said to them, \"What has your Lord sent down?\" They say, \"Legends of the former peoples,\"",
       "textEnglishMustafa": "And when it is said to them, “What has your Lord revealed?” They say, “Ancient fables!”",
       "juz": 14,
@@ -290,7 +290,7 @@
     {
       "id": 25,
       "textArabic": "لِيَحۡمِلُوٓاْ أَوۡزَارَهُمۡ كَامِلَةٗ يَوۡمَ ٱلۡقِيَٰمَةِ وَمِنۡ أَوۡزَارِ ٱلَّذِينَ يُضِلُّونَهُم بِغَيۡرِ عِلۡمٍۗ أَلَا سَآءَ مَا يَزِرُونَ",
-      "textTransliteration": "Liyahmiloo awzarahum kamilatan yawma alqiyamati wamin awzari allatheena yudilloonahum bighayri AAilmin ala saa ma yaziroona",
+      "textTransliteration": "Liyahmilooo awzaarahum kaamilatany Yawmal Qiyaamati Wa-min awzaaril lazeena yudilloonahum bighairi 'ilm; alaa saaa'a maa yaziroon",
       "textEnglishSaheeh": "That they may bear their own burdens in full on the Day of Resurrection and some of the burdens of those whom they misguide without knowledge. Unquestionably, evil is that which they bear.",
       "textEnglishMustafa": "Let them bear their burdens in full on the Day of Judgment as well as some of the burdens of those they mislead without knowledge. Evil indeed is what they will bear!",
       "juz": 14,
@@ -301,7 +301,7 @@
     {
       "id": 26,
       "textArabic": "قَدۡ مَكَرَ ٱلَّذِينَ مِن قَبۡلِهِمۡ فَأَتَى ٱللَّهُ بُنۡيَٰنَهُم مِّنَ ٱلۡقَوَاعِدِ فَخَرَّ عَلَيۡهِمُ ٱلسَّقۡفُ مِن فَوۡقِهِمۡ وَأَتَىٰهُمُ ٱلۡعَذَابُ مِنۡ حَيۡثُ لَا يَشۡعُرُونَ",
-      "textTransliteration": "Qad makara allatheena min qablihim faata Allahu bunyanahum mina alqawaAAidi fakharra AAalayhimu alssaqfu min fawqihim waatahumu alAAathabu min haythu la yashAAuroona",
+      "textTransliteration": "Qad makaral lazeena min qablihim fa-atal laahu bunyaa-nahum minal qawaa'idi fakharra 'alaihimus saqfu min fawqihim Wa-ataahumul 'azaabu min haisu laa yash'uroon",
       "textEnglishSaheeh": "Those before them had already plotted, but Allah came at their building from the foundations, so the roof fell upon them from above them, and the punishment came to them from where they did not perceive.",
       "textEnglishMustafa": "Indeed, those before them had plotted, but Allah struck at the ˹very˺ foundation of their structure, so the roof collapsed on top of them, and the torment came upon them from where they did not expect.",
       "juz": 14,
@@ -312,7 +312,7 @@
     {
       "id": 27,
       "textArabic": "ثُمَّ يَوۡمَ ٱلۡقِيَٰمَةِ يُخۡزِيهِمۡ وَيَقُولُ أَيۡنَ شُرَكَآءِيَ ٱلَّذِينَ كُنتُمۡ تُشَٰٓقُّونَ فِيهِمۡۚ قَالَ ٱلَّذِينَ أُوتُواْ ٱلۡعِلۡمَ إِنَّ ٱلۡخِزۡيَ ٱلۡيَوۡمَ وَٱلسُّوٓءَ عَلَى ٱلۡكَٰفِرِينَ",
-      "textTransliteration": "Thumma yawma alqiyamati yukhzeehim wayaqoolu ayna shurakaiya allatheena kuntum tushaqqoona feehim qala allatheena ootoo alAAilma inna alkhizya alyawma waalssooa AAala alkafireena",
+      "textTransliteration": "Summa Yawmal Qiyaamati yukhzeehim Wa-yaqoolu aina shurakaaa'iyal lazeena kuntum tushaaaqqoona feehim; qaalal lazeena ootul 'ilma innal khizyal Yawma wassooo'a 'alal kaafireen",
       "textEnglishSaheeh": "Then on the Day of Resurrection He will disgrace them and say, \"Where are My 'partners' for whom you used to oppose [the believers]?\" Those who were given knowledge will say, \"Indeed disgrace, this Day, and evil are upon the disbelievers\" -",
       "textEnglishMustafa": "Then on the Day of Judgment He will humiliate them and say, “Where are My ˹so-called˺ associate-gods for whose sake you used to oppose ˹the believers˺?” Those gifted with knowledge will say, “Surely disgrace and misery today are upon the disbelievers.”",
       "juz": 14,
@@ -323,7 +323,7 @@
     {
       "id": 28,
       "textArabic": "ٱلَّذِينَ تَتَوَفَّىٰهُمُ ٱلۡمَلَٰٓئِكَةُ ظَالِمِيٓ أَنفُسِهِمۡۖ فَأَلۡقَوُاْ ٱلسَّلَمَ مَا كُنَّا نَعۡمَلُ مِن سُوٓءِۭۚ بَلَىٰٓۚ إِنَّ ٱللَّهَ عَلِيمُۢ بِمَا كُنتُمۡ تَعۡمَلُونَ",
-      "textTransliteration": "Allatheena tatawaffahumu almalaikatu thalimee anfusihim faalqawoo alssalama ma kunna naAAmalu min sooin bala inna Allaha AAaleemun bima kuntum taAAmaloona",
+      "textTransliteration": "Allazeena tatawaf-faahu-mul malaaa'ikatu zaalimeee anfusihim fa-alqawus salama maa kunnaa na'malu min sooo'; balaaa innal laaha 'aleemum bimaa kuntum ta'maloon",
       "textEnglishSaheeh": "The ones whom the angels take in death [while] wronging themselves, and [who] then offer submission, [saying], \"We were not doing any evil.\" But, yes! Indeed, Allah is Knowing of what you used to do.",
       "textEnglishMustafa": "Those whose souls the angels seize while they wrong themselves will then offer ˹full˺ submission ˹and say falsely,˺ “We did not do any evil.” ˹The angels will say,˺ “No! Surely Allah fully knows what you used to do.",
       "juz": 14,
@@ -334,7 +334,7 @@
     {
       "id": 29,
       "textArabic": "فَٱدۡخُلُوٓاْ أَبۡوَٰبَ جَهَنَّمَ خَٰلِدِينَ فِيهَاۖ فَلَبِئۡسَ مَثۡوَى ٱلۡمُتَكَبِّرِينَ",
-      "textTransliteration": "Faodkhuloo abwaba jahannama khalideena feeha falabisa mathwa almutakabbireena",
+      "textTransliteration": "Fadkhulooo abwaaba jahannama khaalideena feeha falabi'sa maswal mutakab-bireen",
       "textEnglishSaheeh": "So enter the gates of Hell to abide eternally therein, and how wretched is the residence of the arrogant.",
       "textEnglishMustafa": "So enter the gates of Hell, to stay there forever. Indeed, what an evil home for the arrogant!”",
       "juz": 14,
@@ -345,7 +345,7 @@
     {
       "id": 30,
       "textArabic": "۞ وَقِيلَ لِلَّذِينَ ٱتَّقَوۡاْ مَاذَآ أَنزَلَ رَبُّكُمۡۚ قَالُواْ خَيۡرٗاۗ لِّلَّذِينَ أَحۡسَنُواْ فِي هَٰذِهِ ٱلدُّنۡيَا حَسَنَةٞۚ وَلَدَارُ ٱلۡأٓخِرَةِ خَيۡرٞۚ وَلَنِعۡمَ دَارُ ٱلۡمُتَّقِينَ",
-      "textTransliteration": "Waqeela lillatheena ittaqaw matha anzala rabbukum qaloo khayran lillatheena ahsanoo fee hathihi alddunya hasanatun waladaru alakhirati khayrun walaniAAma daru almuttaqeena",
+      "textTransliteration": "Wa-qeela lillazeenat taqaw maazaaa anzala Rabbukum; qaaloo khairaa; lillazeena ahsanoo fee haazihid dunyaa hasanah; Wa-la-Daarul Aakhirati khair; Wa-lani'ma daarul muttaqeen",
       "textEnglishSaheeh": "And it will be said to those who feared Allah, \"What did your Lord send down?\" They will say, \"[That which is] good.\" For those who do good in this world is good; and the home of the Hereafter is better. And how excellent is the home of the righteous -",
       "textEnglishMustafa": "And ˹when˺ it is said to those mindful ˹of Allah˺, “What has your Lord revealed?” They say, “All the best!” For those who do good in this world, there is goodness. But far better is the ˹eternal˺ Home of the Hereafter. How excellent indeed is the home of the righteous:",
       "juz": 14,
@@ -356,7 +356,7 @@
     {
       "id": 31,
       "textArabic": "جَنَّٰتُ عَدۡنٖ يَدۡخُلُونَهَا تَجۡرِي مِن تَحۡتِهَا ٱلۡأَنۡهَٰرُۖ لَهُمۡ فِيهَا مَا يَشَآءُونَۚ كَذَٰلِكَ يَجۡزِي ٱللَّهُ ٱلۡمُتَّقِينَ",
-      "textTransliteration": "Jannatu AAadnin yadkhuloonaha tajree min tahtiha alanharu lahum feeha ma yashaoona kathalika yajzee Allahu almuttaqeena",
+      "textTransliteration": "Jannaatu 'Adniny yadkhuloonahaa tajree min tahtihal anhaaru lahum feehaa maa yashaaa'oon; kazaalika yajzil laahul muttaqeen",
       "textEnglishSaheeh": "Gardens of perpetual residence, which they will enter, beneath which rivers flow. They will have therein whatever they wish. Thus does Allah reward the righteous -",
       "textEnglishMustafa": "the Gardens of Eternity which they will enter, under which rivers flow. In it they will have whatever they desire. This is how Allah rewards the righteous—",
       "juz": 14,
@@ -367,7 +367,7 @@
     {
       "id": 32,
       "textArabic": "ٱلَّذِينَ تَتَوَفَّىٰهُمُ ٱلۡمَلَٰٓئِكَةُ طَيِّبِينَ يَقُولُونَ سَلَٰمٌ عَلَيۡكُمُ ٱدۡخُلُواْ ٱلۡجَنَّةَ بِمَا كُنتُمۡ تَعۡمَلُونَ",
-      "textTransliteration": "Allatheena tatawaffahumu almalaikatu tayyibeena yaqooloona salamun AAalaykumu odkhuloo aljannata bima kuntum taAAmaloona",
+      "textTransliteration": "Allazeena tatawaf-faahumul malaaa'ikatu taiyibeena yaqooloona salaamun 'alai-kumud khulul Jannata bimaa kuntum ta'maloon",
       "textEnglishSaheeh": "The ones whom the angels take in death, [being] good and pure; [the angels] will say, \"Peace be upon you. Enter Paradise for what you used to do.\"",
       "textEnglishMustafa": "those whose souls the angels take while they are virtuous, saying ˹to them˺, “Peace be upon you! Enter Paradise for what you used to do.”",
       "juz": 14,
@@ -378,7 +378,7 @@
     {
       "id": 33,
       "textArabic": "هَلۡ يَنظُرُونَ إِلَّآ أَن تَأۡتِيَهُمُ ٱلۡمَلَٰٓئِكَةُ أَوۡ يَأۡتِيَ أَمۡرُ رَبِّكَۚ كَذَٰلِكَ فَعَلَ ٱلَّذِينَ مِن قَبۡلِهِمۡۚ وَمَا ظَلَمَهُمُ ٱللَّهُ وَلَٰكِن كَانُوٓاْ أَنفُسَهُمۡ يَظۡلِمُونَ",
-      "textTransliteration": "Hal yanthuroona illa an tatiyahumu almalaikatu aw yatiya amru rabbika kathalika faAAala allatheena min qablihim wama thalamahumu Allahu walakin kanoo anfusahum yathlimoona",
+      "textTransliteration": "Hal yanzuroona illaaa an taatiyahumul malaaa'ikatu aw yaatiya amru Rabbik; kazaalika fa'alal lazeena min qablihim; Wa-maa zalamahumul laahu Wa-laakin kaanoo anfusahum yazlimoon",
       "textEnglishSaheeh": "Do the disbelievers await [anything] except that the angels should come to them or there comes the command of your Lord? Thus did those do before them. And Allah wronged them not, but they had been wronging themselves.",
       "textEnglishMustafa": "Are they only awaiting the coming of the angels or the command of your Lord ˹O Prophet˺? So were those before them. And Allah never wronged them, but it was they who wronged themselves.",
       "juz": 14,
@@ -389,7 +389,7 @@
     {
       "id": 34,
       "textArabic": "فَأَصَابَهُمۡ سَيِّـَٔاتُ مَا عَمِلُواْ وَحَاقَ بِهِم مَّا كَانُواْ بِهِۦ يَسۡتَهۡزِءُونَ",
-      "textTransliteration": "Faasabahum sayyiatu ma AAamiloo wahaqa bihim ma kanoo bihi yastahzioona",
+      "textTransliteration": "Fa-asaabahum saiyi-aatu maa 'amiloo Wa-haaqa bihim maa kaano bihee yastahzi'oon",
       "textEnglishSaheeh": "So they were struck by the evil consequences of what they did and were enveloped by what they used to ridicule.",
       "textEnglishMustafa": "Then the evil ˹consequences˺ of their deeds overtook them, and they were overwhelmed by what they used to ridicule.",
       "juz": 14,
@@ -400,7 +400,7 @@
     {
       "id": 35,
       "textArabic": "وَقَالَ ٱلَّذِينَ أَشۡرَكُواْ لَوۡ شَآءَ ٱللَّهُ مَا عَبَدۡنَا مِن دُونِهِۦ مِن شَيۡءٖ نَّحۡنُ وَلَآ ءَابَآؤُنَا وَلَا حَرَّمۡنَا مِن دُونِهِۦ مِن شَيۡءٖۚ كَذَٰلِكَ فَعَلَ ٱلَّذِينَ مِن قَبۡلِهِمۡۚ فَهَلۡ عَلَى ٱلرُّسُلِ إِلَّا ٱلۡبَلَٰغُ ٱلۡمُبِينُ",
-      "textTransliteration": "Waqala allatheena ashrakoo law shaa Allahu ma AAabadna min doonihi min shayin nahnu wala abaona wala harramna min doonihi min shayin kathalika faAAala allatheena min qablihim fahal AAala alrrusuli illa albalaghu almubeenu",
+      "textTransliteration": "Wa-qaalal lazeena ashrakoo law shaaa'al laahu ma 'abadnaa min doonihee min shai'in nahnu Wa-laaa aabaaa'unaa Wa-laa harramnaa min doonihee min shai'; kazaalika fa'alal lazeena min qablihim fahal 'alar Rusuli illal balaaghul mubeen",
       "textEnglishSaheeh": "And those who associate others with Allah say, \"If Allah had willed, we would not have worshipped anything other than Him, neither we nor our fathers, nor would we have forbidden anything through other than Him.\" Thus did those do before them. So is there upon the messengers except [the duty of] clear notification?",
       "textEnglishMustafa": "The polytheists argue, “Had Allah willed, neither we nor our forefathers would have worshipped anything other than Him, nor prohibited anything without His command.” So did those before them. Is not the messengers’ duty only to deliver ˹the message˺ clearly?",
       "juz": 14,
@@ -411,7 +411,7 @@
     {
       "id": 36,
       "textArabic": "وَلَقَدۡ بَعَثۡنَا فِي كُلِّ أُمَّةٖ رَّسُولًا أَنِ ٱعۡبُدُواْ ٱللَّهَ وَٱجۡتَنِبُواْ ٱلطَّٰغُوتَۖ فَمِنۡهُم مَّنۡ هَدَى ٱللَّهُ وَمِنۡهُم مَّنۡ حَقَّتۡ عَلَيۡهِ ٱلضَّلَٰلَةُۚ فَسِيرُواْ فِي ٱلۡأَرۡضِ فَٱنظُرُواْ كَيۡفَ كَانَ عَٰقِبَةُ ٱلۡمُكَذِّبِينَ",
-      "textTransliteration": "Walaqad baAAathna fee kulli ommatin rasoolan ani oAAbudoo Allaha waijtaniboo alttaghoota faminhum man hada Allahu waminhum man haqqat AAalayhi alddalalatu faseeroo fee alardi faonthuroo kayfa kana AAaqibatu almukaththibeena",
+      "textTransliteration": "Wa-laqad ba'asnaa fee kulli ummatir Rasoolan ani' budul laaha wajtanibut Taaghoota faminhum man hadal laahu Wa-minhum man haqqat 'alaihid dalaalah; faseeroo fil ardi fanzuroo kaifa kaana 'aaqibatul mukazzibeen",
       "textEnglishSaheeh": "And We certainly sent into every nation a messenger, [saying], \"Worship Allah and avoid Taghut.\" And among them were those whom Allah guided, and among them were those upon whom error was [deservedly] decreed. So proceed through the earth and observe how was the end of the deniers.",
       "textEnglishMustafa": "We surely sent a messenger to every community, saying, “Worship Allah and shun false gods.” But some of them were guided by Allah, while others were destined to stray. So travel throughout the land and see the fate of the deniers!",
       "juz": 14,
@@ -422,7 +422,7 @@
     {
       "id": 37,
       "textArabic": "إِن تَحۡرِصۡ عَلَىٰ هُدَىٰهُمۡ فَإِنَّ ٱللَّهَ لَا يَهۡدِي مَن يُضِلُّۖ وَمَا لَهُم مِّن نَّٰصِرِينَ",
-      "textTransliteration": "In tahris AAala hudahum fainna Allaha la yahdee man yudillu wama lahum min nasireena",
+      "textTransliteration": "In tahris 'alaa hudaahum fa-innal laaha laa yahdee mai yudillu Wa-maa lahum min naasireen",
       "textEnglishSaheeh": "[Even] if you should strive for their guidance, [O Muhammad], indeed, Allah does not guide those He sends astray, and they will have no helpers.",
       "textEnglishMustafa": "Even though you ˹O Prophet˺ are keen on their guidance, Allah certainly does not guide those He leaves to stray, and they will have no helpers.",
       "juz": 14,
@@ -433,7 +433,7 @@
     {
       "id": 38,
       "textArabic": "وَأَقۡسَمُواْ بِٱللَّهِ جَهۡدَ أَيۡمَٰنِهِمۡ لَا يَبۡعَثُ ٱللَّهُ مَن يَمُوتُۚ بَلَىٰ وَعۡدًا عَلَيۡهِ حَقّٗا وَلَٰكِنَّ أَكۡثَرَ ٱلنَّاسِ لَا يَعۡلَمُونَ",
-      "textTransliteration": "Waaqsamoo biAllahi jahda aymanihim la yabAAathu Allahu man yamootu bala waAAdan AAalayhi haqqan walakinna akthara alnnasi la yaAAlamoona",
+      "textTransliteration": "Wa-aqsamoo billaahi jahda aimaanihim laa yab'asul laahu mai yamoot; balaa wa'dan 'alaihi haqqanw Wa-laakinna aksaran naasi laa ya'lamoon",
       "textEnglishSaheeh": "And they swear by Allah their strongest oaths [that] Allah will not resurrect one who dies. But yes - [it is] a true promise [binding] upon Him, but most of the people do not know.",
       "textEnglishMustafa": "They swear by Allah their most solemn oaths that Allah will never raise the dead to life. Yes ˹He will˺! It is a true promise binding on Him, but most people do not know.",
       "juz": 14,
@@ -444,7 +444,7 @@
     {
       "id": 39,
       "textArabic": "لِيُبَيِّنَ لَهُمُ ٱلَّذِي يَخۡتَلِفُونَ فِيهِ وَلِيَعۡلَمَ ٱلَّذِينَ كَفَرُوٓاْ أَنَّهُمۡ كَانُواْ كَٰذِبِينَ",
-      "textTransliteration": "Liyubayyina lahumu allathee yakhtalifoona feehi waliyaAAlama allatheena kafaroo annahum kanoo kathibeena",
+      "textTransliteration": "Liyubaiyina lahumul lazee yakhtalifoona feehi Wa-liya'lamal lazeena kafarooo annahum kaanoo kaazibeen",
       "textEnglishSaheeh": "[It is] so He will make clear to them [the truth of] that wherein they differ and so those who have disbelieved may know that they were liars.",
       "textEnglishMustafa": "˹He will do that˺ to make clear to them what they disagreed on, and for the disbelievers to know that they were liars.",
       "juz": 14,
@@ -455,7 +455,7 @@
     {
       "id": 40,
       "textArabic": "إِنَّمَا قَوۡلُنَا لِشَيۡءٍ إِذَآ أَرَدۡنَٰهُ أَن نَّقُولَ لَهُۥ كُن فَيَكُونُ",
-      "textTransliteration": "Innama qawluna lishayin itha aradnahu an naqoola lahu kun fayakoonu",
+      "textTransliteration": "Innamaa qawlunaa lishay'in izaa aradnaahu an naqoola lahoo kun fa-yakoon",
       "textEnglishSaheeh": "Indeed, Our word to a thing when We intend it is but that We say to it, \"Be,\" and it is.",
       "textEnglishMustafa": "If We ever will something ˹to exist˺, all We say is: “Be!” And it is!",
       "juz": 14,
@@ -466,7 +466,7 @@
     {
       "id": 41,
       "textArabic": "وَٱلَّذِينَ هَاجَرُواْ فِي ٱللَّهِ مِنۢ بَعۡدِ مَا ظُلِمُواْ لَنُبَوِّئَنَّهُمۡ فِي ٱلدُّنۡيَا حَسَنَةٗۖ وَلَأَجۡرُ ٱلۡأٓخِرَةِ أَكۡبَرُۚ لَوۡ كَانُواْ يَعۡلَمُونَ",
-      "textTransliteration": "Waallatheena hajaroo fee Allahi min baAAdi ma thulimoo lanubawwiannahum fee alddunya hasanatan walaajru alakhirati akbaru law kanoo yaAAlamoona",
+      "textTransliteration": "Wallazeena haajaroo fil laahi mim ba'di maa zulimoo lanubawwi'-annahum fid dunyaa hasanatanw Wa-la-ajrul Aakhirati akbar; law kaanoo ya'lamoon",
       "textEnglishSaheeh": "And those who emigrated for [the cause of] Allah after they had been wronged - We will surely settle them in this world in a good place; but the reward of the Hereafter is greater, if only they could know.",
       "textEnglishMustafa": "As for those who emigrated in ˹the cause of˺ Allah after being persecuted, We will surely bless them with a good home in this world. But the reward of the Hereafter is far better, if only they knew.",
       "juz": 14,
@@ -477,7 +477,7 @@
     {
       "id": 42,
       "textArabic": "ٱلَّذِينَ صَبَرُواْ وَعَلَىٰ رَبِّهِمۡ يَتَوَكَّلُونَ",
-      "textTransliteration": "Allatheena sabaroo waAAala rabbihim yatawakkaloona",
+      "textTransliteration": "Allazeena sabaroo Wa-'alaa Rabbihim yatawak-kaloon",
       "textEnglishSaheeh": "[They are] those who endured patiently and upon their Lord relied.",
       "textEnglishMustafa": "˹It is˺ they who have patiently endured, and in their Lord they put their trust.",
       "juz": 14,
@@ -488,7 +488,7 @@
     {
       "id": 43,
       "textArabic": "وَمَآ أَرۡسَلۡنَا مِن قَبۡلِكَ إِلَّا رِجَالٗا نُّوحِيٓ إِلَيۡهِمۡۖ فَسۡـَٔلُوٓاْ أَهۡلَ ٱلذِّكۡرِ إِن كُنتُمۡ لَا تَعۡلَمُونَ",
-      "textTransliteration": "Wama arsalna min qablika illa rijalan noohee ilayhim faisaloo ahla alththikri in kuntum la taAAlamoona",
+      "textTransliteration": "Wa-maaa arsalnaa min qablika illaa rijaalan nooheee ilaihim; fas'alooo ahlaz zikri in kuntum laa ta'lamoon",
       "textEnglishSaheeh": "And We sent not before you except men to whom We revealed [Our message]. So ask the people of the message if you do not know.",
       "textEnglishMustafa": "We did not send ˹messengers˺ before you ˹O Prophet˺ except mere men inspired by Us. If you ˹polytheists˺ do not know ˹this already˺, then ask those who have knowledge ˹of the Scriptures˺.",
       "juz": 14,
@@ -499,7 +499,7 @@
     {
       "id": 44,
       "textArabic": "بِٱلۡبَيِّنَٰتِ وَٱلزُّبُرِۗ وَأَنزَلۡنَآ إِلَيۡكَ ٱلذِّكۡرَ لِتُبَيِّنَ لِلنَّاسِ مَا نُزِّلَ إِلَيۡهِمۡ وَلَعَلَّهُمۡ يَتَفَكَّرُونَ",
-      "textTransliteration": "Bialbayyinati waalzzuburi waanzalna ilayka alththikra litubayyina lilnnasi ma nuzzila ilayhim walaAAallahum yatafakkaroona",
+      "textTransliteration": "Bilbaiyinaati waz-Zubur; Wa-anzalnaaa ilaikaz Zikra litubaiyina linnaasi maa nuzzila ilaihim Wa-la'allahum yatafakkaroon",
       "textEnglishSaheeh": "[We sent them] with clear proofs and written ordinances. And We revealed to you the message that you may make clear to the people what was sent down to them and that they might give thought.",
       "textEnglishMustafa": "˹We sent them˺ with clear proofs and divine Books. And We have sent down to you ˹O Prophet˺ the Reminder, so that you may explain to people what has been revealed for them, and perhaps they will reflect.",
       "juz": 14,
@@ -510,7 +510,7 @@
     {
       "id": 45,
       "textArabic": "أَفَأَمِنَ ٱلَّذِينَ مَكَرُواْ ٱلسَّيِّـَٔاتِ أَن يَخۡسِفَ ٱللَّهُ بِهِمُ ٱلۡأَرۡضَ أَوۡ يَأۡتِيَهُمُ ٱلۡعَذَابُ مِنۡ حَيۡثُ لَا يَشۡعُرُونَ",
-      "textTransliteration": "Afaamina allatheena makaroo alssayyiati an yakhsifa Allahu bihimu alarda aw yatiyahumu alAAathabu min haythu la yashAAuroona",
+      "textTransliteration": "Afa-aminal lazeena makarus saiyi-aati ai yakhsifal laahu bihimul arda aw yaaa-tiyahumul 'azaabu min haisu laa yash'uroon",
       "textEnglishSaheeh": "Then, do those who have planned evil deeds feel secure that Allah will not cause the earth to swallow them or that the punishment will not come upon them from where they do not perceive?",
       "textEnglishMustafa": "Do those who devise evil plots feel secure that Allah will not cause the earth to swallow them? Or that the torment will not come upon them in ways they cannot comprehend?",
       "juz": 14,
@@ -521,7 +521,7 @@
     {
       "id": 46,
       "textArabic": "أَوۡ يَأۡخُذَهُمۡ فِي تَقَلُّبِهِمۡ فَمَا هُم بِمُعۡجِزِينَ",
-      "textTransliteration": "Aw yakhuthahum fee taqallubihim fama hum bimuAAjizeena",
+      "textTransliteration": "Aw yaakhuzahum fee taqallubihim famaa hum bi-mu'jizeen",
       "textEnglishSaheeh": "Or that He would not seize them during their [usual] activity, and they could not cause failure?",
       "textEnglishMustafa": "Or that He will not seize them while they go about ˹their day˺, for then they will have no escape?",
       "juz": 14,
@@ -532,7 +532,7 @@
     {
       "id": 47,
       "textArabic": "أَوۡ يَأۡخُذَهُمۡ عَلَىٰ تَخَوُّفٖ فَإِنَّ رَبَّكُمۡ لَرَءُوفٞ رَّحِيمٌ",
-      "textTransliteration": "Aw yakhuthahum AAala takhawwufin fainna rabbakum laraoofun raheemun",
+      "textTransliteration": "Aw yaakhuzahum 'alaa takhawwuf; fa-inna Rabbakum la-Ra'oofur Raheem",
       "textEnglishSaheeh": "Or that He would not seize them gradually [in a state of dread]? But indeed, your Lord is Kind and Merciful.",
       "textEnglishMustafa": "Or that He will not destroy them gradually? But your Lord is truly Ever Gracious, Most Merciful.",
       "juz": 14,
@@ -543,7 +543,7 @@
     {
       "id": 48,
       "textArabic": "أَوَلَمۡ يَرَوۡاْ إِلَىٰ مَا خَلَقَ ٱللَّهُ مِن شَيۡءٖ يَتَفَيَّؤُاْ ظِلَٰلُهُۥ عَنِ ٱلۡيَمِينِ وَٱلشَّمَآئِلِ سُجَّدٗا لِّلَّهِ وَهُمۡ دَٰخِرُونَ",
-      "textTransliteration": "Awa lam yaraw ila ma khalaqa Allahu min shayin yatafayyao thilaluhu AAani alyameeni waalshshamaili sujjadan lillahi wahum dakhiroona",
+      "textTransliteration": "Awa-lam yaraw ilaa maa khalaqal laahu min shai'iny yatafaiya'u zilaaluhoo 'anil yameeni washshamaaa'-ili sujjadal lillaahi Wa-hum daakhiroon",
       "textEnglishSaheeh": "Have they not considered what things Allah has created? Their shadows incline to the right and to the left, prostrating to Allah, while they are humble.",
       "textEnglishMustafa": "Have they not considered how the shadows of everything Allah has created incline to the right and the left ˹as the sun moves˺, totally submitting to Allah in all humility?",
       "juz": 14,
@@ -554,7 +554,7 @@
     {
       "id": 49,
       "textArabic": "وَلِلَّهِۤ يَسۡجُدُۤ مَا فِي ٱلسَّمَٰوَٰتِ وَمَا فِي ٱلۡأَرۡضِ مِن دَآبَّةٖ وَٱلۡمَلَٰٓئِكَةُ وَهُمۡ لَا يَسۡتَكۡبِرُونَ",
-      "textTransliteration": "Walillahi yasjudu ma fee alssamawati wama fee alardi min dabbatin waalmalaikatu wahum la yastakbiroona",
+      "textTransliteration": "Wa-lillaahi yasjudu maa fis samaawaati Wa-maa fil ardi min daaabbatinw walma-laaa'ikatu Wa-hum laa yastakbiroon",
       "textEnglishSaheeh": "And to Allah prostrates whatever is in the heavens and whatever is on the earth of creatures, and the angels [as well], and they are not arrogant.",
       "textEnglishMustafa": "And to Allah ˹alone˺ bows down ˹in submission˺ whatever is in the heavens and whatever is on the earth of living creatures, as do the angels—who are not too proud ˹to do so˺.",
       "juz": 14,
@@ -565,7 +565,7 @@
     {
       "id": 50,
       "textArabic": "يَخَافُونَ رَبَّهُم مِّن فَوۡقِهِمۡ وَيَفۡعَلُونَ مَا يُؤۡمَرُونَ۩",
-      "textTransliteration": "Yakhafoona rabbahum min fawqihim wayafAAaloona ma yumaroona",
+      "textTransliteration": "yakhaafoona Rabbahum min fawqihim Wa-yaf'aloona maa yu'maroon",
       "textEnglishSaheeh": "They fear their Lord above them, and they do what they are commanded.",
       "textEnglishMustafa": "They fear their Lord above them, and do whatever they are commanded.",
       "juz": 14,
@@ -576,7 +576,7 @@
     {
       "id": 51,
       "textArabic": "۞ وَقَالَ ٱللَّهُ لَا تَتَّخِذُوٓاْ إِلَٰهَيۡنِ ٱثۡنَيۡنِۖ إِنَّمَا هُوَ إِلَٰهٞ وَٰحِدٞ فَإِيَّٰيَ فَٱرۡهَبُونِ",
-      "textTransliteration": "Waqala Allahu la tattakhithoo ilahayni ithnayni innama huwa ilahun wahidun faiyyaya fairhabooni",
+      "textTransliteration": "Wa-qaalal laahu laa tatta-khizooo ilaahainis naini innamaa Huwa Ilaahunw Waahid; fa-iyyaaya farhaboon",
       "textEnglishSaheeh": "And Allah has said, \"Do not take for yourselves two deities. He is but one God, so fear only Me.\"",
       "textEnglishMustafa": "And Allah has said, “Do not take two gods. There is only One God. So be in awe of Me ˹alone˺.”",
       "juz": 14,
@@ -587,7 +587,7 @@
     {
       "id": 52,
       "textArabic": "وَلَهُۥ مَا فِي ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِ وَلَهُ ٱلدِّينُ وَاصِبًاۚ أَفَغَيۡرَ ٱللَّهِ تَتَّقُونَ",
-      "textTransliteration": "Walahu ma fee alssamawati waalardi walahu alddeenu wasiban afaghayra Allahi tattaqoona",
+      "textTransliteration": "Wa-lahoo maa fis samaawaati wal-ardi Wa-lahud deenu waasibaa; afaghairal laahi tattaqoon",
       "textEnglishSaheeh": "And to Him belongs whatever is in the heavens and the earth, and to Him is [due] worship constantly. Then is it other than Allah that you fear?",
       "textEnglishMustafa": "To Him belongs whatever is in the heavens and the earth, and to Him ˹alone˺ is the everlasting devotion. Will you then fear any other than Allah?",
       "juz": 14,
@@ -598,7 +598,7 @@
     {
       "id": 53,
       "textArabic": "وَمَا بِكُم مِّن نِّعۡمَةٖ فَمِنَ ٱللَّهِۖ ثُمَّ إِذَا مَسَّكُمُ ٱلضُّرُّ فَإِلَيۡهِ تَجۡـَٔرُونَ",
-      "textTransliteration": "Wama bikum min niAAmatin famina Allahi thumma itha massakumu alddurru failayhi tajaroona",
+      "textTransliteration": "Wa-maa bikum min ni'matin faminal laahi summa izaa massakumud durru fa-ilaihi taj'aroon",
       "textEnglishSaheeh": "And whatever you have of favor - it is from Allah. Then when adversity touches you, to Him you cry for help.",
       "textEnglishMustafa": "Whatever blessings you have are from Allah. Then whenever hardship touches you, to Him ˹alone˺ you cry ˹for help˺.",
       "juz": 14,
@@ -609,7 +609,7 @@
     {
       "id": 54,
       "textArabic": "ثُمَّ إِذَا كَشَفَ ٱلضُّرَّ عَنكُمۡ إِذَا فَرِيقٞ مِّنكُم بِرَبِّهِمۡ يُشۡرِكُونَ",
-      "textTransliteration": "Thumma itha kashafa alddurra AAankum itha fareequn minkum birabbihim yushrikoona",
+      "textTransliteration": "Summaa izaa kashafad durra 'ankum izaa fareequm minkum bi-Rabbihim yushrikoon",
       "textEnglishSaheeh": "Then when He removes the adversity from you, at once a party of you associates others with their Lord",
       "textEnglishMustafa": "Then as soon as He removes the hardship from you, a group of you associates ˹others˺ with their Lord ˹in worship˺,",
       "juz": 14,
@@ -620,7 +620,7 @@
     {
       "id": 55,
       "textArabic": "لِيَكۡفُرُواْ بِمَآ ءَاتَيۡنَٰهُمۡۚ فَتَمَتَّعُواْ فَسَوۡفَ تَعۡلَمُونَ",
-      "textTransliteration": "Liyakfuroo bima ataynahum fatamattaAAoo fasawfa taAAlamoona",
+      "textTransliteration": "Liyakfuroo bimaa aatainaahum; fatamatta'oo, faswfa ta'lamoon",
       "textEnglishSaheeh": "So they will deny what We have given them. Then enjoy yourselves, for you are going to know.",
       "textEnglishMustafa": "only returning Our favours with ingratitude. So enjoy yourselves, for you will soon know.",
       "juz": 14,
@@ -631,7 +631,7 @@
     {
       "id": 56,
       "textArabic": "وَيَجۡعَلُونَ لِمَا لَا يَعۡلَمُونَ نَصِيبٗا مِّمَّا رَزَقۡنَٰهُمۡۗ تَٱللَّهِ لَتُسۡـَٔلُنَّ عَمَّا كُنتُمۡ تَفۡتَرُونَ",
-      "textTransliteration": "WayajAAaloona lima la yaAAlamoona naseeban mimma razaqnahum taAllahi latusalunna AAamma kuntum taftaroona",
+      "textTransliteration": "Wa-yaj'aloona limaa laa ya'lamoona naseebam mimmaa razaqnnaahum; tallaahi latus'alunaa 'ammaa kuntum taftaroon",
       "textEnglishSaheeh": "And they assign to what they do not know a portion of that which We have provided them. By Allah, you will surely be questioned about what you used to invent.",
       "textEnglishMustafa": "And they ˹even˺ assign to those ˹idols˺—who know nothing—a share of what We have provided for them. By Allah! You will certainly be questioned about whatever ˹lies˺ you used to fabricate ˹against Allah˺.",
       "juz": 14,
@@ -642,7 +642,7 @@
     {
       "id": 57,
       "textArabic": "وَيَجۡعَلُونَ لِلَّهِ ٱلۡبَنَٰتِ سُبۡحَٰنَهُۥ وَلَهُم مَّا يَشۡتَهُونَ",
-      "textTransliteration": "WayajAAaloona lillahi albanati subhanahu walahum ma yashtahoona",
+      "textTransliteration": "Wa-yaj'aloona lillaahil banaati Subhaanahoo Wa-lahum maa yashtahoon",
       "textEnglishSaheeh": "And they attribute to Allah daughters - exalted is He - and for them is what they desire.",
       "textEnglishMustafa": "And they attribute ˹angels as˺ daughters to Allah—glory be to Him!—the opposite of what they desire for themselves.",
       "juz": 14,
@@ -653,7 +653,7 @@
     {
       "id": 58,
       "textArabic": "وَإِذَا بُشِّرَ أَحَدُهُم بِٱلۡأُنثَىٰ ظَلَّ وَجۡهُهُۥ مُسۡوَدّٗا وَهُوَ كَظِيمٞ",
-      "textTransliteration": "Waitha bushshira ahaduhum bialontha thalla wajhuhu muswaddan wahuwa katheemun",
+      "textTransliteration": "Wa-izaa bushshira ahaduhum bil-unsaa zalla wajhuhoo muswaddanw Wa-huwa kazeem",
       "textEnglishSaheeh": "And when one of them is informed of [the birth of] a female, his face becomes dark, and he suppresses grief.",
       "textEnglishMustafa": "Whenever one of them is given the good news of a baby girl, his face grows gloomy, as he suppresses his rage.",
       "juz": 14,
@@ -664,7 +664,7 @@
     {
       "id": 59,
       "textArabic": "يَتَوَٰرَىٰ مِنَ ٱلۡقَوۡمِ مِن سُوٓءِ مَا بُشِّرَ بِهِۦٓۚ أَيُمۡسِكُهُۥ عَلَىٰ هُونٍ أَمۡ يَدُسُّهُۥ فِي ٱلتُّرَابِۗ أَلَا سَآءَ مَا يَحۡكُمُونَ",
-      "textTransliteration": "Yatawara mina alqawmi min sooi ma bushshira bihi ayumsikuhu AAala hoonin am yadussuhu fee altturabi ala saa ma yahkumoona",
+      "textTransliteration": "yatawaaraa minal qawmi min sooo'i maa bushshira bih; a-yumsikuhoo 'alaa hoonin am yadussuhoo fit turaab; alaa saaa'a maa yahkumoon",
       "textEnglishSaheeh": "He hides himself from the people because of the ill of which he has been informed. Should he keep it in humiliation or bury it in the ground? Unquestionably, evil is what they decide.",
       "textEnglishMustafa": "He hides himself from the people because of the bad news he has received. Should he keep her in disgrace, or bury her ˹alive˺ in the ground? Evil indeed is their judgment!",
       "juz": 14,
@@ -675,7 +675,7 @@
     {
       "id": 60,
       "textArabic": "لِلَّذِينَ لَا يُؤۡمِنُونَ بِٱلۡأٓخِرَةِ مَثَلُ ٱلسَّوۡءِۖ وَلِلَّهِ ٱلۡمَثَلُ ٱلۡأَعۡلَىٰۚ وَهُوَ ٱلۡعَزِيزُ ٱلۡحَكِيمُ",
-      "textTransliteration": "Lillatheena la yuminoona bialakhirati mathalu alssawi walillahi almathalu alaAAla wahuwa alAAazeezu alhakeemu",
+      "textTransliteration": "Lillazeena laa yu'minoona bil-Aakhirati masalus saw'i Wa-lillaahil masalul a'laa; Wa-Huwal 'Azeezul Hakeem",
       "textEnglishSaheeh": "For those who do not believe in the Hereafter is the description of evil; and for Allah is the highest attribute. And He is Exalted in Might, the Wise.",
       "textEnglishMustafa": "To those who disbelieve in the Hereafter belong all evil qualities, whereas to Allah belong the finest attributes. And He is the Almighty, All-Wise.",
       "juz": 14,
@@ -686,7 +686,7 @@
     {
       "id": 61,
       "textArabic": "وَلَوۡ يُؤَاخِذُ ٱللَّهُ ٱلنَّاسَ بِظُلۡمِهِم مَّا تَرَكَ عَلَيۡهَا مِن دَآبَّةٖ وَلَٰكِن يُؤَخِّرُهُمۡ إِلَىٰٓ أَجَلٖ مُّسَمّٗىۖ فَإِذَا جَآءَ أَجَلُهُمۡ لَا يَسۡتَـٔۡخِرُونَ سَاعَةٗ وَلَا يَسۡتَقۡدِمُونَ",
-      "textTransliteration": "Walaw yuakhithu Allahu alnnasa bithulmihim ma taraka AAalayha min dabbatin walakin yuakhkhiruhum ila ajalin musamman faitha jaa ajaluhum la yastakhiroona saAAatan wala yastaqdimoona",
+      "textTransliteration": "Wa-law yu'aakhizul laahun naasa bizulminhim maa taraka 'alaihaa min daaabbatinw Wa-laakiny yu'akhkhiruhum ilaaa ajalim musamman fa-izaa jaaa'a ajaluhum laa yastaakhiroona saa'atanw Wa-laa yastaqdimoon",
       "textEnglishSaheeh": "And if Allah were to impose blame on the people for their wrongdoing, He would not have left upon the earth any creature, but He defers them for a specified term. And when their term has come, they will not remain behind an hour, nor will they precede [it].",
       "textEnglishMustafa": "If Allah were to punish people ˹immediately˺ for their wrongdoing, He would not have left a single living being on earth. But He delays them for an appointed term. And when their time arrives, they cannot delay it for a moment, nor could they advance it.",
       "juz": 14,
@@ -697,7 +697,7 @@
     {
       "id": 62,
       "textArabic": "وَيَجۡعَلُونَ لِلَّهِ مَا يَكۡرَهُونَۚ وَتَصِفُ أَلۡسِنَتُهُمُ ٱلۡكَذِبَ أَنَّ لَهُمُ ٱلۡحُسۡنَىٰۚ لَا جَرَمَ أَنَّ لَهُمُ ٱلنَّارَ وَأَنَّهُم مُّفۡرَطُونَ",
-      "textTransliteration": "WayajAAaloona lillahi ma yakrahoona watasifu alsinatuhumu alkathiba anna lahumu alhusna la jarama anna lahumu alnnara waannahum mufratoona",
+      "textTransliteration": "Wa-yaj'aloona lillaahi maa yakrahoona Wa-tasifu alsinatuhumul kaziba anna lahumul husnaa laa jarama anna lahumun Naara Wa-annahum mufratoon",
       "textEnglishSaheeh": "And they attribute to Allah that which they dislike, and their tongues assert the lie that they will have the best [from Him]. Assuredly, they will have the Fire, and they will be [therein] neglected.",
       "textEnglishMustafa": "They attribute to Allah what they hate ˹for themselves˺, and their tongues utter the lie that they will have the finest reward. Without a doubt, for them is the Fire, where they will be abandoned.",
       "juz": 14,
@@ -708,7 +708,7 @@
     {
       "id": 63,
       "textArabic": "تَٱللَّهِ لَقَدۡ أَرۡسَلۡنَآ إِلَىٰٓ أُمَمٖ مِّن قَبۡلِكَ فَزَيَّنَ لَهُمُ ٱلشَّيۡطَٰنُ أَعۡمَٰلَهُمۡ فَهُوَ وَلِيُّهُمُ ٱلۡيَوۡمَ وَلَهُمۡ عَذَابٌ أَلِيمٞ",
-      "textTransliteration": "TaAllahi laqad arsalna ila omamin min qablika fazayyana lahumu alshshaytanu aAAmalahum fahuwa waliyyuhumu alyawma walahum AAathabun aleemun",
+      "textTransliteration": "Tallaahi laqad arsalnaaa ilaaa umamim min qablika fazayyana lahumush Shaitaanu a'maalahum fahuwa waliyyuhumul yawma Wa-lahum 'azaabun aleem",
       "textEnglishSaheeh": "By Allah, We did certainly send [messengers] to nations before you, but Satan made their deeds attractive to them. And he is the disbelievers' ally today [as well], and they will have a painful punishment.",
       "textEnglishMustafa": "By Allah! We have surely sent messengers to communities before you ˹O Prophet˺, but Satan made their misdeeds appealing to them. So he is their patron today, and they will suffer a painful punishment.",
       "juz": 14,
@@ -719,7 +719,7 @@
     {
       "id": 64,
       "textArabic": "وَمَآ أَنزَلۡنَا عَلَيۡكَ ٱلۡكِتَٰبَ إِلَّا لِتُبَيِّنَ لَهُمُ ٱلَّذِي ٱخۡتَلَفُواْ فِيهِ وَهُدٗى وَرَحۡمَةٗ لِّقَوۡمٖ يُؤۡمِنُونَ",
-      "textTransliteration": "Wama anzalna AAalayka alkitaba illa litubayyina lahumu allathee ikhtalafoo feehi wahudan warahmatan liqawmin yuminoona",
+      "textTransliteration": "Wa-maaa anzalnaa 'alaikal Kitaaba illaa litubaiyina lahumul lazikh talafoo feehi Wa-hudanw Wa-rahmatal liqawminy yu'minoon",
       "textEnglishSaheeh": "And We have not revealed to you the Book, [O Muhammad], except for you to make clear to them that wherein they have differed and as guidance and mercy for a people who believe.",
       "textEnglishMustafa": "We have revealed to you the Book only to clarify for them what they differed about, and as a guide and mercy for those who believe.",
       "juz": 14,
@@ -730,7 +730,7 @@
     {
       "id": 65,
       "textArabic": "وَٱللَّهُ أَنزَلَ مِنَ ٱلسَّمَآءِ مَآءٗ فَأَحۡيَا بِهِ ٱلۡأَرۡضَ بَعۡدَ مَوۡتِهَآۚ إِنَّ فِي ذَٰلِكَ لَأٓيَةٗ لِّقَوۡمٖ يَسۡمَعُونَ",
-      "textTransliteration": "WaAllahu anzala mina alssamai maan faahya bihi alarda baAAda mawtiha inna fee thalika laayatan liqawmin yasmaAAoona",
+      "textTransliteration": "Wallaahu anzala minas samaaa'i maaa'an fa-ahyaa bihil arda ba'da mawtihaa; inna fee zaalika la-aayatal liqaw-miny yasma'oon",
       "textEnglishSaheeh": "And Allah has sent down rain from the sky and given life thereby to the earth after its lifelessness. Indeed in that is a sign for a people who listen.",
       "textEnglishMustafa": "And Allah sends down rain from the sky, giving life to the earth after its death. Surely in this is a sign for those who listen.",
       "juz": 14,
@@ -741,7 +741,7 @@
     {
       "id": 66,
       "textArabic": "وَإِنَّ لَكُمۡ فِي ٱلۡأَنۡعَٰمِ لَعِبۡرَةٗۖ نُّسۡقِيكُم مِّمَّا فِي بُطُونِهِۦ مِنۢ بَيۡنِ فَرۡثٖ وَدَمٖ لَّبَنًا خَالِصٗا سَآئِغٗا لِّلشَّٰرِبِينَ",
-      "textTransliteration": "Wainna lakum fee alanAAami laAAibratan nusqeekum mimma fee butoonihi min bayni farthin wadamin labanan khalisan saighan lilshsharibeena",
+      "textTransliteration": "Wa-inna lakum fil an'aami la'ibrah; nusqeekum mimmmaa fee butoonihee mim baini farsinw Wa-damil labanann khaalisan saaa'ighallish shaaribeen",
       "textEnglishSaheeh": "And indeed, for you in grazing livestock is a lesson. We give you drink from what is in their bellies - between excretion and blood - pure milk, palatable to drinkers.",
       "textEnglishMustafa": "And there is certainly a lesson for you in cattle: We give you to drink of what is in their bellies, from between digested food and blood: pure milk, pleasant to drink.",
       "juz": 14,
@@ -752,7 +752,7 @@
     {
       "id": 67,
       "textArabic": "وَمِن ثَمَرَٰتِ ٱلنَّخِيلِ وَٱلۡأَعۡنَٰبِ تَتَّخِذُونَ مِنۡهُ سَكَرٗا وَرِزۡقًا حَسَنًاۚ إِنَّ فِي ذَٰلِكَ لَأٓيَةٗ لِّقَوۡمٖ يَعۡقِلُونَ",
-      "textTransliteration": "Wamin thamarati alnnakheeli waalaAAnabi tattakhithoona minhu sakaran warizqan hasanan inna fee thalika laayatan liqawmin yaAAqiloona",
+      "textTransliteration": "Wa-min samaraatin nakheeli wal-a'nnaabi tattakhizoona minhu sakaranw Wa-rizqann hasanaa; inna fee zaalika la-Aayatal liqawmien ya'qiloon",
       "textEnglishSaheeh": "And from the fruits of the palm trees and grapevines you take intoxicant and good provision. Indeed in that is a sign for a people who reason.",
       "textEnglishMustafa": "And from the fruits of palm trees and grapevines you derive intoxicants as well as wholesome provision. Surely in this is a sign for those who understand.",
       "juz": 14,
@@ -763,7 +763,7 @@
     {
       "id": 68,
       "textArabic": "وَأَوۡحَىٰ رَبُّكَ إِلَى ٱلنَّحۡلِ أَنِ ٱتَّخِذِي مِنَ ٱلۡجِبَالِ بُيُوتٗا وَمِنَ ٱلشَّجَرِ وَمِمَّا يَعۡرِشُونَ",
-      "textTransliteration": "Waawha rabbuka ila alnnahli ani ittakhithee mina aljibali buyootan wamina alshshajari wamimma yaAArishoona",
+      "textTransliteration": "Wa-awhaa Rabbuka ilan nahli anit takhizee minal jabaali buyootanw Wa-minash shajari Wa-mimmaa ya'rishoon",
       "textEnglishSaheeh": "And your Lord inspired to the bee, \"Take for yourself among the mountains, houses, and among the trees and [in] that which they construct.",
       "textEnglishMustafa": "And your Lord inspired the bees: “Make ˹your˺ homes in the mountains, the trees, and in what people construct,",
       "juz": 14,
@@ -774,7 +774,7 @@
     {
       "id": 69,
       "textArabic": "ثُمَّ كُلِي مِن كُلِّ ٱلثَّمَرَٰتِ فَٱسۡلُكِي سُبُلَ رَبِّكِ ذُلُلٗاۚ يَخۡرُجُ مِنۢ بُطُونِهَا شَرَابٞ مُّخۡتَلِفٌ أَلۡوَٰنُهُۥ فِيهِ شِفَآءٞ لِّلنَّاسِۚ إِنَّ فِي ذَٰلِكَ لَأٓيَةٗ لِّقَوۡمٖ يَتَفَكَّرُونَ",
-      "textTransliteration": "Thumma kulee min kulli alththamarati faoslukee subula rabbiki thululan yakhruju min butooniha sharabun mukhtalifun alwanuhu feehi shifaon lilnnasi inna fee thalika laayatan liqawmin yatafakkaroona",
+      "textTransliteration": "Summma kulee min kullis samaraati faslukee subula Rabbiki zululaa; yakhruju mim butoonihaa sharaabum mukh-talifun alwaanuhoo feehi shifaaa'ul linnaas, innna fee zaalika la-Aayatal liqawmien yatafakkaroon",
       "textEnglishSaheeh": "Then eat from all the fruits and follow the ways of your Lord laid down [for you].\" There emerges from their bellies a drink, varying in colors, in which there is healing for people. Indeed in that is a sign for a people who give thought.",
       "textEnglishMustafa": "and feed from ˹the flower of˺ any fruit ˹you please˺ and follow the ways your Lord has made easy for you.” From their bellies comes forth liquid of varying colours, in which there is healing for people. Surely in this is a sign for those who reflect.",
       "juz": 14,
@@ -785,7 +785,7 @@
     {
       "id": 70,
       "textArabic": "وَٱللَّهُ خَلَقَكُمۡ ثُمَّ يَتَوَفَّىٰكُمۡۚ وَمِنكُم مَّن يُرَدُّ إِلَىٰٓ أَرۡذَلِ ٱلۡعُمُرِ لِكَيۡ لَا يَعۡلَمَ بَعۡدَ عِلۡمٖ شَيۡـًٔاۚ إِنَّ ٱللَّهَ عَلِيمٞ قَدِيرٞ",
-      "textTransliteration": "WaAllahu khalaqakum thumma yatawaffakum waminkum man yuraddu ila arthali alAAumuri likay la yaAAlama baAAda AAilmin shayan inna Allaha AAaleemun qadeerun",
+      "textTransliteration": "Wallaahu khalaqakum suma tatawaffaakum; Wa-minkum maien yuradu ilaaa arzalil 'umuri likai laa ya'lama ba'da 'ilmin shai'aa; innal laaha 'Aleemun Qadeer",
       "textEnglishSaheeh": "And Allah created you; then He will take you in death. And among you is he who is reversed to the most decrepit [old] age so that he will not know, after [having had] knowledge, a thing. Indeed, Allah is Knowing and Competent.",
       "textEnglishMustafa": "Allah has created you, and then causes you to die. And some of you are left to reach the most feeble stage of life so that they may know nothing after having known much. Indeed, Allah is All-Knowing, Most Capable.",
       "juz": 14,
@@ -796,7 +796,7 @@
     {
       "id": 71,
       "textArabic": "وَٱللَّهُ فَضَّلَ بَعۡضَكُمۡ عَلَىٰ بَعۡضٖ فِي ٱلرِّزۡقِۚ فَمَا ٱلَّذِينَ فُضِّلُواْ بِرَآدِّي رِزۡقِهِمۡ عَلَىٰ مَا مَلَكَتۡ أَيۡمَٰنُهُمۡ فَهُمۡ فِيهِ سَوَآءٌۚ أَفَبِنِعۡمَةِ ٱللَّهِ يَجۡحَدُونَ",
-      "textTransliteration": "WaAllahu faddala baAAdakum AAala baAAdin fee alrrizqi fama allatheena fuddiloo biraddee rizqihim AAala ma malakat aymanuhum fahum feehi sawaon afabiniAAmati Allahi yajhadoona",
+      "textTransliteration": "Wallaahu faddala ba'dakum 'alaa ba'din fir rizq; famal lazeena fuddiloo biraaaddee rizqihim 'alaa maa malakat aimaanuhum fahum feehi sawaaa'; afabini'matil laahi yajhadoon",
       "textEnglishSaheeh": "And Allah has favored some of you over others in provision. But those who were favored would not hand over their provision to those whom their right hands possess so they would be equal to them therein. Then is it the favor of Allah they reject?",
       "textEnglishMustafa": "And Allah has favoured some of you over others in provision. But those who have been much favoured would not share their wealth with those ˹bondspeople˺ in their possession, making them their equals. Do they then deny Allah’s favours?",
       "juz": 14,
@@ -807,7 +807,7 @@
     {
       "id": 72,
       "textArabic": "وَٱللَّهُ جَعَلَ لَكُم مِّنۡ أَنفُسِكُمۡ أَزۡوَٰجٗا وَجَعَلَ لَكُم مِّنۡ أَزۡوَٰجِكُم بَنِينَ وَحَفَدَةٗ وَرَزَقَكُم مِّنَ ٱلطَّيِّبَٰتِۚ أَفَبِٱلۡبَٰطِلِ يُؤۡمِنُونَ وَبِنِعۡمَتِ ٱللَّهِ هُمۡ يَكۡفُرُونَ",
-      "textTransliteration": "WaAllahu jaAAala lakum min anfusikum azwajan wajaAAala lakum min azwajikum baneena wahafadatan warazaqakum mina alttayyibati afabialbatili yuminoona wabiniAAmati Allahi hum yakfuroona",
+      "textTransliteration": "Wallaahu ja'ala lakum min anfusikum azwaajanw Wa-ja'ala lakum min azwaajikum baneena Wa-hafadatanw Wa-razaqakum minat taiyyibaat; afabil-baatili yu'minoona Wa-bini'matil laahi hum yakkfuroon",
       "textEnglishSaheeh": "And Allah has made for you from yourselves mates and has made for you from your mates sons and grandchildren and has provided for you from the good things. Then in falsehood do they believe and in the favor of Allah they disbelieve?",
       "textEnglishMustafa": "And Allah has made for you spouses of your own kind, and given you through your spouses children and grandchildren. And He has granted you good, lawful provisions. Are they then faithful to falsehood and ungrateful for Allah’s favours?",
       "juz": 14,
@@ -818,7 +818,7 @@
     {
       "id": 73,
       "textArabic": "وَيَعۡبُدُونَ مِن دُونِ ٱللَّهِ مَا لَا يَمۡلِكُ لَهُمۡ رِزۡقٗا مِّنَ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِ شَيۡـٔٗا وَلَا يَسۡتَطِيعُونَ",
-      "textTransliteration": "WayaAAbudoona min dooni Allahi ma la yamliku lahum rizqan mina alssamawati waalardi shayan wala yastateeAAoona",
+      "textTransliteration": "Wa-ya'budoona min doonil laahi maa laa yamliku lahum rizqam minas samaawaati wal-ardi shai'anw Wa-laa yastatee'oon",
       "textEnglishSaheeh": "And they worship besides Allah that which does not possess for them [the power of] provision from the heavens and the earth at all, and [in fact], they are unable.",
       "textEnglishMustafa": "Yet they worship besides Allah those ˹idols˺ who do not afford them any provision from the heavens and the earth, nor do they have the power to.",
       "juz": 14,
@@ -829,7 +829,7 @@
     {
       "id": 74,
       "textArabic": "فَلَا تَضۡرِبُواْ لِلَّهِ ٱلۡأَمۡثَالَۚ إِنَّ ٱللَّهَ يَعۡلَمُ وَأَنتُمۡ لَا تَعۡلَمُونَ",
-      "textTransliteration": "Fala tadriboo lillahi alamthala inna Allaha yaAAlamu waantum la taAAlamoona",
+      "textTransliteration": "Falaa tadriboo lillaahil amsaal; innal laaha ya'lamu Wa-antum laa ta'lamoon",
       "textEnglishSaheeh": "So do not assert similarities to Allah. Indeed, Allah knows and you do not know.",
       "textEnglishMustafa": "So do not set up equals to Allah, for Allah certainly knows and you do not know.",
       "juz": 14,
@@ -840,7 +840,7 @@
     {
       "id": 75,
       "textArabic": "۞ ضَرَبَ ٱللَّهُ مَثَلًا عَبۡدٗا مَّمۡلُوكٗا لَّا يَقۡدِرُ عَلَىٰ شَيۡءٖ وَمَن رَّزَقۡنَٰهُ مِنَّا رِزۡقًا حَسَنٗا فَهُوَ يُنفِقُ مِنۡهُ سِرّٗا وَجَهۡرًاۖ هَلۡ يَسۡتَوُۥنَۚ ٱلۡحَمۡدُ لِلَّهِۚ بَلۡ أَكۡثَرُهُمۡ لَا يَعۡلَمُونَ",
-      "textTransliteration": "Daraba Allahu mathalan AAabdan mamlookan la yaqdiru AAala shayin waman razaqnahu minna rizqan hasanan fahuwa yunfiqu minhu sirran wajahran hal yastawoona alhamdu lillahi bal aktharuhum la yaAAlamoona",
+      "textTransliteration": "Darabal laahu masalan 'abdam mammlookal laa yaqdiru 'alaa shai'inw Wa-mar razaqnaahu mminnaa rizqan hasanan fahuwa yunfiqu minhu sirranw Wa-jahra; hal yasta-woon; alhamdu lillaah; bal aksaruhum laa ya'lamoon",
       "textEnglishSaheeh": "Allah presents an example: a slave [who is] owned and unable to do a thing and he to whom We have provided from Us good provision, so he spends from it secretly and publicly. Can they be equal? Praise to Allah! But most of them do not know.",
       "textEnglishMustafa": "Allah sets forth a parable: a slave who lacks all means, compared to a ˹free˺ man to whom We granted a good provision, of which he donates ˹freely,˺ openly and secretly. Are they equal? Praise be to Allah. In fact, most of them do not know.",
       "juz": 14,
@@ -851,7 +851,7 @@
     {
       "id": 76,
       "textArabic": "وَضَرَبَ ٱللَّهُ مَثَلٗا رَّجُلَيۡنِ أَحَدُهُمَآ أَبۡكَمُ لَا يَقۡدِرُ عَلَىٰ شَيۡءٖ وَهُوَ كَلٌّ عَلَىٰ مَوۡلَىٰهُ أَيۡنَمَا يُوَجِّههُّ لَا يَأۡتِ بِخَيۡرٍ هَلۡ يَسۡتَوِي هُوَ وَمَن يَأۡمُرُ بِٱلۡعَدۡلِ وَهُوَ عَلَىٰ صِرَٰطٖ مُّسۡتَقِيمٖ",
-      "textTransliteration": "Wadaraba Allahu mathalan rajulayni ahaduhuma abkamu la yaqdiru AAala shayin wahuwa kallun AAala mawlahu aynama yuwajjihhu la yati bikhayrin hal yastawee huwa waman yamuru bialAAadli wahuwa AAala siratin mustaqeemin",
+      "textTransliteration": "Wa-darabal laahu masalar rajulaini ahaduhumaaa abkamu laa yaqdiru 'alaa shai'inw Wa-huwa kallun 'alaa mawlaahu ainamaa yuwajjihhu laa yaati bikhairin hal yastawee huwa Wa-maien yaamuru bil'adli Wa-huwa 'alaa Siraatim Mustaqeem",
       "textEnglishSaheeh": "And Allah presents an example of two men, one of them dumb and unable to do a thing, while he is a burden to his guardian. Wherever he directs him, he brings no good. Is he equal to one who commands justice, while he is on a straight path?",
       "textEnglishMustafa": "And Allah sets forth a parable of two men: one of them is dumb, incapable of anything. He is a burden on his master. Wherever he is sent, he brings no good. Can such a person be equal to the one who commands justice and is on the Straight Path?",
       "juz": 14,
@@ -862,7 +862,7 @@
     {
       "id": 77,
       "textArabic": "وَلِلَّهِ غَيۡبُ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِۚ وَمَآ أَمۡرُ ٱلسَّاعَةِ إِلَّا كَلَمۡحِ ٱلۡبَصَرِ أَوۡ هُوَ أَقۡرَبُۚ إِنَّ ٱللَّهَ عَلَىٰ كُلِّ شَيۡءٖ قَدِيرٞ",
-      "textTransliteration": "Walillahi ghaybu alssamawati waalardi wama amru alssaAAati illa kalamhi albasari aw huwa aqrabu inna Allaha AAala kulli shayin qadeerun",
+      "textTransliteration": "Wa-lillaahi ghaibus samaawaati wal-ard; Wa-maaa amrus Saa'ati illaa kalamhil basari aw huwa aqrab; innal laaha 'alaaa kulli shai'in Qadeer",
       "textEnglishSaheeh": "And to Allah belongs the unseen [aspects] of the heavens and the earth. And the command for the Hour is not but as a glance of the eye or even nearer. Indeed, Allah is over all things competent.",
       "textEnglishMustafa": "To Allah ˹alone˺ belongs ˹the knowledge of˺ the unseen in the heavens and the earth. Bringing about the Hour would only take the blink of an eye, or even less. Surely Allah is Most Capable of everything.",
       "juz": 14,
@@ -873,7 +873,7 @@
     {
       "id": 78,
       "textArabic": "وَٱللَّهُ أَخۡرَجَكُم مِّنۢ بُطُونِ أُمَّهَٰتِكُمۡ لَا تَعۡلَمُونَ شَيۡـٔٗا وَجَعَلَ لَكُمُ ٱلسَّمۡعَ وَٱلۡأَبۡصَٰرَ وَٱلۡأَفۡـِٔدَةَ لَعَلَّكُمۡ تَشۡكُرُونَ",
-      "textTransliteration": "WaAllahu akhrajakum min butooni ommahatikum la taAAlamoona shayan wajaAAala lakumu alssamAAa waalabsara waalafidata laAAallakum tashkuroona",
+      "textTransliteration": "Wallaahu akhrajakum mim butooni ummahaatikum laa ta'lamoona shai'anw Wa-ja'ala lakumus sam'a wal-absaara wal-af'idata la'allakum tashkuroon",
       "textEnglishSaheeh": "And Allah has extracted you from the wombs of your mothers not knowing a thing, and He made for you hearing and vision and intellect that perhaps you would be grateful.",
       "textEnglishMustafa": "And Allah brought you out of the wombs of your mothers while you knew nothing, and gave you hearing, sight, and intellect so perhaps you would be thankful.",
       "juz": 14,
@@ -884,7 +884,7 @@
     {
       "id": 79,
       "textArabic": "أَلَمۡ يَرَوۡاْ إِلَى ٱلطَّيۡرِ مُسَخَّرَٰتٖ فِي جَوِّ ٱلسَّمَآءِ مَا يُمۡسِكُهُنَّ إِلَّا ٱللَّهُۚ إِنَّ فِي ذَٰلِكَ لَأٓيَٰتٖ لِّقَوۡمٖ يُؤۡمِنُونَ",
-      "textTransliteration": "Alam yaraw ila alttayri musakhkharatin fee jawwi alssamai ma yumsikuhunna illa Allahu inna fee thalika laayatin liqawmin yuminoona",
+      "textTransliteration": "Alam yaraw ilat tairi musakhkharaatin fee jawwis samaaa'i maa yumsikuhunna illal laah; inna fee zaalika la-Aayaatil liqawminy yu'minoon",
       "textEnglishSaheeh": "Do they not see the birds controlled in the atmosphere of the sky? None holds them up except Allah. Indeed in that are signs for a people who believe.",
       "textEnglishMustafa": "Have they not seen the birds glide in the open sky? None holds them up except Allah. Surely in this are signs for those who believe.",
       "juz": 14,
@@ -895,7 +895,7 @@
     {
       "id": 80,
       "textArabic": "وَٱللَّهُ جَعَلَ لَكُم مِّنۢ بُيُوتِكُمۡ سَكَنٗا وَجَعَلَ لَكُم مِّن جُلُودِ ٱلۡأَنۡعَٰمِ بُيُوتٗا تَسۡتَخِفُّونَهَا يَوۡمَ ظَعۡنِكُمۡ وَيَوۡمَ إِقَامَتِكُمۡ وَمِنۡ أَصۡوَافِهَا وَأَوۡبَارِهَا وَأَشۡعَارِهَآ أَثَٰثٗا وَمَتَٰعًا إِلَىٰ حِينٖ",
-      "textTransliteration": "WaAllahu jaAAala lakum min buyootikum sakanan wajaAAala lakum min juloodi alanAAami buyootan tastakhiffoonaha yawma thaAAnikum wayawma iqamatikum wamin aswafiha waawbariha waashAAariha athathan wamataAAan ila heenin",
+      "textTransliteration": "Wallaahu ja'ala lakum mim buyootikum sakananw Wa-ja'ala lakum min juloodil an'aami buyootan tastakhif-foonahaa yawma za'nikum Wa-yawma iqaamatikum Wa-min aswaafihaa Wa-awbaarihaa Wa-ash'aarihaaa asaasanw Wa-mataa'an ilaa heen",
       "textEnglishSaheeh": "And Allah has made for you from your homes a place of rest and made for you from the hides of the animals tents which you find light on your day of travel and your day of encampment; and from their wool, fur and hair is furnishing and enjoyment for a time.",
       "textEnglishMustafa": "And Allah has made your homes a place to rest, and has given you tents from the hide of animals, light to handle when you travel and when you camp. And out of their wool, fur, and hair He has given you furnishings and goods for a while.",
       "juz": 14,
@@ -906,7 +906,7 @@
     {
       "id": 81,
       "textArabic": "وَٱللَّهُ جَعَلَ لَكُم مِّمَّا خَلَقَ ظِلَٰلٗا وَجَعَلَ لَكُم مِّنَ ٱلۡجِبَالِ أَكۡنَٰنٗا وَجَعَلَ لَكُمۡ سَرَٰبِيلَ تَقِيكُمُ ٱلۡحَرَّ وَسَرَٰبِيلَ تَقِيكُم بَأۡسَكُمۡۚ كَذَٰلِكَ يُتِمُّ نِعۡمَتَهُۥ عَلَيۡكُمۡ لَعَلَّكُمۡ تُسۡلِمُونَ",
-      "textTransliteration": "WaAllahu jaAAala lakum mimma khalaqa thilalan wajaAAala lakum mina aljibali aknanan wajaAAala lakum sarabeela taqeekumu alharra wasarabeela taqeekum basakum kathalika yutimmu niAAmatahu AAalaykum laAAallakum tuslimoona",
+      "textTransliteration": "Wallaahu ja'ala lakum mimmaa khalaqa zilaalanw Wa-ja'ala lakum minal jibaali aknaananw Wa-ja'ala lakum saraabeela taqeekumul harra Wa-saraabeela taqeekum baasakum; kazaalika yutimmu ni'matahoo alaikum la'allakum tuslimoon",
       "textEnglishSaheeh": "And Allah has made for you, from that which He has created, shadows and has made for you from the mountains, shelters and has made for you garments which protect you from the heat and garments which protect you from your [enemy in] battle. Thus does He complete His favor upon you that you might submit [to Him].",
       "textEnglishMustafa": "And Allah has provided you shade out of what He created, and has given you shelter in the mountains. He has also provided you with clothes protecting you from the heat ˹and cold˺, and armour shielding you in battle. This is how He perfects His favour upon you, so perhaps you will ˹fully˺ submit ˹to Him˺.",
       "juz": 14,
@@ -917,7 +917,7 @@
     {
       "id": 82,
       "textArabic": "فَإِن تَوَلَّوۡاْ فَإِنَّمَا عَلَيۡكَ ٱلۡبَلَٰغُ ٱلۡمُبِينُ",
-      "textTransliteration": "Fain tawallaw fainnama AAalayka albalaghu almubeenu",
+      "textTransliteration": "Fa-in tawallaw fa-innamaa 'alaikal balaaghul mubeen",
       "textEnglishSaheeh": "But if they turn away, [O Muhammad] - then only upon you is [responsibility for] clear notification.",
       "textEnglishMustafa": "But if they turn away, then your duty ˹O Prophet˺ is only to deliver ˹the message˺ clearly.",
       "juz": 14,
@@ -928,7 +928,7 @@
     {
       "id": 83,
       "textArabic": "يَعۡرِفُونَ نِعۡمَتَ ٱللَّهِ ثُمَّ يُنكِرُونَهَا وَأَكۡثَرُهُمُ ٱلۡكَٰفِرُونَ",
-      "textTransliteration": "YaAArifoona niAAmata Allahi thumma yunkiroonaha waaktharuhumu alkafiroona",
+      "textTransliteration": "Ya'rifoona ni'matal laahi summa yunkiroonahaa Wa-aksaruhumul kaafiroon",
       "textEnglishSaheeh": "They recognize the favor of Allah; then they deny it. And most of them are disbelievers.",
       "textEnglishMustafa": "They are aware of Allah’s favours, but still deny them. And most of them are ˹truly˺ ungrateful.",
       "juz": 14,
@@ -939,7 +939,7 @@
     {
       "id": 84,
       "textArabic": "وَيَوۡمَ نَبۡعَثُ مِن كُلِّ أُمَّةٖ شَهِيدٗا ثُمَّ لَا يُؤۡذَنُ لِلَّذِينَ كَفَرُواْ وَلَا هُمۡ يُسۡتَعۡتَبُونَ",
-      "textTransliteration": "Wayawma nabAAathu min kulli ommatin shaheedan thumma la yuthanu lillatheena kafaroo wala hum yustaAAtaboona",
+      "textTransliteration": "Wa-yawma nab'asu min kulli ummatin shaheedan summa laa yu'zanu lillazeena kafaroo Wa-laa hum yusta'taboon",
       "textEnglishSaheeh": "And [mention] the Day when We will resurrect from every nation a witness. Then it will not be permitted to the disbelievers [to apologize or make excuses], nor will they be asked to appease [Allah].",
       "textEnglishMustafa": "˹Consider, O Prophet,˺ the Day We will call ˹a prophet as˺ a witness from every faith-community. Then the disbelievers will neither be allowed to plead nor appease ˹their Lord˺.",
       "juz": 14,
@@ -950,7 +950,7 @@
     {
       "id": 85,
       "textArabic": "وَإِذَا رَءَا ٱلَّذِينَ ظَلَمُواْ ٱلۡعَذَابَ فَلَا يُخَفَّفُ عَنۡهُمۡ وَلَا هُمۡ يُنظَرُونَ",
-      "textTransliteration": "Waitha raa allatheena thalamoo alAAathaba fala yukhaffafu AAanhum wala hum yuntharoona",
+      "textTransliteration": "Wa-izaa ra al-lazeena zalamul 'azaaba falaa yukhaf-fafu 'anhum Wa-laa hum yunzaroon",
       "textEnglishSaheeh": "And when those who wronged see the punishment, it will not be lightened for them, nor will they be reprieved.",
       "textEnglishMustafa": "And when the wrongdoers face the punishment, it will not be lightened for them, nor will they be delayed ˹from it˺.",
       "juz": 14,
@@ -961,7 +961,7 @@
     {
       "id": 86,
       "textArabic": "وَإِذَا رَءَا ٱلَّذِينَ أَشۡرَكُواْ شُرَكَآءَهُمۡ قَالُواْ رَبَّنَا هَٰٓؤُلَآءِ شُرَكَآؤُنَا ٱلَّذِينَ كُنَّا نَدۡعُواْ مِن دُونِكَۖ فَأَلۡقَوۡاْ إِلَيۡهِمُ ٱلۡقَوۡلَ إِنَّكُمۡ لَكَٰذِبُونَ",
-      "textTransliteration": "Waitha raa allatheena ashrakoo shurakaahum qaloo rabbana haolai shurakaona allatheena kunna nadAAoo min doonika faalqaw ilayhimu alqawla innakum lakathiboona",
+      "textTransliteration": "Wa-izaa ra al-lazeena ashrakoo shurakaaa'ahum qaaloo Rabbana haaa'ulaaa'i shurakaaa'unal lazeena kunnaa nad'oo min doonika fa-alqaw ilaihimul qawla innakum lakaaziboon",
       "textEnglishSaheeh": "And when those who associated others with Allah see their \"partners,\" they will say,\" Our Lord, these are our partners [to You] whom we used to invoke besides You.\" But they will throw at them the statement, \"Indeed, you are liars.\"",
       "textEnglishMustafa": "And when the polytheists see their associate-gods, they will say, “Our Lord! These are our associate-gods that we used to invoke besides You.” Their gods will throw a rebuttal at them, ˹saying,˺ “You are definitely liars.”",
       "juz": 14,
@@ -972,7 +972,7 @@
     {
       "id": 87,
       "textArabic": "وَأَلۡقَوۡاْ إِلَى ٱللَّهِ يَوۡمَئِذٍ ٱلسَّلَمَۖ وَضَلَّ عَنۡهُم مَّا كَانُواْ يَفۡتَرُونَ",
-      "textTransliteration": "Waalqaw ila Allahi yawmaithin alssalama wadalla AAanhum ma kanoo yaftaroona",
+      "textTransliteration": "Wa-alqaw ilal laahi yawma'izinis salama Wa-dalla 'anhum maa kaanoo yaftaroon",
       "textEnglishSaheeh": "And they will impart to Allah that Day [their] submission, and lost from them is what they used to invent.",
       "textEnglishMustafa": "They will offer ˹full˺ submission to Allah on that Day, and whatever ˹gods˺ they fabricated will fail them.",
       "juz": 14,
@@ -983,7 +983,7 @@
     {
       "id": 88,
       "textArabic": "ٱلَّذِينَ كَفَرُواْ وَصَدُّواْ عَن سَبِيلِ ٱللَّهِ زِدۡنَٰهُمۡ عَذَابٗا فَوۡقَ ٱلۡعَذَابِ بِمَا كَانُواْ يُفۡسِدُونَ",
-      "textTransliteration": "Allatheena kafaroo wasaddoo AAan sabeeli Allahi zidnahum AAathaban fawqa alAAathabi bima kanoo yufsidoona",
+      "textTransliteration": "Allazeena kafaroo Wa-saddoo 'an sabeelil laahi zidnaahum 'azaaban fawqal 'azaabi bimaa kaanoo yufsidoon",
       "textEnglishSaheeh": "Those who disbelieved and averted [others] from the way of Allah - We will increase them in punishment over [their] punishment for what corruption they were causing.",
       "textEnglishMustafa": "For those who disbelieve and hinder ˹others˺ from the Way of Allah, We will add more punishment to their punishment for all the corruption they spread.",
       "juz": 14,
@@ -994,7 +994,7 @@
     {
       "id": 89,
       "textArabic": "وَيَوۡمَ نَبۡعَثُ فِي كُلِّ أُمَّةٖ شَهِيدًا عَلَيۡهِم مِّنۡ أَنفُسِهِمۡۖ وَجِئۡنَا بِكَ شَهِيدًا عَلَىٰ هَٰٓؤُلَآءِۚ وَنَزَّلۡنَا عَلَيۡكَ ٱلۡكِتَٰبَ تِبۡيَٰنٗا لِّكُلِّ شَيۡءٖ وَهُدٗى وَرَحۡمَةٗ وَبُشۡرَىٰ لِلۡمُسۡلِمِينَ",
-      "textTransliteration": "Wayawma nabAAathu fee kulli ommatin shaheedan AAalayhim min anfusihim wajina bika shaheedan AAala haolai wanazzalna AAalayka alkitaba tibyanan likulli shayin wahudan warahmatan wabushra lilmuslimeena",
+      "textTransliteration": "Wa-yawma nab'asu fee kulli ummmatin shaheedan 'alaihim min anfusihim Wa-ji'naa bika shaheedan 'alaa haaa'ulaaa'; Wa-nazzalnaa 'alaikal Kitaaba tibyaanal likulli shai'inw Wa-hudanw Wa-rahmatanw Wa-bushraa lilmuslimeen",
       "textEnglishSaheeh": "And [mention] the Day when We will resurrect among every nation a witness over them from themselves. And We will bring you, [O Muhammad], as a witness over your nation. And We have sent down to you the Book as clarification for all things and as guidance and mercy and good tidings for the Muslims.",
       "textEnglishMustafa": "˹Consider, O Prophet,˺ the Day We will call against every faith-community a witness of their own. And We will call you to be a witness against these ˹people of yours˺. We have revealed to you the Book as an explanation of all things, a guide, a mercy, and good news for those who ˹fully˺ submit.",
       "juz": 14,
@@ -1005,7 +1005,7 @@
     {
       "id": 90,
       "textArabic": "۞ إِنَّ ٱللَّهَ يَأۡمُرُ بِٱلۡعَدۡلِ وَٱلۡإِحۡسَٰنِ وَإِيتَآيِٕ ذِي ٱلۡقُرۡبَىٰ وَيَنۡهَىٰ عَنِ ٱلۡفَحۡشَآءِ وَٱلۡمُنكَرِ وَٱلۡبَغۡيِۚ يَعِظُكُمۡ لَعَلَّكُمۡ تَذَكَّرُونَ",
-      "textTransliteration": "Inna Allaha yamuru bialAAadli waalihsani waeetai thee alqurba wayanha AAani alfahshai waalmunkari waalbaghyi yaAAithukum laAAallakum tathakkaroona",
+      "textTransliteration": "Innal laaha ya'muru bil-'adli wal-ihsaani Wa-eetaaa'i zil qurbaa Wa-yanhaa 'anil fahshaaa'i wal-munkari walbagh-i' ya'izukum la'allakum tazakkaroon",
       "textEnglishSaheeh": "Indeed, Allah orders justice and good conduct and giving to relatives and forbids immorality and bad conduct and oppression. He admonishes you that perhaps you will be reminded.",
       "textEnglishMustafa": "Indeed, Allah commands justice, grace, as well as courtesy to close relatives. He forbids indecency, wickedness, and aggression. He instructs you so perhaps you will be mindful.",
       "juz": 14,
@@ -1016,7 +1016,7 @@
     {
       "id": 91,
       "textArabic": "وَأَوۡفُواْ بِعَهۡدِ ٱللَّهِ إِذَا عَٰهَدتُّمۡ وَلَا تَنقُضُواْ ٱلۡأَيۡمَٰنَ بَعۡدَ تَوۡكِيدِهَا وَقَدۡ جَعَلۡتُمُ ٱللَّهَ عَلَيۡكُمۡ كَفِيلًاۚ إِنَّ ٱللَّهَ يَعۡلَمُ مَا تَفۡعَلُونَ",
-      "textTransliteration": "Waawfoo biAAahdi Allahi itha AAahadtum wala tanqudoo alaymana baAAda tawkeediha waqad jaAAaltumu Allaha AAalaykum kafeelan inna Allaha yaAAlamu ma tafAAaloona",
+      "textTransliteration": "Wa-awfoo bi-Ahdil laahi izaa 'aahattum Wa-laa tanqudul aimaana ba'da tawkeedihaa Wa-qad ja'altumul laaha 'alaikum kafeelaa; innal laaha ya'lamu maa taf'aloon",
       "textEnglishSaheeh": "And fulfill the covenant of Allah when you have taken it, [O believers], and do not break oaths after their confirmation while you have made Allah, over you, a witness. Indeed, Allah knows what you do.",
       "textEnglishMustafa": "Honour Allah’s covenant when you make a pledge, and do not break your oaths after confirming them, having made Allah your guarantor. Surely Allah knows all you do.",
       "juz": 14,
@@ -1027,7 +1027,7 @@
     {
       "id": 92,
       "textArabic": "وَلَا تَكُونُواْ كَٱلَّتِي نَقَضَتۡ غَزۡلَهَا مِنۢ بَعۡدِ قُوَّةٍ أَنكَٰثٗا تَتَّخِذُونَ أَيۡمَٰنَكُمۡ دَخَلَۢا بَيۡنَكُمۡ أَن تَكُونَ أُمَّةٌ هِيَ أَرۡبَىٰ مِنۡ أُمَّةٍۚ إِنَّمَا يَبۡلُوكُمُ ٱللَّهُ بِهِۦۚ وَلَيُبَيِّنَنَّ لَكُمۡ يَوۡمَ ٱلۡقِيَٰمَةِ مَا كُنتُمۡ فِيهِ تَخۡتَلِفُونَ",
-      "textTransliteration": "Wala takoonoo kaallatee naqadat ghazlaha min baAAdi quwwatin ankathan tattakhithoona aymanakum dakhalan baynakum an takoona ommatun hiya arba min ommatin innama yablookumu Allahu bihi walayubayyinanna lakum yawma alqiyamati ma kuntum feehi takhtalifoona",
+      "textTransliteration": "Wa-laa takoonoo kallatee naqadat ghazlahaa mim ba'di quwwatin ankaasaa; tattakhizoona aimaanakum dakhlalam bainakum an takoona ummatun hiya arbaa min ummah; innnamaa yablookumul laahu bih; Wa-la-yubaiyyinanna lakum yawmal Qiyaamati maa kuntum feehi takhtalifoon",
       "textEnglishSaheeh": "And do not be like she who untwisted her spun thread after it was strong [by] taking your oaths as [means of] deceit between you because one community is more plentiful [in number or wealth] than another community. Allah only tries you thereby. And He will surely make clear to you on the Day of Resurrection that over which you used to differ.",
       "textEnglishMustafa": "Do not be like the woman who ˹foolishly˺ unravels her yarn after it is firmly spun, by taking your oaths as a means of deceiving one another in favour of a stronger group. Surely Allah tests you through this. And on the Day of Judgment He will certainly make your differences clear to you.",
       "juz": 14,
@@ -1038,7 +1038,7 @@
     {
       "id": 93,
       "textArabic": "وَلَوۡ شَآءَ ٱللَّهُ لَجَعَلَكُمۡ أُمَّةٗ وَٰحِدَةٗ وَلَٰكِن يُضِلُّ مَن يَشَآءُ وَيَهۡدِي مَن يَشَآءُۚ وَلَتُسۡـَٔلُنَّ عَمَّا كُنتُمۡ تَعۡمَلُونَ",
-      "textTransliteration": "Walaw shaa Allahu lajaAAalakum ommatan wahidatan walakin yudillu man yashao wayahdee man yashao walatusalunna AAamma kuntum taAAmaloona",
+      "textTransliteration": "Wa-law shaaa'al laahu laja'alakum ummmatanw waahidatanw Wa-laakien yudillu maien yashaaa'u Wa-yahdee maien yashaaa'; Wa-latus'alunna 'ammaa kuntum ta'maloon",
       "textEnglishSaheeh": "And if Allah had willed, He could have made you [of] one religion, but He causes to stray whom He wills and guides whom He wills. And you will surely be questioned about what you used to do.",
       "textEnglishMustafa": "Had Allah willed, He could have easily made you one community ˹of believers˺, but He leaves to stray whoever He wills and guides whoever He wills. And you will certainly be questioned about what you used to do.",
       "juz": 14,
@@ -1049,7 +1049,7 @@
     {
       "id": 94,
       "textArabic": "وَلَا تَتَّخِذُوٓاْ أَيۡمَٰنَكُمۡ دَخَلَۢا بَيۡنَكُمۡ فَتَزِلَّ قَدَمُۢ بَعۡدَ ثُبُوتِهَا وَتَذُوقُواْ ٱلسُّوٓءَ بِمَا صَدَدتُّمۡ عَن سَبِيلِ ٱللَّهِ وَلَكُمۡ عَذَابٌ عَظِيمٞ",
-      "textTransliteration": "Wala tattakhithoo aymanakum dakhalan baynakum fatazilla qadamun baAAda thubootiha watathooqoo alssooa bima sadadtum AAan sabeeli Allahi walakum AAathabun AAatheemun",
+      "textTransliteration": "Wa-laa tattakhizooo aimaanakum dakhalam bainakum fatazilla qadamum ba'da subootihaa Wa-tazooqus sooo'a bimmaa sadattum 'an sabeelil laahi Wa-lakum 'azaabun 'azeem",
       "textEnglishSaheeh": "And do not take your oaths as [means of] deceit between you, lest a foot slip after it was [once] firm, and you would taste evil [in this world] for what [people] you diverted from the way of Allah, and you would have [in the Hereafter] a great punishment.",
       "textEnglishMustafa": "And do not take your oaths as a means of deceiving one another or your feet will slip after they have been firm. Then you will taste the evil ˹consequences˺ of hindering ˹others˺ from the Way of Allah, and you will suffer a tremendous punishment.",
       "juz": 14,
@@ -1060,7 +1060,7 @@
     {
       "id": 95,
       "textArabic": "وَلَا تَشۡتَرُواْ بِعَهۡدِ ٱللَّهِ ثَمَنٗا قَلِيلًاۚ إِنَّمَا عِندَ ٱللَّهِ هُوَ خَيۡرٞ لَّكُمۡ إِن كُنتُمۡ تَعۡلَمُونَ",
-      "textTransliteration": "Wala tashtaroo biAAahdi Allahi thamanan qaleelan innama AAinda Allahi huwa khayrun lakum in kuntum taAAlamoona",
+      "textTransliteration": "Wa-laa tashtaroo bi-'ahdil laahi samanan qaleelaa; innamaa 'indal laahi huwa khairul lakum in kuntum ta'lamoon",
       "textEnglishSaheeh": "And do not exchange the covenant of Allah for a small price. Indeed, what is with Allah is best for you, if only you could know.",
       "textEnglishMustafa": "And do not trade Allah’s covenant for a fleeting gain. What is with Allah is certainly far better for you, if only you knew.",
       "juz": 14,
@@ -1071,7 +1071,7 @@
     {
       "id": 96,
       "textArabic": "مَا عِندَكُمۡ يَنفَدُ وَمَا عِندَ ٱللَّهِ بَاقٖۗ وَلَنَجۡزِيَنَّ ٱلَّذِينَ صَبَرُوٓاْ أَجۡرَهُم بِأَحۡسَنِ مَا كَانُواْ يَعۡمَلُونَ",
-      "textTransliteration": "Ma AAindakum yanfadu wama AAinda Allahi baqin walanajziyanna allatheena sabaroo ajrahum biahsani ma kanoo yaAAmaloona",
+      "textTransliteration": "maa 'indakum yanfadu Wa-maa 'indal laahi baaq; Wa-lanajziyannal lazeena sabarooo ajjrahum bi-ahsani maa kaanoo ya'maloon",
       "textEnglishSaheeh": "Whatever you have will end, but what Allah has is lasting. And We will surely give those who were patient their reward according to the best of what they used to do.",
       "textEnglishMustafa": "Whatever you have will end, but whatever Allah has is everlasting. And We will certainly reward the steadfast according to the best of their deeds.",
       "juz": 14,
@@ -1082,7 +1082,7 @@
     {
       "id": 97,
       "textArabic": "مَنۡ عَمِلَ صَٰلِحٗا مِّن ذَكَرٍ أَوۡ أُنثَىٰ وَهُوَ مُؤۡمِنٞ فَلَنُحۡيِيَنَّهُۥ حَيَوٰةٗ طَيِّبَةٗۖ وَلَنَجۡزِيَنَّهُمۡ أَجۡرَهُم بِأَحۡسَنِ مَا كَانُواْ يَعۡمَلُونَ",
-      "textTransliteration": "Man AAamila salihan min thakarin aw ontha wahuwa muminun falanuhyiyannahu hayatan tayyibatan walanajziyannahum ajrahum biahsani ma kanoo yaAAmaloona",
+      "textTransliteration": "Man 'amila saaliham min zakarin aw unsaa Wa-huwa mu'minun falanuhyiyannahoo hayaatan taiiyibatanw Wa-lanajzi-yannnahum ajrahum bi-ahsani maa kaanoo ya'maloon",
       "textEnglishSaheeh": "Whoever does righteousness, whether male or female, while he is a believer - We will surely cause him to live a good life, and We will surely give them their reward [in the Hereafter] according to the best of what they used to do.",
       "textEnglishMustafa": "Whoever does good, whether male or female, and is a believer, We will surely bless them with a good life, and We will certainly reward them according to the best of their deeds.",
       "juz": 14,
@@ -1093,7 +1093,7 @@
     {
       "id": 98,
       "textArabic": "فَإِذَا قَرَأۡتَ ٱلۡقُرۡءَانَ فَٱسۡتَعِذۡ بِٱللَّهِ مِنَ ٱلشَّيۡطَٰنِ ٱلرَّجِيمِ",
-      "textTransliteration": "Faitha qarata alqurana faistaAAith biAllahi mina alshshaytani alrrajeemi",
+      "textTransliteration": "Fa-izaa qara-tal Quraana fasta'iz billaahi minashh Shai-taanir rajeem",
       "textEnglishSaheeh": "So when you recite the Qur'an, [first] seek refuge in Allah from Satan, the expelled [from His mercy].",
       "textEnglishMustafa": "When you recite the Quran, seek refuge with Allah from Satan, the accursed.",
       "juz": 14,
@@ -1104,7 +1104,7 @@
     {
       "id": 99,
       "textArabic": "إِنَّهُۥ لَيۡسَ لَهُۥ سُلۡطَٰنٌ عَلَى ٱلَّذِينَ ءَامَنُواْ وَعَلَىٰ رَبِّهِمۡ يَتَوَكَّلُونَ",
-      "textTransliteration": "Innahu laysa lahu sultanun AAala allatheena amanoo waAAala rabbihim yatawakkaloona",
+      "textTransliteration": "Innahoo laisa lahoo sultaanun 'alal lazeena aamanoo Wa-'alaa Rabbihim yatawakkaloon",
       "textEnglishSaheeh": "Indeed, there is for him no authority over those who have believed and rely upon their Lord.",
       "textEnglishMustafa": "He certainly has no authority over those who believe and put their trust in their Lord.",
       "juz": 14,
@@ -1115,7 +1115,7 @@
     {
       "id": 100,
       "textArabic": "إِنَّمَا سُلۡطَٰنُهُۥ عَلَى ٱلَّذِينَ يَتَوَلَّوۡنَهُۥ وَٱلَّذِينَ هُم بِهِۦ مُشۡرِكُونَ",
-      "textTransliteration": "Innama sultanuhu AAala allatheena yatawallawnahu waallatheena hum bihi mushrikoona",
+      "textTransliteration": "Innnamaa sultaanuhoo 'alal lazeena yatawallawnahoo wallazeena hum bihee mushrikoon",
       "textEnglishSaheeh": "His authority is only over those who take him as an ally and those who through him associate others with Allah.",
       "textEnglishMustafa": "His authority is only over those who take him as a patron and who—under his influence—associate ˹others˺ with Allah ˹in worship˺.",
       "juz": 14,
@@ -1126,7 +1126,7 @@
     {
       "id": 101,
       "textArabic": "وَإِذَا بَدَّلۡنَآ ءَايَةٗ مَّكَانَ ءَايَةٖ وَٱللَّهُ أَعۡلَمُ بِمَا يُنَزِّلُ قَالُوٓاْ إِنَّمَآ أَنتَ مُفۡتَرِۭۚ بَلۡ أَكۡثَرُهُمۡ لَا يَعۡلَمُونَ",
-      "textTransliteration": "Waitha baddalna ayatan makana ayatin waAllahu aAAlamu bima yunazzilu qaloo innama anta muftarin bal aktharuhum la yaAAlamoona",
+      "textTransliteration": "Wa-izaa baddalnaaa Aayatam makaana Aayatinw wal-laahu a'lamu bimaa yunazzilu qaalooo innamaa anta muftar; bal aksaruhum laa ya'lamoon",
       "textEnglishSaheeh": "And when We substitute a verse in place of a verse - and Allah is most knowing of what He sends down - they say, \"You, [O Muhammad], are but an inventor [of lies].\" But most of them do not know.",
       "textEnglishMustafa": "When We replace a verse with another—and Allah knows best what He reveals—they say, “You ˹Muḥammad˺ are just a fabricator.” In fact, most of them do not know.",
       "juz": 14,
@@ -1137,7 +1137,7 @@
     {
       "id": 102,
       "textArabic": "قُلۡ نَزَّلَهُۥ رُوحُ ٱلۡقُدُسِ مِن رَّبِّكَ بِٱلۡحَقِّ لِيُثَبِّتَ ٱلَّذِينَ ءَامَنُواْ وَهُدٗى وَبُشۡرَىٰ لِلۡمُسۡلِمِينَ",
-      "textTransliteration": "Qul nazzalahu roohu alqudusi min rabbika bialhaqqi liyuthabbita allatheena amanoo wahudan wabushra lilmuslimeena",
+      "textTransliteration": "Qul nazzalahoo Roohul Qudusi mir Rabbika bilhaqqi liyusabbital lazeena aamanoo Wa-hudanw Wa-bushraa lilmuslimeen",
       "textEnglishSaheeh": "Say, [O Muhammad], \"The Pure Spirit has brought it down from your Lord in truth to make firm those who believe and as guidance and good tidings to the Muslims.\"",
       "textEnglishMustafa": "Say, “The holy spirit has brought it down from your Lord with the truth to reassure the believers, and as a guide and good news for those who submit ˹to Allah˺.”",
       "juz": 14,
@@ -1148,7 +1148,7 @@
     {
       "id": 103,
       "textArabic": "وَلَقَدۡ نَعۡلَمُ أَنَّهُمۡ يَقُولُونَ إِنَّمَا يُعَلِّمُهُۥ بَشَرٞۗ لِّسَانُ ٱلَّذِي يُلۡحِدُونَ إِلَيۡهِ أَعۡجَمِيّٞ وَهَٰذَا لِسَانٌ عَرَبِيّٞ مُّبِينٌ",
-      "textTransliteration": "Walaqad naAAlamu annahum yaqooloona innama yuAAallimuhu basharun lisanu allathee yulhidoona ilayhi aAAjamiyyun wahatha lisanun AAarabiyyun mubeenun",
+      "textTransliteration": "Wa-laqad na'lamu annahum yaqooloona innamaa yu'allimuhoo bashar; lisaanul lazee yulhidoona ilaihi a'ja-miyyunw Wa-haaza lisaanun 'Arabiyyum mubeen",
       "textEnglishSaheeh": "And We certainly know that they say, \"It is only a human being who teaches the Prophet.\" The tongue of the one they refer to is foreign, and this Qur'an is [in] a clear Arabic language.",
       "textEnglishMustafa": "And We surely know that they say, “No one is teaching him except a human.” But the man they refer to speaks a foreign tongue, whereas this ˹Quran˺ is ˹in˺ eloquent Arabic.",
       "juz": 14,
@@ -1159,7 +1159,7 @@
     {
       "id": 104,
       "textArabic": "إِنَّ ٱلَّذِينَ لَا يُؤۡمِنُونَ بِـَٔايَٰتِ ٱللَّهِ لَا يَهۡدِيهِمُ ٱللَّهُ وَلَهُمۡ عَذَابٌ أَلِيمٌ",
-      "textTransliteration": "Inna allatheena la yuminoona biayati Allahi la yahdeehimu Allahu walahum AAathabun aleemun",
+      "textTransliteration": "Innal lazeena laa yu'minoona bi-Aayaatil laahi laa yahdehimul laahu Wa-lahum 'azaabun aleem",
       "textEnglishSaheeh": "Indeed, those who do not believe in the verses of Allah - Allah will not guide them, and for them is a painful punishment.",
       "textEnglishMustafa": "Surely those who do not believe in Allah’s revelations will never be guided by Allah, and they will suffer a painful punishment.",
       "juz": 14,
@@ -1170,7 +1170,7 @@
     {
       "id": 105,
       "textArabic": "إِنَّمَا يَفۡتَرِي ٱلۡكَذِبَ ٱلَّذِينَ لَا يُؤۡمِنُونَ بِـَٔايَٰتِ ٱللَّهِۖ وَأُوْلَٰٓئِكَ هُمُ ٱلۡكَٰذِبُونَ",
-      "textTransliteration": "Innama yaftaree alkathiba allatheena la yuminoona biayati Allahi waolaika humu alkathiboona",
+      "textTransliteration": "Innamaa yaftaril kazibal lazeena laa yu'minoona bi-Aayaatil laahi Wa-ulaaa'ika humul kaaziboon",
       "textEnglishSaheeh": "They only invent falsehood who do not believe in the verses of Allah, and it is those who are the liars.",
       "textEnglishMustafa": "No one fabricates lies except those who disbelieve in Allah’s revelations, and it is they who are the ˹true˺ liars.",
       "juz": 14,
@@ -1181,7 +1181,7 @@
     {
       "id": 106,
       "textArabic": "مَن كَفَرَ بِٱللَّهِ مِنۢ بَعۡدِ إِيمَٰنِهِۦٓ إِلَّا مَنۡ أُكۡرِهَ وَقَلۡبُهُۥ مُطۡمَئِنُّۢ بِٱلۡإِيمَٰنِ وَلَٰكِن مَّن شَرَحَ بِٱلۡكُفۡرِ صَدۡرٗا فَعَلَيۡهِمۡ غَضَبٞ مِّنَ ٱللَّهِ وَلَهُمۡ عَذَابٌ عَظِيمٞ",
-      "textTransliteration": "Man kafara biAllahi min baAAdi eemanihi illa man okriha waqalbuhu mutmainnun bialeemani walakin man sharaha bialkufri sadran faAAalayhim ghadabun mina Allahi walahum AAathabun AAatheemun",
+      "textTransliteration": "Man kafara billaahi mim ba'di eemaanihee illaa man ukriha Wa-qalbuhoo mutmma'innum bil-eemaani Wa-laakim man sharaha bilkufri sadran fa'alaihim ghadabum minal laahi Wa-lahum 'azaabun 'azeem",
       "textEnglishSaheeh": "Whoever disbelieves in Allah after his belief... except for one who is forced [to renounce his religion] while his heart is secure in faith. But those who [willingly] open their breasts to disbelief, upon them is wrath from Allah, and for them is a great punishment;",
       "textEnglishMustafa": "Whoever disbelieves in Allah after their belief—not those who are forced while their hearts are firm in faith, but those who embrace disbelief wholeheartedly—they will be condemned by Allah and suffer a tremendous punishment.",
       "juz": 14,
@@ -1192,7 +1192,7 @@
     {
       "id": 107,
       "textArabic": "ذَٰلِكَ بِأَنَّهُمُ ٱسۡتَحَبُّواْ ٱلۡحَيَوٰةَ ٱلدُّنۡيَا عَلَى ٱلۡأٓخِرَةِ وَأَنَّ ٱللَّهَ لَا يَهۡدِي ٱلۡقَوۡمَ ٱلۡكَٰفِرِينَ",
-      "textTransliteration": "Thalika biannahumu istahabboo alhayata alddunya AAala alakhirati waanna Allaha la yahdee alqawma alkafireena",
+      "textTransliteration": "Zaalika bi-annahumus tahabbul hayaatad dunyaa 'alal Aakhirati Wa-annal laaha laa yahdil qawmal kaafireen",
       "textEnglishSaheeh": "That is because they preferred the worldly life over the Hereafter and that Allah does not guide the disbelieving people.",
       "textEnglishMustafa": "This is because they prefer the life of this world over the Hereafter. Surely Allah never guides those who ˹choose to˺ disbelieve.",
       "juz": 14,
@@ -1203,7 +1203,7 @@
     {
       "id": 108,
       "textArabic": "أُوْلَٰٓئِكَ ٱلَّذِينَ طَبَعَ ٱللَّهُ عَلَىٰ قُلُوبِهِمۡ وَسَمۡعِهِمۡ وَأَبۡصَٰرِهِمۡۖ وَأُوْلَٰٓئِكَ هُمُ ٱلۡغَٰفِلُونَ",
-      "textTransliteration": "Olaika allatheena tabaAAa Allahu AAala quloobihim wasamAAihim waabsarihim waolaika humu alghafiloona",
+      "textTransliteration": "Ulaaa'ikal lazeena taba'al laahu 'alaa quloobihim Wa-sam'ihim Wa-absaarihim Wa-ulaaa'ika humul ghaafiloon",
       "textEnglishSaheeh": "Those are the ones over whose hearts and hearing and vision Allah has sealed, and it is those who are the heedless.",
       "textEnglishMustafa": "They are the ones whose hearts, ears, and eyes are sealed by Allah, and it is they who are ˹truly˺ heedless.",
       "juz": 14,
@@ -1214,7 +1214,7 @@
     {
       "id": 109,
       "textArabic": "لَا جَرَمَ أَنَّهُمۡ فِي ٱلۡأٓخِرَةِ هُمُ ٱلۡخَٰسِرُونَ",
-      "textTransliteration": "La jarama annahum fee alakhirati humu alkhasiroona",
+      "textTransliteration": "Laa jarama annnahum fil Aakhirati humul khassiroon",
       "textEnglishSaheeh": "Assuredly, it is they, in the Hereafter, who will be the losers.",
       "textEnglishMustafa": "Without a doubt, they will be the losers in the Hereafter.",
       "juz": 14,
@@ -1225,7 +1225,7 @@
     {
       "id": 110,
       "textArabic": "ثُمَّ إِنَّ رَبَّكَ لِلَّذِينَ هَاجَرُواْ مِنۢ بَعۡدِ مَا فُتِنُواْ ثُمَّ جَٰهَدُواْ وَصَبَرُوٓاْ إِنَّ رَبَّكَ مِنۢ بَعۡدِهَا لَغَفُورٞ رَّحِيمٞ",
-      "textTransliteration": "Thumma inna rabbaka lillatheena hajaroo min baAAdi ma futinoo thumma jahadoo wasabaroo inna rabbaka min baAAdiha laghafoorun raheemun",
+      "textTransliteration": "Summa inna Rabbaka lillazeena haajaroo mim ba'dimaa futinoo summma jaahadoo Wa-sabaroo inna Rabbaka mim ba'dihaa la Ghafoorur Raheem",
       "textEnglishSaheeh": "Then, indeed your Lord, to those who emigrated after they had been compelled [to renounce their religion] and thereafter fought [for the cause of Allah] and were patient - indeed, your Lord, after that, is Forgiving and Merciful",
       "textEnglishMustafa": "As for those who emigrated after being compelled ˹to renounce Islam˺, then struggled ˹in Allah’s cause˺, and persevered, your Lord ˹O Prophet˺ is truly All-Forgiving, Most Merciful after all.",
       "juz": 14,
@@ -1236,7 +1236,7 @@
     {
       "id": 111,
       "textArabic": "۞ يَوۡمَ تَأۡتِي كُلُّ نَفۡسٖ تُجَٰدِلُ عَن نَّفۡسِهَا وَتُوَفَّىٰ كُلُّ نَفۡسٖ مَّا عَمِلَتۡ وَهُمۡ لَا يُظۡلَمُونَ",
-      "textTransliteration": "Yawma tatee kullu nafsin tujadilu AAan nafsiha watuwaffa kullu nafsin ma AAamilat wahum la yuthlamoona",
+      "textTransliteration": "Yawma taatee kullu nafsin tujaadilu 'an nafsihaa Wa-tuwaffaa kullu nafsim maa 'amilat Wa-hum laa yuzlamoon",
       "textEnglishSaheeh": "On the Day when every soul will come disputing for itself, and every soul will be fully compensated for what it did, and they will not be wronged.",
       "textEnglishMustafa": "˹Consider˺ the Day ˹when˺ every soul will come pleading for itself, and each will be paid in full for what it did, and none will be wronged.",
       "juz": 14,
@@ -1247,7 +1247,7 @@
     {
       "id": 112,
       "textArabic": "وَضَرَبَ ٱللَّهُ مَثَلٗا قَرۡيَةٗ كَانَتۡ ءَامِنَةٗ مُّطۡمَئِنَّةٗ يَأۡتِيهَا رِزۡقُهَا رَغَدٗا مِّن كُلِّ مَكَانٖ فَكَفَرَتۡ بِأَنۡعُمِ ٱللَّهِ فَأَذَٰقَهَا ٱللَّهُ لِبَاسَ ٱلۡجُوعِ وَٱلۡخَوۡفِ بِمَا كَانُواْ يَصۡنَعُونَ",
-      "textTransliteration": "Wadaraba Allahu mathalan qaryatan kanat aminatan mutmainnatan yateeha rizquha raghadan min kulli makanin fakafarat bianAAumi Allahi faathaqaha Allahu libasa aljooAAi waalkhawfi bima kanoo yasnaAAoona",
+      "textTransliteration": "Wa-darabal laahu masalan qaryatan kaanat aaminatam mutma'innataien yaaateehaa rizquhaa raghadam min kulli makaanin fakafarat bi-an'umil laahi fa-azaaqahal laahu libaasal joo'i walkhawfi bimaa kaanoo yasna'oon",
       "textEnglishSaheeh": "And Allah presents an example: a city which was safe and secure, its provision coming to it in abundance from every location, but it denied the favors of Allah. So Allah made it taste the envelopment of hunger and fear for what they had been doing.",
       "textEnglishMustafa": "And Allah sets forth the example of a society which was safe and at ease, receiving its provision in abundance from all directions. But its people met Allah’s favours with ingratitude, so Allah made them taste the clutches of hunger and fear for their misdeeds.",
       "juz": 14,
@@ -1258,7 +1258,7 @@
     {
       "id": 113,
       "textArabic": "وَلَقَدۡ جَآءَهُمۡ رَسُولٞ مِّنۡهُمۡ فَكَذَّبُوهُ فَأَخَذَهُمُ ٱلۡعَذَابُ وَهُمۡ ظَٰلِمُونَ",
-      "textTransliteration": "Walaqad jaahum rasoolun minhum fakaththaboohu faakhathahumu alAAathabu wahum thalimoona",
+      "textTransliteration": "Wa-laqad jaaa'ahum Rasoolum minhum fakazzaboohu fa-akhazahumul 'azaabu Wa-hum zaalimoon",
       "textEnglishSaheeh": "And there had certainly come to them a Messenger from among themselves, but they denied him; so punishment overtook them while they were wrongdoers.",
       "textEnglishMustafa": "A messenger of their own actually did come to them, but they denied him. So the torment overtook them while they persisted in wrongdoing.",
       "juz": 14,
@@ -1269,7 +1269,7 @@
     {
       "id": 114,
       "textArabic": "فَكُلُواْ مِمَّا رَزَقَكُمُ ٱللَّهُ حَلَٰلٗا طَيِّبٗا وَٱشۡكُرُواْ نِعۡمَتَ ٱللَّهِ إِن كُنتُمۡ إِيَّاهُ تَعۡبُدُونَ",
-      "textTransliteration": "Fakuloo mimma razaqakumu Allahu halalan tayyiban waoshkuroo niAAmata Allahi in kuntum iyyahu taAAbudoona",
+      "textTransliteration": "Fakuloo mimmaa razaqa-kumul laahu halaalan taiyyibanw washkuroo ni'matal laahi in kuntum iyyaahu ta'budoon",
       "textEnglishSaheeh": "Then eat of what Allah has provided for you [which is] lawful and good. And be grateful for the favor of Allah, if it is [indeed] Him that you worship.",
       "textEnglishMustafa": "So eat from the good, lawful things which Allah has provided for you, and be grateful for Allah’s favours, if you ˹truly˺ worship Him ˹alone˺.",
       "juz": 14,
@@ -1280,7 +1280,7 @@
     {
       "id": 115,
       "textArabic": "إِنَّمَا حَرَّمَ عَلَيۡكُمُ ٱلۡمَيۡتَةَ وَٱلدَّمَ وَلَحۡمَ ٱلۡخِنزِيرِ وَمَآ أُهِلَّ لِغَيۡرِ ٱللَّهِ بِهِۦۖ فَمَنِ ٱضۡطُرَّ غَيۡرَ بَاغٖ وَلَا عَادٖ فَإِنَّ ٱللَّهَ غَفُورٞ رَّحِيمٞ",
-      "textTransliteration": "Innama harrama AAalaykumu almaytata waalddama walahma alkhinzeeri wama ohilla lighayri Allahi bihi famani idturra ghayra baghin wala AAadin fainna Allaha ghafoorun raheemun",
+      "textTransliteration": "Innamaa harama 'alai-kumul maitata waddama Wa-lahmal khinzeeri Wa-maaa uhilla lighairil laahi bihee famanid turra ghaira baaghinw Wa-laa 'aadin fa-innal laaha Ghafoorur Raheem",
       "textEnglishSaheeh": "He has only forbidden to you dead animals, blood, the flesh of swine, and that which has been dedicated to other than Allah. But whoever is forced [by necessity], neither desiring [it] nor transgressing [its limit] - then indeed, Allah is Forgiving and Merciful.",
       "textEnglishMustafa": "He has only forbidden you ˹to eat˺ carrion, blood, swine, and what is slaughtered in the name of any other than Allah. But if someone is compelled by necessity—neither driven by desire nor exceeding immediate need—then surely Allah is All-Forgiving, Most Merciful.",
       "juz": 14,
@@ -1291,7 +1291,7 @@
     {
       "id": 116,
       "textArabic": "وَلَا تَقُولُواْ لِمَا تَصِفُ أَلۡسِنَتُكُمُ ٱلۡكَذِبَ هَٰذَا حَلَٰلٞ وَهَٰذَا حَرَامٞ لِّتَفۡتَرُواْ عَلَى ٱللَّهِ ٱلۡكَذِبَۚ إِنَّ ٱلَّذِينَ يَفۡتَرُونَ عَلَى ٱللَّهِ ٱلۡكَذِبَ لَا يُفۡلِحُونَ",
-      "textTransliteration": "Wala taqooloo lima tasifu alsinatukumu alkathiba hatha halalun wahatha haramun litaftaroo AAala Allahi alkathiba inna allatheena yaftaroona AAala Allahi alkathiba la yuflihoona",
+      "textTransliteration": "Wa-laa taqooloo limaa tasifu alsinatukumul kaziba haaza halaalunw Wa-haazaa haraamul litaftaroo 'alal laahil kazib; innal lazeena yaftaroona 'alal laahil kaziba laa yuflihoon",
       "textEnglishSaheeh": "And do not say about what your tongues assert of untruth, \"This is lawful and this is unlawful,\" to invent falsehood about Allah. Indeed, those who invent falsehood about Allah will not succeed.",
       "textEnglishMustafa": "Do not falsely declare with your tongues, “This is lawful, and that is unlawful,” ˹only˺ fabricating lies against Allah. Indeed, those who fabricate lies against Allah will never succeed.",
       "juz": 14,
@@ -1302,7 +1302,7 @@
     {
       "id": 117,
       "textArabic": "مَتَٰعٞ قَلِيلٞ وَلَهُمۡ عَذَابٌ أَلِيمٞ",
-      "textTransliteration": "MataAAun qaleelun walahum AAathabun aleemun",
+      "textTransliteration": "Mata'un qaleelunw Wa-lahum 'azaabun aleem",
       "textEnglishSaheeh": "[It is but] a brief enjoyment, and they will have a painful punishment.",
       "textEnglishMustafa": "˹It is only˺ a brief enjoyment, then they will suffer a painful punishment.",
       "juz": 14,
@@ -1313,7 +1313,7 @@
     {
       "id": 118,
       "textArabic": "وَعَلَى ٱلَّذِينَ هَادُواْ حَرَّمۡنَا مَا قَصَصۡنَا عَلَيۡكَ مِن قَبۡلُۖ وَمَا ظَلَمۡنَٰهُمۡ وَلَٰكِن كَانُوٓاْ أَنفُسَهُمۡ يَظۡلِمُونَ",
-      "textTransliteration": "WaAAala allatheena hadoo harramna ma qasasna AAalayka min qablu wama thalamnahum walakin kanoo anfusahum yathlimoona",
+      "textTransliteration": "Wa-'alal lazeena haadoo harramnaa ma qasasnaa 'alaika min qablu Wa-maa zalamanaahum Wa-laakin kaanoo anfusahum yazlimoon",
       "textEnglishSaheeh": "And to those who are Jews We have prohibited that which We related to you before. And We did not wrong them [thereby], but they were wronging themselves.",
       "textEnglishMustafa": "To the Jews, We have forbidden what We related to you before. We did not wrong them, but it was they who wronged themselves.",
       "juz": 14,
@@ -1324,7 +1324,7 @@
     {
       "id": 119,
       "textArabic": "ثُمَّ إِنَّ رَبَّكَ لِلَّذِينَ عَمِلُواْ ٱلسُّوٓءَ بِجَهَٰلَةٖ ثُمَّ تَابُواْ مِنۢ بَعۡدِ ذَٰلِكَ وَأَصۡلَحُوٓاْ إِنَّ رَبَّكَ مِنۢ بَعۡدِهَا لَغَفُورٞ رَّحِيمٌ",
-      "textTransliteration": "Thumma inna rabbaka lillatheena AAamiloo alssooa bijahalatin thumma taboo min baAAdi thalika waaslahoo inna rabbaka min baAAdiha laghafoorun raheemun",
+      "textTransliteration": "Summma inna Rabbaka lillazeena 'amilus sooo'a bijahaalatin summa taaboo mim ba'di zaaalika Wa-aslahoo inna Rabbaka mim ba'dihaa la-Ghafoorur Raheem",
       "textEnglishSaheeh": "Then, indeed your Lord, to those who have done wrong out of ignorance and then repent after that and correct themselves - indeed, your Lord, thereafter, is Forgiving and Merciful.",
       "textEnglishMustafa": "As for those who commit evil ignorantly ˹or recklessly˺, then repent afterwards and mend their ways, then your Lord is surely All-Forgiving, Most Merciful.",
       "juz": 14,
@@ -1335,7 +1335,7 @@
     {
       "id": 120,
       "textArabic": "إِنَّ إِبۡرَٰهِيمَ كَانَ أُمَّةٗ قَانِتٗا لِّلَّهِ حَنِيفٗا وَلَمۡ يَكُ مِنَ ٱلۡمُشۡرِكِينَ",
-      "textTransliteration": "Inna ibraheema kana ommatan qanitan lillahi haneefan walam yaku mina almushrikeena",
+      "textTransliteration": "Inna Ibraaheema kaana ummatan qaanital lillaahi Haneefanw Wa-lam yaku minal mushrikeen",
       "textEnglishSaheeh": "Indeed, Abraham was a [comprehensive] leader, devoutly obedient to Allah, inclining toward truth, and he was not of those who associate others with Allah.",
       "textEnglishMustafa": "Indeed, Abraham was a model of excellence: devoted to Allah, ˹perfectly˺ upright—not a polytheist—",
       "juz": 14,
@@ -1346,7 +1346,7 @@
     {
       "id": 121,
       "textArabic": "شَاكِرٗا لِّأَنۡعُمِهِۚ ٱجۡتَبَىٰهُ وَهَدَىٰهُ إِلَىٰ صِرَٰطٖ مُّسۡتَقِيمٖ",
-      "textTransliteration": "Shakiran lianAAumihi ijtabahu wahadahu ila siratin mustaqeemin",
+      "textTransliteration": "Shaakiral li-an'umih; ijtabaahu Wa-hadaahu ilaa Siraatim Mustaqeem",
       "textEnglishSaheeh": "[He was] grateful for His favors. Allah chose him and guided him to a straight path.",
       "textEnglishMustafa": "˹utterly˺ grateful for Allah’s favours. ˹So˺ He chose him and guided him to the Straight Path.",
       "juz": 14,
@@ -1357,7 +1357,7 @@
     {
       "id": 122,
       "textArabic": "وَءَاتَيۡنَٰهُ فِي ٱلدُّنۡيَا حَسَنَةٗۖ وَإِنَّهُۥ فِي ٱلۡأٓخِرَةِ لَمِنَ ٱلصَّٰلِحِينَ",
-      "textTransliteration": "Waataynahu fee alddunya hasanatan wainnahu fee alakhirati lamina alssaliheena",
+      "textTransliteration": "Wa-aatainaahu fid dunyaa hasanah; Wa-innahoo fil Aakhirati laminas saaliheen",
       "textEnglishSaheeh": "And We gave him good in this world, and indeed, in the Hereafter he will be among the righteous.",
       "textEnglishMustafa": "We blessed him with all goodness in this world, and in the Hereafter he will certainly be among the righteous.",
       "juz": 14,
@@ -1368,7 +1368,7 @@
     {
       "id": 123,
       "textArabic": "ثُمَّ أَوۡحَيۡنَآ إِلَيۡكَ أَنِ ٱتَّبِعۡ مِلَّةَ إِبۡرَٰهِيمَ حَنِيفٗاۖ وَمَا كَانَ مِنَ ٱلۡمُشۡرِكِينَ",
-      "textTransliteration": "Thumma awhayna ilayka ani ittabiAA millata ibraheema haneefan wama kana mina almushrikeena",
+      "textTransliteration": "Summma awhainaa ilaika anit tabi' Millata Ibraaheema haneefaa; Wa-maa kaana minal mushrikeen",
       "textEnglishSaheeh": "Then We revealed to you, [O Muhammad], to follow the religion of Abraham, inclining toward truth; and he was not of those who associate with Allah.",
       "textEnglishMustafa": "Then We revealed to you ˹O Prophet, saying˺: “Follow the faith of Abraham, the upright, who was not one of the polytheists.”",
       "juz": 14,
@@ -1379,7 +1379,7 @@
     {
       "id": 124,
       "textArabic": "إِنَّمَا جُعِلَ ٱلسَّبۡتُ عَلَى ٱلَّذِينَ ٱخۡتَلَفُواْ فِيهِۚ وَإِنَّ رَبَّكَ لَيَحۡكُمُ بَيۡنَهُمۡ يَوۡمَ ٱلۡقِيَٰمَةِ فِيمَا كَانُواْ فِيهِ يَخۡتَلِفُونَ",
-      "textTransliteration": "Innama juAAila alssabtu AAala allatheena ikhtalafoo feehi wainna rabbaka layahkumu baynahum yawma alqiyamati feema kanoo feehi yakhtalifoona",
+      "textTransliteration": "Innnamaa ju'ilas Sabtu 'alal lazeenakhtalafoo feeh; Wa-inna Rabbaka la yahkumu bainahum Yawmal Qiyaamati feemaa kaanoo feehi yakhtalifoon",
       "textEnglishSaheeh": "The sabbath was only appointed for those who differed over it. And indeed, your Lord will judge between them on the Day of Resurrection concerning that over which they used to differ.",
       "textEnglishMustafa": "˹Honouring˺ the Sabbath was ordained only for those who disputed about Abraham. And surely your Lord will judge between them on the Day of Judgment regarding their disputes.",
       "juz": 14,
@@ -1390,7 +1390,7 @@
     {
       "id": 125,
       "textArabic": "ٱدۡعُ إِلَىٰ سَبِيلِ رَبِّكَ بِٱلۡحِكۡمَةِ وَٱلۡمَوۡعِظَةِ ٱلۡحَسَنَةِۖ وَجَٰدِلۡهُم بِٱلَّتِي هِيَ أَحۡسَنُۚ إِنَّ رَبَّكَ هُوَ أَعۡلَمُ بِمَن ضَلَّ عَن سَبِيلِهِۦ وَهُوَ أَعۡلَمُ بِٱلۡمُهۡتَدِينَ",
-      "textTransliteration": "OdAAu ila sabeeli rabbika bialhikmati waalmawAAithati alhasanati wajadilhum biallatee hiya ahsanu inna rabbaka huwa aAAlamu biman dalla AAan sabeelihi wahuwa aAAlamu bialmuhtadeena",
+      "textTransliteration": "Ud'u ilaa sabeeli Rabbika bilhikmati walmaw-'izatil hasanati Wa-jaadilhum billatee hiya ahsan; inna Rabbaka huwa a'almu biman dalla 'an sabeelihee Wa-Huwa a'lamu bilmuhtadeen",
       "textEnglishSaheeh": "Invite to the way of your Lord with wisdom and good instruction, and argue with them in a way that is best. Indeed, your Lord is most knowing of who has strayed from His way, and He is most knowing of who is [rightly] guided.",
       "textEnglishMustafa": "Invite ˹all˺ to the Way of your Lord with wisdom and kind advice, and only debate with them in the best manner. Surely your Lord ˹alone˺ knows best who has strayed from His Way and who is ˹rightly˺ guided.",
       "juz": 14,
@@ -1401,7 +1401,7 @@
     {
       "id": 126,
       "textArabic": "وَإِنۡ عَاقَبۡتُمۡ فَعَاقِبُواْ بِمِثۡلِ مَا عُوقِبۡتُم بِهِۦۖ وَلَئِن صَبَرۡتُمۡ لَهُوَ خَيۡرٞ لِّلصَّٰبِرِينَ",
-      "textTransliteration": "Wain AAaqabtum faAAaqiboo bimithli ma AAooqibtum bihi walain sabartum lahuwa khayrun lilssabireena",
+      "textTransliteration": "Wa-in 'aaqabtum fa'aaqiboo bimisli maa 'ooqibtum bihee Wa-la'in sabartum lahuwa khairul lissaabireen",
       "textEnglishSaheeh": "And if you punish [an enemy, O believers], punish with an equivalent of that with which you were harmed. But if you are patient - it is better for those who are patient.",
       "textEnglishMustafa": "If you retaliate, then let it be equivalent to what you have suffered. But if you patiently endure, it is certainly best for those who are patient.",
       "juz": 14,
@@ -1412,7 +1412,7 @@
     {
       "id": 127,
       "textArabic": "وَٱصۡبِرۡ وَمَا صَبۡرُكَ إِلَّا بِٱللَّهِۚ وَلَا تَحۡزَنۡ عَلَيۡهِمۡ وَلَا تَكُ فِي ضَيۡقٖ مِّمَّا يَمۡكُرُونَ",
-      "textTransliteration": "Waisbir wama sabruka illa biAllahi wala tahzan AAalayhim wala taku fee dayqin mimma yamkuroona",
+      "textTransliteration": "Wasbir Wa-maa sabruka illaa billaah; Wa-laa tahzan 'alaihim Wa-laa taku fee daiqim mimmaa yamkuroon",
       "textEnglishSaheeh": "And be patient, [O Muhammad], and your patience is not but through Allah. And do not grieve over them and do not be in distress over what they conspire.",
       "textEnglishMustafa": "Be patient ˹O Prophet˺, for your patience is only with Allah’s help. Do not grieve over those ˹who disbelieve˺, nor be distressed by their schemes.",
       "juz": 14,
@@ -1423,7 +1423,7 @@
     {
       "id": 128,
       "textArabic": "إِنَّ ٱللَّهَ مَعَ ٱلَّذِينَ ٱتَّقَواْ وَّٱلَّذِينَ هُم مُّحۡسِنُونَ",
-      "textTransliteration": "Inna Allaha maAAa allatheena ittaqaw waallatheena hum muhsinoona",
+      "textTransliteration": "Innal laaha ma'al lazeenat taqaw wal-lazeena hum muhsinoon",
       "textEnglishSaheeh": "Indeed, Allah is with those who fear Him and those who are doers of good.",
       "textEnglishMustafa": "Surely Allah is with those who shun evil and who do good ˹deeds˺.",
       "juz": 14,

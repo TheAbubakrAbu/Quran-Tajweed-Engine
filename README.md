@@ -17,6 +17,8 @@
 | **62** reciters | **20** riwayat, as page-exact printed mushafs |
 | **7** alternate qiraat readings | **7** riwayah tajweed packs (where a reading differs from Hafs) |
 | **77,629** words glossed **and** transliterated | **323** curated themes · **5,446** ayahs with similar-ayah matches |
+| **77,629** words with **root and lemma** | **814** repeated phrases · **2,512** QUL topics · **1,049** passage themes |
+| **1,634** qiraat variant junctures with attribution | **60** hizb · **558** ruku · **7** manzil |
 | **3** Quran fonts (Uthmani / Qiraat / Indopak) | **99** Names of Allah |
 | 2 English translations + transliteration | **7** language ports |
 | Retrieval + prompt for a grounded "Ask AI" | 100% offline · zero runtime deps (JS) |
@@ -55,7 +57,16 @@ Quran Tajweed Engine/
 │   ├── word-by-word.json       77,629 words: English gloss + Latin transliteration, token-aligned
 │   ├── similar-ayahs.json      mutashabihat: 5,446 ayahs with their matches, pre-ranked
 │   ├── themes.json             323 curated topics, each with its ayahs
-│   ├── tajweed-lessons.json    the 8-chapter tajweed course
+│   ├── tajweed-lessons.json    the 10-chapter tajweed course
+│   ├── morphology.json         root + lemma of all 77,629 words (Quranic Arabic Corpus via QUL)
+│   ├── mutashabihat.json       814 repeated phrases and every ayah carrying each
+│   ├── quran-topics.json       2,512 QUL topics in three independent indexes
+│   ├── ayah-themes.json        1,049 passage themes, one sentence per run of ayahs
+│   ├── quran-metadata.json     hizb, ruku and manzil boundaries
+│   ├── qiraat-variants.json    who among the Ten reads which form, and why it matters
+│   ├── qiraat-places.json      where each published riwayah differs from Hafs at all
+│   ├── qiraat-variant-audio.json  one reciter reading a verse both ways (4 riwayat)
+│   ├── word-of-day.json        149 curated words with every occurrence of the form
 │   ├── surah-sections.json     per-surah section outlines · surah-stats.json  counts
 │   ├── surahs/                 per-surah split (NNN.json) + lightweight index.json
 │   └── tajweed/                per-surah pre-computed tajweed (NNN.json)
@@ -76,7 +87,9 @@ Quran Tajweed Engine/
 │   ├── quran-engine-go/        Go
 │   └── quran-engine-rust/      Rust
 ├── examples/                   ← runnable demos (node, terminal tajweed, browser, React)
-└── scripts/                    ← build-data.mjs (regenerates derived data)
+└── sources/                    ← upstream JSON the data was built from (provenance, not API)
+    ├── Quran.json · SurahInfos.json · NamesOfAllah.json · Qiraat/ · QUL/
+    └── Qiraat/_staging-riwayat/  the 12 beta riwayat + the extraction pipeline
 ```
 
 ## Engine modules
@@ -96,7 +109,13 @@ Each module is implemented, tested, and stands alone — adopt them independentl
 | Surah sections | 741 titled passages across 111 surahs, nested | ✓ |
 | Arabic alphabet | 28 letters with tajweed weight, tashkeel, waqf signs | ✓ |
 | Qiraat comparison | two readings aligned word by word, three buckets | ✓ |
-| Tajweed course | 8 chapters, 34 lessons with drills | ✓ |
+| Morphology | root + lemma of every word, searchable by root | ✓ |
+| Mutashabihat | 814 repeated phrases, with the shared tokens | ✓ |
+| QUL topics | 2,512 topics in three indexes + 1,049 passage themes | ✓ |
+| Mushaf divisions | hizb, ruku, manzil | ✓ |
+| Qiraat variants | who among the Ten reads what, and what it means | ✓ |
+| Word of the day | 149 curated words with every occurrence | ✓ |
+| Tajweed course | 10 chapters, 57 lessons with drills | ✓ |
 | Juz / Page | mushaf navigation | ✓ |
 | Audio | 62 reciters, surah + ayah feeds | ✓ |
 | Search | Arabic / English / references / boolean | ✓ |
@@ -125,6 +144,11 @@ Per-feature specifications, in priority order:
 14. **Surah sections** — where a surah changes subject → [docs/15](docs/15-surah-sections.md)
 15. **Arabic alphabet** — letters, weights, tashkeel, waqf signs → [docs/16](docs/16-arabic-alphabet.md)
 16. **Qiraat comparison** — how far apart two readings are, measured → [docs/17](docs/17-qiraat-comparison.md)
+17. **Morphology** — root and lemma of every word → [docs/18](docs/18-morphology.md)
+18. **Mutashabihat** — the phrases the Quran repeats → [docs/19](docs/19-mutashabihat.md)
+19. **Topics, passages and divisions** — three ways of saying where you are → [docs/20](docs/20-topics-and-metadata.md)
+20. **Qiraat variants** — who reads what, and what it means → [docs/21](docs/21-qiraat-variants.md)
+21. **Word of the day** — curated vocabulary with every occurrence → [docs/22](docs/22-word-of-day.md)
 
 **Plus:** bundled Quran [**fonts**](docs/fonts.md) (Uthmani / Qiraat / Indopak), the [**alphabet data file**](docs/arabic-alphabet.md) documented field by field, and a detailed [**tajweed rules explained**](docs/tajweed-rules-explained.md) guide ("what does *idgham* mean?").
 

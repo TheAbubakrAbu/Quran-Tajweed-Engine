@@ -21,6 +21,14 @@ type SimilarMatch struct {
 	Verified bool
 	// Labels say why a generated row matched; empty for verified rows.
 	Labels []string
+	// Spans are 0-based inclusive token ranges of the shared words in the MATCHED ayah's raw
+	// text, from the Quranic Universal Library's table. Empty when only the phrase is known,
+	// which is why a consumer tints these where they exist and falls back to locating Phrase
+	// where they do not.
+	Spans [][2]int
+	// Score is QUL's 0-100 similarity, where it listed the pair. Nil for rows from the other two
+	// sources: they rank, but they do not score.
+	Score *int
 }
 
 // Topic is one curated topic and the ayahs that speak to it.
@@ -96,7 +104,8 @@ func (e *Engine) SimilarAyahs(surahID, ayahID int) []SimilarMatch {
 	}
 	var out []SimilarMatch
 	for _, row := range rows {
-		// [surah, ayah, phrase, verifiedFlag, labels?] — heterogeneous, so read field by field.
+		// [surah, ayah, phrase, verifiedFlag, labels?, spans?, score?]: heterogeneous, so read
+		// field by field. The last two come only from the Quranic Universal Library's table.
 		if len(row) < 4 {
 			continue
 		}
@@ -110,6 +119,15 @@ func (e *Engine) SimilarAyahs(surahID, ayahID int) []SimilarMatch {
 		match.Verified = verified == 1
 		if len(row) > 4 {
 			_ = json.Unmarshal(row[4], &match.Labels)
+		}
+		if len(row) > 5 {
+			_ = json.Unmarshal(row[5], &match.Spans)
+		}
+		if len(row) > 6 {
+			var score int
+			if json.Unmarshal(row[6], &score) == nil {
+				match.Score = &score
+			}
 		}
 		out = append(out, match)
 	}

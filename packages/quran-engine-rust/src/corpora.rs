@@ -5,13 +5,19 @@
 
 use serde::Deserialize;
 
-/// One row of `data/similar-ayahs.json`: `[surah, ayah, phrase, verifiedFlag, labels?]`.
+/// One field of a row of `data/similar-ayahs.json`:
+/// `[surah, ayah, phrase, verifiedFlag, labels?, spans?, score?]`.
+///
+/// Order matters for an untagged enum, and `Labels` must be tried before `Spans`: an empty `[]`
+/// is a valid `Vec<String>` and a valid `Vec<[usize; 2]>`, and position 4 is the one that is
+/// routinely empty.
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
 #[serde(untagged)]
 pub enum SimilarField {
     Number(u32),
     Text(String),
     Labels(Vec<String>),
+    Spans(Vec<[usize; 2]>),
 }
 
 /// One similar-ayah match, in display order.
@@ -25,6 +31,14 @@ pub struct SimilarMatch {
     pub verified: bool,
     /// Why a generated row matched; empty for verified rows.
     pub labels: Vec<String>,
+    /// 0-based inclusive token ranges of the shared words in the MATCHED ayah's raw text, from
+    /// the Quranic Universal Library's table. Empty when only the phrase is known, which is why
+    /// a consumer tints these where they exist and falls back to matching `phrase` where they
+    /// do not.
+    pub spans: Vec<[usize; 2]>,
+    /// QUL's 0-100 similarity score, where it listed the pair. `None` for the rows that come
+    /// from the other two sources: they rank, but they do not score.
+    pub score: Option<u32>,
 }
 
 /// One curated topic and the ayahs that speak to it.
@@ -139,6 +153,14 @@ impl Engine {
                     labels: match row.get(4) {
                         Some(SimilarField::Labels(labels)) => labels.clone(),
                         _ => Vec::new(),
+                    },
+                    spans: match row.get(5) {
+                        Some(SimilarField::Spans(spans)) => spans.clone(),
+                        _ => Vec::new(),
+                    },
+                    score: match row.get(6) {
+                        Some(SimilarField::Number(score)) => Some(*score),
+                        _ => None,
                     },
                 })
             })

@@ -42,6 +42,20 @@ public final class Engine {
     public let alphabet: ArabicAlphabet
     /// Needs `loadQiraat`; with no qiraah text it reports "hafs" alone and compares nothing.
     public let qiraatComparison: QiraatComparison
+    /// Root and lemma of every word; needs `loadMorphology`.
+    public let morphology: Morphology
+    /// The repeated phrases; needs `loadMutashabihat`.
+    public let mutashabihat: Mutashabihat
+    /// The three QUL topic indexes; needs `loadQuranTopics`.
+    public let quranTopics: QuranTopics
+    /// The passage themes; loaded by default.
+    public let ayahThemes: AyahThemes
+    /// Hizb, ruku and manzil; loaded by default.
+    public let quranMetadata: QuranMetadata
+    /// The variant matrix, place index and paired recordings; needs `loadQiraatVariants`.
+    public let qiraatVariants: QiraatVariants
+    /// The curated vocabulary; loaded by default.
+    public let wordOfDay: WordOfDay
 
     public init(quran: Quran, juzPage: JuzPage, reciters: Reciters, tajweed: Tajweed, search: Search,
                 namesOfAllah: NamesOfAllah, muqattaat: Muqattaat,
@@ -49,7 +63,14 @@ public final class Engine {
                 wordByWord: WordByWord = WordByWord(), similarAyahs: SimilarAyahs = SimilarAyahs(),
                 themes: Themes = Themes(), tajweedLessons: TajweedLessons = TajweedLessons(),
                 surahSections: SurahSections = SurahSections(),
-                alphabet: ArabicAlphabet = ArabicAlphabet()) {
+                alphabet: ArabicAlphabet = ArabicAlphabet(),
+                morphology: Morphology = Morphology(),
+                mutashabihat: Mutashabihat = Mutashabihat(),
+                quranTopics: QuranTopics = QuranTopics(),
+                ayahThemes: AyahThemes = AyahThemes(),
+                quranMetadata: QuranMetadata = QuranMetadata(),
+                qiraatVariants: QiraatVariants = QiraatVariants(),
+                wordOfDay: WordOfDay = WordOfDay()) {
         self.quran = quran
         self.juzPage = juzPage
         self.reciters = reciters
@@ -65,6 +86,13 @@ public final class Engine {
         self.tajweedLessons = tajweedLessons
         self.surahSections = surahSections
         self.alphabet = alphabet
+        self.morphology = morphology
+        self.mutashabihat = mutashabihat
+        self.quranTopics = quranTopics
+        self.ayahThemes = ayahThemes
+        self.quranMetadata = quranMetadata
+        self.qiraatVariants = qiraatVariants
+        self.wordOfDay = wordOfDay
         self.askAI = AskAI(quran: quran, search: search, themes: themes)
         self.qiraatComparison = QiraatComparison(quran: quran)
     }
@@ -83,12 +111,21 @@ public final class Engine {
     ///   - loadSimilarAyahs: the mutashabihat corpus (~3.5 MB).
     ///   - loadQiraat: the seven non-Hafs riwayat's own text (~11 MB) - what `qiraatComparison`
     ///     compares. NOT bundled in the package, so this needs a `dataDirectory`.
+    ///   - loadMorphology: root and lemma of every word (~776 KB).
+    ///   - loadMutashabihat: the repeated phrases (~178 KB).
+    ///   - loadQuranTopics: the three QUL topic indexes (~730 KB).
+    ///   - loadQiraatVariants: the variant matrix, the place index and the paired-recording
+    ///     table (~1.9 MB together).
     public static func load(dataDirectory: URL? = nil, riwayah: String? = nil,
                             loadMushaf: Bool = false,
                             loadQiraatTajweed: Bool = false,
                             loadWordByWord: Bool = false,
                             loadSimilarAyahs: Bool = false,
-                            loadQiraat: Bool = false) throws -> Engine {
+                            loadQiraat: Bool = false,
+                            loadMorphology: Bool = false,
+                            loadMutashabihat: Bool = false,
+                            loadQuranTopics: Bool = false,
+                            loadQiraatVariants: Bool = false) throws -> Engine {
         let decoder = JSONDecoder()
 
         // Resolve each data file from (in order): an explicit dir, the resources BUNDLED in the package
@@ -211,11 +248,42 @@ public final class Engine {
             similar = SimilarAyahs(rows)
         }
 
+        // Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB) load by
+        // default like the sections and the alphabet: small, and each answers a question a
+        // consumer should not have to opt into.
+        let metadata = QuranMetadata(decodeIfPresent(QuranMetadataFile.self, "quran-metadata.json"))
+        let ayahThemes = AyahThemes(decodeIfPresent([String: [ThemePassage]].self, "ayah-themes.json"))
+        let wordOfDay = WordOfDay(decodeIfPresent(WordOfDayFile.self, "word-of-day.json"))
+
+        var morphology = Morphology()
+        if loadMorphology, let file = decodeIfPresent(MorphologyFile.self, "morphology.json") {
+            morphology = Morphology(file)
+        }
+        var mutashabihat = Mutashabihat()
+        if loadMutashabihat, let file = decodeIfPresent(MutashabihatFile.self, "mutashabihat.json") {
+            mutashabihat = Mutashabihat(file)
+        }
+        var quranTopics = QuranTopics()
+        if loadQuranTopics, let file = decodeIfPresent(QulTopicsFile.self, "quran-topics.json") {
+            quranTopics = QuranTopics(file)
+        }
+        var qiraatVariants = QiraatVariants()
+        if loadQiraatVariants {
+            qiraatVariants = QiraatVariants(
+                variants: decodeIfPresent(QiraatVariantsFile.self, "qiraat-variants.json"),
+                places: decodeIfPresent(QiraatPlacesFile.self, "qiraat-places.json"),
+                audio: decodeIfPresent(QiraatVariantAudioFile.self, "qiraat-variant-audio.json"))
+        }
+
         return Engine(quran: quran, juzPage: juzPage, reciters: reciters, tajweed: tajweed,
                       search: search, namesOfAllah: namesOfAllah, muqattaat: muqattaat,
                       mushaf: mushaf, qiraatTajweed: qiraatTajweed, wordByWord: wordByWord,
                       similarAyahs: similar, themes: themes, tajweedLessons: lessons,
-                      surahSections: sections, alphabet: alphabet)
+                      surahSections: sections, alphabet: alphabet,
+                      morphology: morphology, mutashabihat: mutashabihat,
+                      quranTopics: quranTopics, ayahThemes: ayahThemes,
+                      quranMetadata: metadata, qiraatVariants: qiraatVariants,
+                      wordOfDay: wordOfDay)
     }
 
     /// Resolve the `/data` directory, trying several strategies.

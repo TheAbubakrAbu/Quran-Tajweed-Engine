@@ -34,6 +34,12 @@ async function readJson(rel) {
  * @param {boolean} [opts.loadQiraatTajweed=false]  also load the 7 riwayah tajweed packs (~0.9 MB)
  * @param {boolean} [opts.loadWordByWord=false]  also load word-by-word.json (~1.8 MB)
  * @param {boolean} [opts.loadSimilarAyahs=false]  also load similar-ayahs.json (~3.5 MB)
+ * @param {boolean} [opts.loadMorphology=false]  also load morphology.json (~776 KB); needed by
+ *        `engine.morphology`, which knows nothing without it
+ * @param {boolean} [opts.loadMutashabihat=false]  also load mutashabihat.json (~178 KB)
+ * @param {boolean} [opts.loadQuranTopics=false]  also load quran-topics.json (~612 KB)
+ * @param {boolean} [opts.loadQiraatVariants=false]  also load the variant matrix, the place index
+ *        and the paired-recording table (~1.9 MB together); `engine.qiraatVariants` needs them
  * @param {string} [opts.riwayah]   default display riwayah for search indexing
  */
 export async function loadFromDisk(opts = {}) {
@@ -55,16 +61,23 @@ export async function loadFromDisk(opts = {}) {
   // kind of thing a consumer wants without having to know it needed a flag.
   // Sections (80 KB) and the alphabet (18 KB) join them: small, and both answer questions a
   // consumer should not have to opt into.
-  const [themes, tajweedLessons, surahSections, arabicAlphabet] = await Promise.all([
+  // Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB) join them on the
+  // same reasoning: small, and each answers a question a consumer should not have to opt into.
+  const [themes, tajweedLessons, surahSections, arabicAlphabet,
+         quranMetadata, ayahThemes, wordOfDay] = await Promise.all([
     read("themes.json"),
     read("tajweed-lessons.json"),
     read("surah-sections.json"),
     read("arabic-alphabet.json"),
+    read("quran-metadata.json"),
+    read("ayah-themes.json"),
+    read("word-of-day.json"),
   ]);
 
   /** @type {any} */
   const data = { quran, juz, reciters, tajweedRules, surahInfo, namesOfAllah, muqattaat, qiraatCounts,
-                 themes, tajweedLessons, surahSections, arabicAlphabet };
+                 themes, tajweedLessons, surahSections, arabicAlphabet,
+                 quranMetadata, ayahThemes, wordOfDay };
 
   if (opts.loadQiraat) {
     /** @type {Record<string, any>} */
@@ -97,6 +110,17 @@ export async function loadFromDisk(opts = {}) {
 
   if (opts.loadWordByWord) data.wordByWord = await read("word-by-word.json");
   if (opts.loadSimilarAyahs) data.similarAyahs = await read("similar-ayahs.json");
+  if (opts.loadMorphology) data.morphology = await read("morphology.json");
+  if (opts.loadMutashabihat) data.mutashabihat = await read("mutashabihat.json");
+  if (opts.loadQuranTopics) data.quranTopics = await read("quran-topics.json");
+
+  if (opts.loadQiraatVariants) {
+    [data.qiraatVariants, data.qiraatPlaces, data.qiraatVariantAudio] = await Promise.all([
+      read("qiraat-variants.json"),
+      read("qiraat-places.json"),
+      read("qiraat-variant-audio.json"),
+    ]);
+  }
 
   return createEngine(data, { riwayah: opts.riwayah });
 }

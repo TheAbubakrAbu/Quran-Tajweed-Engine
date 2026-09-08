@@ -18,12 +18,24 @@ class SimilarMatch {
   /// Why a generated row matched; empty for verified rows.
   final List<String> labels;
 
+  /// 0-based inclusive token ranges of the shared words in the MATCHED ayah's
+  /// raw text, from the Quranic Universal Library's table. Empty when only the
+  /// phrase is known, which is why a consumer tints these where they exist and
+  /// falls back to locating [phrase] where they do not.
+  final List<List<int>> spans;
+
+  /// QUL's 0-100 similarity, where it listed the pair. Null for rows from the
+  /// other two sources: they rank, but they do not score.
+  final int? score;
+
   const SimilarMatch({
     required this.surah,
     required this.ayah,
     required this.phrase,
     required this.verified,
     required this.labels,
+    this.spans = const [],
+    this.score,
   });
 }
 
@@ -34,6 +46,11 @@ class SimilarMatch {
 /// rows are phrase-overlap matches carrying the labels that explain why they
 /// matched. They are a reading aid, not a scholarly claim, so [SimilarMatch.verified]
 /// is the flag to gate on if you show only one kind.
+///
+/// The Quranic Universal Library's table is the third source, and it adds two
+/// things the other two cannot: [SimilarMatch.spans], the exact token ranges of
+/// the shared words in the matched ayah, and [SimilarMatch.score], its own
+/// 0-100 similarity.
 
 class SimilarAyahs {
   final Map<String, dynamic> _data;
@@ -46,7 +63,8 @@ class SimilarAyahs {
     if (rows == null) return const [];
     final out = <SimilarMatch>[];
     for (final raw in rows) {
-      // [surah, ayah, phrase, verifiedFlag, labels?] — heterogeneous.
+      // [surah, ayah, phrase, verifiedFlag, labels?, spans?, score?]:
+      // heterogeneous, and the last two come only from the QUL table.
       final row = raw as List<dynamic>;
       if (row.length < 4) continue;
       out.add(SimilarMatch(
@@ -57,6 +75,12 @@ class SimilarAyahs {
         labels: row.length > 4 && row[4] is List
             ? (row[4] as List<dynamic>).cast<String>()
             : const [],
+        spans: row.length > 5 && row[5] is List
+            ? (row[5] as List<dynamic>)
+                .map((span) => (span as List<dynamic>).cast<int>())
+                .toList(growable: false)
+            : const [],
+        score: row.length > 6 && row[6] is int ? row[6] as int : null,
       ));
     }
     return out;

@@ -18,6 +18,10 @@ import 'ask_ai.dart';
 import 'sections.dart';
 import 'alphabet.dart';
 import 'qiraat_comparison.dart';
+import 'word_of_day.dart';
+import 'qiraat_variants.dart';
+import 'batch5.dart';
+import 'morphology.dart';
 import 'reciters.dart';
 import 'search.dart';
 import 'tajweed.dart';
@@ -45,6 +49,28 @@ class Engine {
 
   /// Mutashabihat. Empty unless `loadSimilarAyahs`.
   final SimilarAyahs similarAyahs;
+
+  /// Root and lemma of every word. Empty unless `loadMorphology`.
+  final Morphology morphology;
+
+  /// The repeated phrases. Empty unless `loadMutashabihat`.
+  final Mutashabihat mutashabihat;
+
+  /// The three QUL topic indexes. Empty unless `loadQuranTopics`.
+  final QuranTopics quranTopics;
+
+  /// The passage themes; loaded by default.
+  final AyahThemes ayahThemes;
+
+  /// Hizb, ruku and manzil; loaded by default.
+  final QuranMetadata quranMetadata;
+
+  /// The variant matrix, place index and paired recordings. Empty unless
+  /// `loadQiraatVariants`.
+  final QiraatVariants qiraatVariants;
+
+  /// The curated vocabulary; loaded by default.
+  final WordOfDay wordOfDay;
 
   /// The curated topics; loaded by default.
   final Themes themes;
@@ -75,6 +101,13 @@ class Engine {
     QiraatTajweed? qiraatTajweed,
     WordByWord? wordByWord,
     SimilarAyahs? similarAyahs,
+    Morphology? morphology,
+    Mutashabihat? mutashabihat,
+    QuranTopics? quranTopics,
+    AyahThemes? ayahThemes,
+    QuranMetadata? quranMetadata,
+    QiraatVariants? qiraatVariants,
+    WordOfDay? wordOfDay,
     Themes? themes,
     TajweedLessons? tajweedLessons,
     SurahSections? surahSections,
@@ -89,6 +122,13 @@ class Engine {
         qiraatTajweed = qiraatTajweed ?? QiraatTajweed(),
         wordByWord = wordByWord ?? WordByWord(),
         similarAyahs = similarAyahs ?? const SimilarAyahs(),
+        morphology = morphology ?? Morphology(),
+        mutashabihat = mutashabihat ?? const Mutashabihat(),
+        quranTopics = quranTopics ?? QuranTopics(),
+        ayahThemes = ayahThemes ?? const AyahThemes(),
+        quranMetadata = quranMetadata ?? QuranMetadata(),
+        qiraatVariants = qiraatVariants ?? const QiraatVariants(),
+        wordOfDay = wordOfDay ?? WordOfDay(),
         themes = themes ?? Themes(),
         tajweedLessons = tajweedLessons ?? TajweedLessons(),
         askAI = AskAI(
@@ -127,6 +167,15 @@ class Engine {
     Map<String, Map<String, dynamic>> qiraatTajweedPacksJson = const {},
     Map<String, dynamic>? wordByWordJson,
     Map<String, dynamic>? similarAyahsJson,
+    Map<String, dynamic>? morphologyJson,
+    Map<String, dynamic>? mutashabihatJson,
+    Map<String, dynamic>? quranTopicsJson,
+    Map<String, dynamic>? ayahThemesJson,
+    Map<String, dynamic>? quranMetadataJson,
+    Map<String, dynamic>? qiraatVariantsJson,
+    Map<String, dynamic>? qiraatPlacesJson,
+    Map<String, dynamic>? qiraatVariantAudioJson,
+    Map<String, dynamic>? wordOfDayJson,
     Map<String, dynamic>? surahSectionsJson,
     Map<String, dynamic>? arabicAlphabetJson,
     Map<String, Map<String, dynamic>> qiraatJson = const {},
@@ -156,6 +205,17 @@ class Engine {
       ),
       wordByWord: WordByWord(pack: wordByWordJson, quran: quran),
       similarAyahs: SimilarAyahs(similarAyahsJson ?? const {}),
+      morphology: Morphology(morphologyJson ?? const {}),
+      mutashabihat: Mutashabihat(mutashabihatJson ?? const {}),
+      quranTopics: QuranTopics(quranTopicsJson),
+      ayahThemes: AyahThemes(ayahThemesJson ?? const {}),
+      quranMetadata: QuranMetadata(quranMetadataJson),
+      qiraatVariants: QiraatVariants(
+        variants: qiraatVariantsJson ?? const {},
+        places: qiraatPlacesJson ?? const {},
+        audio: qiraatVariantAudioJson ?? const {},
+      ),
+      wordOfDay: WordOfDay(wordOfDayJson),
       surahSections: SurahSections(surahSectionsJson ?? const {}),
       alphabet: ArabicAlphabet(arabicAlphabetJson ?? const {}),
     );
@@ -188,6 +248,10 @@ class Engine {
     bool loadWordByWord = false,
     bool loadSimilarAyahs = false,
     bool loadQiraat = false,
+    bool loadMorphology = false,
+    bool loadMutashabihat = false,
+    bool loadQuranTopics = false,
+    bool loadQiraatVariants = false,
   }) async {
     final dir = dataDir ?? _locateDataDir();
     if (dir == null) {
@@ -272,6 +336,34 @@ class Engine {
         ? await read('similar-ayahs.json') as Map<String, dynamic>
         : null;
 
+    // Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB)
+    // join the always-loaded set on the same reasoning as the sections and the
+    // alphabet: small, and each answers a question a consumer should not have to
+    // opt into.
+    final quranMetadataJson = await readOptional('quran-metadata.json');
+    final ayahThemesJson = await readOptional('ayah-themes.json');
+    final wordOfDayJson = await readOptional('word-of-day.json');
+
+    final morphologyJson = loadMorphology
+        ? await read('morphology.json') as Map<String, dynamic>
+        : null;
+    final mutashabihatJson = loadMutashabihat
+        ? await read('mutashabihat.json') as Map<String, dynamic>
+        : null;
+    final quranTopicsJson = loadQuranTopics
+        ? await read('quran-topics.json') as Map<String, dynamic>
+        : null;
+    Map<String, dynamic>? qiraatVariantsJson;
+    Map<String, dynamic>? qiraatPlacesJson;
+    Map<String, dynamic>? qiraatVariantAudioJson;
+    if (loadQiraatVariants) {
+      qiraatVariantsJson =
+          await read('qiraat-variants.json') as Map<String, dynamic>;
+      qiraatPlacesJson = await read('qiraat-places.json') as Map<String, dynamic>;
+      qiraatVariantAudioJson =
+          await read('qiraat-variant-audio.json') as Map<String, dynamic>;
+    }
+
     return Engine.fromJson(
       quranJson: results[0] as List<dynamic>,
       juzJson: results[1] as List<dynamic>,
@@ -291,6 +383,15 @@ class Engine {
       qiraatTajweedPacksJson: qiraatPacks,
       wordByWordJson: wordByWordJson,
       similarAyahsJson: similarJson,
+      morphologyJson: morphologyJson,
+      mutashabihatJson: mutashabihatJson,
+      quranTopicsJson: quranTopicsJson,
+      ayahThemesJson: ayahThemesJson,
+      quranMetadataJson: quranMetadataJson,
+      qiraatVariantsJson: qiraatVariantsJson,
+      qiraatPlacesJson: qiraatPlacesJson,
+      qiraatVariantAudioJson: qiraatVariantAudioJson,
+      wordOfDayJson: wordOfDayJson,
       surahSectionsJson: surahSectionsJson,
       arabicAlphabetJson: arabicAlphabetJson,
       qiraatJson: qiraatJson,

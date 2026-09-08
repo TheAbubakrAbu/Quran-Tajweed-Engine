@@ -23,6 +23,17 @@ data class SimilarMatch(
     val verified: Boolean,
     /** Why a generated row matched; empty for verified rows. */
     val labels: List<String>,
+    /**
+     * 0-based inclusive token ranges of the shared words in the MATCHED ayah's raw text, from the
+     * Quranic Universal Library's table. Empty when only the phrase is known, which is why a
+     * consumer tints these where they exist and falls back to locating [phrase] where they do not.
+     */
+    val spans: List<IntRange> = emptyList(),
+    /**
+     * QUL's 0-100 similarity, where it listed the pair. Null for rows from the other two sources:
+     * they rank, but they do not score.
+     */
+    val score: Int? = null,
 )
 
 /**
@@ -32,8 +43,9 @@ data class SimilarMatch(
  * phrase-overlap matches carrying the labels that explain why they matched. They are a reading aid,
  * not a scholarly claim, so `verified` is the flag to gate on if you show only one kind.
  *
- * Rows ship as `[surah, ayah, phrase, verifiedFlag, labels?]`, which is heterogeneous, so they stay
- * as [JsonArray] until [matches] reads them.
+ * Rows ship as `[surah, ayah, phrase, verifiedFlag, labels?, spans?, score?]`, which is
+ * heterogeneous, so they stay as [JsonArray] until [matches] reads them. The last two come only
+ * from the Quranic Universal Library's table.
  */
 class SimilarAyahs(private val data: Map<String, List<JsonArray>> = emptyMap()) {
     /** Matches for an ayah, in display order. Empty for most short ayahs. */
@@ -51,6 +63,13 @@ class SimilarAyahs(private val data: Map<String, List<JsonArray>> = emptyMap()) 
                 labels = (row.getOrNull(4) as? JsonArray)
                     ?.mapNotNull { (it as? JsonPrimitive)?.takeIf { p -> p.isString }?.content }
                     ?: emptyList(),
+                spans = (row.getOrNull(5) as? JsonArray)
+                    ?.mapNotNull { span ->
+                        val pair = (span as? JsonArray)?.mapNotNull { it.jsonPrimitive.intOrNull }
+                        if (pair != null && pair.size == 2 && pair[1] >= pair[0]) pair[0]..pair[1] else null
+                    }
+                    ?: emptyList(),
+                score = (row.getOrNull(6) as? JsonPrimitive)?.intOrNull,
             )
         }
     }

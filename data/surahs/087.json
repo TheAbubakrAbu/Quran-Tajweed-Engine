@@ -27,7 +27,7 @@
     {
       "id": 1,
       "textArabic": "سَبِّحِ ٱسۡمَ رَبِّكَ ٱلۡأَعۡلَى",
-      "textTransliteration": "Sabbihi isma rabbika alaAAla",
+      "textTransliteration": "Sabbihis ma Rabbikal A'laa",
       "textEnglishSaheeh": "Exalt the name of your Lord, the Most High,",
       "textEnglishMustafa": "Glorify the Name of your Lord, the Most High,",
       "juz": 30,
@@ -38,7 +38,7 @@
     {
       "id": 2,
       "textArabic": "ٱلَّذِي خَلَقَ فَسَوَّىٰ",
-      "textTransliteration": "Allathee khalaqa fasawwa",
+      "textTransliteration": "Allazee khalaqa fasawwaa",
       "textEnglishSaheeh": "Who created and proportioned",
       "textEnglishMustafa": "Who created and ˹perfectly˺ fashioned ˹all˺,",
       "juz": 30,
@@ -49,7 +49,7 @@
     {
       "id": 3,
       "textArabic": "وَٱلَّذِي قَدَّرَ فَهَدَىٰ",
-      "textTransliteration": "Waallathee qaddara fahada",
+      "textTransliteration": "Wallazee qaddara fahadaa",
       "textEnglishSaheeh": "And who destined and [then] guided",
       "textEnglishMustafa": "and Who ordained precisely and inspired accordingly,",
       "juz": 30,
@@ -60,7 +60,7 @@
     {
       "id": 4,
       "textArabic": "وَٱلَّذِيٓ أَخۡرَجَ ٱلۡمَرۡعَىٰ",
-      "textTransliteration": "Waallathee akhraja almarAAa",
+      "textTransliteration": "Wallazeee akhrajal mar'aa",
       "textEnglishSaheeh": "And who brings out the pasture",
       "textEnglishMustafa": "and Who brings forth ˹green˺ pasture,",
       "juz": 30,
@@ -71,7 +71,7 @@
     {
       "id": 5,
       "textArabic": "فَجَعَلَهُۥ غُثَآءً أَحۡوَىٰ",
-      "textTransliteration": "FajaAAalahu ghuthaan ahwa",
+      "textTransliteration": "Faja'alahoo ghusaaa'an ahwaa",
       "textEnglishSaheeh": "And [then] makes it black stubble.",
       "textEnglishMustafa": "then reduces it to withered chaff.",
       "juz": 30,
@@ -82,7 +82,7 @@
     {
       "id": 6,
       "textArabic": "سَنُقۡرِئُكَ فَلَا تَنسَىٰٓ",
-      "textTransliteration": "Sanuqrioka fala tansa",
+      "textTransliteration": "Sanuqri'uka falaa tansaaa",
       "textEnglishSaheeh": "We will make you recite, [O Muhammad], and you will not forget,",
       "textEnglishMustafa": "We will have you recite ˹the Quran, O Prophet,˺ so you will not forget ˹any of it˺,",
       "juz": 30,
@@ -93,7 +93,7 @@
     {
       "id": 7,
       "textArabic": "إِلَّا مَا شَآءَ ٱللَّهُۚ إِنَّهُۥ يَعۡلَمُ ٱلۡجَهۡرَ وَمَا يَخۡفَىٰ",
-      "textTransliteration": "Illa ma shaa Allahu innahu yaAAlamu aljahra wama yakhfa",
+      "textTransliteration": "Illaa maa shaaa'al laah; innahoo ya'lamul jahra Wa-maa yakhfaa",
       "textEnglishSaheeh": "Except what Allah should will. Indeed, He knows what is declared and what is hidden.",
       "textEnglishMustafa": "unless Allah wills otherwise. He surely knows what is open and what is hidden.",
       "juz": 30,
@@ -104,7 +104,7 @@
     {
       "id": 8,
       "textArabic": "وَنُيَسِّرُكَ لِلۡيُسۡرَىٰ",
-      "textTransliteration": "Wanuyassiruka lilyusra",
+      "textTransliteration": "Wa-nu-yassiruka lilyusraa",
       "textEnglishSaheeh": "And We will ease you toward ease.",
       "textEnglishMustafa": "We will facilitate for you the Way of Ease.",
       "juz": 30,
@@ -115,7 +115,7 @@
     {
       "id": 9,
       "textArabic": "فَذَكِّرۡ إِن نَّفَعَتِ ٱلذِّكۡرَىٰ",
-      "textTransliteration": "Fathakkir in nafaAAati alththikra",
+      "textTransliteration": "Fazakkir in nafa'atiz zikraa",
       "textEnglishSaheeh": "So remind, if the reminder should benefit;",
       "textEnglishMustafa": "So ˹always˺ remind ˹with the Quran˺—˹even˺ if the reminder is beneficial ˹only to some˺.",
       "juz": 30,
@@ -126,7 +126,7 @@
     {
       "id": 10,
       "textArabic": "سَيَذَّكَّرُ مَن يَخۡشَىٰ",
-      "textTransliteration": "Sayaththakkaru man yakhsha",
+      "textTransliteration": "Sa-yazzakkaru mai yakhshaa",
       "textEnglishSaheeh": "He who fears [Allah] will be reminded.",
       "textEnglishMustafa": "Those in awe ˹of Allah˺ will be mindful ˹of it˺.",
       "juz": 30,
@@ -137,7 +137,7 @@
     {
       "id": 11,
       "textArabic": "وَيَتَجَنَّبُهَا ٱلۡأَشۡقَى",
-      "textTransliteration": "Wayatajannabuha alashqa",
+      "textTransliteration": "Wa-yatajannabuhal ashqaa",
       "textEnglishSaheeh": "But the wretched one will avoid it -",
       "textEnglishMustafa": "But it will be shunned by the most wretched,",
       "juz": 30,
@@ -148,7 +148,7 @@
     {
       "id": 12,
       "textArabic": "ٱلَّذِي يَصۡلَى ٱلنَّارَ ٱلۡكُبۡرَىٰ",
-      "textTransliteration": "Allathee yasla alnnara alkubra",
+      "textTransliteration": "Allazee yaslan Naaral kubraa",
       "textEnglishSaheeh": "[He] who will [enter and] burn in the greatest Fire,",
       "textEnglishMustafa": "who will burn in the greatest Fire,",
       "juz": 30,
@@ -159,7 +159,7 @@
     {
       "id": 13,
       "textArabic": "ثُمَّ لَا يَمُوتُ فِيهَا وَلَا يَحۡيَىٰ",
-      "textTransliteration": "Thumma la yamootu feeha wala yahya",
+      "textTransliteration": "Summa laa yamootu feehaa Wa-laa yahyaa",
       "textEnglishSaheeh": "Neither dying therein nor living.",
       "textEnglishMustafa": "where they will not ˹be able to˺ live or die.",
       "juz": 30,
@@ -170,7 +170,7 @@
     {
       "id": 14,
       "textArabic": "قَدۡ أَفۡلَحَ مَن تَزَكَّىٰ",
-      "textTransliteration": "Qad aflaha man tazakka",
+      "textTransliteration": "Qad aflaha man tazakkaa",
       "textEnglishSaheeh": "He has certainly succeeded who purifies himself",
       "textEnglishMustafa": "Successful indeed are those who purify themselves,",
       "juz": 30,
@@ -181,7 +181,7 @@
     {
       "id": 15,
       "textArabic": "وَذَكَرَ ٱسۡمَ رَبِّهِۦ فَصَلَّىٰ",
-      "textTransliteration": "Wathakara isma rabbihi fasalla",
+      "textTransliteration": "Wa-zakaras ma Rabbihee fasallaa",
       "textEnglishSaheeh": "And mentions the name of his Lord and prays.",
       "textEnglishMustafa": "remember the Name of their Lord, and pray.",
       "juz": 30,
@@ -192,7 +192,7 @@
     {
       "id": 16,
       "textArabic": "بَلۡ تُؤۡثِرُونَ ٱلۡحَيَوٰةَ ٱلدُّنۡيَا",
-      "textTransliteration": "Bal tuthiroona alhayata alddunya",
+      "textTransliteration": "Bal tu'siroonal hayaatad dunyaa",
       "textEnglishSaheeh": "But you prefer the worldly life,",
       "textEnglishMustafa": "But you ˹deniers only˺ prefer the life of this world,",
       "juz": 30,
@@ -203,7 +203,7 @@
     {
       "id": 17,
       "textArabic": "وَٱلۡأٓخِرَةُ خَيۡرٞ وَأَبۡقَىٰٓ",
-      "textTransliteration": "Waalakhiratu khayrun waabqa",
+      "textTransliteration": "Wal-Aakhiratu khairunw Wa-abqaa",
       "textEnglishSaheeh": "While the Hereafter is better and more enduring.",
       "textEnglishMustafa": "even though the Hereafter is far better and more lasting.",
       "juz": 30,
@@ -214,7 +214,7 @@
     {
       "id": 18,
       "textArabic": "إِنَّ هَٰذَا لَفِي ٱلصُّحُفِ ٱلۡأُولَىٰ",
-      "textTransliteration": "Inna hatha lafee alssuhufi aloola",
+      "textTransliteration": "Inna haazaa lafis suhu-fil oolaa",
       "textEnglishSaheeh": "Indeed, this is in the former scriptures,",
       "textEnglishMustafa": "This is certainly ˹mentioned˺ in the earlier Scriptures—",
       "juz": 30,
@@ -225,7 +225,7 @@
     {
       "id": 19,
       "textArabic": "صُحُفِ إِبۡرَٰهِيمَ وَمُوسَىٰ",
-      "textTransliteration": "Suhufi ibraheema wamoosa",
+      "textTransliteration": "Suhufi Ibraaheema Wa-Moosaa",
       "textEnglishSaheeh": "The scriptures of Abraham and Moses.",
       "textEnglishMustafa": "the Scriptures of Abraham and Moses.",
       "juz": 30,

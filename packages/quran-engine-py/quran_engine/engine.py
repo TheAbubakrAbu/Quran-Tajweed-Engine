@@ -22,6 +22,12 @@ from .ask_ai import AskAI
 from .sections import SurahSections
 from .alphabet import ArabicAlphabet
 from .qiraat_comparison import QiraatComparison
+from .morphology import Morphology
+from .mutashabihat import Mutashabihat
+from .topics import QuranTopics, AyahThemes
+from .metadata import QuranMetadata
+from .qiraat_variants import QiraatVariants
+from .word_of_day import WordOfDay
 
 _RIWAYAT = ["warsh", "qaloon", "duri", "susi", "buzzi", "qunbul", "shubah"]
 #: The eight riwayat whose text this engine publishes - the ones with line tables.
@@ -45,7 +51,14 @@ class Engine:
                  themes: Optional[Themes] = None,
                  tajweed_lessons: Optional[TajweedLessons] = None,
                  surah_sections: Optional[SurahSections] = None,
-                 alphabet: Optional[ArabicAlphabet] = None):
+                 alphabet: Optional[ArabicAlphabet] = None,
+                 morphology: Optional[Morphology] = None,
+                 mutashabihat: Optional[Mutashabihat] = None,
+                 quran_topics: Optional[QuranTopics] = None,
+                 ayah_themes: Optional[AyahThemes] = None,
+                 quran_metadata: Optional[QuranMetadata] = None,
+                 qiraat_variants: Optional[QiraatVariants] = None,
+                 word_of_day: Optional[WordOfDay] = None):
         self.quran = quran
         self.juz_page = juz_page
         self.reciters = reciters
@@ -58,6 +71,13 @@ class Engine:
         self.word_by_word = word_by_word or WordByWord(quran=quran)
         self.similar_ayahs = similar_ayahs or SimilarAyahs()
         self.themes = themes or Themes()
+        self.morphology = morphology or Morphology()
+        self.mutashabihat = mutashabihat or Mutashabihat()
+        self.quran_topics = quran_topics or QuranTopics()
+        self.ayah_themes = ayah_themes or AyahThemes()
+        self.quran_metadata = quran_metadata or QuranMetadata()
+        self.qiraat_variants = qiraat_variants or QiraatVariants()
+        self.word_of_day = word_of_day or WordOfDay()
         self.tajweed_lessons = tajweed_lessons or TajweedLessons()
         self.surah_sections = surah_sections or SurahSections()
         self.alphabet = alphabet or ArabicAlphabet()
@@ -81,6 +101,10 @@ class Engine:
              load_qiraat_tajweed: bool = False,
              load_word_by_word: bool = False,
              load_similar_ayahs: bool = False,
+             load_morphology: bool = False,
+             load_mutashabihat: bool = False,
+             load_quran_topics: bool = False,
+             load_qiraat_variants: bool = False,
              riwayah: Optional[str] = None) -> "Engine":
         d = Path(data_dir) if data_dir else _default_data_dir()
 
@@ -147,6 +171,24 @@ class Engine:
         surah_sections = SurahSections(read("surah-sections.json"))
         alphabet = ArabicAlphabet(read("arabic-alphabet.json"))
 
+        # Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB) join them on
+        # the same reasoning: small, and each answers a question a consumer should not have to
+        # opt into.
+        quran_metadata = QuranMetadata(read("quran-metadata.json"))
+        ayah_themes = AyahThemes(read("ayah-themes.json"))
+        word_of_day = WordOfDay(read("word-of-day.json"))
+
+        morphology = Morphology(read("morphology.json")) if load_morphology else None
+        mutashabihat = Mutashabihat(read("mutashabihat.json")) if load_mutashabihat else None
+        quran_topics = QuranTopics(read("quran-topics.json")) if load_quran_topics else None
+        qiraat_variants = None
+        if load_qiraat_variants:
+            qiraat_variants = QiraatVariants(
+                variants=read("qiraat-variants.json"),
+                places=read("qiraat-places.json"),
+                audio=read("qiraat-variant-audio.json"),
+            )
+
         return Engine(
             quran=quran,
             juz_page=JuzPage(quran, juz_list),
@@ -163,4 +205,11 @@ class Engine:
             tajweed_lessons=lessons,
             surah_sections=surah_sections,
             alphabet=alphabet,
+            morphology=morphology,
+            mutashabihat=mutashabihat,
+            quran_topics=quran_topics,
+            ayah_themes=ayah_themes,
+            quran_metadata=quran_metadata,
+            qiraat_variants=qiraat_variants,
+            word_of_day=word_of_day,
         )

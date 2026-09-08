@@ -93,29 +93,32 @@ Field guide: `searchVerses[].query` with `contains` (ids that must appear), `exc
 
 The core modules — Quran, tajweed, juz/page, audio, search, sorting, caching, names, muqattaat — are in **all seven** ports and are covered by the conformance vectors.
 
-Everything beyond the core is in **all seven** too — the mushaf, riwayah tajweed, word by word, similar ayahs, themes, the tajweed course, meaning search and Ask AI retrieval (batch 3), then surah sections, the alphabet reference and the qiraat comparison (batch 4). Each port carries a parity suite that is a deliberate translation of the same cases:
+Everything beyond the core is in **all seven** too — the mushaf, riwayah tajweed, word by word, similar ayahs, themes, the tajweed course, meaning search and Ask AI retrieval (batch 3), then surah sections, the alphabet reference and the qiraat comparison (batch 4), then morphology, mutashabihat, the QUL topic indexes, the mushaf divisions, the qiraat variant matrix and the word of the day (batch 5). Each port carries parity suites that are deliberate translations of the same cases:
 
-| Port | Core | Beyond the core | Parity tests |
-|---|---|---|---|
-| JavaScript | ✓ | ✓ | `test/parity.test.js` — 32 |
-| Python | ✓ | ✓ | `tests/test_parity.py` — 32 |
-| Swift | ✓ | ✓ | `ParityTests.swift` — 31 |
-| Rust | ✓ | ✓ | `tests/parity.rs` — 31 |
-| Go | ✓ | ✓ | `parity_test.go` — 31 |
-| Kotlin | ✓ | ✓ | `ParityTest.kt` — 31 |
-| Dart | ✓ | ✓ | `test/parity_test.dart` — 31 |
+| Port | Core | Beyond the core | Batch 3-4 parity | Batch 5 parity |
+|---|---|---|---|---|
+| JavaScript | ✓ | ✓ | `test/parity.test.js` | `test/batch5.test.js` |
+| Python | ✓ | ✓ | `tests/test_parity.py` | `tests/test_batch5.py` |
+| Swift | ✓ | ✓ | `ParityTests.swift` | `Batch5Tests.swift` |
+| Rust | ✓ | ✓ | `tests/parity.rs` | `tests/batch5.rs` |
+| Go | ✓ | ✓ | `parity_test.go` | `batch5_test.go` |
+| Kotlin | ✓ | ✓ | `ParityTest.kt` | `Batch5Test.kt` |
+| Dart | ✓ | ✓ | `test/parity_test.dart` | `test/batch5_test.dart` |
 
-A divergence between the ports fails a test rather than surprising an app. Two the suites caught, both worth knowing if you write an eighth port:
+A divergence between the ports fails a test rather than surprising an app. Several the suites caught, all worth knowing if you write an eighth port:
 
 - **Java's `\s` is ASCII-only.** 2:26 separates two of its words with U+00A0, so Kotlin tokenized one word short of the pack and every Arabic token after it shifted by one. `Regex("(?U)\\s+")` fixes it. Go's `strings.Fields`, Rust's `split_whitespace`, and JS, Dart and Python's `\s` are Unicode-aware already.
 - **Go's RE2 has no lookbehind**, so the `(?<![\d:])(\d{1,3}):(\d{1,3})` reference scanner cannot be a regexp there. Go and Rust both hand-roll it; the code is short and the tests pin it.
 - **A value-type tree needs a path, not a pointer.** The surah outline is a flat list that nests, so rebuilding the tree means appending into the node currently being filled. Rust will not lend you two mutable borrows of one tree, and Swift/Go trees are values that move when a slice grows — all three track the open chain as a *path of indices* and walk back down on each insert. JS, Python, Kotlin and Dart keep a stack of references.
+- **Dart reserves `index` on every enum.** The three QUL topic indexes are `thematic` / `ontology` / `index` everywhere else; Dart cannot have an enum value named `index` because `Enum.index` already exists, so its value is `generalIndex` and `topicTreeWireName` maps it back to the wire name. Nothing else about the shape changes, and the JSON is untouched.
+- **The morphology fold closes spaces; `cleanSearch` only trims them.** A root is printed spaced (`"ر ب ب"`) and typed closed up (`"ربب"`), and both have to find it. Every port therefore wraps `cleanSearch(removingArabicDiacriticsAndSigns(q))` in a whitespace *strip*, not the library's `whitespace: true` option, which trims the ends only. Getting this wrong makes root search silently return nothing for the spaced form, which no type checker will catch.
+- **An untagged union needs its variants ordered.** `similar-ayahs.json` rows carry both a `labels` array of strings and a `spans` array of int pairs, and an empty `[]` decodes as either. Position 4 is the one routinely empty, so Rust's `SimilarField` and Swift's `Field` try `[String]` before the span shape; reversing them silently turns every label list into an empty span list.
 
 ### What an eighth port needs
 
 Nothing algorithmically hard; the corpora do the work. In order of effort:
 
-1. **Data accessors** — mushaf (page/line tables + the index), riwayah tajweed (legend + word rules + khilaf markers), word by word (two aligned layers), similar ayahs, themes, lessons. Each is a JSON shape and a handful of lookups; see [10](10-mushaf.md)–[13](13-similar-and-themes.md) for the schemas and the invariants that matter (letter indices vs character offsets; the token alignment; which riwayat ship what).
+1. **Data accessors** — mushaf (page/line tables + the index), riwayah tajweed (legend + word rules + khilaf markers), word by word (two aligned layers), similar ayahs, themes, lessons, and the batch-5 six (morphology, mutashabihat, QUL topics, the mushaf divisions, qiraat variants, the word of the day). Each is a JSON shape and a handful of lookups; see [10](10-mushaf.md)–[13](13-similar-and-themes.md) and [18](18-morphology.md)–[22](22-word-of-day.md) for the schemas and the invariants that matter (letter indices vs character offsets; the token alignment; which riwayat ship what; that the three topic indexes are independent trees).
 2. **`Semantic`** — a word-vector MaxSim index with a pluggable embedder. About 80 lines: tokenize, embed, normalize once, score as the mean over query words of the best-matching document word.
 3. **Ask AI retrieval** — four lanes, round-robin interleaved. The only fiddly parts are the reference scanner (`N:M`, `surah <name>`, `verse <n>`, the named verses) and the IDF weighting; the Rust port does both without a regex dependency if yours would rather avoid one.
 

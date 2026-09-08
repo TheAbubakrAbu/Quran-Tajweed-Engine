@@ -22,9 +22,11 @@ use std::path::{Path, PathBuf};
 
 pub mod ask_ai;
 pub mod audio;
+pub mod batch5;
 pub mod cache;
 pub mod corpora;
 pub mod model;
+pub mod morphology;
 pub mod mushaf;
 pub mod alphabet;
 pub mod qiraat_comparison;
@@ -160,6 +162,19 @@ pub struct Engine {
     topics: Vec<Topic>,
     /// The tajweed course; loaded by default.
     tajweed_chapters: Vec<TajweedChapter>,
+    /// Batch 5. `morphology`, `mutashabihat`, `qul_topics` and the qiraat variant trio are
+    /// opt-in; the metadata, passage themes and word list load by default.
+    morphology: morphology::MorphologyFile,
+    morphology_index: std::sync::OnceLock<morphology::MorphologyIndex>,
+    mutashabihat: batch5::MutashabihatFile,
+    qul_topics: Vec<batch5::QulTopic>,
+    qul_topic_index: std::sync::OnceLock<batch5::QulTopicIndex>,
+    ayah_themes: HashMap<String, Vec<batch5::ThemePassage>>,
+    quran_metadata: batch5::QuranMetadataFile,
+    qiraat_variants: batch5::QiraatVariantsFile,
+    qiraat_places: batch5::QiraatPlacesFile,
+    qiraat_variant_audio: batch5::QiraatVariantAudioFile,
+    words_of_day: Vec<batch5::WordOfDayEntry>,
     search: SearchIndex,
 }
 
@@ -179,6 +194,14 @@ pub struct LoadOptions {
     pub similar_ayahs: bool,
     /// The seven non-Hafs riwayat's own text (~11 MB) — what `compare_surah` compares.
     pub qiraat: bool,
+    /// Root and lemma of every word (~776 KB).
+    pub morphology: bool,
+    /// The repeated phrases (~178 KB).
+    pub mutashabihat: bool,
+    /// The three QUL topic indexes (~730 KB).
+    pub qul_topics: bool,
+    /// The variant matrix, the place index and the paired-recording table (~1.9 MB together).
+    pub qiraat_variants: bool,
 }
 
 /// One verse of a riwayah's own text, in ITS numbering.
@@ -186,6 +209,18 @@ pub struct LoadOptions {
 pub struct QiraahVerse {
     pub id: u32,
     pub text: String,
+}
+
+/// Like `read_json`, but a missing file yields the type's default rather than an error. Used for
+/// the corpora that load by default: absent data means the accessors answer nothing, not that the
+/// engine fails to start.
+fn read_json_or_default<T: serde::de::DeserializeOwned + Default>(
+    path: &Path,
+) -> Result<T, LoadError> {
+    if !path.exists() {
+        return Ok(T::default());
+    }
+    read_json(path)
 }
 
 fn read_json<T: serde::de::DeserializeOwned>(path: &Path) -> Result<T, LoadError> {
@@ -364,6 +399,42 @@ impl Engine {
             HashMap::new()
         };
 
+        // Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB) load by
+        // default like the sections and the alphabet: small, and each answers a question a
+        // consumer should not have to opt into. A missing file is not an error.
+        let quran_metadata: batch5::QuranMetadataFile =
+            read_json_or_default(&data_dir.join("quran-metadata.json"))?;
+        let ayah_themes: HashMap<String, Vec<batch5::ThemePassage>> =
+            read_json_or_default(&data_dir.join("ayah-themes.json"))?;
+        let word_file: batch5::WordOfDayFile =
+            read_json_or_default(&data_dir.join("word-of-day.json"))?;
+
+        let morphology = if options.morphology {
+            read_json(&data_dir.join("morphology.json"))?
+        } else {
+            morphology::MorphologyFile::default()
+        };
+        let mutashabihat = if options.mutashabihat {
+            read_json(&data_dir.join("mutashabihat.json"))?
+        } else {
+            batch5::MutashabihatFile::default()
+        };
+        let qul_topics = if options.qul_topics {
+            let file: batch5::QulTopicsFile = read_json(&data_dir.join("quran-topics.json"))?;
+            file.topics
+        } else {
+            Vec::new()
+        };
+        let (qiraat_variants, qiraat_places, qiraat_variant_audio) = if options.qiraat_variants {
+            (
+                read_json(&data_dir.join("qiraat-variants.json"))?,
+                read_json(&data_dir.join("qiraat-places.json"))?,
+                read_json(&data_dir.join("qiraat-variant-audio.json"))?,
+            )
+        } else {
+            Default::default()
+        };
+
         let search = SearchIndex::build(&surahs);
 
         Ok(Engine {
@@ -391,6 +462,17 @@ impl Engine {
             similar_ayahs,
             topics,
             tajweed_chapters,
+            morphology,
+            morphology_index: std::sync::OnceLock::new(),
+            mutashabihat,
+            qul_topics,
+            qul_topic_index: std::sync::OnceLock::new(),
+            ayah_themes,
+            quran_metadata,
+            qiraat_variants,
+            qiraat_places,
+            qiraat_variant_audio,
+            words_of_day: word_file.words,
             search,
         })
     }
@@ -1036,5 +1118,679 @@ mod tests {
 
         // Digit rejection happens BEFORE the boolean branch: `allah & 2` returns 0.
         assert!(e.search_verses("allah & 2", &opts).is_empty());
+    }
+}
+
+// ---- batch 5 accessors -------------------------------------------------------------
+//
+// Kept here with the other accessors rather than in `batch5.rs`, which holds the shapes: the
+// engine owns the data, and an accessor that borrows from it belongs on the type that owns it.
+
+impl Engine {
+    // -- morphology ------------------------------------------------------------------
+
+    /// Whether `morphology.json` was loaded.
+    pub fn has_morphology(&self) -> bool {
+        !self.morphology.roots.is_empty()
+    }
+
+    /// The root with this 1-based id. Id `0` means the token has no root and never resolves.
+    pub fn root(&self, id: u32) -> Option<morphology::Root> {
+        morphology::root_at(&self.morphology, id)
+    }
+
+    /// The dictionary form with this 1-based id.
+    pub fn lemma(&self, id: u32) -> Option<morphology::Lemma> {
+        morphology::lemma_at(&self.morphology, id)
+    }
+
+    /// The root and lemma id of every token of the ayah, or `None` when it is not covered.
+    pub fn morphology_ids(&self, surah_id: u32, ayah_id: u32) -> Option<(&[u32], &[u32])> {
+        let key = surah_id.to_string();
+        let roots = self.morphology.root_ids.get(&key)?;
+        let lemmas = self.morphology.lemma_ids.get(&key)?;
+        let index = (ayah_id as usize).checked_sub(1)?;
+        Some((roots.get(index)?.as_slice(), lemmas.get(index)?.as_slice()))
+    }
+
+    /// The root of one token, `None` when it has none (a particle) or the index is out of range.
+    pub fn root_of(&self, surah_id: u32, ayah_id: u32, token: usize) -> Option<(u32, morphology::Root)> {
+        let (roots, _) = self.morphology_ids(surah_id, ayah_id)?;
+        let id = *roots.get(token)?;
+        Some((id, self.root(id)?))
+    }
+
+    /// The dictionary form of one token.
+    pub fn lemma_of(&self, surah_id: u32, ayah_id: u32, token: usize) -> Option<(u32, morphology::Lemma)> {
+        let (_, lemmas) = self.morphology_ids(surah_id, ayah_id)?;
+        let id = *lemmas.get(token)?;
+        Some((id, self.lemma(id)?))
+    }
+
+    fn morphology_index(&self) -> &morphology::MorphologyIndex {
+        self.morphology_index
+            .get_or_init(|| morphology::MorphologyIndex::build(&self.morphology))
+    }
+
+    /// Every word carrying this root, in mushaf order.
+    pub fn occurrences_of_root(&self, id: u32) -> &[morphology::WordLocation] {
+        self.morphology_index().by_root.get(&id).map(Vec::as_slice).unwrap_or(&[])
+    }
+
+    /// Every word carrying this lemma, in mushaf order.
+    pub fn occurrences_of_lemma(&self, id: u32) -> &[morphology::WordLocation] {
+        self.morphology_index().by_lemma.get(&id).map(Vec::as_slice).unwrap_or(&[])
+    }
+
+    /// Roots whose Arabic or Buckwalter spelling starts with the query.
+    pub fn find_roots(&self, query: &str, limit: usize) -> Vec<morphology::RootHit> {
+        morphology::prefix_hits(&self.morphology.roots, query, limit)
+            .into_iter()
+            .filter_map(|id| Some(morphology::RootHit { id: id as u32, root: self.root(id as u32)? }))
+            .collect()
+    }
+
+    /// Dictionary forms whose marked or unmarked spelling starts with the query.
+    pub fn find_lemmas(&self, query: &str, limit: usize) -> Vec<morphology::LemmaHit> {
+        morphology::prefix_hits(&self.morphology.lemmas, query, limit)
+            .into_iter()
+            .filter_map(|id| Some(morphology::LemmaHit { id: id as u32, lemma: self.lemma(id as u32)? }))
+            .collect()
+    }
+
+    /// Corpus size: roots, lemmas, and the tokens they cover.
+    pub fn morphology_count(&self) -> (usize, usize, usize) {
+        let tokens = self
+            .morphology
+            .root_ids
+            .values()
+            .flat_map(|ayahs| ayahs.iter())
+            .map(Vec::len)
+            .sum();
+        (self.morphology.roots.len(), self.morphology.lemmas.len(), tokens)
+    }
+
+    // -- mutashabihat ----------------------------------------------------------------
+
+    /// One repeated phrase by id.
+    pub fn mutashabihat_phrase(&self, id: u32) -> Option<batch5::Phrase> {
+        let row = self.mutashabihat.phrases.get(&id.to_string())?;
+        Some(batch5::Phrase {
+            id,
+            source: row.source.clone(),
+            span: row.span,
+            count: row.count,
+            ayah_count: row.ayah_count,
+            surah_count: row.surah_count,
+            occurrences: row.occurrences.clone(),
+            word_count: row.span[1] - row.span[0] + 1,
+        })
+    }
+
+    /// The phrases this ayah carries, longest first so the most distinctive wording leads.
+    pub fn mutashabihat_for(&self, surah_id: u32, ayah_id: u32) -> Vec<batch5::Phrase> {
+        let key = format!("{surah_id}:{ayah_id}");
+        let mut out: Vec<batch5::Phrase> = self
+            .mutashabihat
+            .index
+            .get(&key)
+            .map(Vec::as_slice)
+            .unwrap_or(&[])
+            .iter()
+            .filter_map(|&id| self.mutashabihat_phrase(id))
+            .collect();
+        out.sort_by(|a, b| b.word_count.cmp(&a.word_count).then(a.id.cmp(&b.id)));
+        out
+    }
+
+    /// Whether the ayah carries any: a map hit, cheap enough to gate a button on.
+    pub fn has_mutashabihat(&self, surah_id: u32, ayah_id: u32) -> bool {
+        self.mutashabihat
+            .index
+            .get(&format!("{surah_id}:{ayah_id}"))
+            .is_some_and(|ids| !ids.is_empty())
+    }
+
+    /// A phrase's occurrences in mushaf order, not key order.
+    pub fn phrase_occurrences(&self, id: u32) -> Vec<batch5::PhraseOccurrence> {
+        let Some(phrase) = self.mutashabihat_phrase(id) else {
+            return Vec::new();
+        };
+        let mut keys: Vec<&String> = phrase.occurrences.keys().collect();
+        keys.sort_by_key(|key| batch5::split_ayah_key(key));
+        keys.into_iter()
+            .map(|key| {
+                let (surah, ayah) = batch5::split_ayah_key(key);
+                batch5::PhraseOccurrence {
+                    surah,
+                    ayah,
+                    key: key.clone(),
+                    spans: phrase.occurrences[key].clone(),
+                }
+            })
+            .collect()
+    }
+
+    /// The phrase's own words, sliced out of the ayah text you hand it. The engine does not carry
+    /// the text in here: the caller already has the ayah it is displaying.
+    pub fn phrase_text(&self, id: u32, source_ayah_text: &str) -> String {
+        let Some(phrase) = self.mutashabihat_phrase(id) else {
+            return String::new();
+        };
+        let tokens: Vec<&str> = source_ayah_text.split_whitespace().collect();
+        if phrase.span[1] >= tokens.len() {
+            return String::new();
+        }
+        tokens[phrase.span[0]..=phrase.span[1]].join(" ")
+    }
+
+    /// How many phrases there are, and how many ayahs carry one.
+    pub fn mutashabihat_count(&self) -> (usize, usize) {
+        (self.mutashabihat.phrases.len(), self.mutashabihat.index.len())
+    }
+
+    // -- QUL topics ------------------------------------------------------------------
+
+    fn qul_topic_index(&self) -> &batch5::QulTopicIndex {
+        self.qul_topic_index
+            .get_or_init(|| batch5::QulTopicIndex::build(&self.qul_topics))
+    }
+
+    /// Every topic, in corpus order.
+    pub fn qul_topics(&self) -> &[batch5::QulTopic] {
+        &self.qul_topics
+    }
+
+    /// One topic.
+    pub fn qul_topic(&self, id: u32) -> Option<&batch5::QulTopic> {
+        let position = *self.qul_topic_index().by_id.get(&id)?;
+        self.qul_topics.get(position)
+    }
+
+    /// The topics an index lists.
+    pub fn topics_in_tree(&self, tree: batch5::TopicTree) -> Vec<&batch5::QulTopic> {
+        self.qul_topics.iter().filter(|topic| topic.listed_in(tree)).collect()
+    }
+
+    /// Topics an index lists that have no parent in that same tree.
+    pub fn topic_roots(&self, tree: batch5::TopicTree) -> Vec<&batch5::QulTopic> {
+        self.qul_topics
+            .iter()
+            .filter(|topic| topic.listed_in(tree) && topic.parent_in(tree).is_none())
+            .collect()
+    }
+
+    /// The parent in one tree. `None` for the tree means the topic's first listed index, which is
+    /// a convenience for a caller that does not care.
+    pub fn topic_parent(&self, id: u32, tree: Option<batch5::TopicTree>) -> Option<&batch5::QulTopic> {
+        let topic = self.qul_topic(id)?;
+        let which = tree.or_else(|| topic.default_tree())?;
+        self.qul_topic(topic.parent_in(which)?)
+    }
+
+    /// Direct children in one tree, in id order.
+    pub fn topic_children(&self, id: u32, tree: Option<batch5::TopicTree>) -> Vec<&batch5::QulTopic> {
+        let Some(topic) = self.qul_topic(id) else {
+            return Vec::new();
+        };
+        let Some(which) = tree.or_else(|| topic.default_tree()) else {
+            return Vec::new();
+        };
+        self.qul_topic_index()
+            .children
+            .get(&(which, id))
+            .map(Vec::as_slice)
+            .unwrap_or(&[])
+            .iter()
+            .filter_map(|&child| self.qul_topic(child))
+            .collect()
+    }
+
+    /// The chain up to the root of one tree, nearest first. Cycle-safe: the corpus is trusted for
+    /// its content, not for its shape.
+    pub fn topic_ancestors(&self, id: u32, tree: Option<batch5::TopicTree>) -> Vec<&batch5::QulTopic> {
+        let Some(topic) = self.qul_topic(id) else {
+            return Vec::new();
+        };
+        let Some(which) = tree.or_else(|| topic.default_tree()) else {
+            return Vec::new();
+        };
+        let mut out = Vec::new();
+        let mut seen = std::collections::HashSet::from([id]);
+        let mut current = self.topic_parent(id, Some(which));
+        while let Some(parent) = current {
+            if !seen.insert(parent.id) {
+                break;
+            }
+            out.push(parent);
+            current = self.topic_parent(parent.id, Some(which));
+        }
+        out
+    }
+
+    /// Every topic annotating this ayah, across all three indexes.
+    pub fn qul_topics_for(&self, surah_id: u32, ayah_id: u32) -> Vec<&batch5::QulTopic> {
+        self.qul_topic_index()
+            .by_ayah
+            .get(&format!("{surah_id}:{ayah_id}"))
+            .map(Vec::as_slice)
+            .unwrap_or(&[])
+            .iter()
+            .filter_map(|&id| self.qul_topic(id))
+            .collect()
+    }
+
+    /// Name and Arabic-name substring search, exact-prefix hits first.
+    pub fn search_qul_topics(&self, query: &str, limit: usize) -> Vec<&batch5::QulTopic> {
+        let q = query.trim().to_lowercase();
+        if q.is_empty() {
+            return Vec::new();
+        }
+        let mut starts = Vec::new();
+        let mut contains = Vec::new();
+        for topic in &self.qul_topics {
+            let name = topic.name.to_lowercase();
+            if name.starts_with(&q) {
+                starts.push(topic);
+            } else if name.contains(&q) || topic.arabic.contains(query) {
+                contains.push(topic);
+            }
+            if limit > 0 && starts.len() >= limit {
+                break;
+            }
+        }
+        starts.extend(contains);
+        if limit > 0 {
+            starts.truncate(limit);
+        }
+        starts
+    }
+
+    /// Corpus size. The per-index counts deliberately sum to MORE than the topic count: the 17
+    /// topics listed in two indexes are counted in both.
+    pub fn qul_topic_count(&self) -> (usize, usize, usize, usize, usize) {
+        let mut thematic = 0;
+        let mut ontology = 0;
+        let mut index = 0;
+        let mut references = 0;
+        for topic in &self.qul_topics {
+            for family in &topic.families {
+                match family {
+                    batch5::TopicTree::Thematic => thematic += 1,
+                    batch5::TopicTree::Ontology => ontology += 1,
+                    batch5::TopicTree::Index => index += 1,
+                }
+            }
+            references += topic.ayahs.len();
+        }
+        (self.qul_topics.len(), thematic, ontology, index, references)
+    }
+
+    // -- passage themes --------------------------------------------------------------
+
+    /// A surah's passages, in order.
+    pub fn passages(&self, surah_id: u32) -> &[batch5::ThemePassage] {
+        self.ayah_themes.get(&surah_id.to_string()).map(Vec::as_slice).unwrap_or(&[])
+    }
+
+    /// The passage an ayah falls in. Passages do not overlap, so this is the one answer; `None`
+    /// for an ayah between two of them.
+    pub fn passage_for(&self, surah_id: u32, ayah_id: u32) -> Option<&batch5::ThemePassage> {
+        self.passages(surah_id)
+            .iter()
+            .find(|passage| ayah_id >= passage.from && ayah_id <= passage.to)
+    }
+
+    /// Matches the theme sentence and the topic it sits under.
+    pub fn search_passages(&self, query: &str, limit: usize) -> Vec<(u32, &batch5::ThemePassage)> {
+        let q = query.trim().to_lowercase();
+        if q.is_empty() {
+            return Vec::new();
+        }
+        let mut out = Vec::new();
+        for surah in &self.surahs {
+            for passage in self.passages(surah.id) {
+                if passage.theme.to_lowercase().contains(&q)
+                    || passage.topic.to_lowercase().contains(&q)
+                {
+                    out.push((surah.id, passage));
+                    if limit > 0 && out.len() >= limit {
+                        return out;
+                    }
+                }
+            }
+        }
+        out
+    }
+
+    /// How many surahs carry an outline, and how many passages there are.
+    pub fn passage_count(&self) -> (usize, usize) {
+        (self.ayah_themes.len(), self.ayah_themes.values().map(Vec::len).sum())
+    }
+
+    // -- hizb / ruku / manzil --------------------------------------------------------
+
+    fn division_starts(&self, kind: batch5::DivisionKind) -> &[String] {
+        match kind {
+            batch5::DivisionKind::Hizb => &self.quran_metadata.hizb,
+            batch5::DivisionKind::Ruku => &self.quran_metadata.ruku,
+            batch5::DivisionKind::Manzil => &self.quran_metadata.manzil,
+        }
+    }
+
+    /// How many of a kind there are.
+    pub fn division_count(&self, kind: batch5::DivisionKind) -> usize {
+        self.division_starts(kind).len()
+    }
+
+    /// The 1-based number containing an ayah, or 0 when there is no table.
+    pub fn division_for(&self, kind: batch5::DivisionKind, surah_id: u32, ayah_id: u32) -> usize {
+        let starts = self.division_starts(kind);
+        let target = surah_id * 1000 + ayah_id;
+        starts.partition_point(|key| {
+            let (surah, ayah) = batch5::split_ayah_key(key);
+            surah * 1000 + ayah <= target
+        })
+    }
+
+    /// Where a division begins.
+    pub fn division_start(&self, kind: batch5::DivisionKind, number: usize) -> Option<batch5::Division> {
+        let key = self.division_starts(kind).get(number.checked_sub(1)?)?;
+        let (surah, ayah) = batch5::split_ayah_key(key);
+        Some(batch5::Division { number, surah, ayah, key: key.clone() })
+    }
+
+    /// Every start of a kind, in order.
+    pub fn divisions(&self, kind: batch5::DivisionKind) -> Vec<batch5::Division> {
+        (1..=self.division_count(kind))
+            .filter_map(|n| self.division_start(kind, n))
+            .collect()
+    }
+
+    /// A division's start, and the start of the next one, which is where it ends. The second is
+    /// `None` for the last, which runs to the end of the Quran: no start key says so, and
+    /// pretending otherwise would be an invented boundary.
+    pub fn division_range(
+        &self,
+        kind: batch5::DivisionKind,
+        number: usize,
+    ) -> Option<(batch5::Division, Option<batch5::Division>)> {
+        let from = self.division_start(kind, number)?;
+        Some((from, self.division_start(kind, number + 1)))
+    }
+
+    /// All three at once, which is what a "where am I" line under an ayah wants.
+    pub fn divisions_for(&self, surah_id: u32, ayah_id: u32) -> (usize, usize, usize) {
+        (
+            self.division_for(batch5::DivisionKind::Hizb, surah_id, ayah_id),
+            self.division_for(batch5::DivisionKind::Ruku, surah_id, ayah_id),
+            self.division_for(batch5::DivisionKind::Manzil, surah_id, ayah_id),
+        )
+    }
+
+    // -- qiraat variants -------------------------------------------------------------
+
+    /// The words of this ayah that the Ten read differently, in corpus order.
+    pub fn junctures(&self, surah_id: u32, ayah_id: u32) -> &[batch5::Juncture] {
+        self.qiraat_variants
+            .ayahs
+            .get(&format!("{surah_id}:{ayah_id}"))
+            .map(Vec::as_slice)
+            .unwrap_or(&[])
+    }
+
+    /// Whether the ayah carries any. Only 1,409 of the 6,236 do.
+    pub fn has_qiraat_variants(&self, surah_id: u32, ayah_id: u32) -> bool {
+        !self.junctures(surah_id, ayah_id).is_empty()
+    }
+
+    /// One of the ten imams.
+    pub fn variant_reader(&self, id: u32) -> Option<&batch5::VariantReader> {
+        self.qiraat_variants.readers.get(&id.to_string())
+    }
+
+    /// One of the twenty transmitters.
+    pub fn variant_transmitter(&self, id: u32) -> Option<&batch5::VariantTransmitter> {
+        self.qiraat_variants.transmitters.get(&id.to_string())
+    }
+
+    /// Every transmitter reading a form: an imam's own pair, plus any listed individually.
+    pub fn transmitters_following(
+        &self,
+        reading: &batch5::VariantReading,
+    ) -> Vec<&batch5::VariantTransmitter> {
+        let mut out = Vec::new();
+        let mut seen = std::collections::HashSet::new();
+        for &reader_id in &reading.readers {
+            let mut ids: Vec<u32> = self
+                .qiraat_variants
+                .transmitters
+                .values()
+                .filter(|t| t.reader == reader_id)
+                .map(|t| t.id)
+                .collect();
+            ids.sort_unstable();
+            for id in ids {
+                if seen.insert(id) {
+                    if let Some(t) = self.variant_transmitter(id) {
+                        out.push(t);
+                    }
+                }
+            }
+        }
+        for &id in &reading.transmitters {
+            if seen.insert(id) {
+                if let Some(t) = self.variant_transmitter(id) {
+                    out.push(t);
+                }
+            }
+        }
+        out
+    }
+
+    /// The reading a riwayah follows at a juncture, by engine slug.
+    pub fn reading_for<'a>(
+        &'a self,
+        juncture: &'a batch5::Juncture,
+        riwayah: &str,
+    ) -> Option<&'a batch5::VariantReading> {
+        juncture.readings.iter().find(|reading| {
+            self.transmitters_following(reading)
+                .iter()
+                .any(|t| t.riwayah.as_deref() == Some(riwayah))
+        })
+    }
+
+    /// Who reads a form, rendered the way the printed sources do: the imams first in their
+    /// canonical order, then any lone transmitters with their imam named in parentheses.
+    pub fn variant_attribution(&self, reading: &batch5::VariantReading) -> String {
+        let mut readers: Vec<&batch5::VariantReader> =
+            reading.readers.iter().filter_map(|&id| self.variant_reader(id)).collect();
+        readers.sort_by_key(|reader| reader.position);
+
+        let mut transmitters: Vec<&batch5::VariantTransmitter> =
+            reading.transmitters.iter().filter_map(|&id| self.variant_transmitter(id)).collect();
+        transmitters.sort_by_key(|t| {
+            (self.variant_reader(t.reader).map_or(99, |r| r.position), t.id)
+        });
+
+        let mut parts = Vec::new();
+        if !readers.is_empty() {
+            parts.push(
+                readers.iter().map(|r| r.abbreviation.as_str()).collect::<Vec<_>>().join(", "),
+            );
+        }
+        if !transmitters.is_empty() {
+            parts.push(
+                transmitters
+                    .iter()
+                    .map(|t| match self.variant_reader(t.reader) {
+                        Some(imam) if !imam.abbreviation.is_empty() => {
+                            format!("{} ({})", t.name, imam.abbreviation)
+                        }
+                        _ => t.name.clone(),
+                    })
+                    .collect::<Vec<_>>()
+                    .join(", "),
+            );
+        }
+        parts.join(" · ")
+    }
+
+    /// Where a riwayah differs from Hafs in a surah, in ayah order.
+    pub fn qiraat_places(&self, riwayah: &str, surah_id: u32) -> Vec<batch5::QiraatPlace> {
+        let Some(table) = self
+            .qiraat_places
+            .riwayat
+            .get(riwayah)
+            .and_then(|surahs| surahs.get(&surah_id.to_string()))
+        else {
+            return Vec::new();
+        };
+        let mut ayahs: Vec<u32> = table.keys().filter_map(|k| k.parse().ok()).collect();
+        ayahs.sort_unstable();
+        ayahs
+            .into_iter()
+            .filter_map(|ayah| {
+                let row = table.get(&ayah.to_string())?;
+                Some(batch5::QiraatPlace {
+                    ayah,
+                    word: row.word.clone(),
+                    letter: row.letter.clone(),
+                })
+            })
+            .collect()
+    }
+
+    /// The riwayat `qiraat_places` can answer for: the published ones.
+    pub fn riwayat_with_places(&self) -> Vec<String> {
+        let mut out: Vec<String> = self.qiraat_places.riwayat.keys().cloned().collect();
+        out.sort();
+        out
+    }
+
+    /// One reciter reading the verse both ways, for the four riwayat where such a recording
+    /// exists.
+    ///
+    /// The rest carry none: no reciter published both sides with timings. A pair drawn from two
+    /// shaykhs would differ in voice, pace and maqam as well, and teach nothing about the
+    /// variant. The honest rendering is "no recording", never a button that does nothing.
+    pub fn variant_audio(
+        &self,
+        riwayah: &str,
+        surah_id: u32,
+        ayah_id: u32,
+    ) -> Option<batch5::VariantAudioPair> {
+        let rows = self
+            .qiraat_variant_audio
+            .riwayat
+            .get(riwayah)?
+            .get(&surah_id.to_string())?;
+        let row = rows.iter().find(|row| row.first() == Some(&(ayah_id as i64)))?;
+        if row.len() < 6 {
+            return None;
+        }
+        let source = self.qiraat_variant_audio.sources.get(usize::try_from(row[1]).ok()?)?;
+        let is_span = source.kind == "span";
+        let name = if is_span {
+            format!("{surah_id:03}.mp3")
+        } else {
+            format!("{surah_id:03}{ayah_id:03}.mp3")
+        };
+        let clip = |base: &str, start: i64, end: i64| batch5::VariantClip {
+            url: format!("{base}/{name}"),
+            start_ms: is_span.then_some(start),
+            end_ms: is_span.then_some(end),
+        };
+        Some(batch5::VariantAudioPair {
+            reciter: source.reciter.clone(),
+            hafs: clip(&source.hafs_base, row[2], row[3]),
+            riwayah: clip(&source.riwayah_base, row[4], row[5]),
+        })
+    }
+
+    /// The riwayat that have any paired recordings at all.
+    pub fn riwayat_with_audio(&self) -> Vec<String> {
+        let mut out: Vec<String> = self.qiraat_variant_audio.riwayat.keys().cloned().collect();
+        out.sort();
+        out
+    }
+
+    /// Corpus size: ayahs carrying a variant, junctures, and readings.
+    pub fn qiraat_variant_count(&self) -> (usize, usize, usize) {
+        let junctures: usize = self.qiraat_variants.ayahs.values().map(Vec::len).sum();
+        let readings: usize = self
+            .qiraat_variants
+            .ayahs
+            .values()
+            .flat_map(|rows| rows.iter())
+            .map(|row| row.readings.len())
+            .sum();
+        (self.qiraat_variants.ayahs.len(), junctures, readings)
+    }
+
+    // -- word of the day -------------------------------------------------------------
+
+    /// The whole corpus, in curation order. The order is deliberate: the themes are interleaved
+    /// so consecutive days feel varied, which is why the day mapping is a walk and not a hash.
+    pub fn words_of_day(&self) -> &[batch5::WordOfDayEntry] {
+        &self.words_of_day
+    }
+
+    /// One curated word.
+    pub fn word_of_day(&self, id: &str) -> Option<&batch5::WordOfDayEntry> {
+        self.words_of_day.iter().find(|word| word.id == id)
+    }
+
+    /// The word for a day number: the corpus walked in order, wrapping.
+    ///
+    /// Take this rather than a date if your app has its own idea of when a day turns over (the
+    /// upstream app rolls at Fajr, not midnight): hand it your own day number and the mapping is
+    /// identical.
+    pub fn word_of_day_for_index(&self, day_index: i64) -> Option<&batch5::WordOfDayEntry> {
+        let n = self.words_of_day.len();
+        if n == 0 {
+            return None;
+        }
+        let n = n as i64;
+        self.words_of_day.get((((day_index % n) + n) % n) as usize)
+    }
+
+    /// Matches the written form, the transliteration and the gloss.
+    pub fn search_words_of_day(&self, query: &str, limit: usize) -> Vec<&batch5::WordOfDayEntry> {
+        let q = query.trim();
+        if q.is_empty() {
+            return Vec::new();
+        }
+        let lower = q.to_lowercase();
+        self.words_of_day
+            .iter()
+            .filter(|word| {
+                word.arabic.contains(q)
+                    || word.transliteration.to_lowercase().contains(&lower)
+                    || word.meaning.to_lowercase().contains(&lower)
+            })
+            .take(if limit == 0 { usize::MAX } else { limit })
+            .collect()
+    }
+
+    /// Every curated word appearing in an ayah.
+    pub fn words_of_day_in(&self, surah_id: u32, ayah_id: u32) -> Vec<&batch5::WordOfDayEntry> {
+        self.words_of_day
+            .iter()
+            .filter(|word| {
+                word.occurrences
+                    .iter()
+                    .any(|o| o.surah == surah_id && o.ayah == ayah_id)
+            })
+            .collect()
+    }
+
+    /// How many words there are, and how many occurrences they cover.
+    pub fn word_of_day_count(&self) -> (usize, usize) {
+        (
+            self.words_of_day.len(),
+            self.words_of_day.iter().map(|word| word.count as usize).sum(),
+        )
     }
 }

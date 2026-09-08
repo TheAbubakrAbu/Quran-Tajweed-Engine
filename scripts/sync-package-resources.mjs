@@ -41,6 +41,18 @@ const FILES = [
   "surah-stats.json",
   "word-by-word.json",
   "similar-ayahs.json",
+  // Batch 5. The three that load by default are small; morphology, the topic indexes and the
+  // variant trio are opt-in but bundled anyway, because an app added via SwiftPM has no repo
+  // /data to fall back on and a flag it cannot satisfy is worse than 2 MB it may not read.
+  "quran-metadata.json",
+  "ayah-themes.json",
+  "word-of-day.json",
+  "morphology.json",
+  "mutashabihat.json",
+  "quran-topics.json",
+  "qiraat-variants.json",
+  "qiraat-places.json",
+  "qiraat-variant-audio.json",
   "mushaf/index.json",
   "tajweed-qiraat/rules.json",
   ...["hafs", "shubah", "warsh", "qaloon", "buzzi", "qunbul", "duri", "susi",

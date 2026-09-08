@@ -56,6 +56,19 @@ type Engine struct {
 	surahSections map[string]surahSectionsEntry
 	alphabet      arabicAlphabetFile
 
+	// Batch 5: the corpora added upstream in Al-Islam 4.6.4.
+	morphology   morphologyFile
+	morphIndex   morphologyIndex
+	mutashabihat mutashabihatFile
+	qulTopics    []QulTopic
+	qulTopicIdx  qulTopicIndex
+	ayahThemes   map[string][]passageRow
+	metadata     quranMetadataFile
+	variants     qiraatVariantsFile
+	places       qiraatPlacesFile
+	variantAudio qiraatVariantAudioFile
+	wordsOfDay   []WordOfDayEntry
+
 	// Lazily built by TermWeights, over the translations.
 	documentFrequency map[string]int
 	documentCount     int
@@ -77,6 +90,15 @@ type LoadOptions struct {
 	SimilarAyahs bool
 	// Qiraat loads the seven non-Hafs riwayat's own text (~11 MB) - what CompareSurah compares.
 	Qiraat bool
+	// Morphology loads morphology.json (~776 KB): root and lemma of every word.
+	Morphology bool
+	// Mutashabihat loads mutashabihat.json (~178 KB): the repeated phrases.
+	Mutashabihat bool
+	// QulTopics loads quran-topics.json (~730 KB): the three QUL topic indexes.
+	QulTopics bool
+	// QiraatVariants loads the variant matrix, the place index and the paired-recording table
+	// (~1.9 MB together).
+	QiraatVariants bool
 }
 
 // QiraahVerse is one verse of a riwayah's own text, in ITS numbering.
@@ -286,6 +308,49 @@ func (e *Engine) loadCorpora(dataDir string, options LoadOptions) error {
 	}
 	if err := readOptionalJSON(filepath.Join(dataDir, "arabic-alphabet.json"), &e.alphabet); err != nil {
 		return err
+	}
+
+	// Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB) load by default on
+	// the same reasoning: small, and each answers a question a consumer should not have to opt into.
+	if err := readOptionalJSON(filepath.Join(dataDir, "quran-metadata.json"), &e.metadata); err != nil {
+		return err
+	}
+	if err := readOptionalJSON(filepath.Join(dataDir, "ayah-themes.json"), &e.ayahThemes); err != nil {
+		return err
+	}
+	var words wordOfDayFile
+	if err := readOptionalJSON(filepath.Join(dataDir, "word-of-day.json"), &words); err != nil {
+		return err
+	}
+	e.wordsOfDay = words.Words
+
+	if options.Morphology {
+		if err := readJSON(filepath.Join(dataDir, "morphology.json"), &e.morphology); err != nil {
+			return err
+		}
+	}
+	if options.Mutashabihat {
+		if err := readJSON(filepath.Join(dataDir, "mutashabihat.json"), &e.mutashabihat); err != nil {
+			return err
+		}
+	}
+	if options.QulTopics {
+		var topics qulTopicsFile
+		if err := readJSON(filepath.Join(dataDir, "quran-topics.json"), &topics); err != nil {
+			return err
+		}
+		e.qulTopics = topics.Topics
+	}
+	if options.QiraatVariants {
+		if err := readJSON(filepath.Join(dataDir, "qiraat-variants.json"), &e.variants); err != nil {
+			return err
+		}
+		if err := readJSON(filepath.Join(dataDir, "qiraat-places.json"), &e.places); err != nil {
+			return err
+		}
+		if err := readJSON(filepath.Join(dataDir, "qiraat-variant-audio.json"), &e.variantAudio); err != nil {
+			return err
+		}
 	}
 	return nil
 }

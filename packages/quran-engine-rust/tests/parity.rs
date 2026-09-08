@@ -14,6 +14,9 @@ fn engine() -> Engine {
         word_by_word: true,
         similar_ayahs: true,
         qiraat: true,
+        // Batch 5 has its own suite; spelling the rest out here keeps this file's intent clear
+        // and means a new corpus does not silently join every existing test's working set.
+        ..Default::default()
     })
     .expect("engine loads")
 }

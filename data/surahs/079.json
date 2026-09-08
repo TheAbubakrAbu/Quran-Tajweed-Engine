@@ -31,7 +31,7 @@
     {
       "id": 1,
       "textArabic": "وَٱلنَّٰزِعَٰتِ غَرۡقٗا",
-      "textTransliteration": "WaalnnaziAAati gharqan",
+      "textTransliteration": "Wan-naazi-'aati gharqa",
       "textEnglishSaheeh": "By those [angels] who extract with violence",
       "textEnglishMustafa": "By those ˹angels˺ stripping out ˹evil souls˺ harshly,",
       "juz": 30,
@@ -42,7 +42,7 @@
     {
       "id": 2,
       "textArabic": "وَٱلنَّٰشِطَٰتِ نَشۡطٗا",
-      "textTransliteration": "Waalnnashitati nashtan",
+      "textTransliteration": "Wan-naa-shi-taati nashta",
       "textEnglishSaheeh": "And [by] those who remove with ease",
       "textEnglishMustafa": "and those pulling out ˹good souls˺ gently,",
       "juz": 30,
@@ -53,7 +53,7 @@
     {
       "id": 3,
       "textArabic": "وَٱلسَّٰبِحَٰتِ سَبۡحٗا",
-      "textTransliteration": "Waalssabihati sabhan",
+      "textTransliteration": "Wass-saabi-haati sabha",
       "textEnglishSaheeh": "And [by] those who glide [as if] swimming",
       "textEnglishMustafa": "and those gliding ˹through heavens˺ swiftly,",
       "juz": 30,
@@ -64,7 +64,7 @@
     {
       "id": 4,
       "textArabic": "فَٱلسَّٰبِقَٰتِ سَبۡقٗا",
-      "textTransliteration": "Faalssabiqati sabqan",
+      "textTransliteration": "Fass-saabi-qaati sabqa",
       "textEnglishSaheeh": "And those who race each other in a race",
       "textEnglishMustafa": "and those taking the lead vigorously,",
       "juz": 30,
@@ -75,7 +75,7 @@
     {
       "id": 5,
       "textArabic": "فَٱلۡمُدَبِّرَٰتِ أَمۡرٗا",
-      "textTransliteration": "Faalmudabbirati amran",
+      "textTransliteration": "Fal-mu-dab-bi-raati amra",
       "textEnglishSaheeh": "And those who arrange [each] matter,",
       "textEnglishMustafa": "and those conducting affairs ˹obediently˺!",
       "juz": 30,
@@ -86,7 +86,7 @@
     {
       "id": 6,
       "textArabic": "يَوۡمَ تَرۡجُفُ ٱلرَّاجِفَةُ",
-      "textTransliteration": "Yawma tarjufu alrrajifatu",
+      "textTransliteration": "Yawma tarjufur raajifa",
       "textEnglishSaheeh": "On the Day the blast [of the Horn] will convulse [creation],",
       "textEnglishMustafa": "˹Consider˺ the Day ˹when˺ the quaking Blast will come to pass,",
       "juz": 30,
@@ -97,7 +97,7 @@
     {
       "id": 7,
       "textArabic": "تَتۡبَعُهَا ٱلرَّادِفَةُ",
-      "textTransliteration": "TatbaAAuha alrradifatu",
+      "textTransliteration": "Tatba'u-har raadifa",
       "textEnglishSaheeh": "There will follow it the subsequent [one].",
       "textEnglishMustafa": "followed by a second Blast.",
       "juz": 30,
@@ -108,7 +108,7 @@
     {
       "id": 8,
       "textArabic": "قُلُوبٞ يَوۡمَئِذٖ وَاجِفَةٌ",
-      "textTransliteration": "Quloobun yawmaithin wajifatun",
+      "textTransliteration": "Quloobuny yau-maaiziw waaji-fa",
       "textEnglishSaheeh": "Hearts, that Day, will tremble,",
       "textEnglishMustafa": "˹The deniers’˺ hearts on that Day will be trembling ˹in horror˺,",
       "juz": 30,
@@ -119,7 +119,7 @@
     {
       "id": 9,
       "textArabic": "أَبۡصَٰرُهَا خَٰشِعَةٞ",
-      "textTransliteration": "Absaruha khashiAAatun",
+      "textTransliteration": "Absaa-ruhaa khashi'ah",
       "textEnglishSaheeh": "Their eyes humbled.",
       "textEnglishMustafa": "with their eyes downcast.",
       "juz": 30,
@@ -130,7 +130,7 @@
     {
       "id": 10,
       "textArabic": "يَقُولُونَ أَءِنَّا لَمَرۡدُودُونَ فِي ٱلۡحَافِرَةِ",
-      "textTransliteration": "Yaqooloona ainna lamardoodoona fee alhafirati",
+      "textTransliteration": "Ya-qoo-loona a-inna lamar-doo-doona fil haafirah",
       "textEnglishSaheeh": "They are [presently] saying, \"Will we indeed be returned to [our] former state [of life]?",
       "textEnglishMustafa": "˹But now˺ they ask ˹mockingly˺, “Will we really be restored to our former state,",
       "juz": 30,
@@ -141,7 +141,7 @@
     {
       "id": 11,
       "textArabic": "أَءِذَا كُنَّا عِظَٰمٗا نَّخِرَةٗ",
-      "textTransliteration": "Aitha kunna AAithaman nakhiratan",
+      "textTransliteration": "Aizaa kunna 'izaa-man nakhirah",
       "textEnglishSaheeh": "Even if we should be decayed bones?",
       "textEnglishMustafa": "even after we have been reduced to decayed bones?”",
       "juz": 30,
@@ -152,7 +152,7 @@
     {
       "id": 12,
       "textArabic": "قَالُواْ تِلۡكَ إِذٗا كَرَّةٌ خَاسِرَةٞ",
-      "textTransliteration": "Qaloo tilka ithan karratun khasiratun",
+      "textTransliteration": "Qaalu tilka izan karratun khaasirah",
       "textEnglishSaheeh": "They say, \"That, then, would be a losing return.\"",
       "textEnglishMustafa": "Adding, “Then such a return would be a ˹total˺ loss ˹for us˺!”",
       "juz": 30,
@@ -163,7 +163,7 @@
     {
       "id": 13,
       "textArabic": "فَإِنَّمَا هِيَ زَجۡرَةٞ وَٰحِدَةٞ",
-      "textTransliteration": "Fainnama hiya zajratun wahidatun",
+      "textTransliteration": "Fa-inna-ma hiya zajratuw waahida",
       "textEnglishSaheeh": "Indeed, it will be but one shout,",
       "textEnglishMustafa": "But indeed, it will take only one ˹mighty˺ Blast,",
       "juz": 30,
@@ -174,7 +174,7 @@
     {
       "id": 14,
       "textArabic": "فَإِذَا هُم بِٱلسَّاهِرَةِ",
-      "textTransliteration": "Faitha hum bialssahirati",
+      "textTransliteration": "Faizaa hum biss-saahirah",
       "textEnglishSaheeh": "And suddenly they will be [alert] upon the earth's surface.",
       "textEnglishMustafa": "and at once they will be above ground.",
       "juz": 30,
@@ -185,7 +185,7 @@
     {
       "id": 15,
       "textArabic": "هَلۡ أَتَىٰكَ حَدِيثُ مُوسَىٰٓ",
-      "textTransliteration": "Hal ataka hadeethu moosa",
+      "textTransliteration": "Hal ataaka hadeethu Musaa",
       "textEnglishSaheeh": "Has there reached you the story of Moses? -",
       "textEnglishMustafa": "Has the story of Moses reached you ˹O Prophet˺?",
       "juz": 30,
@@ -196,7 +196,7 @@
     {
       "id": 16,
       "textArabic": "إِذۡ نَادَىٰهُ رَبُّهُۥ بِٱلۡوَادِ ٱلۡمُقَدَّسِ طُوًى",
-      "textTransliteration": "Ith nadahu rabbuhu bialwadi almuqaddasi tuwan",
+      "textTransliteration": "Iz nadaahu rabbuhu bil-waadil muqad-dasi tuwa",
       "textEnglishSaheeh": "When his Lord called to him in the sacred valley of Tuwa,",
       "textEnglishMustafa": "His Lord called him in the sacred valley of Ṭuwa,",
       "juz": 30,
@@ -207,7 +207,7 @@
     {
       "id": 17,
       "textArabic": "ٱذۡهَبۡ إِلَىٰ فِرۡعَوۡنَ إِنَّهُۥ طَغَىٰ",
-      "textTransliteration": "Ithhab ila firAAawna innahu tagha",
+      "textTransliteration": "Izhab ilaa fir'auna innahu taghaa",
       "textEnglishSaheeh": "\"Go to Pharaoh. Indeed, he has transgressed.",
       "textEnglishMustafa": "˹commanding,˺ “Go to Pharaoh, for he has truly transgressed ˹all bounds˺.",
       "juz": 30,
@@ -218,7 +218,7 @@
     {
       "id": 18,
       "textArabic": "فَقُلۡ هَل لَّكَ إِلَىٰٓ أَن تَزَكَّىٰ",
-      "textTransliteration": "Faqul hal laka ila an tazakka",
+      "textTransliteration": "Faqul hal laka ilaa an tazakka",
       "textEnglishSaheeh": "And say to him, 'Would you [be willing to] purify yourself",
       "textEnglishMustafa": "And say, ‘Would you ˹be willing to˺ purify yourself,",
       "juz": 30,
@@ -229,7 +229,7 @@
     {
       "id": 19,
       "textArabic": "وَأَهۡدِيَكَ إِلَىٰ رَبِّكَ فَتَخۡشَىٰ",
-      "textTransliteration": "Waahdiyaka ila rabbika fatakhsha",
+      "textTransliteration": "Wa-ahdi-yaka ila rabbika fatakh-sha",
       "textEnglishSaheeh": "And let me guide you to your Lord so you would fear [Him]?'\"",
       "textEnglishMustafa": "and let me guide you to your Lord so that you will be in awe ˹of Him˺?’”",
       "juz": 30,
@@ -240,7 +240,7 @@
     {
       "id": 20,
       "textArabic": "فَأَرَىٰهُ ٱلۡأٓيَةَ ٱلۡكُبۡرَىٰ",
-      "textTransliteration": "Faarahu alayata alkubra",
+      "textTransliteration": "Fa-araahul aayatal kubra",
       "textEnglishSaheeh": "And he showed him the greatest sign,",
       "textEnglishMustafa": "Then Moses showed him the great sign,",
       "juz": 30,
@@ -251,7 +251,7 @@
     {
       "id": 21,
       "textArabic": "فَكَذَّبَ وَعَصَىٰ",
-      "textTransliteration": "Fakaththaba waAAasa",
+      "textTransliteration": "Fa-kazzaba Wa-asaa",
       "textEnglishSaheeh": "But Pharaoh denied and disobeyed.",
       "textEnglishMustafa": "but he denied and disobeyed ˹Allah˺,",
       "juz": 30,
@@ -262,7 +262,7 @@
     {
       "id": 22,
       "textArabic": "ثُمَّ أَدۡبَرَ يَسۡعَىٰ",
-      "textTransliteration": "Thumma adbara yasAAa",
+      "textTransliteration": "Thumma adbara yas'aa",
       "textEnglishSaheeh": "Then he turned his back, striving.",
       "textEnglishMustafa": "then turned his back, striving ˹against the truth˺.",
       "juz": 30,
@@ -273,7 +273,7 @@
     {
       "id": 23,
       "textArabic": "فَحَشَرَ فَنَادَىٰ",
-      "textTransliteration": "Fahashara fanada",
+      "textTransliteration": "Fa-hashara fanada",
       "textEnglishSaheeh": "And he gathered [his people] and called out",
       "textEnglishMustafa": "Then he summoned ˹his people˺ and called out,",
       "juz": 30,
@@ -284,7 +284,7 @@
     {
       "id": 24,
       "textArabic": "فَقَالَ أَنَا۠ رَبُّكُمُ ٱلۡأَعۡلَىٰ",
-      "textTransliteration": "Faqala ana rabbukumu alaAAla",
+      "textTransliteration": "Faqala ana rabbu-kumul a'laa",
       "textEnglishSaheeh": "And said, \"I am your most exalted lord.\"",
       "textEnglishMustafa": "saying, “I am your lord, the most high!”",
       "juz": 30,
@@ -295,7 +295,7 @@
     {
       "id": 25,
       "textArabic": "فَأَخَذَهُ ٱللَّهُ نَكَالَ ٱلۡأٓخِرَةِ وَٱلۡأُولَىٰٓ",
-      "textTransliteration": "Faakhathahu Allahu nakala alakhirati waaloola",
+      "textTransliteration": "Fa-akha-zahul laahu nakalal aakhirati wal-oola",
       "textEnglishSaheeh": "So Allah seized him in exemplary punishment for the last and the first [transgression].",
       "textEnglishMustafa": "So Allah overtook him, making him an example in this life and the next.",
       "juz": 30,
@@ -306,7 +306,7 @@
     {
       "id": 26,
       "textArabic": "إِنَّ فِي ذَٰلِكَ لَعِبۡرَةٗ لِّمَن يَخۡشَىٰٓ",
-      "textTransliteration": "Inna fee thalika laAAibratan liman yakhsha",
+      "textTransliteration": "Inna fee zaalika la'ibratal limaiy yaksha",
       "textEnglishSaheeh": "Indeed in that is a warning for whoever would fear [Allah].",
       "textEnglishMustafa": "Surely in this is a lesson for whoever stands in awe of ˹Allah˺.",
       "juz": 30,
@@ -317,7 +317,7 @@
     {
       "id": 27,
       "textArabic": "ءَأَنتُمۡ أَشَدُّ خَلۡقًا أَمِ ٱلسَّمَآءُۚ بَنَىٰهَا",
-      "textTransliteration": "Aantum ashaddu khalqan ami alssamao banaha",
+      "textTransliteration": "A-antum a-shaddu khalqan amis samaa-u banaaha",
       "textEnglishSaheeh": "Are you a more difficult creation or is the heaven? Allah constructed it.",
       "textEnglishMustafa": "Which is harder to create: you or the sky? He built it,",
       "juz": 30,
@@ -328,7 +328,7 @@
     {
       "id": 28,
       "textArabic": "رَفَعَ سَمۡكَهَا فَسَوَّىٰهَا",
-      "textTransliteration": "RafaAAa samkaha fasawwaha",
+      "textTransliteration": "Raf'a sam-kaha fasaw-waaha",
       "textEnglishSaheeh": "He raised its ceiling and proportioned it.",
       "textEnglishMustafa": "raising it high and forming it flawlessly.",
       "juz": 30,
@@ -339,7 +339,7 @@
     {
       "id": 29,
       "textArabic": "وَأَغۡطَشَ لَيۡلَهَا وَأَخۡرَجَ ضُحَىٰهَا",
-      "textTransliteration": "Waaghtasha laylaha waakhraja duhaha",
+      "textTransliteration": "Wa-aghtasha lailaha Wa-akhraja duhaaha",
       "textEnglishSaheeh": "And He darkened its night and extracted its brightness.",
       "textEnglishMustafa": "He dimmed its night, and brought forth its daylight.",
       "juz": 30,
@@ -350,7 +350,7 @@
     {
       "id": 30,
       "textArabic": "وَٱلۡأَرۡضَ بَعۡدَ ذَٰلِكَ دَحَىٰهَآ",
-      "textTransliteration": "Waalarda baAAda thalika dahaha",
+      "textTransliteration": "Wal-arda b'ada zaalika dahaaha",
       "textEnglishSaheeh": "And after that He spread the earth.",
       "textEnglishMustafa": "As for the earth, He spread it out as well,",
       "juz": 30,
@@ -361,7 +361,7 @@
     {
       "id": 31,
       "textArabic": "أَخۡرَجَ مِنۡهَا مَآءَهَا وَمَرۡعَىٰهَا",
-      "textTransliteration": "Akhraja minha maaha wamarAAaha",
+      "textTransliteration": "Akhraja minha maa-aha Wa-mar-'aaha",
       "textEnglishSaheeh": "He extracted from it its water and its pasture,",
       "textEnglishMustafa": "bringing forth its water and pastures",
       "juz": 30,
@@ -372,7 +372,7 @@
     {
       "id": 32,
       "textArabic": "وَٱلۡجِبَالَ أَرۡسَىٰهَا",
-      "textTransliteration": "Waaljibala arsaha",
+      "textTransliteration": "Wal-jibala arsaaha",
       "textEnglishSaheeh": "And the mountains He set firmly",
       "textEnglishMustafa": "and setting the mountains firmly ˹upon it˺—",
       "juz": 30,
@@ -383,7 +383,7 @@
     {
       "id": 33,
       "textArabic": "مَتَٰعٗا لَّكُمۡ وَلِأَنۡعَٰمِكُمۡ",
-      "textTransliteration": "MataAAan lakum walianAAamikum",
+      "textTransliteration": "Mataa'al lakum wali-an-'aamikum",
       "textEnglishSaheeh": "As provision for you and your grazing livestock.",
       "textEnglishMustafa": "all as ˹a means of˺ sustenance for you and your animals.",
       "juz": 30,
@@ -394,7 +394,7 @@
     {
       "id": 34,
       "textArabic": "فَإِذَا جَآءَتِ ٱلطَّآمَّةُ ٱلۡكُبۡرَىٰ",
-      "textTransliteration": "Faitha jaati alttammatu alkubra",
+      "textTransliteration": "Fa-izaa jaaa'atit taaam-matul kubraa",
       "textEnglishSaheeh": "But when there comes the greatest Overwhelming Calamity -",
       "textEnglishMustafa": "But, when the Supreme Disaster comes to pass—",
       "juz": 30,
@@ -405,7 +405,7 @@
     {
       "id": 35,
       "textArabic": "يَوۡمَ يَتَذَكَّرُ ٱلۡإِنسَٰنُ مَا سَعَىٰ",
-      "textTransliteration": "Yawma yatathakkaru alinsanu ma saAAa",
+      "textTransliteration": "Yauma Yata-zakkarul insaanu ma sa'aa",
       "textEnglishSaheeh": "The Day when man will remember that for which he strove,",
       "textEnglishMustafa": "the Day every person will remember all ˹their˺ striving,",
       "juz": 30,
@@ -416,7 +416,7 @@
     {
       "id": 36,
       "textArabic": "وَبُرِّزَتِ ٱلۡجَحِيمُ لِمَن يَرَىٰ",
-      "textTransliteration": "Waburrizati aljaheemu liman yara",
+      "textTransliteration": "Wa-burrizatil jaheemu limany yaraa",
       "textEnglishSaheeh": "And Hellfire will be exposed for [all] those who see -",
       "textEnglishMustafa": "and the Hellfire will be displayed for all to see—",
       "juz": 30,
@@ -427,7 +427,7 @@
     {
       "id": 37,
       "textArabic": "فَأَمَّا مَن طَغَىٰ",
-      "textTransliteration": "Faamma man tagha",
+      "textTransliteration": "Fa-ammaa man taghaa",
       "textEnglishSaheeh": "So as for he who transgressed",
       "textEnglishMustafa": "then as for those who transgressed",
       "juz": 30,
@@ -438,7 +438,7 @@
     {
       "id": 38,
       "textArabic": "وَءَاثَرَ ٱلۡحَيَوٰةَ ٱلدُّنۡيَا",
-      "textTransliteration": "Waathara alhayata alddunya",
+      "textTransliteration": "Wa-aasaral hayaatad dunyaa",
       "textEnglishSaheeh": "And preferred the life of the world,",
       "textEnglishMustafa": "and preferred the ˹fleeting˺ life of this world,",
       "juz": 30,
@@ -449,7 +449,7 @@
     {
       "id": 39,
       "textArabic": "فَإِنَّ ٱلۡجَحِيمَ هِيَ ٱلۡمَأۡوَىٰ",
-      "textTransliteration": "Fainna aljaheema hiya almawa",
+      "textTransliteration": "Fa-innal jaheema hiyal maawaa",
       "textEnglishSaheeh": "Then indeed, Hellfire will be [his] refuge.",
       "textEnglishMustafa": "the Hellfire will certainly be ˹their˺ home.",
       "juz": 30,
@@ -460,7 +460,7 @@
     {
       "id": 40,
       "textArabic": "وَأَمَّا مَنۡ خَافَ مَقَامَ رَبِّهِۦ وَنَهَى ٱلنَّفۡسَ عَنِ ٱلۡهَوَىٰ",
-      "textTransliteration": "Waama man khafa maqama rabbihi wanaha alnnafsa AAani alhawa",
+      "textTransliteration": "Wa-ammaa man khaafa maqaama Rabbihee Wa-nahan nafsa 'anil hawaa",
       "textEnglishSaheeh": "But as for he who feared the position of his Lord and prevented the soul from [unlawful] inclination,",
       "textEnglishMustafa": "And as for those who were in awe of standing before their Lord and restrained themselves from ˹evil˺ desires,",
       "juz": 30,
@@ -471,7 +471,7 @@
     {
       "id": 41,
       "textArabic": "فَإِنَّ ٱلۡجَنَّةَ هِيَ ٱلۡمَأۡوَىٰ",
-      "textTransliteration": "Fainna aljannata hiya almawa",
+      "textTransliteration": "Fa-innal jannata hiyal ma'waa",
       "textEnglishSaheeh": "Then indeed, Paradise will be [his] refuge.",
       "textEnglishMustafa": "Paradise will certainly be ˹their˺ home.",
       "juz": 30,
@@ -482,7 +482,7 @@
     {
       "id": 42,
       "textArabic": "يَسۡـَٔلُونَكَ عَنِ ٱلسَّاعَةِ أَيَّانَ مُرۡسَىٰهَا",
-      "textTransliteration": "Yasaloonaka AAani alssaAAati ayyana mursaha",
+      "textTransliteration": "Yas'aloonaka 'anis saa'ati ayyaana mursaahaa",
       "textEnglishSaheeh": "They ask you, [O Muhammad], about the Hour: when is its arrival?",
       "textEnglishMustafa": "They ask you ˹O Prophet˺ regarding the Hour, “When will it be?”",
       "juz": 30,
@@ -493,7 +493,7 @@
     {
       "id": 43,
       "textArabic": "فِيمَ أَنتَ مِن ذِكۡرَىٰهَآ",
-      "textTransliteration": "Feema anta min thikraha",
+      "textTransliteration": "Feema anta min zikraahaa",
       "textEnglishSaheeh": "In what [position] are you that you should mention it?",
       "textEnglishMustafa": "But it is not for you to tell its time.",
       "juz": 30,
@@ -504,7 +504,7 @@
     {
       "id": 44,
       "textArabic": "إِلَىٰ رَبِّكَ مُنتَهَىٰهَآ",
-      "textTransliteration": "Ila rabbika muntahaha",
+      "textTransliteration": "Ilaa Rabbika muntahaa-haa",
       "textEnglishSaheeh": "To your Lord is its finality.",
       "textEnglishMustafa": "That knowledge rests with your Lord ˹alone˺.",
       "juz": 30,
@@ -515,7 +515,7 @@
     {
       "id": 45,
       "textArabic": "إِنَّمَآ أَنتَ مُنذِرُ مَن يَخۡشَىٰهَا",
-      "textTransliteration": "Innama anta munthiru man yakhshaha",
+      "textTransliteration": "Innamaaa anta munziru maiy yakshaahaa",
       "textEnglishSaheeh": "You are only a warner for those who fear it.",
       "textEnglishMustafa": "Your duty is only to warn whoever is in awe of it.",
       "juz": 30,
@@ -526,7 +526,7 @@
     {
       "id": 46,
       "textArabic": "كَأَنَّهُمۡ يَوۡمَ يَرَوۡنَهَا لَمۡ يَلۡبَثُوٓاْ إِلَّا عَشِيَّةً أَوۡ ضُحَىٰهَا",
-      "textTransliteration": "Kaannahum yawma yarawnaha lam yalbathoo illa AAashiyyatan aw duhaha",
+      "textTransliteration": "Ka-annahum Yawma yarawnahaa lam yalbasooo illaa 'ashiyyatan aw duhaahaa",
       "textEnglishSaheeh": "It will be, on the Day they see it, as though they had not remained [in the world] except for an afternoon or a morning thereof.",
       "textEnglishMustafa": "On the Day they see it, it will be as if they had stayed ˹in the world˺ no more than one evening or its morning.",
       "juz": 30,

@@ -49,4 +49,8 @@ export 'src/ask_ai.dart';
 export 'src/sections.dart';
 export 'src/alphabet.dart';
 export 'src/qiraat_comparison.dart';
+export 'src/morphology.dart';
+export 'src/batch5.dart';
+export 'src/qiraat_variants.dart';
+export 'src/word_of_day.dart';
 export 'src/engine.dart';

@@ -43,6 +43,20 @@ class Engine internal constructor(
     val surahSections: SurahSections = SurahSections(),
     /** The letter/tashkeel/waqf reference; loaded by default. */
     val alphabet: ArabicAlphabet = ArabicAlphabet(),
+    /** Root and lemma of every word. Empty unless `loadMorphology`. */
+    val morphology: Morphology = Morphology(),
+    /** The repeated phrases. Empty unless `loadMutashabihat`. */
+    val mutashabihat: Mutashabihat = Mutashabihat(),
+    /** The three QUL topic indexes. Empty unless `loadQuranTopics`. */
+    val quranTopics: QuranTopics = QuranTopics(),
+    /** The passage themes; loaded by default. */
+    val ayahThemes: AyahThemes = AyahThemes(),
+    /** Hizb, ruku and manzil; loaded by default. */
+    val quranMetadata: QuranMetadata = QuranMetadata(),
+    /** The variant matrix, place index and paired recordings. Empty unless `loadQiraatVariants`. */
+    val qiraatVariants: QiraatVariants = QiraatVariants(),
+    /** The curated vocabulary; loaded by default. */
+    val wordOfDay: WordOfDay = WordOfDay(),
 ) {
     /** Needs `loadQiraat`; with no qiraah text it reports "hafs" alone and compares nothing. */
     val qiraatComparison: QiraatComparison by lazy { QiraatComparison(quran) }
@@ -82,6 +96,14 @@ class Engine internal constructor(
             /** Both aligned layers of word-by-word.json. */
             loadWordByWord: Boolean = false,
             loadSimilarAyahs: Boolean = false,
+            /** Root and lemma of every word (~776 KB). */
+            loadMorphology: Boolean = false,
+            /** The repeated phrases (~178 KB). */
+            loadMutashabihat: Boolean = false,
+            /** The three QUL topic indexes (~730 KB). */
+            loadQuranTopics: Boolean = false,
+            /** The variant matrix, place index and paired-recording table (~1.9 MB together). */
+            loadQiraatVariants: Boolean = false,
         ): Engine {
             val dir = dataDir ?: findDefaultDataDir()
                 ?: throw IllegalStateException("Could not locate the repo /data directory; pass dataDir explicitly")
@@ -169,6 +191,38 @@ class Engine internal constructor(
                     SimilarAyahs(json.decodeFromString(text("similar-ayahs.json")))
                 } else SimilarAyahs()
 
+            // Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB) load by
+            // default like the sections and the alphabet: small, and each answers a question a
+            // consumer should not have to opt into.
+            val metadata = QuranMetadata(
+                optional<QuranMetadataFile>(dir, "quran-metadata.json") ?: QuranMetadataFile()
+            )
+            val ayahThemes = AyahThemes(
+                optional<Map<String, List<ThemePassage>>>(dir, "ayah-themes.json") ?: emptyMap()
+            )
+            val wordOfDay = WordOfDay(
+                optional<WordOfDayFile>(dir, "word-of-day.json")?.words ?: emptyList()
+            )
+
+            val morphology =
+                if (loadMorphology) Morphology(json.decodeFromString(text("morphology.json")))
+                else Morphology()
+            val mutashabihat =
+                if (loadMutashabihat) Mutashabihat(json.decodeFromString(text("mutashabihat.json")))
+                else Mutashabihat()
+            val quranTopics =
+                if (loadQuranTopics) {
+                    QuranTopics(json.decodeFromString<QulTopicsFile>(text("quran-topics.json")).topics)
+                } else QuranTopics()
+            val qiraatVariants =
+                if (loadQiraatVariants) {
+                    QiraatVariants(
+                        json.decodeFromString(text("qiraat-variants.json")),
+                        json.decodeFromString(text("qiraat-places.json")),
+                        json.decodeFromString(text("qiraat-variant-audio.json")),
+                    )
+                } else QiraatVariants()
+
             return Engine(
                 quran = quran,
                 juzPage = JuzPage(quran, juzList),
@@ -185,6 +239,13 @@ class Engine internal constructor(
                 tajweedLessons = lessons,
                 surahSections = sections,
                 alphabet = alphabet,
+                morphology = morphology,
+                mutashabihat = mutashabihat,
+                quranTopics = quranTopics,
+                ayahThemes = ayahThemes,
+                quranMetadata = metadata,
+                qiraatVariants = qiraatVariants,
+                wordOfDay = wordOfDay,
             )
         }
 

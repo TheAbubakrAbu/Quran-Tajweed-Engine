@@ -2,7 +2,7 @@
 /**
  * Similar ayahs (mutashabihat): the other places the Quran says something close to this.
  *
- * Two kinds of row, already merged and ranked at build time so nothing here scores or sorts:
+ * Three sources, already merged and ranked at build time so nothing here scores or sorts:
  *
  *  * **verified** - the classical mutashabihat corpus, listed first. `phrase` is the shared
  *    wording when the corpus records it.
@@ -10,6 +10,12 @@
  *    matched ("Reckoning", "Root rbb"). These are a reading aid, not a scholarly claim.
  *
  * `verified` is the flag to gate on if you show only one kind.
+ *
+ * The Quranic Universal Library's table is the third source, and it adds two things the other
+ * two cannot: `spans`, the exact token ranges of the shared words in the MATCHED ayah, and
+ * `score`, its own 0-100 similarity. Tint `spans` where they exist and fall back to locating
+ * `phrase` where they do not; `score` is null for rows that came from the other two sources,
+ * which rank but do not score.
  */
 
 /**
@@ -19,10 +25,13 @@
  * @property {string} phrase    the shared wording, "" when none is recorded
  * @property {boolean} verified
  * @property {string[]} labels  why a generated row matched; empty for verified rows
+ * @property {Array<[number, number]>} spans  0-based inclusive token ranges of the shared words
+ *           in the MATCHED ayah's raw text (QUL rows); empty when only the phrase is known
+ * @property {number|null} score  QUL's 0-100 similarity, null for rows from the other sources
  */
 
 export class SimilarAyahs {
-  /** @param {Record<string, Array<[number, number, string, number, string[]?]>>} [data] data/similar-ayahs.json */
+  /** @param {Record<string, Array<[number, number, string, number, string[]?, Array<[number,number]>?, number?]>>} [data] data/similar-ayahs.json */
   constructor(data = {}) {
     this._data = data;
   }
@@ -35,12 +44,14 @@ export class SimilarAyahs {
   matches(surahId, ayahId) {
     const rows = this._data[`${surahId}:${ayahId}`];
     if (!rows) return [];
-    return rows.map(([surah, ayah, phrase, verified, labels]) => ({
+    return rows.map(([surah, ayah, phrase, verified, labels, spans, score]) => ({
       surah,
       ayah,
       phrase: phrase ?? "",
       verified: verified === 1,
       labels: labels ?? [],
+      spans: spans ?? [],
+      score: score ?? null,
     }));
   }
 

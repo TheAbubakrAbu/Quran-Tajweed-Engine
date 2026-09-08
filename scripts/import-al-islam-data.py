@@ -19,6 +19,16 @@ to read a page table. So this script decompresses, reshapes, and writes:
     data/surah-sections.json           per-surah section outlines
     data/tajweed-lessons.json          the tajweed course
     data/surah-stats.json              per-surah ayah/word/letter counts
+    data/quran.json                    ayah text fields, refreshed in place
+    data/morphology.json               root + lemma of every word (Quranic Arabic Corpus via QUL)
+    data/mutashabihat.json             the 814 repeated phrases and where each occurs
+    data/quran-topics.json             2,512 QUL topics in three families
+    data/ayah-themes.json              1,049 passage themes, one sentence per run of ayahs
+    data/quran-metadata.json           hizb, ruku and manzil boundaries
+    data/qiraat-variants.json          who among the Ten reads which form, and what it means
+    data/qiraat-places.json            where each published riwayah differs from Hafs at all
+    data/qiraat-variant-audio.json     one reciter reading a verse both ways (4 riwayat)
+    data/word-of-day.json              149 curated words with every occurrence of the form
 
 WHAT IS DELIBERATELY NOT IMPORTED
 ---------------------------------
@@ -46,6 +56,9 @@ import zlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
+# The upstream JSON moved out of the app and into this repo in September 2026; the qiraah
+# overlays are read from here, not from the app checkout. See sources/README.md.
+SOURCES = ROOT / "sources"
 
 # slug, app tag, English label, Arabic label, imam (en/ar), death year AH, PDF base name,
 # whether the app's own text is verified (and so ships here).
@@ -127,14 +140,50 @@ def rule_descriptions(app: pathlib.Path) -> dict:
     return dict(sorted(out.items()))
 
 
-def import_qiraat(app: pathlib.Path) -> None:
+def import_qiraat(_app: pathlib.Path) -> None:
+    """The 7 verified overlays, copied out of this repo's own sources/ rather than the app."""
     print("qiraat text (the 7 verified non-Hafs riwayat)")
-    source = app / "Resources" / "JSONs-Deprecated" / "Qiraat"
+    source = SOURCES / "Qiraat"
     for slug, name in sorted(QIRAAT_JSON.items()):
         payload = json.loads((source / f"{name}.json").read_text(encoding="utf-8"))
         # Indented, like the files already in data/qiraat: the diff of a text correction should be
         # the corrected ayahs, not the whole reading reflowed onto one line.
         write_json(DATA / "qiraat" / f"qiraah-{slug}.json", payload, indent=2)
+
+
+
+def import_quran_text() -> None:
+    """Refresh the ayah transliteration in data/quran.json from sources/Quran.json.
+
+    The whole surah record is not overwritten: data/quran.json carries fields the app's source
+    does not (word and letter counts, juz-change flags), and rewriting it wholesale would lose
+    them. Only the fields that legitimately change upstream are copied, ayah by ayah, and the
+    file is rewritten in the same indent-2 shape so a diff shows the corrected ayahs.
+
+    Written for the 2026-09 transliteration swap: the app replaced its own scheme with QUL's
+    "English Transliteration (Tajweed)", which moved 6,235 of the 6,236 ayahs.
+    """
+    print("quran text")
+    source = json.loads((SOURCES / "Quran.json").read_text(encoding="utf-8"))
+    target = json.loads((DATA / "quran.json").read_text(encoding="utf-8"))
+    by_id = {s["id"]: {a["id"]: a for a in s.get("ayahs", [])} for s in source}
+
+    fields = ("textArabic", "textTransliteration", "textEnglishSaheeh", "textEnglishMustafa")
+    changed = {f: 0 for f in fields}
+    for surah in target:
+        upstream = by_id.get(surah["id"], {})
+        for ayah in surah.get("ayahs", []):
+            other = upstream.get(ayah["id"])
+            if not other:
+                continue
+            for field in fields:
+                if field in other and other[field] != ayah.get(field):
+                    ayah[field] = other[field]
+                    changed[field] += 1
+
+    write_json(DATA / "quran.json", target, indent=2)
+    moved = {f: n for f, n in changed.items() if n}
+    print(f"    ayahs changed: {moved or 'none'}")
 
 
 def import_mushaf(app: pathlib.Path, quran: list) -> None:
@@ -232,16 +281,283 @@ def import_payloads(app: pathlib.Path) -> None:
                json.loads((quran_data / "surah-stats.json").read_text(encoding="utf-8")))
 
 
+# ---------------------------------------------------------------------------
+# Batch 5: the corpora added upstream in Al-Islam 4.6.4 (September 2026).
+# ---------------------------------------------------------------------------
+
+# The riwayat whose text this engine publishes; the beta twelve are excluded everywhere,
+# including from indexes that only describe their text.
+PUBLISHED_TAGS = {tag for (_slug, tag, *_rest, ships) in RIWAYAT if ships}
+TAG_TO_SLUG = {tag: slug for (slug, tag, *_rest) in RIWAYAT if tag}
+
+
+def import_morphology(app: pathlib.Path) -> None:
+    """Root and lemma of every word, from the Quranic Arabic Corpus via QUL.
+
+    Kept in the app's compact shape on purpose: this is one small integer per token of the
+    Quran, twice over, and inflating 155,258 ids into objects would multiply the file for
+    nothing. Ids are 1-based into `roots` / `lemmas`; 0 means the token has neither (particles,
+    the sajdah mark). The arrays are per surah, then per ayah, then per whitespace token of the
+    ayah's raw Hafs text, which is exactly how `word-by-word.json` is indexed.
+    """
+    print("morphology")
+    pack = unxz(app / "Resources" / "Data" / "Quran" / "Morphology.json.xz")
+    write_json(DATA / "morphology.json", {
+        "roots": pack["roots"],            # [[letters spaced, buckwalter], ...]
+        "lemmas": pack["lemmas"],          # [[dictionary form, unmarked form], ...]
+        "rootIds": pack["r"],
+        "lemmaIds": pack["l"],
+    })
+
+
+def import_mutashabihat(app: pathlib.Path) -> None:
+    """The repeated phrases: QUL's "Mutashabihat ul Quran" set, named rather than positional.
+
+    The app stores each phrase as a 7-element array; a consumer reading JSON should not have to
+    know that element 4 is the surah count, so this names the fields. Spans are 0-based
+    inclusive token ranges of the raw Hafs text.
+    """
+    print("mutashabihat")
+    pack = unxz(app / "Resources" / "Data" / "Quran" / "Mutashabihat.json.xz")
+    phrases = {}
+    for pid, row in pack["phrases"].items():
+        source, start, end, count, ayah_count, surah_count, occurrences = row
+        phrases[pid] = {
+            "source": source,
+            "span": [start, end],
+            "count": count,
+            "ayahCount": ayah_count,
+            "surahCount": surah_count,
+            "occurrences": occurrences,
+        }
+    write_json(DATA / "mutashabihat.json", {"phrases": phrases, "index": pack["index"]})
+
+
+def import_topics(app: pathlib.Path) -> None:
+    """QUL's three topic families, the passage themes, and the hizb/ruku/manzil boundaries.
+
+    `quran-topics.json` is a different corpus from `themes.json`, not a newer one: themes is the
+    323 curated topics, this is 2,512 from the Clear Quran thematic index, the Quranic Arabic
+    Corpus ontology and a general A-Z index.
+
+    All THREE parent links are carried, because they are three independent trees over one pool of
+    topics and a topic can sit in more than one: Adam is a node in the thematic tree under 2284
+    and in the ontology under 272, and collapsing that to a single "family parent" would silently
+    drop one of them. The `t` and `o` flags say which indexes a topic is listed in (17 topics are
+    listed in both), so they are carried as flags rather than as one exclusive family. A tree's
+    parent may itself be a topic listed elsewhere - the A-Z index hangs "House of" under Moses,
+    who is a thematic topic - so a tree is not closed over its own listing either.
+    """
+    print("topics, passage themes and metadata")
+    quran_data = app / "Resources" / "Data" / "Quran"
+
+    raw = unxz(quran_data / "QuranTopics.json.xz")["topics"]
+    topics = []
+    for row in raw:
+        name = row.get("n") or ""
+        if not name:
+            continue
+        thematic, ontology = row.get("t", 0) == 1, row.get("o", 0) == 1
+        listed = []
+        if thematic:
+            listed.append("thematic")
+        if ontology:
+            listed.append("ontology")
+        if not listed:
+            listed.append("index")
+        topics.append({
+            "id": row["id"],
+            "name": name,
+            "arabic": row.get("ar", ""),
+            # The indexes this topic is listed in; 17 topics are listed in two.
+            "families": listed,
+            # One parent per tree, independently. Null where the topic is not in that tree, or
+            # is one of its roots.
+            "parents": {
+                "thematic": row.get("tp"),
+                "ontology": row.get("op"),
+                "index": row.get("p"),
+            },
+            "description": row.get("d", ""),
+            "wiki": row.get("w", ""),
+            "ayahs": row.get("ay", []),
+            "related": row.get("rel", []),
+        })
+    write_json(DATA / "quran-topics.json", {"topics": topics})
+
+    # One sentence per run of ayahs: [firstAyah, lastAyah, theme, topic].
+    themes = unxz(quran_data / "AyahThemes.json.xz")["themes"]
+    write_json(DATA / "ayah-themes.json", {
+        surah: [{"from": row[0], "to": row[1], "theme": row[2], "topic": row[3]} for row in rows]
+        for surah, rows in themes.items()
+    })
+
+    meta = json.loads((quran_data / "QuranMetadata.json").read_text(encoding="utf-8"))
+    write_json(DATA / "quran-metadata.json",
+               {k: meta[k] for k in ("hizb", "ruku", "manzil")}, indent=2)
+
+
+def import_qiraat_variants(app: pathlib.Path) -> None:
+    """WHO among the Ten reads a word differently, and what the difference means.
+
+    A layer the qiraah texts cannot supply. `data/qiraat/` gives each reading's own words; this
+    gives the reader behind each form, a transliteration, an English rendering and usually a
+    grammarian's note. Source is the Quran.com qiraat matrix (Quran Foundation).
+
+    `readers` are the ten imams; `transmitters` the twenty riwayat. A reading lists `readers`
+    when both of an imam's transmitters follow it, and `transmitters` when they part company.
+    Segment ranges are 0-based inclusive token indices of the raw Hafs text, `null` where the
+    builder could not place the word.
+    """
+    print("qiraat variants")
+    quran_data = app / "Resources" / "Data" / "Quran"
+    pack = unxz(quran_data / "QiraatVariants.json.xz")
+
+    readers = {rid: {"id": int(rid), "name": row["n"], "abbreviation": row.get("a", row["n"]),
+                     "city": row.get("c", ""), "position": row.get("p", 99)}
+               for rid, row in pack["readers"].items()}
+    transmitters = {}
+    for tid, row in pack["transmitters"].items():
+        tag = row.get("tag", "")
+        transmitters[tid] = {
+            "id": int(tid), "name": row["n"], "reader": row["r"],
+            # The engine's own slug, so a consumer can join this to data/qiraat/ and data/mushaf/.
+            "riwayah": TAG_TO_SLUG.get(tag, "hafs" if tag == "" else None),
+            "textPublished": tag in PUBLISHED_TAGS,
+        }
+
+    ayahs = {}
+    for key, rows in pack["ayahs"].items():
+        junctures = []
+        for row in rows:
+            readings = []
+            for reading in row.get("readings", []):
+                text = reading.get("t") or ""
+                if not text:
+                    continue
+                readings.append({
+                    "text": text,
+                    "transliteration": reading.get("tr", ""),
+                    "english": reading.get("en", ""),
+                    "explanation": reading.get("ex", ""),
+                    "grammaticalForm": reading.get("gf", ""),
+                    "rootLetters": reading.get("rt", ""),
+                    "readers": reading.get("rd", []),
+                    "transmitters": reading.get("tm", []),
+                })
+            if not readings:
+                continue
+            segments = []
+            for seg in row.get("seg", []):
+                if len(seg) != 3:
+                    continue
+                seg_key, start, end = seg
+                segments.append({"ayah": seg_key,
+                                 "span": [start, end] if start >= 0 and end >= start else None})
+            junctures.append({
+                "word": row.get("t", ""),
+                "category": row.get("c", ""),
+                "segments": segments,
+                "readings": readings,
+                "note": row.get("note", ""),
+            })
+        if junctures:
+            ayahs[key] = junctures
+
+    write_json(DATA / "qiraat-variants.json",
+               {"readers": readers, "transmitters": transmitters, "ayahs": ayahs})
+
+
+def import_qiraat_places(app: pathlib.Path) -> None:
+    """Where a riwayah differs from Hafs at all, ayah by ayah, for the published readings.
+
+    The comparison answers "how does this riwayah read this ayah"; this answers the question
+    before it, so a reader can step from one difference to the next instead of hunting. Two
+    kinds, because they are found two ways and a consumer may want only the first: a `word`
+    index is a word dropped, added or spelled differently, found by diffing the two texts; a
+    `letter` index is a word the printed mushaf marks as read with other vowels over the SAME
+    skeleton, which no text diff can see (مَلِكِ against مَٰلِكِ in al-Fatihah).
+
+    The app encodes the second kind as a negative index; unpacking it here means no consumer has
+    to know that. The beta riwayat are dropped with their text.
+    """
+    print("qiraat places")
+    pack = unxz(app / "Resources" / "Data" / "Quran" / "QiraatPlaces.json.xz")
+    out = {}
+    for tag, surahs in pack["riwayat"].items():
+        if tag not in PUBLISHED_TAGS:
+            continue
+        slug = TAG_TO_SLUG[tag]
+        table = {}
+        for surah, rows in surahs.items():
+            for row in rows:
+                ayah, indices = row[0], row[1:]
+                table.setdefault(surah, {})[str(ayah)] = {
+                    "word": sorted(i for i in indices if i >= 0),
+                    "letter": sorted(-i - 1 for i in indices if i < 0),
+                }
+        out[slug] = table
+    write_json(DATA / "qiraat-places.json", {"riwayat": out})
+
+
+def import_qiraat_variant_audio(app: pathlib.Path) -> None:
+    """The same reciter reading a verse both ways, for the four riwayat where one exists.
+
+    A pair drawn from two shaykhs would differ in voice, pace and maqam as well, and teach
+    nothing about the variant, so only reciters who published both sides with timings are here.
+    Rows are `[surah, sourceIndex, hafsStartMs, hafsEndMs, riwayahStartMs, riwayahEndMs]` per
+    ayah; a `file` source is a whole per-verse recording and ignores the offsets, a `span`
+    source is a seek inside a full-surah one. URLs are built from the source's two bases.
+    """
+    print("qiraat variant audio")
+    pack = unxz(app / "Resources" / "Data" / "Quran" / "QiraatVariantAudio.json.xz")
+    write_json(DATA / "qiraat-variant-audio.json", {
+        "sources": pack["sources"],
+        "riwayat": {TAG_TO_SLUG.get(tag, tag): rows for tag, rows in pack["riwayat"].items()},
+    }, indent=2)
+
+
+def import_word_of_day(app: pathlib.Path) -> None:
+    """149 curated words, each with every ayah the same written form appears in.
+
+    The curation and glosses are Tilawa's (Jamil Hammoudeh, with permission); the occurrences
+    are derived from the Hafs text, so the count and the list behind it are one derivation.
+    `token` indices are into the ayah's raw whitespace tokens, as everywhere else.
+    """
+    print("word of the day")
+    pack = unxz(app / "Resources" / "Data" / "Quran" / "WordOfDay.json.xz")
+    words = [{
+        "id": row["id"],
+        "arabic": row["ar"],
+        "transliteration": row.get("tr", ""),
+        "meaning": row.get("en", ""),
+        "surah": row["s"],
+        "ayah": row["a"],
+        "token": row["p"],
+        "count": row["n"],
+        "occurrences": [{"surah": o[0], "ayah": o[1], "tokens": o[2]} for o in row["occ"]],
+    } for row in pack["words"]]
+    write_json(DATA / "word-of-day.json", {"words": words})
+
+
 def main() -> None:
     app = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT.parent / "Al-Islam-iOS"
     if not (app / "Resources" / "Data" / "Quran").is_dir():
         raise SystemExit(f"no Al-Islam-iOS checkout at {app} (pass its path as the first argument)")
 
+    import_quran_text()
     quran = json.loads((DATA / "quran.json").read_text(encoding="utf-8"))
     import_qiraat(app)
     import_mushaf(app, quran)
     import_tajweed_qiraat(app)
     import_payloads(app)
+    import_morphology(app)
+    import_mutashabihat(app)
+    import_topics(app)
+    import_qiraat_variants(app)
+    import_qiraat_places(app)
+    import_qiraat_variant_audio(app)
+    import_word_of_day(app)
     print("done")
 
 
