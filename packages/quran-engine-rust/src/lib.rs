@@ -1589,15 +1589,32 @@ impl Engine {
     }
 
     /// The reading a riwayah follows at a juncture, by engine slug.
+    ///
+    /// A reading names an imam when BOTH his transmitters follow it, and names a transmitter when
+    /// the two part company, so a transmitter named on one reading overrides his imam's listing on
+    /// a sibling. Look for him across the whole juncture before falling back to the imams: at
+    /// 12:109 ʿĀṣim is named on نوحي while Shuʿbah is named on يوحى, and Shuʿbah recites يوحى.
     pub fn reading_for<'a>(
         &'a self,
         juncture: &'a batch5::Juncture,
         riwayah: &str,
     ) -> Option<&'a batch5::VariantReading> {
+        let named = juncture.readings.iter().find(|reading| {
+            reading.transmitters.iter().any(|&id| {
+                self.variant_transmitter(id).map(|t| t.riwayah.as_deref() == Some(riwayah))
+                    == Some(true)
+            })
+        });
+        if named.is_some() {
+            return named;
+        }
         juncture.readings.iter().find(|reading| {
-            self.transmitters_following(reading)
-                .iter()
-                .any(|t| t.riwayah.as_deref() == Some(riwayah))
+            reading.readers.iter().any(|&reader_id| {
+                self.qiraat_variants
+                    .transmitters
+                    .values()
+                    .any(|t| t.reader == reader_id && t.riwayah.as_deref() == Some(riwayah))
+            })
         })
     }
 

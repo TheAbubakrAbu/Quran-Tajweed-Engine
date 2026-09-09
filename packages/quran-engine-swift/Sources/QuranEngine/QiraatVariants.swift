@@ -184,9 +184,22 @@ public final class QiraatVariants: Sendable {
     }
 
     /// The reading a riwayah follows at a juncture, by engine slug.
+    ///
+    /// A reading names an imam when BOTH his transmitters follow it, and names a transmitter when
+    /// the two part company, so a transmitter named on one reading overrides his imam's listing on
+    /// a sibling. Look for him across the whole juncture before falling back to the imams: at
+    /// 12:109 ʿĀṣim is named on نوحي while Shuʿbah is named on يوحى, and Shuʿbah recites يوحى.
     public func reading(in juncture: Juncture, followedBy riwayah: String) -> VariantReading? {
-        juncture.readings.first { reading in
-            transmitters(following: reading).contains { $0.riwayah == riwayah }
+        let named = juncture.readings.first { reading in
+            reading.transmitters.contains { transmitter(id: $0)?.riwayah == riwayah }
+        }
+        if let named { return named }
+        return juncture.readings.first { reading in
+            reading.readers.contains { readerID in
+                file?.transmitters.values.contains {
+                    $0.reader == readerID && $0.riwayah == riwayah
+                } ?? false
+            }
         }
     }
 

@@ -278,12 +278,31 @@ test("qiraatVariants: a juncture names the word, its readings and who reads them
 });
 
 test("qiraatVariants: attribution names imams first, then lone transmitters with their imam", () => {
-  for (const [key] of Object.entries(engine.qiraatVariants._ayahs).slice(0, 50)) {
+  // Every ayah, not the first fifty: the hole at 16:43 sat past the sample for months.
+  for (const [key] of Object.entries(engine.qiraatVariants._ayahs)) {
     const [s, a] = key.split(":").map(Number);
     for (const juncture of engine.qiraatVariants.junctures(s, a)) {
       for (const reading of juncture.readings) {
         const text = engine.qiraatVariants.attribution(reading);
         assert.ok(text.length > 0, `${key} has a reading with no attribution`);
+      }
+    }
+  }
+});
+
+test("qiraatVariants: a transmitter named on a reading overrides his imam's listing", () => {
+  // Where an imam's two transmitters part company the source names the imam on one reading and
+  // the departing transmitter on the other, so the imam's listing covers his OTHER transmitter.
+  // Hafs and Shubah split over نوحي/يوحى wherever it occurs; data/qiraat/ has Shubah on يوحى.
+  for (const [surah, ayah] of [[12, 109], [16, 43], [21, 7]]) {
+    for (const juncture of engine.qiraatVariants.junctures(surah, ayah)) {
+      if (!juncture.word.includes("وح")) continue;
+      // The forms differ in their first letter; diacritics vary between the three places.
+      for (const [riwayah, first] of [["hafs", "ن"], ["shubah", "ي"]]) {
+        const reading = engine.qiraatVariants.readingFor(juncture, riwayah);
+        assert.ok(reading, `${surah}:${ayah} has no reading for ${riwayah}`);
+        assert.ok(reading.text.startsWith(first),
+          `${surah}:${ayah} ${riwayah} reads ${reading.text}, want one starting ${first}`);
       }
     }
   }

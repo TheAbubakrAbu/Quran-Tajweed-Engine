@@ -278,10 +278,23 @@ class QiraatVariants {
   }
 
   /// The reading a riwayah follows at a juncture, by engine slug.
+  ///
+  /// A reading names an imam when BOTH his transmitters follow it, and names a transmitter when
+  /// the two part company, so a transmitter named on one reading overrides his imam's listing on
+  /// a sibling. Look for him across the whole juncture before falling back to the imams: at
+  /// 12:109 ʿĀṣim is named on نوحي while Shuʿbah is named on يوحى, and Shuʿbah recites يوحى.
   VariantReading? readingFor(Juncture juncture, String riwayah) {
     for (final reading in juncture.readings) {
-      if (transmittersFollowing(reading).any((t) => t.riwayah == riwayah)) {
-        return reading;
+      for (final id in reading.transmitters) {
+        if (transmitter(id)?.riwayah == riwayah) return reading;
+      }
+    }
+    for (final reading in juncture.readings) {
+      for (final readerId in reading.readers) {
+        for (final raw in _transmitters.values) {
+          final row = raw as Map<String, dynamic>;
+          if (row['reader'] == readerId && row['riwayah'] == riwayah) return reading;
+        }
       }
     }
     return null;

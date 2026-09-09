@@ -290,6 +290,21 @@ def import_payloads(app: pathlib.Path) -> None:
 PUBLISHED_TAGS = {tag for (_slug, tag, *_rest, ships) in RIWAYAT if ships}
 TAG_TO_SLUG = {tag: slug for (slug, tag, *_rest) in RIWAYAT if tag}
 
+# Errata against the upstream qiraat matrix, applied on import so a re-import cannot undo them.
+# Keyed by ayah, then by the reading's text; the value replaces that reading's `readers` list.
+#
+# 16:43 نُّوحِىٓ: upstream gives نُوحِي an empty matrix (no reader, no transmitter) and puts all ten
+# imams on يُوحَى, so the form Ḥafṣ actually recites is left attributed to nobody. The same word in
+# 12:109 and 21:7 carries the standard attribution and this restores it: ʿĀṣim on نُوحِي, the other
+# nine on يُوحَى, and Shuʿbah named there too because he parts from his imam here. The riwayah texts
+# in data/qiraat/ confirm it - Ḥafṣ alone reads نُوحِي, Shuʿbah and the rest read يُوحَى.
+VARIANT_READER_ERRATA = {
+    "16:43": {
+        "نُوحِيْ": [5],
+        "يُوحَى": [1, 2, 3, 4, 6, 7, 8, 9, 10],
+    },
+}
+
 
 def import_morphology(app: pathlib.Path) -> None:
     """Root and lemma of every word, from the Quranic Arabic Corpus via QUL.
@@ -442,7 +457,7 @@ def import_qiraat_variants(app: pathlib.Path) -> None:
                     "explanation": reading.get("ex", ""),
                     "grammaticalForm": reading.get("gf", ""),
                     "rootLetters": reading.get("rt", ""),
-                    "readers": reading.get("rd", []),
+                    "readers": VARIANT_READER_ERRATA.get(key, {}).get(text, reading.get("rd", [])),
                     "transmitters": reading.get("tm", []),
                 })
             if not readings:

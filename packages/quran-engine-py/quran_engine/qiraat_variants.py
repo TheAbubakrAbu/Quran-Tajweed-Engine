@@ -72,10 +72,21 @@ class QiraatVariants:
         return out
 
     def reading_for(self, juncture: dict, riwayah: str) -> Optional[dict]:
-        """The reading a riwayah follows at a juncture, by engine slug."""
-        for reading in juncture.get("readings", []):
-            if any(t.get("riwayah") == riwayah for t in self.transmitters_following(reading)):
-                return reading
+        """The reading a riwayah follows at a juncture, by engine slug.
+
+        A reading names an imam when BOTH his transmitters follow it, and names a transmitter when the two part company, so a transmitter named on one reading overrides his imam's listing on a sibling. Look for him across the whole juncture before falling back to the imams: at 12:109 ʿĀṣim is named on نوحي while Shuʿbah is named on يوحى, and Shuʿbah recites يوحى.
+        """
+        readings = juncture.get("readings", [])
+        for reading in readings:
+            for tid in reading.get("transmitters", []):
+                t = self.transmitter(tid)
+                if t and t.get("riwayah") == riwayah:
+                    return reading
+        for reading in readings:
+            for reader_id in reading.get("readers", []):
+                for t in self._transmitters.values():
+                    if t["reader"] == reader_id and t.get("riwayah") == riwayah:
+                        return reading
         return None
 
     def attribution(self, reading: dict) -> str:

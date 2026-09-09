@@ -469,19 +469,49 @@ func TestJunctureNamesWordReadingsAndWhoReadsThem(t *testing.T) {
 	}
 }
 
+// Every reading, not a sample: ranging over a map samples a different fifty each run, so a hole
+// in the data showed up only when the iteration order happened to land on it (16:43 did, once).
 func TestEveryReadingHasAnAttribution(t *testing.T) {
 	e := batch5Engine(t)
-	checked := 0
+	keys := make([]string, 0, len(e.variants.Ayahs))
 	for key := range e.variants.Ayahs {
-		if checked >= 50 {
-			break
-		}
-		checked++
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
 		surah, ayah := splitAyahKey(key)
 		for _, juncture := range e.Junctures(surah, ayah) {
 			for _, reading := range juncture.Readings {
 				if e.VariantAttribution(reading) == "" {
-					t.Fatalf("%s has a reading with no attribution", key)
+					t.Errorf("%s has a reading (%q) with no attribution", key, reading.Text)
+				}
+			}
+		}
+	}
+}
+
+// A transmitter named on one reading parts from his imam, who is named on another: the imam's
+// listing covers his OTHER transmitter only. Ḥafṣ and Shuʿbah split over نوحي/يوحى in all three
+// places it occurs, and data/qiraat/ shows Shuʿbah reciting يوحى, so resolving him through ʿĀṣim
+// would hand him the wrong form.
+func TestNamedTransmitterOverridesHisImamsReading(t *testing.T) {
+	e := batch5Engine(t)
+	for _, place := range []struct{ surah, ayah int }{{12, 109}, {16, 43}, {21, 7}} {
+		for _, juncture := range e.Junctures(place.surah, place.ayah) {
+			if !strings.Contains(juncture.Word, "وح") {
+				continue
+			}
+			// The two forms differ in their first letter: Allah's "We inspire" against the
+			// passive "it is inspired". Diacritics vary between the three places, so compare
+			// only that letter.
+			for riwayah, want := range map[string]string{"hafs": "ن", "shubah": "ي"} {
+				reading, ok := e.ReadingFor(juncture, riwayah)
+				if !ok {
+					t.Fatalf("%d:%d has no reading for %s", place.surah, place.ayah, riwayah)
+				}
+				if !strings.HasPrefix(reading.Text, want) {
+					t.Errorf("%d:%d %s reads %q, want one starting %q",
+						place.surah, place.ayah, riwayah, reading.Text, want)
 				}
 			}
 		}

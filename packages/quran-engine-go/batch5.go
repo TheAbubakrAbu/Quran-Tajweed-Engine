@@ -696,11 +696,27 @@ func (e *Engine) TransmittersFollowing(reading VariantReading) []VariantTransmit
 }
 
 // ReadingFor returns the reading a riwayah follows at a juncture, by engine slug.
+//
+// A reading names an imam when BOTH his transmitters follow it, and names a transmitter when the
+// two part company. So a transmitter listed by name overrides his imam's listing on a sibling
+// reading, and must be looked for across the whole juncture before falling back to the imams:
+// at 12:109 ʿĀṣim is named on نُوحِي while Shuʿbah is named on يُوحَى, and Shuʿbah recites يُوحَى.
+// Scanning reading by reading would hand him his imam's form instead.
 func (e *Engine) ReadingFor(juncture Juncture, riwayah string) (VariantReading, bool) {
 	for _, reading := range juncture.Readings {
-		for _, transmitter := range e.TransmittersFollowing(reading) {
-			if transmitter.Riwayah == riwayah {
+		for _, id := range reading.Transmitters {
+			if transmitter, ok := e.VariantTransmitterByID(id); ok && transmitter.Riwayah == riwayah {
 				return reading, true
+			}
+		}
+	}
+	for _, reading := range juncture.Readings {
+		for _, readerID := range reading.Readers {
+			for key := range e.variants.Transmitters {
+				t := e.variants.Transmitters[key]
+				if t.Reader == readerID && t.Riwayah == riwayah {
+					return reading, true
+				}
 			}
 		}
 	}
