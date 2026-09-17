@@ -1,6 +1,6 @@
 # Android (Jetpack Compose)
 
-Use **`quran-engine-kotlin`** in an Android app. It's a thin, idiomatic wrapper over the JSON in [`/data`](../../data) plus a few pure functions — no network, database, or framework required (audio is just URL strings). Tajweed uses the pre-computed annotation corpus (strategy A); JVM `String` is UTF-16, so offsets slice directly.
+Use **`quran-engine-kotlin`** in an Android app. It's a thin, idiomatic wrapper over the JSON in [`/data`](../../data) plus a few pure functions: no network, database, or framework required (audio is just URL strings). Tajweed uses the pre-computed annotation corpus (strategy A); JVM `String` is UTF-16, so offsets slice directly.
 
 ## Setup
 
@@ -45,7 +45,7 @@ private fun copyAssetDir(context: Context, assetPath: String, outDir: File) {
 }
 ```
 
-Build the engine once (e.g. in your `Application`, a DI singleton, or a `remember`/`ViewModel`) and reuse it — decoding `quran.json` is the heaviest step.
+Build the engine once (e.g. in your `Application`, a DI singleton, or a `remember`/`ViewModel`) and reuse it, decoding `quran.json` is the heaviest step.
 
 ## Minimal working example (Compose)
 
@@ -70,7 +70,7 @@ fun AyahScreen(surah: Int = 1, ayah: Int = 1) {
 
 ## Tajweed rendering with `AnnotatedString`
 
-`engine.tajweed(surah, ayah)` returns `List<TajweedSpan>`, each with `start`, `end`, `rule`, `colorHex` (`"#RRGGBB"`, nullable), and the reconstructed `text`. Spans cover only the colored parts, in order and non-overlapping — fill the gaps. Build an `AnnotatedString` and color each run with a `SpanStyle`:
+`engine.tajweed(surah, ayah)` returns `List<TajweedSpan>`, each with `start`, `end`, `rule`, `colorHex` (`"#RRGGBB"`, nullable), and the reconstructed `text`. Spans cover only the colored parts, in order and non-overlapping, fill the gaps. Build an `AnnotatedString` and color each run with a `SpanStyle`:
 
 ```kotlin
 import androidx.compose.foundation.text.BasicText
@@ -115,7 +115,7 @@ fun TajweedAyah(engine: Engine, surah: Int, ayah: Int) {
 }
 ```
 
-`TajweedSpan.start`/`end` are UTF-16 code-unit offsets; Kotlin/JVM `String` is UTF-16, so `text.substring(start, end)` slices on the same units — no conversion. See [02-tajweed.md](../02-tajweed.md).
+`TajweedSpan.start`/`end` are UTF-16 code-unit offsets; Kotlin/JVM `String` is UTF-16, so `text.substring(start, end)` slices on the same units, no conversion. See [02-tajweed.md](../02-tajweed.md).
 
 ## Audio with `ExoPlayer` (or `MediaPlayer`)
 
@@ -151,7 +151,7 @@ With `MediaPlayer` the equivalent is `MediaPlayer().apply { setDataSource(surahA
 
 ## See also
 
-- [recipes.md](../recipes.md) — #2 (tajweed), #4–6 (audio).
+- [recipes.md](../recipes.md): #2 (tajweed), #4–6 (audio).
 - [02-tajweed.md](../02-tajweed.md) · [01-quran.md](../01-quran.md) · [06-ayah-search.md](../06-ayah-search.md)
 - [04-surah-recitations.md](../04-surah-recitations.md) · [05-ayah-recitations.md](../05-ayah-recitations.md) · [08-caching.md](../08-caching.md)
 - [`quran-engine-kotlin` README](../../packages/quran-engine-kotlin/README.md)

@@ -73,7 +73,7 @@ class Quran(
         return surah(surahs.size + 1 - n)
     }
 
-    /** Whether an ayah is a sajdah (prostration) ayah — carries the U+06E9 mark. */
+    /** Whether an ayah is a sajdah (prostration) ayah, carries the U+06E9 mark. */
     fun isSajdahAyah(surahId: Int, ayahId: Int): Boolean =
         (ayah(surahId, ayahId)?.textArabic ?: "").contains(SAJDAH_MARK)
 
@@ -132,7 +132,7 @@ class Quran(
     }
 
     /**
-     * Ayah count of a surah in the given riwayah — the number of Hafs ayahs that exist there (e.g.
+     * Ayah count of a surah in the given riwayah, the number of Hafs ayahs that exist there (e.g.
      * Baqarah is 286 in Hafs but 285 in Warsh). Mirrors `Surah.numberOfAyahs(for:)`.
      */
     /**
@@ -173,7 +173,7 @@ class Quran(
     }
 
     companion object {
-        /** ARABIC PLACE OF SAJDAH (U+06E9) — marks the 15 sajdah (prostration) ayahs. */
+        /** ARABIC PLACE OF SAJDAH (U+06E9), marks the 15 sajdah (prostration) ayahs. */
         const val SAJDAH_MARK: String = "۩"
     }
 }

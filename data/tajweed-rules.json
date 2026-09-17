@@ -4,19 +4,19 @@
   "sections": [
     {
       "id": "silents",
-      "title": "Sukūn — Silent"
+      "title": "Sukūn: Silent"
     },
     {
       "id": "ghunnah",
-      "title": "Ghunnah — Nasal"
+      "title": "Ghunnah: Nasal"
     },
     {
       "id": "sifaat",
-      "title": "Sifaat — Articulation"
+      "title": "Sifaat: Articulation"
     },
     {
       "id": "madd",
-      "title": "Madd — Elongation"
+      "title": "Madd: Elongation"
     }
   ],
   "categories": [
@@ -56,7 +56,7 @@
       "englishTitle": "Joining Hamzah",
       "arabicTitle": "هَمزَةُ الوَصل",
       "transliteration": "Hamzat al-Wasl",
-      "literalMeaning": "Hamzat al-wasl — the 'connecting hamzah' — is silent when joining from a previous word.",
+      "literalMeaning": "Hamzat al-wasl (the 'connecting hamzah') is silent when joining from a previous word.",
       "countLabel": null,
       "applicableLetters": null,
       "shortDescription": "Start-only hamzah; dropped when connecting.",
@@ -74,7 +74,7 @@
       "countLabel": null,
       "applicableLetters": "When noon (ن) or tanween comes before: ل، ر",
       "shortDescription": "Silent-style merge into next without nasal sound.",
-      "longDescription": "Unlike ghunnah-based merges, no nasal hold is maintained; the sound moves straight into the target letter (ل or ر). Timing is cleaner and shorter — avoid adding nasal color by habit."
+      "longDescription": "Unlike ghunnah-based merges, no nasal hold is maintained; the sound moves straight into the target letter (ل or ر). Timing is cleaner and shorter: avoid adding nasal color by habit."
     },
     {
       "id": "idghamGhunnah",
@@ -186,7 +186,7 @@
       "countLabel": "2 counts",
       "applicableLetters": "Occurs on madd letters: ا، و، ي (normal 2-count elongation)",
       "shortDescription": "From full vowel letters: alif, waw, or yaa.",
-      "longDescription": "The reference madd length. Mastering its steady two-count rhythm calibrates all longer madd forms. The stretch should be even and relaxed — not clipped, not drifting longer."
+      "longDescription": "The reference madd length. Mastering its steady two-count rhythm calibrates all longer madd forms. The stretch should be even and relaxed: not clipped, not drifting longer."
     },
     {
       "id": "maddNaturalMiniature",
@@ -228,7 +228,7 @@
       "countLabel": "2, 4, or 5 counts",
       "applicableLetters": "When madd letters (ا، و، ي) are followed by hamzah in the next word",
       "shortDescription": "Madd at word end before next hamzah.",
-      "longDescription": "Because the hamzah is in the following word, scholars classify this separately from muttasil. Allowed lengths vary by riwayah — follow one taught pattern. This color also marks Madd Munfasil Hukmi: the vocative يَا and demonstrative هَا particles written joined to a following hamzah (e.g. يَٰٓأَيُّهَا, هَٰٓؤُلَآءِ)."
+      "longDescription": "Because the hamzah is in the following word, scholars classify this separately from muttasil. Allowed lengths vary by riwayah, so follow one taught pattern. This color also marks Madd Munfasil Hukmi: the vocative يَا and demonstrative هَا particles written joined to a following hamzah (e.g. يَٰٓأَيُّهَا, هَٰٓؤُلَآءِ)."
     },
     {
       "id": "maddConnected",

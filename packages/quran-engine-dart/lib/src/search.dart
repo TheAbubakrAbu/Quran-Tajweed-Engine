@@ -1,6 +1,6 @@
 /// Ayah & surah search. Faithful port of the search system in `search.js`.
 ///
-/// Verse matching is unranked — results come back in mushaf order (surah, then
+/// Verse matching is unranked, results come back in mushaf order (surah, then
 /// ayah). Each verse is indexed into Arabic/English blobs plus token lists.
 ///
 /// Regular (non-boolean) verse search is a PURE SUBSTRING match against the

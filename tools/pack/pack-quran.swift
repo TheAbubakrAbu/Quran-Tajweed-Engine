@@ -365,7 +365,7 @@ func packQiraat(directory: URL, outputURL: URL) throws -> PackStats {
         readings.append(Reading(key: key, surahs: surahs))
     }
 
-    // Eager: which surahs each reading covers, and how many ayahs in each — this is what
+    // Eager: which surahs each reading covers, and how many ayahs in each: this is what
     // `existsInQiraah` / `numberOfAyahs(for:)` need, and it answers them without any text.
     var eager = ByteWriter()
     eager.u32(readings.count)

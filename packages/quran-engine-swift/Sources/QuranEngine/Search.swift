@@ -127,7 +127,7 @@ public final class Search {
         if cleaned.isEmpty { return [] }
 
         // Reject any query containing a decimal digit (numeric/refs go via surah search). Done BEFORE
-        // the boolean path — exactly as QuranData.search(term:) does — so even a boolean query with a
+        // the boolean path, exactly as QuranData.search(term:) does, so even a boolean query with a
         // digit returns []. `.decimalDigits` also catches Arabic-Indic digits (mirrors `\p{Nd}`).
         if cleaned.rangeOfCharacter(from: .decimalDigits) != nil { return [] }
 
@@ -141,7 +141,7 @@ public final class Search {
             ? ArabicText.cleanSearch(ArabicText.removingSilentArabicLettersForSearch(query), whitespace: true)
             : ""
 
-        // Plain substring search in mushaf order — word/sentence boundaries DON'T matter (a query
+        // Plain substring search in mushaf order, word/sentence boundaries DON'T matter (a query
         // matches anywhere it appears, e.g. "رب" inside "ربهم"). Whole-word / phrase matching lives in
         // the boolean `=` operator. Mirrors the regular path in search.js.
         let matched = index.filter { e in

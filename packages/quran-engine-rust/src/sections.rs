@@ -1,13 +1,13 @@
 //! Where a surah changes subject: an outline of each surah as titled ayah ranges, plus one sentence
 //! saying what the surah as a whole is about.
 //!
-//! This answers "I am at 18:60 — what is this passage doing here", which neither the translation nor
+//! This answers "I am at 18:60: what is this passage doing here", which neither the translation nor
 //! the tafsir answers quickly, because both are written per ayah. 111 of the 114 surahs carry an
 //! outline; al-Fatihah, Fussilat and ad-Dukhan do not.
 //!
 //! **The outline is a tree, flattened.** Ranges are inclusive, in mushaf order, and MAY NEST: a
 //! broad section is followed by the sections inside it, parent before children (Hud opens with 1–24
-//! "Doctrine facts", then 1–4, 5–6, 7–11, 12–17, 18–24 within it). They also do not tile the surah —
+//! "Doctrine facts", then 1–4, 5–6, 7–11, 12–17, 18–24 within it). They also do not tile the surah, 
 //! an ayah can belong to no section at all. So an ayah has a CHAIN of sections, outermost first,
 //! which is what [`Engine::sections_for`] returns; [`Engine::outline`] rebuilds it as a tree.
 //!
@@ -96,7 +96,7 @@ impl Engine {
     /// The same sections as a tree: top-level passages, each with what is inside it.
     pub fn outline(&self, surah: u32) -> Vec<OutlineNode> {
         let mut roots: Vec<OutlineNode> = Vec::new();
-        // Path of indices into the tree, outermost first — Rust will not hand out two mutable
+        // Path of indices into the tree, outermost first, Rust will not hand out two mutable
         // borrows of the same tree, so the open chain is tracked by position instead.
         let mut path: Vec<usize> = Vec::new();
 
@@ -118,13 +118,13 @@ impl Engine {
         roots
     }
 
-    /// Every section covering an ayah, outermost first — the breadcrumb for "you are here". Empty
+    /// Every section covering an ayah, outermost first: the breadcrumb for "you are here". Empty
     /// when the surah has no outline, or when this ayah falls between sections.
     pub fn sections_for(&self, surah: u32, ayah: u32) -> Vec<SurahSection> {
         self.sections(surah).into_iter().filter(|s| s.contains(ayah)).collect()
     }
 
-    /// The most specific section covering an ayah — the heading a reader wants beside the verse.
+    /// The most specific section covering an ayah: the heading a reader wants beside the verse.
     pub fn section_for(&self, surah: u32, ayah: u32) -> Option<SurahSection> {
         self.sections_for(surah, ayah).pop()
     }

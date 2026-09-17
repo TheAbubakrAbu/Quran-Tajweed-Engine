@@ -4,7 +4,7 @@ import 'dart:math' show min;
 import 'models.dart';
 import 'text.dart';
 
-/// ۩ ARABIC PLACE OF SAJDAH (U+06E9) — marks the 15 sajdah (prostration) ayahs.
+/// ۩ ARABIC PLACE OF SAJDAH (U+06E9), marks the 15 sajdah (prostration) ayahs.
 const String sajdahMark = '۩';
 
 /// A surah paired with one of its ayahs (used by iteration helpers).
@@ -163,7 +163,7 @@ class Quran {
     return surah(surahs.length + 1 - n);
   }
 
-  /// Whether an ayah is a sajdah (prostration) ayah — carries the ۩ mark
+  /// Whether an ayah is a sajdah (prostration) ayah, carries the ۩ mark
   /// (U+06E9).
   bool isSajdahAyah(int surahId, int ayahId) =>
       (ayah(surahId, ayahId)?.textArabic ?? '').contains(sajdahMark);
@@ -231,7 +231,7 @@ class Quran {
     return ayahId <= count;
   }
 
-  /// Ayah count of a surah in the given riwayah — the number of Hafs ayahs that
+  /// Ayah count of a surah in the given riwayah, the number of Hafs ayahs that
   /// exist there (e.g. Baqarah is 286 in Hafs but 285 in Warsh). Returns 0 for
   /// an unknown surah.
   int numberOfAyahsInQiraah(int surahId, [String? riwayah]) {

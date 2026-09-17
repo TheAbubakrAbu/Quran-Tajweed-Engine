@@ -46,7 +46,7 @@ await cache.hasSurah(reciter, 57);                          // true
 await cache.removeSurah(reciter, 57);
 ```
 
-`AudioCache` works in any environment with `fetch` (browser, Node 18+, Deno, Bun) — pass `{ fetch }` to inject one explicitly. `memoryStore()` is provided for tests and ephemeral use.
+`AudioCache` works in any environment with `fetch` (browser, Node 18+, Deno, Bun), pass `{ fetch }` to inject one explicitly. `memoryStore()` is provided for tests and ephemeral use.
 
 ## Backend sketches
 
@@ -56,6 +56,6 @@ await cache.removeSurah(reciter, 57);
 
 ## In-app playback prefetch (not persisted)
 
-For gapless playback the reference app also prewarms the next surah ~10 s before the current ends and keeps current+next ayah items buffered. That's a playback concern, not a cache concern — build it in your player.
+For gapless playback the reference app also prewarms the next surah ~10 s before the current ends and keeps current+next ayah items buffered. That's a playback concern, not a cache concern, build it in your player.
 
 Reference: [`src/cache.js`](../packages/quran-engine-js/src/cache.js).

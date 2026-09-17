@@ -2,7 +2,7 @@
 
 The Dart port of the **Quran Tajweed Engine**. A thin, idiomatic, data-driven wrapper over the JSON corpus in the repo `/data` directory. It follows the shared contract in [`../../docs/PORTING.md`](../../docs/PORTING.md) so the API feels the same across every language port.
 
-**The data is the engine.** No network call, database, or framework is required at runtime — the engine constructs audio URLs but never fetches or bundles audio.
+**The data is the engine.** No network call, database, or framework is required at runtime, the engine constructs audio URLs but never fetches or bundles audio.
 
 ## Install
 
@@ -93,11 +93,11 @@ Future<Engine> buildEngine() async {
 | Sorting | `sortSurahs(surahs, mode, direction)`, `filterByRevelationType` |
 | Caching | `localSurahPath(reciter, surah)`, `sanitizeReciterDir(id)`, `sharedAudioPath` |
 
-Models — `Surah`, `Ayah`, `JuzEntry`, `Reciter`, `TajweedSpan` — each have a `fromJson` factory matching the camelCase JSON keys.
+Models (`Surah`, `Ayah`, `JuzEntry`, `Reciter`, `TajweedSpan`), each have a `fromJson` factory matching the camelCase JSON keys.
 
 ### Tajweed strategy (A)
 
-Tajweed colors come from the pre-computed corpus: `tajweed-annotations.json` provides per-ayah `{start, end, rule}` annotations, and each `rule` maps to a `colorHex` from `tajweed-rules.json → categories[]`. Annotation `start`/`end` are **UTF-16 code-unit offsets**. Dart `String`s are UTF-16, so `text.substring(start, end)` slices them directly — no conversion needed.
+Tajweed colors come from the pre-computed corpus: `tajweed-annotations.json` provides per-ayah `{start, end, rule}` annotations, and each `rule` maps to a `colorHex` from `tajweed-rules.json → categories[]`. Annotation `start`/`end` are **UTF-16 code-unit offsets**. Dart `String`s are UTF-16, so `text.substring(start, end)` slices them directly, no conversion needed.
 
 ### Search scope (what is omitted)
 
@@ -113,7 +113,7 @@ With the `test` package available (`dart pub get`):
 dart test
 ```
 
-Offline / no dependencies — a dependency-free smoke test asserts the same canonical cases:
+Offline / no dependencies, a dependency-free smoke test asserts the same canonical cases:
 
 ```sh
 dart run bin/smoke.dart
@@ -121,6 +121,6 @@ dart run bin/smoke.dart
 
 ## License & attribution
 
-MIT — see [`../../LICENSE`](../../LICENSE).
+MIT, see [`../../LICENSE`](../../LICENSE).
 
 All data and algorithms are extracted from the open-source **Al-Islam | Islamic Pillars** app by **Abubakr Elmallah** (© 2025, MIT). Please preserve the attribution in [`../../CREDITS.md`](../../CREDITS.md) in any redistribution. Audio is provided only as constructed URLs to third-party CDNs (mp3quran.net, alquran.cloud / cdn.islamic.network); no audio is hosted or redistributed. The Arabic Quran text must be preserved exactly and never altered.

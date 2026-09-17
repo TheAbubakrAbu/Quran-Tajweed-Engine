@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * Muqaṭṭaʿāt — the disconnected opening letters of 29 surahs (e.g. الٓمٓ). The mushaf prints them joined
+ * Muqaṭṭaʿāt, the disconnected opening letters of 29 surahs (e.g. الٓمٓ). The mushaf prints them joined
  * with maddah marks but they are recited letter by letter ("Alif Lām Mīm"), so this exposes, per opening
  * ayah, the individual letters, a transliteration, and the fully-vocalized Arabic spelling (whose long
  * vowels carry the madd-lāzim maddah U+0653, so a tajweed pass colours them like the real ayah).

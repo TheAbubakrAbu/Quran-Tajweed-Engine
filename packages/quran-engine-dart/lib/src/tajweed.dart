@@ -63,7 +63,7 @@ class Tajweed {
       final start = a['start'] as int;
       final end = a['end'] as int;
       final rule = a['rule'] as String;
-      // UTF-16 offsets — Dart strings are UTF-16, so substring is direct.
+      // UTF-16 offsets, Dart strings are UTF-16, so substring is direct.
       final slice = text.substring(start, end);
       out.add(TajweedSpan(
         start: start,

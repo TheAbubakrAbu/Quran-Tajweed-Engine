@@ -1,9 +1,9 @@
 /// The `Engine` facade ties the modules together.
 ///
 /// Two ways to build it:
-///   • `Engine.load({dataDir})`     — reads JSON from disk (dart:io). Default
+///   • `Engine.load({dataDir})`: reads JSON from disk (dart:io). Default
 ///     locates the repo `/data` by walking up from the current directory.
-///   • `Engine.fromJson(...)`       — accepts already-decoded JSON. Use this in
+///   • `Engine.fromJson(...)`: accepts already-decoded JSON. Use this in
 ///     Flutter, where the data is bundled as assets and loaded via `rootBundle`.
 import 'dart:convert';
 import 'dart:io';
@@ -152,15 +152,15 @@ class Engine {
 
   /// Build from already-decoded JSON. Pass the parsed contents of each file.
   ///
-  /// [quranJson]            — `data/quran.json` (a List).
-  /// [juzJson]              — `data/juz.json` (a List).
-  /// [recitersJson]         — `data/reciters.json` (a List).
-  /// [tajweedRulesJson]     — `data/tajweed-rules.json` (a Map).
-  /// [tajweedAnnotationsJson] — `tajweed-annotations.json` (a List).
-  /// [surahInfoJson]        — `data/surah-info.json` (a List), optional.
-  /// [namesOfAllahJson]     — `data/names-of-allah.json` (a List), optional.
-  /// [muqattaatJson]        — `data/muqattaat.json` (a Map), optional.
-  /// [qiraatCountsJson]     — `data/qiraat-counts.json` (a Map), optional.
+  /// [quranJson], `data/quran.json` (a List).
+  /// [juzJson], `data/juz.json` (a List).
+  /// [recitersJson], `data/reciters.json` (a List).
+  /// [tajweedRulesJson], `data/tajweed-rules.json` (a Map).
+  /// [tajweedAnnotationsJson], `tajweed-annotations.json` (a List).
+  /// [surahInfoJson], `data/surah-info.json` (a List), optional.
+  /// [namesOfAllahJson], `data/names-of-allah.json` (a List), optional.
+  /// [muqattaatJson], `data/muqattaat.json` (a Map), optional.
+  /// [qiraatCountsJson], `data/qiraat-counts.json` (a Map), optional.
   factory Engine.fromJson({
     required List<dynamic> quranJson,
     required List<dynamic> juzJson,
@@ -297,8 +297,8 @@ class Engine {
     ]);
 
     Future<Map<String, dynamic>?> readOptional(String rel) async {
-      // A missing optional corpus is not an error — the accessors simply return
-      // nothing — but a file that IS there and will not parse still throws, so a
+      // A missing optional corpus is not an error: the accessors simply return
+      // nothing, but a file that IS there and will not parse still throws, so a
       // corrupt pack fails loudly instead of silently disappearing.
       final file = File('$dir${Platform.pathSeparator}$rel');
       if (!file.existsSync()) return null;

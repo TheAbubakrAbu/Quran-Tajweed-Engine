@@ -34,7 +34,7 @@ type RiwayahEntry struct {
 	PDF      string `json:"pdf"`
 	PDFBytes int64  `json:"pdfBytes"`
 	Pages    string `json:"pages"`
-	// Lines is "" when the riwayah's text — and so its line table — is not published.
+	// Lines is "" when the riwayah's text (and so its line table), is not published.
 	Lines string `json:"lines"`
 	// Tajweed is "" when the riwayah has no tajweed pack.
 	Tajweed      string `json:"tajweed"`
@@ -157,8 +157,8 @@ func (e *Engine) MushafFirstAyahOfPage(page int, riwayah string) *VerseMatch {
 }
 
 // MushafLineBreaks returns the character offsets into the ayah's own text at which this riwayah's
-// print starts a new line. The second result is false when the riwayah's text — and so its line
-// table — is not published.
+// print starts a new line. The second result is false when the riwayah's text, and so its line
+// table, is not published.
 func (e *Engine) MushafLineBreaks(surahID, ayahID int, riwayah string) ([]int, bool) {
 	table, ok := e.mushafLines[riwayah]
 	if !ok {

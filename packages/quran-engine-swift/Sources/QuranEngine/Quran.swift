@@ -1,6 +1,6 @@
 import Foundation
 
-/// ۩ ARABIC PLACE OF SAJDAH (U+06E9) — marks the 15 sajdah (prostration) ayahs.
+/// ۩ ARABIC PLACE OF SAJDAH (U+06E9), marks the 15 sajdah (prostration) ayahs.
 private let sajdahMark = "\u{06E9}"
 
 /// One "About this surah" write-up (e.g. Maududi / Ibn Ashur). Mirrors a
@@ -89,7 +89,7 @@ public final class Quran {
         return surah(surahs.count + 1 - n)
     }
 
-    /// Whether an ayah is a sajdah (prostration) ayah — carries the ۩ mark (U+06E9).
+    /// Whether an ayah is a sajdah (prostration) ayah, carries the ۩ mark (U+06E9).
     public func isSajdahAyah(_ surahId: Int, _ ayahId: Int) -> Bool {
         (ayah(surahId, ayahId)?.textArabic ?? "").contains(sajdahMark)
     }
@@ -158,7 +158,7 @@ public final class Quran {
         return ayahId <= count
     }
 
-    /// Ayah count of a surah in the given riwayah — the number of Hafs ayahs that exist there (e.g.
+    /// Ayah count of a surah in the given riwayah, the number of Hafs ayahs that exist there (e.g.
     /// Baqarah is 286 in Hafs but 285 in Warsh). Mirrors `numberOfAyahsInQiraah` in quran.js.
     public func numberOfAyahsInQiraah(_ surahId: Int, riwayah: String? = nil) -> Int {
         guard let s = surah(surahId) else { return 0 }

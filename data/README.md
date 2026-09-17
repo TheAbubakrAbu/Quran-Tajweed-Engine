@@ -1,6 +1,6 @@
 # Data dictionary
 
-Canonical, language-agnostic data for the Quran Tajweed Engine. Plain UTF-8 JSON — load it from any language. Full schemas and usage live in [`../docs`](../docs); this is the quick reference.
+Canonical, language-agnostic data for the Quran Tajweed Engine. Plain UTF-8 JSON, load it from any language. Full schemas and usage live in [`../docs`](../docs); this is the quick reference.
 
 | File | Type | Records | Schema doc |
 |------|------|---------|------------|
@@ -26,28 +26,28 @@ Canonical, language-agnostic data for the Quran Tajweed Engine. Plain UTF-8 JSON
 | `themes.json` | object | 323 topics | [docs/13-similar-and-themes.md](../docs/13-similar-and-themes.md) |
 | `tajweed-lessons.json` | object | 10 chapters / 57 lessons | [docs/13-similar-and-themes.md](../docs/13-similar-and-themes.md) |
 | `surah-sections.json` | object | 741 sections / 111 surahs | [docs/15-surah-sections.md](../docs/15-surah-sections.md) |
-| `surah-stats.json` | object | 114 | a standalone index — see below |
+| `surah-stats.json` | object | 114 | a standalone index, see below |
 | `surahs/NNN.json` + `index.json` | per-surah | 114 + index | [docs/architecture.md](../docs/architecture.md) |
 
 ### `surah-stats.json` is a convenience index, not a source
 
-Every value in it — ayah, word and letter counts, juz list, revelation type — is already on the surah in `quran.json`, and a test asserts the two still agree. It ships as an 8 KB file for a consumer that wants the counts without parsing 30 MB of text; the engine's own API answers those questions from `Quran`, so no module reads it.
+Every value in it (ayah, word and letter counts, juz list, revelation type), is already on the surah in `quran.json`, and a test asserts the two still agree. It ships as an 8 KB file for a consumer that wants the counts without parsing 30 MB of text; the engine's own API answers those questions from `Quran`, so no module reads it.
 
 ## Provenance
 
 All files are extracted **unmodified** from the open-source [Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-iOS) app, except three derived files generated from its source for portability:
 
-- `juz.json` — from `QuranData.juzList`.
-- `reciters.json` — from the reciter tables in `QuranStructs.swift` (riwayah labels resolved to text; `id` = `"{name}|{qiraah??Hafs}|{surahLink}"`; `qiraah: null` means Hafs).
-- `tajweed-rules.json` — the rule catalogue + color + letter tables from `TajweedRules.swift`. **This is the single source of truth for tajweed rules:** edit it and run `node scripts/generate-tajweed.mjs` to regenerate the per-language constant files (`tajweed-rules.generated.*` in every `packages/` port) and `docs/tajweed-rules-reference.md`.
-- `arabic-alphabet.json` — from `ArabicLetters.swift` + `ArabicView.swift` (letters, weights, tashkeel, waqf signs).
-- `fonts/` — the three Quran TTFs (Uthmani, Qiraat, Indopak) with `fonts.json` metadata; see [docs/fonts.md](../docs/fonts.md).
+- `juz.json`: from `QuranData.juzList`.
+- `reciters.json`: from the reciter tables in `QuranStructs.swift` (riwayah labels resolved to text; `id` = `"{name}|{qiraah??Hafs}|{surahLink}"`; `qiraah: null` means Hafs).
+- `tajweed-rules.json`: the rule catalogue + color + letter tables from `TajweedRules.swift`. **This is the single source of truth for tajweed rules:** edit it and run `node scripts/generate-tajweed.mjs` to regenerate the per-language constant files (`tajweed-rules.generated.*` in every `packages/` port) and `docs/tajweed-rules-reference.md`.
+- `arabic-alphabet.json`: from `ArabicLetters.swift` + `ArabicView.swift` (letters, weights, tashkeel, waqf signs).
+- `fonts/`: the three Quran TTFs (Uthmani, Qiraat, Indopak) with `fonts.json` metadata; see [docs/fonts.md](../docs/fonts.md).
 
 The mushaf, riwayah-tajweed, word-by-word, similar-ayah, theme, lesson, section and stats corpora are extracted from the same app by [`scripts/import-al-islam-data.py`](../scripts/import-al-islam-data.py), which decompresses the packs it ships them in and reshapes them as plain JSON. Re-run it after the app updates a corpus.
 
-**Not published here:** the text of the twelve riwayat outside the eight verified ones. It is machine-extracted from printed mushafs and not yet proofread word by word, so it is not fit to hand other developers as engine data — and their line tables and tajweed packs index into it, so those stay out with it. Their printed mushafs and page tables *do* ship, because a facsimile is exact whatever the state of the extraction. See [docs/10-mushaf.md](../docs/10-mushaf.md#the-twelve-without-text).
+**Not published here:** the text of the twelve riwayat outside the eight verified ones. It is machine-extracted from printed mushafs and not yet proofread word by word, so it is not fit to hand other developers as engine data, and their line tables and tajweed packs index into it, so those stay out with it. Their printed mushafs and page tables *do* ship, because a facsimile is exact whatever the state of the extraction. See [docs/10-mushaf.md](../docs/10-mushaf.md#the-twelve-without-text).
 
-See [../CREDITS.md](../CREDITS.md) for full attribution. The Quranic Arabic text is sacred — keep it exact.
+See [../CREDITS.md](../CREDITS.md) for full attribution. The Quranic Arabic text is sacred, keep it exact.
 
 ## `names-of-allah.json`
 

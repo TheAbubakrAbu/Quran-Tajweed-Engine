@@ -1,5 +1,5 @@
 """
-quran_engine — a framework-agnostic Quran engine for Python.
+quran_engine, a framework-agnostic Quran engine for Python.
 
 Part of the open-source Quran Tajweed Engine. Data and algorithms are extracted, with attribution,
 from the Al-Islam app by Abubakr Elmallah. See ../../CREDITS.md.

@@ -167,7 +167,7 @@ List<String> _splitGraphemeClusters(String text) {
   return out;
 }
 
-/// True for Unicode general-category M (combining mark) — sufficient subset for
+/// True for Unicode general-category M (combining mark), sufficient subset for
 /// Arabic Quranic text (tashkeel + recitation signs).
 bool _isMark(int cp) =>
     (cp >= 0x0610 && cp <= 0x061a) ||

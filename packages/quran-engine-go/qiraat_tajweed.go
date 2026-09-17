@@ -34,7 +34,7 @@ type LegendRow struct {
 type LegendEntry struct {
 	// Code is the single letter this riwayah's data uses for the rule.
 	Code string
-	// Rule is the stable rule key, e.g. "idgham" — the same across riwayat.
+	// Rule is the stable rule key, e.g. "idgham", the same across riwayat.
 	Rule string
 	// Arabic is the rule's name as this mushaf prints it.
 	Arabic  string
@@ -168,7 +168,7 @@ func (e *Engine) QiraatWordRules(surahID, ayahID int, riwayah string) []WordRule
 	return out
 }
 
-// KhilafAyahs lists the ayahs of a surah this riwayah reads differently from Hafs somewhere — the
+// KhilafAyahs lists the ayahs of a surah this riwayah reads differently from Hafs somewhere, the
 // index behind a "show me where these two readings part" list, without walking every ayah's rules.
 func (e *Engine) KhilafAyahs(surahID int, riwayah string) []int {
 	pack, ok := e.qiraatTajweed[riwayah]

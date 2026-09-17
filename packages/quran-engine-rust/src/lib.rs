@@ -70,7 +70,7 @@ pub use util::{utf16_slice, zero_pad3};
 use model::{AyahAnnotations, MuqattaatData, SurahInfoEntry, TajweedRules};
 use search::SearchIndex;
 
-/// ۩ ARABIC PLACE OF SAJDAH (U+06E9) — marks the 15 sajdah (prostration) ayahs.
+/// ۩ ARABIC PLACE OF SAJDAH (U+06E9), marks the 15 sajdah (prostration) ayahs.
 const SAJDAH_MARK: char = '\u{06E9}';
 
 /// A single annotation flattened to `(utf16_start, utf16_end, rule_id)`.
@@ -191,7 +191,7 @@ pub struct Engine {
 #[derive(Debug, Clone, Copy, Default)]
 pub struct LoadOptions {
     /// The mushaf index, page and line tables (~2 MB). The 604-page facsimiles themselves are never
-    /// loaded by the engine — `mushaf_pdf_path` hands you the path.
+    /// loaded by the engine, `mushaf_pdf_path` hands you the path.
     pub mushaf: bool,
     /// The seven riwayah tajweed packs (~0.9 MB).
     pub qiraat_tajweed: bool,
@@ -199,7 +199,7 @@ pub struct LoadOptions {
     pub word_by_word: bool,
     /// The mutashabihat corpus (~2.9 MB).
     pub similar_ayahs: bool,
-    /// The seven non-Hafs riwayat's own text (~11 MB) — what `compare_surah` compares.
+    /// The seven non-Hafs riwayat's own text (~11 MB), what `compare_surah` compares.
     pub qiraat: bool,
     /// Root and lemma of every word (~776 KB).
     pub morphology: bool,
@@ -565,7 +565,7 @@ impl Engine {
         }
     }
 
-    /// Ayah count of a surah in the given riwayah — the number of Hafs ayahs that exist there
+    /// Ayah count of a surah in the given riwayah, the number of Hafs ayahs that exist there
     /// (e.g. Baqarah is 286 in Hafs but 285 in Warsh). Mirrors `Quran.numberOfAyahsInQiraah`.
     /// Returns 0 for an unknown surah. `riwayah` `""`/`"hafs"` and a missing count fall back to
     /// the surah's Hafs `number_of_ayahs`.
@@ -605,7 +605,7 @@ impl Engine {
 
     /// "About this surah" write-ups (Maududi / Ibn Ashur) for a surah id; empty slice if none.
     /// Mirrors `Quran.info`.
-    /// A riwayah's own verses for a surah, in ITS numbering — which is not always Hafs'.
+    /// A riwayah's own verses for a surah, in ITS numbering: which is not always Hafs'.
     ///
     /// Warsh's al-Baqarah has 285 verses to Hafs' 286, because it reads الٓمٓ and ذٰلك الكتٰب as
     /// one; pairing the two by ayah id past that point compares different verses. Empty unless
@@ -629,7 +629,7 @@ impl Engine {
         self.surah_info.get(&id).map(Vec::as_slice).unwrap_or(&[])
     }
 
-    /// Whether an ayah is a sajdah (prostration) ayah — its Arabic text carries the ۩ mark
+    /// Whether an ayah is a sajdah (prostration) ayah: its Arabic text carries the ۩ mark
     /// (U+06E9). Mirrors `Quran.isSajdahAyah`.
     pub fn is_sajdah_ayah(&self, surah: u32, ayah: u32) -> bool {
         self.ayah(surah, ayah)
@@ -1126,7 +1126,7 @@ mod tests {
         let opts = SearchOpts::default();
         let hits_1_2 = |hits: &[VerseHit]| hits.iter().any(|h| h.surah == 1 && h.ayah == 2);
 
-        // Regular (non-boolean) search is a PURE SUBSTRING — mid-word match: "orld" hits 1:2.
+        // Regular (non-boolean) search is a PURE SUBSTRING, mid-word match: "orld" hits 1:2.
         assert!(hits_1_2(&e.search_verses("orld", &opts)));
 
         // `=lord` (whole-word) hits 1:2; `=lor` does NOT (no whole word "lor")...

@@ -152,10 +152,10 @@ class Reciter {
   final String id;
   final String name;
 
-  /// e.g. "ar.alafasy" — used for the ayah-by-ayah CDN path.
+  /// e.g. "ar.alafasy", used for the ayah-by-ayah CDN path.
   final String ayahIdentifier;
 
-  /// e.g. "128" — used verbatim (a string) in the ayah URL.
+  /// e.g. "128", used verbatim (a string) in the ayah URL.
   final String ayahBitrate;
 
   /// Full-surah CDN base, with a trailing slash.

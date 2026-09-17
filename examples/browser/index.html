@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quran Tajweed Engine — browser demo</title>
+  <title>Quran Tajweed Engine: browser demo</title>
   <!--
     HOW TO RUN
     ----------
@@ -37,7 +37,7 @@
   </style>
 </head>
 <body>
-  <h1>Quran Tajweed Engine — browser demo</h1>
+  <h1>Quran Tajweed Engine: browser demo</h1>
   <p>
     <label>Surah:
       <select id="surahSelect"><option>loading…</option></select>
@@ -90,7 +90,7 @@
       for (const s of surahIndex) {
         const opt = document.createElement("option");
         opt.value = s.id;
-        opt.textContent = `${s.id}. ${s.nameEnglish} — ${s.nameArabic}`;
+        opt.textContent = `${s.id}. ${s.nameEnglish} (${s.nameArabic})`;
         selectEl.appendChild(opt);
       }
       selectEl.addEventListener("change", () => loadSurah(Number(selectEl.value)));
@@ -112,7 +112,7 @@
         tajweedRules,
       });
 
-      statusEl.textContent = `${surah.nameEnglish} (${surah.nameArabic}) — ${surah.numberOfAyahs} ayahs`;
+      statusEl.textContent = `${surah.nameEnglish} (${surah.nameArabic}), ${surah.numberOfAyahs} ayahs`;
 
       for (const ayah of surah.ayahs) {
         outputEl.appendChild(renderAyah(engine, surah.id, ayah));

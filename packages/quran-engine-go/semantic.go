@@ -7,14 +7,14 @@ package quranengine
 // Measured, not assumed. Scoring an ayah by the cosine between a SENTENCE embedding of the query
 // and one of the ayah ranks this corpus close to randomly: translated scripture is dense, and one
 // vector for a whole verse washes out the single idea the query is asking about. Scoring word by
-// word fixes it — embed every word, and score a text as the MEAN over the query's words of the
+// word fixes it, embed every word, and score a text as the MEAN over the query's words of the
 // BEST matching word in the text. On real verses that separates related (0.42–0.70) from unrelated
 // (0.27–0.41) cleanly, and it degrades gracefully: a query word the model has never seen
 // contributes nothing instead of poisoning the vector.
 //
 // THE EMBEDDER IS YOURS
 //
-// This engine ships no model — word vectors are tens of megabytes and every platform already has
+// This engine ships no model, word vectors are tens of megabytes and every platform already has
 // one worth using. Hand NewSemantic a function from a lowercased word to its vector, or nil when
 // it has none. Vectors are cached per word, so a repeated word costs one lookup for the corpus.
 //
@@ -88,7 +88,7 @@ func (s *Semantic) Index(corpus []SemanticDocument) *Semantic {
 }
 
 // Search returns the documents closest in meaning to query, best first. minScore is a floor on
-// "actually related" — 0.42 is a sensible start on English translations, but calibrate it against
+// "actually related": 0.42 is a sensible start on English translations, but calibrate it against
 // YOUR embedder.
 func (s *Semantic) Search(query string, limit int, minScore float64) []SemanticHit {
 	queryVectors := s.vectorize(query)

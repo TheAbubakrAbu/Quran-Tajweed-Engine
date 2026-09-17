@@ -6,7 +6,7 @@ Where a surah changes subject: each surah as a handful of titled ayah ranges.
 
 ## The question it answers
 
-"I am at 18:60 — what is this passage doing here?" Neither the translation nor the tafsir answers that quickly, because both are written per ayah. The outline answers it in one lookup:
+"I am at 18:60: what is this passage doing here?" Neither the translation nor the tafsir answers that quickly, because both are written per ayah. The outline answers it in one lookup:
 
 ```js
 engine.surahSections.sectionFor(18, 60);
@@ -17,7 +17,7 @@ engine.surahSections.sectionFor(18, 60);
 
 ### `overview` is a near-empty field, on purpose
 
-The source pairs each surah with *either* an outline *or* a one-sentence overview, and it has an overview for exactly the three surahs it has no outline for. Worse, only al-Fatihah's is real prose: ash-Shura's and ad-Dukhan's are the literal string `"Surah overview"` — the heading of the page it was extracted from, not its content.
+The source pairs each surah with *either* an outline *or* a one-sentence overview, and it has an overview for exactly the three surahs it has no outline for. Worse, only al-Fatihah's is real prose: ash-Shura's and ad-Dukhan's are the literal string `"Surah overview"`; the heading of the page it was extracted from, not its content.
 
 The engine mirrors the source rather than papering over it, so `overview(42)` hands you `"Surah overview"`. Treat a `<= 20` character overview as absent, and prefer `hasSections` to decide whether there is anything to show at all.
 
@@ -48,13 +48,13 @@ engine.surahSections.outline(11);
 // [{ section: {…"Doctrine facts"}, children: [ …5 nodes… ] }, …]
 ```
 
-`sectionFor` is the innermost of the chain — the heading to put beside the verse. `sectionsFor` is the whole chain — the breadcrumb.
+`sectionFor` is the innermost of the chain (the heading to put beside the verse. `sectionsFor` is the whole chain), the breadcrumb.
 
 Nesting is real but not common: 630 top-level sections across the corpus, 107 nested one level, 4 deeper.
 
 ## They do not tile
 
-Do not assume every ayah has a section. Some fall between ranges, and `sectionFor` returns `null` there — which is not the same as "the surah has no outline". Check `hasSections(surah)` for that.
+Do not assume every ayah has a section. Some fall between ranges, and `sectionFor` returns `null` there: which is not the same as "the surah has no outline". Check `hasSections(surah)` for that.
 
 ## Titles are bilingual, and searchable
 
@@ -67,7 +67,7 @@ engine.surahSections.search("Story of Nuh");
 
 ## Data
 
-`data/surah-sections.json` — 80 KB, loaded by default (no flag).
+`data/surah-sections.json`: 80 KB, loaded by default (no flag).
 
 ```jsonc
 {
@@ -79,9 +79,9 @@ engine.surahSections.search("Story of Nuh");
 }
 ```
 
-Rows are `[from, to, english, arabic]` — a positional array, not an object, because there are 741 of them and the keys would triple the file.
+Rows are `[from, to, english, arabic]`: a positional array, not an object, because there are 741 of them and the keys would triple the file.
 
 ## Related
 
-- **[01 · Quran](01-quran.md)** — the ayahs the ranges point at.
-- **[13 · Similar ayahs and themes](13-similar-and-themes.md)** — themes group ayahs *across* surahs by subject; sections divide *one* surah by subject. Different questions.
+- **[01 · Quran](01-quran.md)**: the ayahs the ranges point at.
+- **[13 · Similar ayahs and themes](13-similar-and-themes.md)**, themes group ayahs *across* surahs by subject; sections divide *one* surah by subject. Different questions.

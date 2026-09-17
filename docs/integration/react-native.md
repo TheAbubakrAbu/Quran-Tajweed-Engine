@@ -1,6 +1,6 @@
 # React Native / Expo
 
-Use **`quran-engine-js`** in a React Native or Expo app. The package is pure ESM with zero runtime dependencies, so it runs on Hermes — with **one important caveat about tajweed** (below). As in the browser, you bring your own JSON and call `createEngine(...)`.
+Use **`quran-engine-js`** in a React Native or Expo app. The package is pure ESM with zero runtime dependencies, so it runs on Hermes, with **one important caveat about tajweed** (below). As in the browser, you bring your own JSON and call `createEngine(...)`.
 
 ## Setup
 
@@ -10,8 +10,8 @@ npm i @quran-tajweed-engine/core   # or a path/workspace dependency to packages/
 
 You have two ways to get the [`/data`](../../data) JSON onto the device:
 
-1. **Bundle as assets** — small/medium files (`juz.json`, `reciters.json`, `tajweed-rules.json`, `surahs/index.json`, per-surah `surahs/NNN.json`) imported with `import x from "./data/x.json"`. Metro bundles JSON natively. Avoid bundling the full ~5 MB `quran.json` if you can lazy-load per-surah files.
-2. **Ship via a CDN** — host `/data` (or just `data/surahs/`) on any static host and `fetch()` per-surah files on demand, caching them with `expo-file-system`. Keeps the app binary small.
+1. **Bundle as assets**: small/medium files (`juz.json`, `reciters.json`, `tajweed-rules.json`, `surahs/index.json`, per-surah `surahs/NNN.json`) imported with `import x from "./data/x.json"`. Metro bundles JSON natively. Avoid bundling the full ~5 MB `quran.json` if you can lazy-load per-surah files.
+2. **Ship via a CDN**: host `/data` (or just `data/surahs/`) on any static host and `fetch()` per-surah files on demand, caching them with `expo-file-system`. Keeps the app binary small.
 
 ```js
 import { createEngine } from "@quran-tajweed-engine/core";
@@ -27,7 +27,7 @@ export const engine = createEngine({ quran, juz, reciters, tajweedRules });
 
 The **live tajweed detector** (`engine.tajweed(text)`) needs grapheme clustering via `Intl.Segmenter`, which **Hermes does not implement** by default. Two safe paths:
 
-- **Recommended — consume the pre-computed corpus** instead of the live detector. Bundle/fetch the annotations (`data/tajweed-annotations.json`, or per-surah `data/tajweed/NNN.json`) and map each annotation `rule` to a color from `tajweed-rules.json → categories[].colorHex`. This is exactly what the native ports (Swift/Kotlin/Dart) do — strategy (A) in the [architecture](../architecture.md). It's a dictionary lookup + a UTF-16 slice, so it's tiny, exact, and Hermes-safe. JS strings are UTF-16, so `text.slice(start, end)` uses the same units the annotations record.
+- **Recommended, consume the pre-computed corpus** instead of the live detector. Bundle/fetch the annotations (`data/tajweed-annotations.json`, or per-surah `data/tajweed/NNN.json`) and map each annotation `rule` to a color from `tajweed-rules.json → categories[].colorHex`. This is exactly what the native ports (Swift/Kotlin/Dart) do, strategy (A) in the [architecture](../architecture.md). It's a dictionary lookup + a UTF-16 slice, so it's tiny, exact, and Hermes-safe. JS strings are UTF-16, so `text.slice(start, end)` uses the same units the annotations record.
 - **Or polyfill** `Intl.Segmenter` (e.g. a `intl-segmenter`/`Intl.Segmenter` polyfill, or build Hermes with Intl) and use the live detector as on the web. Heavier; only needed for text the corpus doesn't cover (other qiraat, user input).
 
 ### Tajweed from the corpus (Hermes-safe)
@@ -154,7 +154,7 @@ await cache.hasSurah(reciter, 36);                 // true
 
 ## See also
 
-- [recipes.md](../recipes.md) — #2 (tajweed), #4–6 (audio), #14 (offline cache).
+- [recipes.md](../recipes.md): #2 (tajweed), #4–6 (audio), #14 (offline cache).
 - [02-tajweed.md](../02-tajweed.md) (corpus strategy A) · [architecture.md](../architecture.md) (two ways to do tajweed)
 - [04-surah-recitations.md](../04-surah-recitations.md) · [05-ayah-recitations.md](../05-ayah-recitations.md) · [08-caching.md](../08-caching.md)
 - [`quran-engine-js` README](../../packages/quran-engine-js/README.md)

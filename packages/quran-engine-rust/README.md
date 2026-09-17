@@ -73,9 +73,9 @@ The full heuristic tajweed detector (strategy B in [`docs/02-tajweed.md`](../../
 
 The **core search path** is implemented:
 
-- `search_verses` — unranked verse-text search in mushaf order. A verse matches when the cleaned query is a substring of the relevant (Arabic or English) folded blob, **or** the query tokens phrase-prefix-match the verse tokens. Verse search rejects any query containing a digit.
-- `search_surahs` — name / alias / number / `"2:255"` / makkan-madani lookup.
-- `parse_reference` — `"2:255"`, `"2 255"`, `"baqarah 10"`, and Arabic-digit forms.
+- `search_verses`: unranked verse-text search in mushaf order. A verse matches when the cleaned query is a substring of the relevant (Arabic or English) folded blob, **or** the query tokens phrase-prefix-match the verse tokens. Verse search rejects any query containing a digit.
+- `search_surahs`: name / alias / number / `"2:255"` / makkan-madani lookup.
+- `parse_reference`: `"2:255"`, `"2 255"`, `"baqarah 10"`, and Arabic-digit forms.
 
 **Omitted (documented divergence):** the **boolean grammar** (`& | ! # ^ % $`) and its dedicated tashkeel / exact-phrase / silent-letter index blobs are not ported. A query containing a boolean operator is treated as plain text. This matches the "minimal port" allowance in the porting guide.
 

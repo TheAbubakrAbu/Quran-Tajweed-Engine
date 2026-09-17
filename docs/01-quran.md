@@ -11,7 +11,7 @@ The foundation. Everything else builds on this data. The engine is **data-first*
 | [`data/names-of-allah.json`](../data/names-of-allah.json) | ~32 KB | The 99 Names of Allah with meanings, descriptions, and where they occur. |
 | [`data/muqattaat.json`](../data/muqattaat.json) | ~8 KB | The disconnected opening letters (muqaṭṭaʿāt) of 29 surahs: letters, transliteration, and fully-vocalized Arabic spelling (with madd-lāzim marks). |
 | [`data/qiraat/*.json`](../data/qiraat) | ~1.6 MB each | Seven alternate readings (riwayat): Warsh, Qaloon, Duri, Susi, al-Bazzi, Qunbul, Shubah. |
-| [`data/qiraat-counts.json`](../data/qiraat-counts.json) | ~6.5 KB | Per-riwayah × per-surah ayah counts (generated from the qiraah feeds) — powers `existsInQiraah` / `numberOfAyahsInQiraah` without loading the full qiraah text. |
+| [`data/qiraat-counts.json`](../data/qiraat-counts.json) | ~6.5 KB | Per-riwayah × per-surah ayah counts (generated from the qiraah feeds), powers `existsInQiraah` / `numberOfAyahsInQiraah` without loading the full qiraah text. |
 
 ## `quran.json` schema
 
@@ -36,7 +36,7 @@ Top-level is a JSON **array** of surah objects:
       "textArabic": "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ",   // Hafs Uthmani, full diacritics
       "textTransliteration": "Bismi Allahi alrrahmani alrraheemi",
       "textEnglishSaheeh": "In the name of Allah, ...",          // Saheeh International
-      "textEnglishMustafa": "In the Name of Allah—...",          // Mustafa Khattab (The Clear Quran)
+      "textEnglishMustafa": "In the Name of Allah,...", // Mustafa Khattab (The Clear Quran)
       "juz": 1, "page": 1,
       "wordCount": 4, "letterCount": 19
     }
@@ -44,7 +44,7 @@ Top-level is a JSON **array** of surah objects:
 }
 ```
 
-The **global ayah number** (1..6236) — used by the ayah-audio CDN and as a stable verse key — is the cumulative ayah index across the whole mushaf:
+The **global ayah number** (1..6236) (used by the ayah-audio CDN and as a stable verse key), is the cumulative ayah index across the whole mushaf:
 
 ```
 globalAyahNumber(surah, ayah) = (sum of numberOfAyahs for all surahs before `surah`) + ayah
@@ -69,12 +69,12 @@ To display an ayah in a non-default reading, look up `qiraat[riwayah][surahId][a
 
 ### Qiraah existence & counts (no full-text load needed)
 
-Riwayat merge/split some ayahs, so a Hafs ayah doesn't always exist as its own verse elsewhere (Baqarah is 286 in Hafs, 285 in Warsh). The qiraah feeds are numbered contiguously `1..count` per surah, so a Hafs ayah `N` exists in a riwayah iff `N ≤ count` — captured compactly in [`data/qiraat-counts.json`](../data/qiraat-counts.json), which loads by default:
+Riwayat merge/split some ayahs, so a Hafs ayah doesn't always exist as its own verse elsewhere (Baqarah is 286 in Hafs, 285 in Warsh). The qiraah feeds are numbered contiguously `1..count` per surah, so a Hafs ayah `N` exists in a riwayah iff `N ≤ count`, captured compactly in [`data/qiraat-counts.json`](../data/qiraat-counts.json), which loads by default:
 
 ```js
 engine.quran.existsInQiraah(2, 285, "warsh");        // true
-engine.quran.existsInQiraah(2, 286, "warsh");        // false — Baqarah is 285 in Warsh
-engine.quran.existsInQiraah(2, 286, "shubah");       // true  — Shubah matches Hafs (6236)
+engine.quran.existsInQiraah(2, 286, "warsh"); // false, Baqarah is 285 in Warsh
+engine.quran.existsInQiraah(2, 286, "shubah"); // true, Shubah matches Hafs (6236)
 engine.quran.numberOfAyahsInQiraah(2, "warsh");      // 285
 engine.quran.numberOfAyahsInQiraah(2);               // 286   (Hafs, when riwayah omitted)
 ```
@@ -91,7 +91,7 @@ An unknown/unloaded riwayah falls back to Hafs (exists / full count). This mirro
 
 ## Reference implementation
 
-JS: [`src/quran.js`](../packages/quran-engine-js/src/quran.js) — `Quran` class.
+JS: [`src/quran.js`](../packages/quran-engine-js/src/quran.js), `Quran` class.
 
 ```js
 import { loadFromDisk } from "@quran-tajweed-engine/core/node";
@@ -112,7 +112,7 @@ engine.namesOfAllah.byNumber(1).transliteration;   // "Ar-Rahman"  (99 Names of 
 
 - **`sajdahAyahs()`** returns the 15 prostration ayahs in mushaf order, detected by the **۩ (U+06E9)** mark in the Arabic text; **`isSajdahAyah(s, a)`** tests one ayah.
 - **`surahFromEnd(n)`** counts surahs backward from the end: `1 → 114`, `2 → 113` … `114 → 1`; `undefined` outside `1..114`. (Page-from-end is `firstAyahOfPage(totalPages() + 1 - n)`.)
-- **`engine.namesOfAllah`** — `all()` (99 names, ordered) and `byNumber(n)`; each name has `name` (Arabic), `transliteration`, `number`, `found`, `meaning`, `desc`, `otherNames`.
+- **`engine.namesOfAllah`**: `all()` (99 names, ordered) and `byNumber(n)`; each name has `name` (Arabic), `transliteration`, `number`, `found`, `meaning`, `desc`, `otherNames`.
 
 ## Provenance
 

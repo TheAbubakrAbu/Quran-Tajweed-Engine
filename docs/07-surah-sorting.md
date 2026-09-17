@@ -25,7 +25,7 @@ The reference app exposes additional browse buckets (`juz`, `khatm`, `sajdah`, `
 ```js
 import { sortSurahs, supportsDirection, filterByRevelationType, filterByCounts } from "@quran-tajweed-engine/core";
 
-sortSurahs(surahs, "ayahs", "descending")[0].id;   // 2  (Al-Baqarah, 286 ayahs — longest)
+sortSurahs(surahs, "ayahs", "descending")[0].id; // 2  (Al-Baqarah, 286 ayahs, longest)
 sortSurahs(surahs, "revelation", "ascending");      // chronological order of revelation
 sortSurahs(surahs, "surah");                         // natural mushaf order
 supportsDirection("ayahs");                          // true
@@ -33,7 +33,7 @@ supportsDirection("surah");                          // false
 
 filterByRevelationType(surahs, "makkan");            // Makkan surahs only
 
-// Count filters — mirror the search-bar "286 ayahs" / "<10 pages". op ∈ "<" "<=" ">" ">=" "==".
+// Count filters, mirror the search-bar "286 ayahs" / "<10 pages". op ∈ "<" "<=" ">" ">=" "==".
 filterByCounts(surahs, { ayahs: { op: "==", value: 286 } }).map(s => s.id);   // [2]
 filterByCounts(surahs, { ayahs: { op: ">", value: 200 } }).map(s => s.id);    // [2, 7, 26]
 filterByCounts(surahs, { pages: { op: "<=", value: 1 } });                     // surahs that fit on ≤1 page

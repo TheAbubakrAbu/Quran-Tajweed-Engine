@@ -1,6 +1,6 @@
 # Examples
 
-Runnable examples for the **Quran Tajweed Engine**. The Node examples import the engine straight from source (`../packages/quran-engine-js/src/...`), so they run with **zero install** on Node 18+ — no `npm install`, no build step. They read the canonical JSON from the repo's `/data` directory.
+Runnable examples for the **Quran Tajweed Engine**. The Node examples import the engine straight from source (`../packages/quran-engine-js/src/...`), so they run with **zero install** on Node 18+: no `npm install`, no build step. They read the canonical JSON from the repo's `/data` directory.
 
 | File | What it shows | How to run |
 |------|---------------|------------|
@@ -20,7 +20,7 @@ node examples/tajweed-terminal.mjs 2 255      # one ayah (Ayat al-Kursi)
 node examples/tajweed-terminal.mjs 112        # a whole surah (al-Ikhlas)
 ```
 
-`tajweed-terminal.mjs` needs a terminal with 24-bit ("true color") support — iTerm2, Apple Terminal, the VS Code terminal, GNOME Terminal, and Windows Terminal all qualify.
+`tajweed-terminal.mjs` needs a terminal with 24-bit ("true color") support, iTerm2, Apple Terminal, the VS Code terminal, GNOME Terminal, and Windows Terminal all qualify.
 
 ## Browser example
 

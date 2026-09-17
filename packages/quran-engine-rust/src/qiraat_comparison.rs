@@ -4,11 +4,11 @@
 //! says what differs but never how much. This measures it: align the two readings' words and sort
 //! every pair into one of three buckets.
 //!
-//! * **identical** — the same word, written the same way, marks and all.
-//! * **same skeleton** — the same consonantal skeleton (rasm), different vowels or spelling. This is
+//! * **identical**: the same word, written the same way, marks and all.
+//! * **same skeleton**: the same consonantal skeleton (rasm), different vowels or spelling. This is
 //!   the overwhelming majority of what "a different qiraah" means, and it is what the uthmani rasm
 //!   was designed to allow: one written form, several sound readings.
-//! * **different** — a different skeleton, i.e. a genuinely different word form.
+//! * **different**: a different skeleton, i.e. a genuinely different word form.
 //!
 //! **Why alignment is not indexing.** Readings merge and split ayahs (Warsh's al-Baqarah has 285
 //! ayahs to Hafs' 286, because it reads الٓمٓ and ذٰلك الكتٰب as one), so ayah n of one is not ayah n
@@ -123,7 +123,7 @@ impl Engine {
         totals(&self.align(surah, against, riwayah))
     }
 
-    /// Compare the whole Quran. This walks every word of both readings — about 155,000 comparisons —
+    /// Compare the whole Quran. This walks every word of both readings, about 155,000 comparisons, 
     /// so cache the result rather than calling it per render.
     pub fn compare_riwayah(&self, riwayah: &str, against: &str) -> ComparisonTotals {
         let mut sum = ComparisonTotals::default();
@@ -139,7 +139,7 @@ impl Engine {
         sum
     }
 
-    /// The words that are not identical, in reading order — the rows behind a comparison view.
+    /// The words that are not identical, in reading order, the rows behind a comparison view.
     /// `limit` of 0 returns them all.
     pub fn qiraat_differences(
         &self,
@@ -191,7 +191,7 @@ impl Engine {
                 continue;
             }
             // Not a match. Before calling it a different word, see whether one side simply has an
-            // extra word here — a merge or a split — by looking for the next place they agree.
+      // extra word here (a merge or a split), by looking for the next place they agree.
             if let Some((ri, rj)) = find_resync(&left_skeletons, &right_skeletons, i, j) {
                 for k in i..ri {
                     rows.push(Row::new(k + 1, &left[k], "", RowKind::Dropped));
@@ -243,7 +243,7 @@ impl Row {
 }
 
 /// The nearest offset within the lookahead window at which the two streams agree again by skipping
-/// words on ONE side only — an insertion or a deletion.
+/// words on ONE side only, an insertion or a deletion.
 ///
 /// Skipping on both sides at once is deliberately not a resync: that is a substitution, one word
 /// standing where another does, which is the `Different` bucket. Allowing it here collapsed every

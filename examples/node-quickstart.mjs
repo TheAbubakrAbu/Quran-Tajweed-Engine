@@ -5,7 +5,7 @@
 //     node examples/node-quickstart.mjs
 //
 // It imports `loadFromDisk` straight from the package source, so there is no
-// build step and no `npm install` required — Node 18+ reads the canonical JSON
+// build step and no `npm install` required, Node 18+ reads the canonical JSON
 // out of the repo's `data/` directory and hands you a ready-to-use engine.
 //
 // Everything below is a real call against the public API. Each section prints
@@ -30,7 +30,7 @@ console.log(`Loaded engine: ${engine.quran.all().length} surahs, ${engine.quran.
 // ---------------------------------------------------------------------------
 // 2. Surah 1 metadata + ayah 1 (Arabic, transliteration, both translations)
 // ---------------------------------------------------------------------------
-heading("2. Surah 1 — metadata + ayah 1");
+heading("2. Surah 1, metadata + ayah 1");
 const fatiha = engine.quran.surah(1);
 console.log(`#${fatiha.id}  ${fatiha.nameEnglish}  (${fatiha.nameTransliteration} / ${fatiha.nameArabic})`);
 console.log(`Type: ${fatiha.type} · Ayahs: ${fatiha.numberOfAyahs} · Pages: ${fatiha.numberOfPages} · Revelation order: ${fatiha.revelationOrder}`);
@@ -55,7 +55,7 @@ console.log(`Detected ${spans.length} colored spans. First 8:\n`);
 console.log("  category               color     text");
 console.log("  ─────────────────────  ────────  ────");
 for (const s of spans.slice(0, 8)) {
-  console.log(`  ${s.category.padEnd(21)}  ${(s.color ?? "—").padEnd(8)}  ${s.text}`);
+  console.log(`  ${s.category.padEnd(21)}  ${(s.color ?? ", ").padEnd(8)}  ${s.text}`);
 }
 
 // ---------------------------------------------------------------------------
@@ -74,7 +74,7 @@ console.log(`Juz of 2:255 = ${engine.juzPage.juzForAyah(2, 255)} · Page of 2:25
 // ---------------------------------------------------------------------------
 // 5. Recitation audio URLs (Mishary Alafasy)
 // ---------------------------------------------------------------------------
-heading("5. Audio URLs — Mishary Alafasy");
+heading("5. Audio URLs, Mishary Alafasy");
 const alafasy = engine.reciters.all().find((r) => r.name === "Mishary Alafasy");
 const surahUrl = surahAudioUrl(alafasy, 1);                                  // full surah al-Fatiha
 const ayahUrl = ayahAudioUrl(alafasy, engine.quran.globalAyahNumber(2, 255)); // single ayah 2:255
@@ -82,7 +82,7 @@ console.log(`Full surah (al-Fatiha): ${surahUrl}`);
 console.log(`Single ayah (2:255)   : ${ayahUrl}`);
 
 // ---------------------------------------------------------------------------
-// 6. Search — verses and surahs
+// 6. Search, verses and surahs
 // ---------------------------------------------------------------------------
 heading("6. Search");
 const mercyHits = engine.search.searchVerses("mercy", { limit: 5 });
@@ -97,7 +97,7 @@ console.log(`searchSurahs("2:255") → ${surahHits.map((s) => `${s.id} ${s.nameE
 // ---------------------------------------------------------------------------
 // 7. Sort surahs by ayah count (longest first)
 // ---------------------------------------------------------------------------
-heading("7. Surahs sorted by ayah count (descending) — top 3");
+heading("7. Surahs sorted by ayah count (descending), top 3");
 const longest = sortSurahs(engine.quran.all(), "ayahs", "descending").slice(0, 3);
 for (const s of longest) {
   console.log(`  #${s.id} ${s.nameEnglish.padEnd(18)} ${s.numberOfAyahs} ayahs`);

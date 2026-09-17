@@ -1,6 +1,6 @@
 # Web (browser / bundler)
 
-Use **`quran-engine-js`** in a browser app — Vite, webpack, Rollup, or plain `<script type="module">`. The package is pure ESM with **zero runtime dependencies**. In the browser you *bring your own JSON*: import the data from [`/data`](../../data) (bundled or served as static assets) and call `createEngine(...)`.
+Use **`quran-engine-js`** in a browser app, Vite, webpack, Rollup, or plain `<script type="module">`. The package is pure ESM with **zero runtime dependencies**. In the browser you *bring your own JSON*: import the data from [`/data`](../../data) (bundled or served as static assets) and call `createEngine(...)`.
 
 ## Setup
 
@@ -12,8 +12,8 @@ npm i @quran-tajweed-engine/core   # if/when published; otherwise use a path/wor
 
 Copy or symlink the `/data` JSON into a place your bundler can import (e.g. `src/data/`) **or** serve it as static assets (e.g. `public/data/`). Two import styles:
 
-- **Bundle the JSON** — `import quran from "./data/quran.json"`. Modern bundlers (Vite, webpack 5) support JSON imports out of the box; the JSON is inlined/code-split into your bundle.
-- **Serve as static assets** — drop the files in `public/data/` and `fetch("/data/quran.json")` at runtime. Best for the big files and for **lazy per-surah loading** (below).
+- **Bundle the JSON**: `import quran from "./data/quran.json"`. Modern bundlers (Vite, webpack 5) support JSON imports out of the box; the JSON is inlined/code-split into your bundle.
+- **Serve as static assets**: drop the files in `public/data/` and `fetch("/data/quran.json")` at runtime. Best for the big files and for **lazy per-surah loading** (below).
 
 ## Minimal working example (framework-agnostic)
 
@@ -37,7 +37,7 @@ console.log(surahAudioUrl(reciter, 2));                                   // ful
 console.log(ayahAudioUrl(reciter, engine.quran.globalAyahNumber(2, 255)));// single ayah
 ```
 
-> `quran.json` is ~5 MB. For a list/menu you only need `data/surahs/index.json` (no verse text); for a reading view, lazy-load `data/surahs/NNN.json` on demand — see below.
+> `quran.json` is ~5 MB. For a list/menu you only need `data/surahs/index.json` (no verse text); for a reading view, lazy-load `data/surahs/NNN.json` on demand, see below.
 
 ## Lazy-loading per-surah files
 
@@ -56,7 +56,7 @@ const alHadid = await loadSurah(57);
 alHadid.ayahs[0].textArabic;
 ```
 
-This avoids shipping the 5 MB `quran.json` to the client. Tajweed still works: `engine.tajweed(text)` operates on any Arabic string, so pass the per-surah ayah text straight in. (If you prefer the pre-computed corpus, fetch `data/tajweed/NNN.json` instead — see [02-tajweed.md](../02-tajweed.md).)
+This avoids shipping the 5 MB `quran.json` to the client. Tajweed still works: `engine.tajweed(text)` operates on any Arabic string, so pass the per-surah ayah text straight in. (If you prefer the pre-computed corpus, fetch `data/tajweed/NNN.json` instead, see [02-tajweed.md](../02-tajweed.md).)
 
 ## Tajweed rendering (colored RTL spans)
 
@@ -84,7 +84,7 @@ function ayahToHtml(surah, ayah) {
 document.querySelector("#ayah").innerHTML = ayahToHtml(1, 1);
 ```
 
-The `dir="rtl"` and `lang="ar"` attributes are what give correct right-to-left shaping. `s.color` is the `colorHex` from `tajweed-rules.json` — it's populated only because we passed `tajweedRules` to `createEngine`.
+The `dir="rtl"` and `lang="ar"` attributes are what give correct right-to-left shaping. `s.color` is the `colorHex` from `tajweed-rules.json`, it's populated only because we passed `tajweedRules` to `createEngine`.
 
 ## Search box
 
@@ -174,7 +174,7 @@ export default function SurahView({ surah = 1 }) {
 
   return (
     <div>
-      <h2>{s.nameEnglish} — {s.nameArabic}</h2>
+      <h2>{s.nameEnglish}, {s.nameArabic}</h2>
       {s.ayahs.map((a) => <TajweedAyah key={a.id} surah={surah} ayah={a.id} />)}
       <button onClick={() => {
         audioRef.current.src = surahAudioUrl(reciter, surah);
@@ -190,7 +190,7 @@ For very large apps, lazy-load per-surah JSON (above) and call `engine.tajweed(a
 
 ## See also
 
-- [recipes.md](../recipes.md) — #1 (surah menu), #2 (tajweed HTML), #7 (search), #4–6 (audio), #14 (browser cache).
+- [recipes.md](../recipes.md): #1 (surah menu), #2 (tajweed HTML), #7 (search), #4–6 (audio), #14 (browser cache).
 - [01-quran.md](../01-quran.md) · [02-tajweed.md](../02-tajweed.md) · [06-ayah-search.md](../06-ayah-search.md)
 - [04-surah-recitations.md](../04-surah-recitations.md) · [05-ayah-recitations.md](../05-ayah-recitations.md) · [08-caching.md](../08-caching.md)
 - [`quran-engine-js` README](../../packages/quran-engine-js/README.md)

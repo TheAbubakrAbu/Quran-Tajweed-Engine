@@ -11,7 +11,7 @@
 //    legend, so the same code is a different rule in a different riwayah.
 //    Always read [QiraatTajweed.legend]. The `rule` KEY is stable across
 //    riwayat, which is why one catalogue can explain it for all of them.
-//  * **Extents are base-letter indices, not character offsets** —
+//  * **Extents are base-letter indices, not character offsets**, 
 //    `firstLetter..lastLetter` inclusive in reading order with diacritics not
 //    counted, or the whole word when `wholeWord`.
 //
@@ -23,7 +23,7 @@ class LegendEntry {
   /// The single letter this riwayah's data uses for the rule.
   final String code;
 
-  /// Stable rule key, e.g. `"idgham"` — the same across riwayat.
+  /// Stable rule key, e.g. `"idgham"`: the same across riwayat.
   final String rule;
 
   /// The rule's name as this mushaf prints it.
@@ -131,7 +131,7 @@ class QiraatTajweed {
     final keys = words.keys.map(int.parse).toList()..sort();
     for (final key in keys) {
       for (final raw in (words['$key'] as List<dynamic>)) {
-        // [code, firstLetter, lastLetter] — heterogeneous, so read positionally.
+        // [code, firstLetter, lastLetter], heterogeneous, so read positionally.
         final triple = raw as List<dynamic>;
         if (triple.length < 3) continue;
         final code = triple[0] as String;
@@ -153,7 +153,7 @@ class QiraatTajweed {
     return out;
   }
 
-  /// The ayahs of a surah this riwayah reads differently from Hafs somewhere —
+  /// The ayahs of a surah this riwayah reads differently from Hafs somewhere, 
   /// the index behind a "show me where these two readings part" list, without
   /// walking every ayah's rules.
   List<int> khilafAyahs(int surahId, String riwayah) {

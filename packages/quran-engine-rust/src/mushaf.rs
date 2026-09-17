@@ -135,7 +135,7 @@ impl Engine {
     }
 
     /// Character offsets into the ayah's own text at which this riwayah's print starts a new line.
-    /// `None` when the riwayah's text — and so its line table — is not published.
+  /// `None` when the riwayah's text (and so its line table), is not published.
     pub fn mushaf_line_breaks(&self, surah: u32, ayah: u32, riwayah: &str) -> Option<&[usize]> {
         self.mushaf_lines
             .get(riwayah)?

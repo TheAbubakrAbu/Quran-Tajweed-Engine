@@ -12,7 +12,7 @@ Every word pair lands in one of three:
 |---|---|
 | `identical` | the same word, written the same way, marks and all |
 | `sameSkeleton` | the same consonantal skeleton (*rasm*), different vowels or spelling |
-| `different` | a different skeleton — a genuinely different word form |
+| `different` | a different skeleton, a genuinely different word form |
 
 Plus `added` and `dropped` for words only one reading has.
 
@@ -43,7 +43,7 @@ engine.qiraatComparison.compare("warsh");
 | Qālūn | Nāfiʿ | 66.1% | 25,556 | 721 |
 | Warsh | Nāfiʿ | 63.5% | 27,546 | 717 |
 
-The shape of that table is the point. Shuʿbah is Hafs' fellow narrator from ʿĀṣim, so the two are nearly the same text; the two narrators of a shared imam always cluster (al-Bazzī and Qunbul are within one word of each other). And even at the far end, **fewer than 1% of words differ in skeleton** — the readings differ in *sound*, overwhelmingly, not in wording.
+The shape of that table is the point. Shuʿbah is Hafs' fellow narrator from ʿĀṣim, so the two are nearly the same text; the two narrators of a shared imam always cluster (al-Bazzī and Qunbul are within one word of each other). And even at the far end, **fewer than 1% of words differ in skeleton**, the readings differ in *sound*, overwhelmingly, not in wording.
 
 ## Why alignment, not indexing
 
@@ -53,14 +53,14 @@ So the comparison walks the **surah's whole word stream** on both sides with a t
 
 1. words equal → `identical`;
 2. skeletons equal → `sameSkeleton`;
-3. otherwise look ahead up to 3 words **on one side only** for a resync — that is an insertion or a deletion, reported as `added` / `dropped`;
+3. otherwise look ahead up to 3 words **on one side only** for a resync: that is an insertion or a deletion, reported as `added` / `dropped`;
 4. no resync → `different`.
 
-Step 3 is deliberately one-sided. Allowing a skip on both sides at once would resync across a *substitution* — one word standing where another does — and collapse every genuine word difference into an added+dropped pair. When that bug was in, `different` came out at exactly zero for every riwayah.
+Step 3 is deliberately one-sided. Allowing a skip on both sides at once would resync across a *substitution* (one word standing where another does), and collapse every genuine word difference into an added+dropped pair. When that bug was in, `different` came out at exactly zero for every riwayah.
 
 ## What it cannot tell you
 
-It measures the two printed **texts**, not the two **recitations**. A difference that lives only in how a letter is sounded — imālah, taqlīl, ishmām — appears here only where the print marks it. Read the numbers as "how far apart these two printed mushafs are", because that is what they are.
+It measures the two printed **texts**, not the two **recitations**. A difference that lives only in how a letter is sounded (imālah, taqlīl, ishmām), appears here only where the print marks it. Read the numbers as "how far apart these two printed mushafs are", because that is what they are.
 
 For what a reading's own print marks *as* a rule, see **[11 · Riwayah tajweed](11-qiraat-tajweed.md)**, which carries each mushaf's own legend.
 
@@ -73,7 +73,7 @@ engine.qiraatComparison.available();
 // ["buzzi", "duri", "hafs", "qaloon", "qunbul", "shubah", "susi", "warsh"]
 ```
 
-The text is ~11 MB, so it is opt-in everywhere (`loadQiraat`), and the Swift package does not bundle it — a Swift consumer that wants the comparison passes a `dataDirectory`.
+The text is ~11 MB, so it is opt-in everywhere (`loadQiraat`), and the Swift package does not bundle it; a Swift consumer that wants the comparison passes a `dataDirectory`.
 
 ## Cost
 

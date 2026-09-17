@@ -1,6 +1,6 @@
 # quran-engine-kotlin
 
-The **Kotlin** port of the open-source *Quran Tajweed Engine* — usable on **Android & JVM**. It is a thin, idiomatic wrapper over the JSON data in [`../../data`](../../data) plus a handful of pure functions. No network calls, no database, no framework.
+The **Kotlin** port of the open-source *Quran Tajweed Engine*, usable on **Android & JVM**. It is a thin, idiomatic wrapper over the JSON data in [`../../data`](../../data) plus a handful of pure functions. No network calls, no database, no framework.
 
 This port follows the shared contract in [`../../docs/PORTING.md`](../../docs/PORTING.md) and the per-feature specs in `../../docs/01…08`. The reference implementation is the JS port in [`../quran-engine-js`](../quran-engine-js).
 
@@ -74,7 +74,7 @@ Ports locate `/data` relative to the repo root *or* accept an injected directory
 
 ## Tajweed strategy
 
-This port uses **strategy (A)** from `docs/PORTING.md`: it loads the pre-computed annotation corpus (`data/tajweed-annotations.json`, also available per-surah under `data/tajweed/NNN.json`) and maps each annotation `rule` to its `colorHex` in `data/tajweed-rules.json`. Annotation `start`/`end` are UTF-16 code-unit offsets; Kotlin/JVM `String` is UTF-16, so `text.substring(start, end)` slices on exactly the same units the reference engine uses — no conversion is required. The full detector (strategy B) is not ported here.
+This port uses **strategy (A)** from `docs/PORTING.md`: it loads the pre-computed annotation corpus (`data/tajweed-annotations.json`, also available per-surah under `data/tajweed/NNN.json`) and maps each annotation `rule` to its `colorHex` in `data/tajweed-rules.json`. Annotation `start`/`end` are UTF-16 code-unit offsets; Kotlin/JVM `String` is UTF-16, so `text.substring(start, end)` slices on exactly the same units the reference engine uses; no conversion is required. The full detector (strategy B) is not ported here.
 
 ## What is omitted
 
@@ -94,4 +94,4 @@ Everything else in the "core" contract (Load, Quran, Tajweed via annotations, Ju
 
 MIT. See [`../../LICENSE`](../../LICENSE).
 
-All data and algorithms are extracted from the open-source **Al-Islam | Islamic Pillars** app by **Abubakr Elmallah** (MIT, © 2025). Please preserve the attribution in [`../../CREDITS.md`](../../CREDITS.md) in any redistribution — including the Quran text (Hafs an Asim Uthmani), translations (Saheeh International; Dr. Mustafa Khattab, *The Clear Quran*), and the audio CDN providers (mp3quran.net; alquran.cloud / cdn.islamic.network).
+All data and algorithms are extracted from the open-source **Al-Islam | Islamic Pillars** app by **Abubakr Elmallah** (MIT, © 2025). Please preserve the attribution in [`../../CREDITS.md`](../../CREDITS.md) in any redistribution: including the Quran text (Hafs an Asim Uthmani), translations (Saheeh International; Dr. Mustafa Khattab, *The Clear Quran*), and the audio CDN providers (mp3quran.net; alquran.cloud / cdn.islamic.network).

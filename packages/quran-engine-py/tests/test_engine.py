@@ -77,7 +77,7 @@ def test_search():
 
 def test_search_behavior():
     sv = engine.search.search_verses
-    # Regular search is pure substring — a mid-word substring still hits.
+    # Regular search is pure substring, a mid-word substring still hits.
     assert any(r["id"] == "1:2" for r in sv("orld"))  # inside "world(s)"
     # `=lord` whole-word hits 1:2, but `=lor` (partial) does NOT.
     assert any(r["id"] == "1:2" for r in sv("=lord"))

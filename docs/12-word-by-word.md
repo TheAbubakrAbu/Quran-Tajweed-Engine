@@ -1,6 +1,6 @@
 # 12 · Word by word
 
-What each word of an ayah means, and how it is said. Two layers — an English gloss and a Latin transliteration — over the **same tokens**.
+What each word of an ayah means, and how it is said. Two layers (an English gloss and a Latin transliteration), over the **same tokens**.
 
 > **Key fact:** the tokens are the ayah's own whitespace-separated words in `quran.json`. Split the ayah on whitespace and index straight in. No matching, no normalizing, no fuzzy lookup.
 
@@ -28,7 +28,7 @@ Reconciling that at render time means shipping the Arabic of every word (~2 MB m
 
 ### Empty entries are real
 
-A token with no word of its own — the ۞ ornament, the tail of a word the corpus writes as two — carries `""` in **both** layers. Show nothing for it; do not fall back to a neighbour.
+A token with no word of its own (the ۞ ornament, the tail of a word the corpus writes as two), carries `""` in **both** layers. Show nothing for it; do not fall back to a neighbour.
 
 The two layers always agree on which entries are empty, so a word that has a meaning has a pronunciation.
 
@@ -40,14 +40,14 @@ The Latin layer is the same corpus's transliteration, aligned by the same walk a
 
 ## Word-level English search
 
-Glosses are a literal word-for-word rendering, not an excerpt of a flowing translation — which makes them a *different* index from the translation search. `find` reaches ayahs a translation search misses because no translator happened to use that phrasing:
+Glosses are a literal word-for-word rendering, not an excerpt of a flowing translation: which makes them a *different* index from the translation search. `find` reaches ayahs a translation search misses because no translator happened to use that phrasing:
 
 ```js
 engine.wordByWord.find("the Ever-Living", { limit: 5 });
 // [{ surah: 2, ayah: 255, position: 6, english: "the Ever-Living", transliteration: "l-ḥayu" }, …]
 ```
 
-It matches on the gloss only. Treat it as a lookup, not as a ranked search — results come back in mushaf order.
+It matches on the gloss only. Treat it as a lookup, not as a ranked search, results come back in mushaf order.
 
 ## Files
 
@@ -72,7 +72,7 @@ engine = Engine.load(load_word_by_word=True)
 
 ## Where it does *not* apply
 
-The alignment is against **Ḥafṣ ʿan ʿĀṣim**. Another riwayah words the ayah differently, so its tokens do not line up and the glosses would be off by one from the first difference onward. Gate the feature on the reader's riwayah, and on anything else that changes the token count — letter-by-letter beginner spacing, for instance, or a display mode that strips the ۞ mark (which deletes a token from 199 ayahs).
+The alignment is against **Ḥafṣ ʿan ʿĀṣim**. Another riwayah words the ayah differently, so its tokens do not line up and the glosses would be off by one from the first difference onward. Gate the feature on the reader's riwayah, and on anything else that changes the token count, letter-by-letter beginner spacing, for instance, or a display mode that strips the ۞ mark (which deletes a token from 199 ayahs).
 
 ## API
 
@@ -83,4 +83,4 @@ The alignment is against **Ḥafṣ ʿan ʿĀṣim**. Another riwayah words the 
 | `glosses(surah, ayah)` | the English layer alone |
 | `transliterations(surah, ayah)` | the Latin layer alone |
 | `find(term, { limit })` | ayahs with a word whose gloss carries `term` |
-| `isLoaded` | whether a pack is loaded at all — cheap enough to gate UI on |
+| `isLoaded` | whether a pack is loaded at all, cheap enough to gate UI on |

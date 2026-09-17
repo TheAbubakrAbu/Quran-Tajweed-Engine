@@ -145,7 +145,7 @@ engineQ.reciters.byQiraah("Warsh an Nafi");    // reciters for that reading
 ```js
 const e = await loadFromDisk({ loadSurahInfo: true });
 const sources = e.quran.info(1);               // [{ name: "Maududi", contents: "## Name\n..." }]
-// `contents` is Markdown — render with any md renderer
+// `contents` is Markdown, render with any md renderer
 ```
 
 ## 14. Offline audio download + cache (browser/IndexedDB sketch)
@@ -177,4 +177,4 @@ a.wordCount; a.letterCount;
 
 ---
 
-Need something not here? The features are small and composable — check the per-feature specs ([01](01-quran.md)–[17](17-qiraat-comparison.md)) or open an issue.
+Need something not here? The features are small and composable, check the per-feature specs ([01](01-quran.md)–[17](17-qiraat-comparison.md)) or open an issue.

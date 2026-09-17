@@ -112,7 +112,7 @@ type SearchOptions struct {
 // Regular (non-boolean) search is PURE SUBSTRING: a verse matches when the whole
 // cleaned query is a substring of the verse blob. Arabic vs English is chosen by
 // whether the query contains Arabic letters. Any query containing a digit is
-// rejected (returns nil) before the boolean branch is even considered — so even a
+// rejected (returns nil) before the boolean branch is even considered, so even a
 // boolean query with a digit returns nil. The boolean grammar (& | ! # ^ % $ =)
 // goes through booleanSearch.
 func (e *Engine) SearchVerses(query string, opts SearchOptions) []VerseMatch {

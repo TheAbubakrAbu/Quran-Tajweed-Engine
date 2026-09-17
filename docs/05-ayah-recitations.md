@@ -1,6 +1,6 @@
 # 05 · Ayah recitations (ayah-by-ayah audio)
 
-Play a single ayah — for verse-by-verse listening, repeat drills, and custom ranges. This feed is **separate** from full-surah audio (doc 04) and uses a different CDN.
+Play a single ayah, for verse-by-verse listening, repeat drills, and custom ranges. This feed is **separate** from full-surah audio (doc 04) and uses a different CDN.
 
 ## URL template
 
@@ -39,10 +39,10 @@ ayahNowPlayingName(reciter);     // "Muhammad Al-Minshawi (Murattal)" when falli
 
 The engine builds URLs; the reference app layers on:
 
-- **Continuous ayah play** — auto-advance ayah→ayah within a surah (queue depth ≥ 2 buffered).
-- **Repeat** — per-ayah and per-section repeat counts.
-- **Custom range** — play ayahs `[start..end]`, each repeated *n* times, the whole section repeated *m* times.
-- **Resume** — persist last-listened ayah and seek back to it.
+- **Continuous ayah play**: auto-advance ayah→ayah within a surah (queue depth ≥ 2 buffered).
+- **Repeat**: per-ayah and per-section repeat counts.
+- **Custom range**: play ayahs `[start..end]`, each repeated *n* times, the whole section repeated *m* times.
+- **Resume**: persist last-listened ayah and seek back to it.
 
 These are straightforward to build on top of `ayahAudioUrl` + a queueing audio player in any framework (`<audio>`, AVQueuePlayer, ExoPlayer, expo-av, Web Audio).
 

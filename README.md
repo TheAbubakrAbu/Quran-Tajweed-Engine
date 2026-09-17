@@ -1,6 +1,6 @@
 # Quran Tajweed Engine
 
-**An open-source, offline-first, framework-agnostic Quran engine.** Complete Quran text, *correct* pre-computed tajweed coloring for every ayah, juz/page navigation, surah & ayah recitations, full-text search, sorting, and offline caching — shipped as **portable data + precise specifications + reference implementations in 7 languages**, so anyone can build a Quran app in *any* language or framework: iOS, Android, web, React Native, Flutter, Node, Deno, Bun, Python, Go, Rust — whatever you use. No network required; everything ships in the box.
+**An open-source, offline-first, framework-agnostic Quran engine.** Complete Quran text, *correct* pre-computed tajweed coloring for every ayah, juz/page navigation, surah & ayah recitations, full-text search, sorting, and offline caching (shipped as **portable data + precise specifications + reference implementations in 7 languages**, so anyone can build a Quran app in *any* language or framework: iOS, Android, web, React Native, Flutter, Node, Deno, Bun, Python, Go, Rust), whatever you use. No network required; everything ships in the box.
 
 > Data and algorithms are extracted, with attribution, from the open-source **[Al-Islam | Islamic Pillars](https://github.com/TheAbubakrAbu/Al-Islam-iOS)** app by **Abubakr Elmallah**. This repository repackages them as a standalone, reusable engine. See [CREDITS.md](CREDITS.md).
 
@@ -27,11 +27,11 @@
 
 ## Why this exists
 
-**Most Quran apps re-solve the same hard problems:** a clean Uthmani dataset, *correct* tajweed coloring — the genuinely difficult part — juz/page boundaries, reciter feeds, and diacritic-aware search. The tajweed in particular is the hard one, so this engine ships it **pre-computed for all 6,236 ayahs (113,611 annotated spans)**, eliminating the single most error-prone piece of building a Quran application. You get all of it as:
+**Most Quran apps re-solve the same hard problems:** a clean Uthmani dataset, *correct* tajweed coloring (the genuinely difficult part), juz/page boundaries, reciter feeds, and diacritic-aware search. The tajweed in particular is the hard one, so this engine ships it **pre-computed for all 6,236 ayahs (113,611 annotated spans)**, eliminating the single most error-prone piece of building a Quran application. You get all of it as:
 
-1. **Data** — JSON any language can read. This is the heart of the engine.
-2. **Specs** — every feature documented precisely enough to reimplement from scratch.
-3. **Reference code** — working implementations in **7 languages** you can use directly or read as the executable spec.
+1. **Data**: JSON any language can read. This is the heart of the engine.
+2. **Specs**: every feature documented precisely enough to reimplement from scratch.
+3. **Reference code**: working implementations in **7 languages** you can use directly or read as the executable spec.
 
 **New here? → start with [docs/00-getting-started.md](docs/00-getting-started.md).** New to the terms (ayah, juz, ghunnah, madd…)? → the [glossary](docs/glossary.md) explains everything.
 
@@ -94,7 +94,7 @@ Quran Tajweed Engine/
 
 ## Engine modules
 
-Each module is implemented, tested, and stands alone — adopt them independently or all at once:
+Each module is implemented, tested, and stands alone, adopt them independently or all at once:
 
 | Module | What it does | This engine |
 |---|---|---|
@@ -128,29 +128,29 @@ Each module is implemented, tested, and stands alone — adopt them independentl
 
 Per-feature specifications, in priority order:
 
-1. **Quran** — text, translations, qiraat → [docs/01](docs/01-quran.md)
-2. **Tajweed** — scalar-driven rule coloring → [docs/02](docs/02-tajweed.md)
-3. **Juz / Page** — mushaf navigation → [docs/03](docs/03-juz-page.md)
-4. **Surah recitations** — full-surah audio → [docs/04](docs/04-surah-recitations.md)
-5. **Ayah recitations** — ayah-by-ayah audio → [docs/05](docs/05-ayah-recitations.md)
-6. **Ayah search** — Arabic/English, references, boolean → [docs/06](docs/06-ayah-search.md)
-7. **Surah sorting** — sort & filter the 114 → [docs/07](docs/07-surah-sorting.md)
-8. **Caching** — offline downloads → [docs/08](docs/08-caching.md)
-9. **The printed mushaf** — 20 facsimiles, per-riwayah pagination → [docs/10](docs/10-mushaf.md)
-10. **Riwayah tajweed** — where a reading differs from Hafs → [docs/11](docs/11-qiraat-tajweed.md)
-11. **Word by word** — gloss + transliteration → [docs/12](docs/12-word-by-word.md)
+1. **Quran**: text, translations, qiraat → [docs/01](docs/01-quran.md)
+2. **Tajweed**: scalar-driven rule coloring → [docs/02](docs/02-tajweed.md)
+3. **Juz / Page**: mushaf navigation → [docs/03](docs/03-juz-page.md)
+4. **Surah recitations**: full-surah audio → [docs/04](docs/04-surah-recitations.md)
+5. **Ayah recitations**: ayah-by-ayah audio → [docs/05](docs/05-ayah-recitations.md)
+6. **Ayah search**: Arabic/English, references, boolean → [docs/06](docs/06-ayah-search.md)
+7. **Surah sorting**: sort & filter the 114 → [docs/07](docs/07-surah-sorting.md)
+8. **Caching**: offline downloads → [docs/08](docs/08-caching.md)
+9. **The printed mushaf**: 20 facsimiles, per-riwayah pagination → [docs/10](docs/10-mushaf.md)
+10. **Riwayah tajweed**: where a reading differs from Hafs → [docs/11](docs/11-qiraat-tajweed.md)
+11. **Word by word**: gloss + transliteration → [docs/12](docs/12-word-by-word.md)
 12. **Similar ayahs, themes, lessons** → [docs/13](docs/13-similar-and-themes.md)
-13. **Ask AI** — retrieval, meaning search, the prompt → [docs/14](docs/14-ask-ai.md)
-14. **Surah sections** — where a surah changes subject → [docs/15](docs/15-surah-sections.md)
-15. **Arabic alphabet** — letters, weights, tashkeel, waqf signs → [docs/16](docs/16-arabic-alphabet.md)
-16. **Qiraat comparison** — how far apart two readings are, measured → [docs/17](docs/17-qiraat-comparison.md)
-17. **Morphology** — root and lemma of every word → [docs/18](docs/18-morphology.md)
-18. **Mutashabihat** — the phrases the Quran repeats → [docs/19](docs/19-mutashabihat.md)
-19. **Topics, passages and divisions** — three ways of saying where you are → [docs/20](docs/20-topics-and-metadata.md)
-20. **Qiraat variants** — who reads what, and what it means → [docs/21](docs/21-qiraat-variants.md)
-21. **Word of the day** — curated vocabulary with every occurrence → [docs/22](docs/22-word-of-day.md)
-22. **The 99 Names in depth** — roots, themes, explanations and where each Name appears → [docs/23](docs/23-names-depth.md)
-23. **Chains of transmission** — the isnād of each of the Ten Readings → [docs/24](docs/24-isnad.md)
+13. **Ask AI**: retrieval, meaning search, the prompt → [docs/14](docs/14-ask-ai.md)
+14. **Surah sections**: where a surah changes subject → [docs/15](docs/15-surah-sections.md)
+15. **Arabic alphabet**: letters, weights, tashkeel, waqf signs → [docs/16](docs/16-arabic-alphabet.md)
+16. **Qiraat comparison**: how far apart two readings are, measured → [docs/17](docs/17-qiraat-comparison.md)
+17. **Morphology**: root and lemma of every word → [docs/18](docs/18-morphology.md)
+18. **Mutashabihat**: the phrases the Quran repeats → [docs/19](docs/19-mutashabihat.md)
+19. **Topics, passages and divisions**: three ways of saying where you are → [docs/20](docs/20-topics-and-metadata.md)
+20. **Qiraat variants**: who reads what, and what it means → [docs/21](docs/21-qiraat-variants.md)
+21. **Word of the day**: curated vocabulary with every occurrence → [docs/22](docs/22-word-of-day.md)
+22. **The 99 Names in depth**: roots, themes, explanations and where each Name appears → [docs/23](docs/23-names-depth.md)
+23. **Chains of transmission**: the isnād of each of the Ten Readings → [docs/24](docs/24-isnad.md)
 24. **Scientific miracles**: 202 articles, each anchored to the ayahs it rests on → [docs/25](docs/25-miracles.md)
 
 **Plus:** bundled Quran [**fonts**](docs/fonts.md) (Uthmani / Qiraat / Indopak), the [**alphabet data file**](docs/arabic-alphabet.md) documented field by field, and a detailed [**tajweed rules explained**](docs/tajweed-rules-explained.md) guide ("what does *idgham* mean?").
@@ -159,7 +159,7 @@ Per-feature specifications, in priority order:
 
 ## One source of truth → seven implementations
 
-One of the coolest engineering pieces: the entire tajweed rule catalogue (colors, trigger letters, meanings) lives in a single file — [`data/tajweed-rules.json`](data/tajweed-rules.json). **Edit one JSON file, run `node scripts/generate-tajweed.mjs`, and the per-language constants in all 7 ports** plus [docs/tajweed-rules-reference.md](docs/tajweed-rules-reference.md) regenerate together. Change one file → everything stays in lockstep.
+One of the coolest engineering pieces: the entire tajweed rule catalogue (colors, trigger letters, meanings) lives in a single file, [`data/tajweed-rules.json`](data/tajweed-rules.json). **Edit one JSON file, run `node scripts/generate-tajweed.mjs`, and the per-language constants in all 7 ports** plus [docs/tajweed-rules-reference.md](docs/tajweed-rules-reference.md) regenerate together. Change one file → everything stays in lockstep.
 
 ## Language ports
 
@@ -205,7 +205,7 @@ engine.quran.ayah(2, 255).text_arabic
 [ (sp.rule, sp.color, sp.text) for sp in engine.tajweed(2, 255) ]
 ```
 
-**Swift / Kotlin / Dart / Go / Rust** — see each package README. Pick your platform in the [getting-started guide](docs/00-getting-started.md#pick-your-path) or the [integration guides](docs/integration/).
+**Swift / Kotlin / Dart / Go / Rust**: see each package README. Pick your platform in the [getting-started guide](docs/00-getting-started.md#pick-your-path) or the [integration guides](docs/integration/).
 
 Try it now (the terminal demo prints the ayah with real color-coded tajweed):
 ```bash
@@ -215,7 +215,7 @@ node examples/tajweed-terminal.mjs 112      # tajweed rendered in your terminal,
 
 ## Performance
 
-Everything runs locally with no network calls. Indicative figures from the JavaScript port (Node 24, Apple Silicon — your numbers will vary):
+Everything runs locally with no network calls. Indicative figures from the JavaScript port (Node 24, Apple Silicon: your numbers will vary):
 
 - **Full engine load:** ~0.8 s to parse the entire Quran and build the in-memory search index over all 6,236 ayahs (qiraat and surah-info are opt-in, not loaded by default).
 - **Tajweed coloring:** ~0.1 ms per ayah with the live detector; instant when reading the pre-computed `tajweed-annotations.json` corpus.
@@ -224,11 +224,11 @@ Everything runs locally with no network calls. Indicative figures from the JavaS
 
 ## Modular architecture
 
-One comprehensive engine with feature submodules you pull in à la carte. Within each language port, every feature is a separate module (`quran`, `tajweed`, `juzPage`, `audio`, `search`, `sorting`, `cache`) — import only what you need. The `data/` directory is the shared substrate every submodule and every language port reads from. See [architecture.md](docs/architecture.md).
+One comprehensive engine with feature submodules you pull in à la carte. Within each language port, every feature is a separate module (`quran`, `tajweed`, `juzPage`, `audio`, `search`, `sorting`, `cache`), import only what you need. The `data/` directory is the shared substrate every submodule and every language port reads from. See [architecture.md](docs/architecture.md).
 
 ## Using the data from any language
 
-The data is plain UTF-8 JSON — load it natively and follow the specs. The one cross-language subtlety is that tajweed offsets are UTF-16 units (trivial in JS/Swift/Kotlin/Dart, a one-line convert in Python/Go/Rust). Full details: [docs/PORTING.md](docs/PORTING.md).
+The data is plain UTF-8 JSON, load it natively and follow the specs. The one cross-language subtlety is that tajweed offsets are UTF-16 units (trivial in JS/Swift/Kotlin/Dart, a one-line convert in Python/Go/Rust). Full details: [docs/PORTING.md](docs/PORTING.md).
 
 ## The Al-Islamic Apps
 
@@ -236,18 +236,18 @@ Five repositories by the same author: three apps, and the two engines the apps a
 
 **Apps**
 
-- [**Al-Islam | Islamic Pillars**](https://github.com/TheAbubakrAbu/Al-Islam-iOS) — prayer times, the Quran, hadith, tafsir, and the Islamic essentials in one app
-- [**Al-Adhan | Prayer Times**](https://github.com/TheAbubakrAbu/Al-Adhan-iOS) — prayer times, adhan notifications, and the Qibla
-- [**Al-Quran | Beginner Quran**](https://github.com/TheAbubakrAbu/Al-Quran-iOS) — the Quran for beginners and Arabic learners
+- [**Al-Islam | Islamic Pillars**](https://github.com/TheAbubakrAbu/Al-Islam-iOS), prayer times, the Quran, hadith, tafsir, and the Islamic essentials in one app
+- [**Al-Adhan | Prayer Times**](https://github.com/TheAbubakrAbu/Al-Adhan-iOS), prayer times, adhan notifications, and the Qibla
+- [**Al-Quran | Beginner Quran**](https://github.com/TheAbubakrAbu/Al-Quran-iOS), the Quran for beginners and Arabic learners
 
-**Engines** — the data layers behind those apps, extracted so anyone can build on them in any language
+**Engines**: the data layers behind those apps, extracted so anyone can build on them in any language
 
-- [**Quran Tajweed Engine**](https://github.com/TheAbubakrAbu/Quran-Tajweed-Engine) — *this repository*. 6,236 ayahs with pre-computed tajweed, qiraat, and recitations
-- [**Hadith JSON Engine**](https://github.com/TheAbubakrAbu/Hadith-JSON-Engine) — the same idea for hadith: 50,884 hadiths across 17 collections, repaired, graded, cited, and packed
+- [**Quran Tajweed Engine**](https://github.com/TheAbubakrAbu/Quran-Tajweed-Engine), *this repository*. 6,236 ayahs with pre-computed tajweed, qiraat, and recitations
+- [**Hadith JSON Engine**](https://github.com/TheAbubakrAbu/Hadith-JSON-Engine), the same idea for hadith: 50,884 hadiths across 17 collections, repaired, graded, cited, and packed
 
 ## License & attribution
 
-MIT — see [LICENSE](LICENSE). Use, modify, and redistribute freely, **with attribution**. Credit this engine and the upstream Al-Islam project, and preserve the provenance in [CREDITS.md](CREDITS.md). The Quran text is sacred — keep it unmodified.
+MIT, see [LICENSE](LICENSE). Use, modify, and redistribute freely, **with attribution**. Credit this engine and the upstream Al-Islam project, and preserve the provenance in [CREDITS.md](CREDITS.md). The Quran text is sacred, keep it unmodified.
 
 ## Contributing
 
@@ -255,6 +255,6 @@ New language ports, better tajweed accuracy, more data, and examples are all wel
 
 ## A note on intent
 
-This project — like the apps it draws from, **[Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-iOS)**, **[Al-Adhan](https://github.com/TheAbubakrAbu/Al-Adhan-iOS)**, and **[Al-Quran](https://github.com/TheAbubakrAbu/Al-Quran-iOS)**, and its sibling the **[Hadith JSON Engine](https://github.com/TheAbubakrAbu/Hadith-JSON-Engine)** — is offered as *sadaqah jariyah*: a continuing charity for the benefit of the Muslim community and anyone building tools to read, learn, and listen to the Quran. If it helps you, please keep the chain of attribution intact and consider contributing improvements back, so the reward continues for everyone who came before you.
+This project, like the apps it draws from, **[Al-Islam](https://github.com/TheAbubakrAbu/Al-Islam-iOS)**, **[Al-Adhan](https://github.com/TheAbubakrAbu/Al-Adhan-iOS)**, and **[Al-Quran](https://github.com/TheAbubakrAbu/Al-Quran-iOS)**, and its sibling the **[Hadith JSON Engine](https://github.com/TheAbubakrAbu/Hadith-JSON-Engine)**, is offered as *sadaqah jariyah*: a continuing charity for the benefit of the Muslim community and anyone building tools to read, learn, and listen to the Quran. If it helps you, please keep the chain of attribution intact and consider contributing improvements back, so the reward continues for everyone who came before you.
 
-> *"When a person dies, all their deeds end except three: a continuing charity (sadaqah jariyah), beneficial knowledge, or a righteous child who prays for them."* — Prophet Muhammad ﷺ (Sahih Muslim)
+> *"When a person dies, all their deeds end except three: a continuing charity (sadaqah jariyah), beneficial knowledge, or a righteous child who prays for them."*, Prophet Muhammad ﷺ (Sahih Muslim)

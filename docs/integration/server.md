@@ -1,6 +1,6 @@
 # Server (Node / Deno / Bun + Go / Rust / Python)
 
-Wrap the engine in a small JSON HTTP API. The engine is pure and offline — load it once at startup and answer requests from memory. Audio endpoints return **URL strings** (the engine never proxies audio).
+Wrap the engine in a small JSON HTTP API. The engine is pure and offline, load it once at startup and answer requests from memory. Audio endpoints return **URL strings** (the engine never proxies audio).
 
 Example routes:
 
@@ -80,9 +80,9 @@ createServer((req, res) => {
 }).listen(3000, () => console.log("http://localhost:3000"));
 ```
 
-**Tajweed snippet** — the `/ayah` route above already attaches it. The facade returns spans with `{ start, end, category, text, color }` (color from `tajweed-rules.json`), ready to render client-side; see [02-tajweed.md](../02-tajweed.md).
+**Tajweed snippet**: the `/ayah` route above already attaches it. The facade returns spans with `{ start, end, category, text, color }` (color from `tajweed-rules.json`), ready to render client-side; see [02-tajweed.md](../02-tajweed.md).
 
-**Audio snippet** — `surahAudioUrl(reciter, id)` / `ayahAudioUrl(reciter, globalAyah)`. Resolve the reciter by id (`reciter.id`) or name; compute the global ayah with `engine.quran.globalAyahNumber(s, a)`.
+**Audio snippet**: `surahAudioUrl(reciter, id)` / `ayahAudioUrl(reciter, globalAyah)`. Resolve the reciter by id (`reciter.id`) or name; compute the global ayah with `engine.quran.globalAyahNumber(s, a)`.
 
 > **Deno / Bun:** replace the `node:http` server with `Deno.serve` / `Bun.serve`, and bundle the JSON + `createEngine` (or use a Node-compat import of `loadFromDisk`). The engine code is identical.
 
@@ -143,11 +143,11 @@ ayah_audio_url(r, engine.quran.global_ayah_number(2, 255))
 
 See the [`quran-engine-py` README](../../packages/quran-engine-py/README.md).
 
-> All ports share the same contract ([PORTING.md](../PORTING.md)) — only the casing differs (`globalAyahNumber` ⇄ `global_ayah_number` ⇄ `GlobalAyahNumber`).
+> All ports share the same contract ([PORTING.md](../PORTING.md)), only the casing differs (`globalAyahNumber` ⇄ `global_ayah_number` ⇄ `GlobalAyahNumber`).
 
 ## See also
 
-- [recipes.md](../recipes.md) — #2 (tajweed), #4–6 (audio), #7 (search).
+- [recipes.md](../recipes.md): #2 (tajweed), #4–6 (audio), #7 (search).
 - [01-quran.md](../01-quran.md) · [02-tajweed.md](../02-tajweed.md) · [06-ayah-search.md](../06-ayah-search.md)
 - [04-surah-recitations.md](../04-surah-recitations.md) · [05-ayah-recitations.md](../05-ayah-recitations.md)
 - [PORTING.md](../PORTING.md) · package READMEs under [`../../packages`](../../packages)

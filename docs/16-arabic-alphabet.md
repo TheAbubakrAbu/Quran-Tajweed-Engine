@@ -1,12 +1,12 @@
 # 16 · Arabic alphabet
 
-Every letter with its joining forms, its name and transliteration, and — the part that earns it a place in a *tajweed* engine — its **weight**.
+Every letter with its joining forms, its name and transliteration, and (the part that earns it a place in a *tajweed* engine), its **weight**.
 
 > **Key fact:** weight is a property of the letter, not of the verse. Alif has no weight of its own at all: it inherits the letter before it.
 
 ## Why weight is the point
 
-Every Arabic letter is pronounced thin (*tarqīq*) or full (*tafkhīm*). Seven are always full — the *istiʿlāʾ* letters خ ص ض ط ظ غ ق — most are always thin, two depend on context (rāʾ, and the lām of the divine name), and alif has no weight of its own: it takes the weight of whatever precedes it. That last rule is behind a large share of beginner mistakes, and it cannot live in the annotation corpus, because it is not a fact about any particular ayah.
+Every Arabic letter is pronounced thin (*tarqīq*) or full (*tafkhīm*). Seven are always full (the *istiʿlāʾ* letters خ ص ض ط ظ غ ق), most are always thin, two depend on context (rāʾ, and the lām of the divine name), and alif has no weight of its own: it takes the weight of whatever precedes it. That last rule is behind a large share of beginner mistakes, and it cannot live in the annotation corpus, because it is not a fact about any particular ayah.
 
 ```js
 engine.alphabet.weight("ص");   // "heavy"          - istiʿlāʾ
@@ -18,7 +18,7 @@ engine.alphabet.weightDescriptions()["followsPrevious"];
 // "has no weight of its own; inherits the previous letter's weight (alif)"
 ```
 
-Every one of the 28 carries a weight, and every weight name has a one-line description — the parity suites assert both, so a data edit that drops one fails a test.
+Every one of the 28 carries a weight, and every weight name has a one-line description; the parity suites assert both, so a data edit that drops one fails a test.
 
 ## Letters resolve from any joining form
 
@@ -34,8 +34,8 @@ engine.alphabet.letter("ص")?.forms;               // ["ـص", "ـصـ", "صـ"]
 | Accessor | Contents |
 |---|---|
 | `letters()` | the 28, in alphabet order |
-| `otherLetters()` | hamza, tāʾ marbūṭa, lām-alif and the rest — written forms outside the 28 |
-| `nonArabicScriptLetters()` | پ چ ڤ گ ڭ ژ — the Persian/Urdu letters some printed mushafs use |
+| `otherLetters()` | hamza, tāʾ marbūṭa, lām-alif and the rest, written forms outside the 28 |
+| `nonArabicScriptLetters()` | پ چ ڤ گ ڭ ژ: the Persian/Urdu letters some printed mushafs use |
 | `tashkeel()` | the vowel and sukūn marks, with the sound each writes |
 | `stoppingSigns()` | the waqf signs, with what each tells the reciter to do |
 | `numbers()` | the Eastern-Arabic numerals ٠–١٠ |
@@ -52,11 +52,11 @@ The hizb marker ۞ is in this list too, which is worth knowing: it is a *navigat
 
 ## Data
 
-`data/arabic-alphabet.json` — 18 KB, loaded by default (no flag). One object with `standardLetters`, `otherLetters`, `nonArabicScriptLetters`, `numbers`, `tashkeel`, `stoppingSigns`, and the `weights` catalogue that explains the four weight names.
+`data/arabic-alphabet.json`: 18 KB, loaded by default (no flag). One object with `standardLetters`, `otherLetters`, `nonArabicScriptLetters`, `numbers`, `tashkeel`, `stoppingSigns`, and the `weights` catalogue that explains the four weight names.
 
 **[arabic-alphabet.md](arabic-alphabet.md)** documents that file field by field, for a consumer reading the JSON directly rather than going through the engine.
 
 ## Related
 
-- **[02 · Tajweed](02-tajweed.md)** — the rules that fire *inside* a verse. Weight is what a letter brings to them.
-- **[tajweed-rules-explained.md](tajweed-rules-explained.md)** — what each rule is, in prose.
+- **[02 · Tajweed](02-tajweed.md)**: the rules that fire *inside* a verse. Weight is what a letter brings to them.
+- **[tajweed-rules-explained.md](tajweed-rules-explained.md)**: what each rule is, in prose.

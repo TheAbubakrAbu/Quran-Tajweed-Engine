@@ -21,7 +21,7 @@ So `juz.json` answers "what is juz 5 called and where does it start/end", while 
 }
 ```
 
-The 30 boundaries: Juz 1 starts at 1:1; Juz 30 ends at 114:6. Notable ones — Juz 2 `Sayaqoolu` (2:142), Juz 15 `Subhana Al-Ladhee` (17:1), Juz 26 `Ha Meem` (46:1), Juz 30 `'Amma` (78:1).
+The 30 boundaries: Juz 1 starts at 1:1; Juz 30 ends at 114:6. Notable ones, Juz 2 `Sayaqoolu` (2:142), Juz 15 `Subhana Al-Ladhee` (17:1), Juz 26 `Ha Meem` (46:1), Juz 30 `'Amma` (78:1).
 
 ## Operations
 
@@ -36,17 +36,17 @@ engine.juzPage.juzForAyah(2, 255);        // 3
 engine.juzPage.pageForAyah(2, 255);       // 42
 engine.juzPage.totalPages();              // 604 (depends on bundled page numbering)
 engine.juzPage.surahsInJuz(1);            // [1, 2]
-engine.juzPage.juzFromEnd(1);             // juz 30 ('Amma) — counts juz from the END of the Quran
+engine.juzPage.juzFromEnd(1); // juz 30 ('Amma), counts juz from the END of the Quran
 engine.juzPage.juzStats(30);              // { surahCount, ayahCount, wordCount, letterCount, pageCount }
 ```
 
 ### Juz from the end
 
-`juzFromEnd(n)` resolves a juz counted backwards from the end of the Quran: `1 → juz 30`, `2 → juz 29`, … `30 → juz 1`. It returns the same `JuzEntry` as `juz(31 - n)` and is `undefined`/`null` for `n` outside `1..30`. This mirrors the search-bar `-N` shorthand in the Al-Islam app (typing `-1` jumps to juz 30) — see [06 · Ayah search](06-ayah-search.md).
+`juzFromEnd(n)` resolves a juz counted backwards from the end of the Quran: `1 → juz 30`, `2 → juz 29`, … `30 → juz 1`. It returns the same `JuzEntry` as `juz(31 - n)` and is `undefined`/`null` for `n` outside `1..30`. This mirrors the search-bar `-N` shorthand in the Al-Islam app (typing `-1` jumps to juz 30), see [06 · Ayah search](06-ayah-search.md).
 
 ### Per-juz statistics
 
-`juzStats(juz)` returns aggregate counts for a single juz — `surahCount`, `ayahCount`, `wordCount`, `letterCount`, `pageCount` — or `undefined`/`null` for an unknown juz id. Counts are computed from the ayahs **actually assigned** to the juz (`ayah.juz === juz`), so a surah that straddles a boundary is split correctly between the two juz it touches. Because the boundary partition is exhaustive and disjoint, summing `ayahCount` across all 30 juz yields exactly 6236.
+`juzStats(juz)` returns aggregate counts for a single juz (`surahCount`, `ayahCount`, `wordCount`, `letterCount`, `pageCount`), or `undefined`/`null` for an unknown juz id. Counts are computed from the ayahs **actually assigned** to the juz (`ayah.juz === juz`), so a surah that straddles a boundary is split correctly between the two juz it touches. Because the boundary partition is exhaustive and disjoint, summing `ayahCount` across all 30 juz yields exactly 6236.
 
 ## Reimplementation notes
 

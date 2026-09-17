@@ -4,7 +4,7 @@ Welcome. This is a **complete Quran engine** you can drop into any app, in any l
 
 ## The one big idea
 
-**The data is the engine.** Everything lives as plain JSON in [`/data`](../data). Any language that can read JSON can use it. The code in [`/packages`](../packages) is just convenient, idiomatic wrappers around that data — use one if it fits your stack, or read the data directly and follow the specs in this folder.
+**The data is the engine.** Everything lives as plain JSON in [`/data`](../data). Any language that can read JSON can use it. The code in [`/packages`](../packages) is just convenient, idiomatic wrappers around that data, use one if it fits your stack, or read the data directly and follow the specs in this folder.
 
 ```
 ┌─────────────┐   reads    ┌──────────────────────────┐   you build   ┌──────────────┐
@@ -78,15 +78,15 @@ print(surah_audio_url(r, 2))
 
 ## The seven features
 
-Build them in any order — each stands alone:
+Build them in any order, each stands alone:
 
-1. **[Quran](01-quran.md)** — the text, translations, and 7 alternate readings.
-2. **[Tajweed](02-tajweed.md)** — color the recitation rules. The hard part, solved for you.
-3. **[Juz & Page](03-juz-page.md)** — navigate by para and mushaf page.
-4. **[Surah recitations](04-surah-recitations.md)** — full-surah audio from 60+ reciters.
-5. **[Ayah recitations](05-ayah-recitations.md)** — verse-by-verse audio.
-6. **[Search](06-ayah-search.md)** — Arabic, English, references, boolean.
-7. **[Sorting](07-surah-sorting.md)** — order and filter the 114 surahs.
+1. **[Quran](01-quran.md)**: the text, translations, and 7 alternate readings.
+2. **[Tajweed](02-tajweed.md)**: color the recitation rules. The hard part, solved for you.
+3. **[Juz & Page](03-juz-page.md)**: navigate by para and mushaf page.
+4. **[Surah recitations](04-surah-recitations.md)**: full-surah audio from 60+ reciters.
+5. **[Ayah recitations](05-ayah-recitations.md)**: verse-by-verse audio.
+6. **[Search](06-ayah-search.md)**: Arabic, English, references, boolean.
+7. **[Sorting](07-surah-sorting.md)**: order and filter the 114 surahs.
 
 Plus **[caching](08-caching.md)** for offline audio.
 
@@ -94,7 +94,7 @@ And, beyond the core:
 
 | I want to… | Read |
 |---|---|
-| show the printed muṣḥaf — 20 riwayat as page-exact facsimiles, each with its own pagination | [10 · The printed muṣḥaf](10-mushaf.md) |
+| show the printed muṣḥaf: 20 riwayat as page-exact facsimiles, each with its own pagination | [10 · The printed muṣḥaf](10-mushaf.md) |
 | show where a reading differs from Ḥafṣ, and explain why | [11 · Riwayah tajweed](11-qiraat-tajweed.md) |
 | tap a word for its meaning and its pronunciation | [12 · Word by word](12-word-by-word.md) |
 | show similar ayahs, browse by theme, or teach tajwīd | [13 · Similar ayahs, themes, lessons](13-similar-and-themes.md) |
@@ -105,7 +105,7 @@ And, beyond the core:
 
 ## New to the terminology?
 
-If words like *ayah, juz, riwayah, ghunnah, ikhfaa, madd* are unfamiliar, skim the **[glossary](glossary.md)** first — it explains every term in plain English.
+If words like *ayah, juz, riwayah, ghunnah, ikhfaa, madd* are unfamiliar, skim the **[glossary](glossary.md)** first, it explains every term in plain English.
 
 ## Next steps
 

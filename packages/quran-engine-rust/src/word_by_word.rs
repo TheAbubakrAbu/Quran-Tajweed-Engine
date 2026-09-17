@@ -1,11 +1,11 @@
 //! Word by word: what each word of an ayah means, and how it is said.
 //!
-//! Two layers over the SAME tokens — the English gloss and a Latin transliteration — where the
+//! Two layers over the SAME tokens (the English gloss and a Latin transliteration), where the
 //! tokens are the ayah's own whitespace-separated words. Split the ayah and index straight in; the
 //! alignment against a corpus that tokenizes ~200 ayahs differently was done once, at build time.
 //!
 //! A token with no word of its own (the ۞ ornament, the tail of a word the corpus writes as two)
-//! carries `""` in both layers — show nothing for it rather than a neighbour's meaning.
+//! carries `""` in both layers, show nothing for it rather than a neighbour's meaning.
 //!
 //! See `../../docs/12-word-by-word.md`.
 
@@ -44,7 +44,7 @@ pub struct GlossHit {
 use crate::Engine;
 
 impl Engine {
-    /// Whether a word-by-word pack is loaded at all — cheap enough to gate UI on.
+    /// Whether a word-by-word pack is loaded at all, cheap enough to gate UI on.
     pub fn word_by_word_loaded(&self) -> bool {
         !self.word_by_word.english.is_empty()
     }
@@ -88,7 +88,7 @@ impl Engine {
         layer_row(&self.word_by_word.transliteration, surah, ayah)
     }
 
-    /// Ayahs containing a word whose gloss carries `term` — a word-level English search, which
+    /// Ayahs containing a word whose gloss carries `term`: a word-level English search, which
     /// finds ayahs a translation search misses because no translator used that phrasing.
     pub fn find_gloss(&self, term: &str, limit: usize) -> Vec<GlossHit> {
         let needle = term.trim().to_lowercase();

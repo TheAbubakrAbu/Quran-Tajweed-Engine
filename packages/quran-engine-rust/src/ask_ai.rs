@@ -3,13 +3,13 @@
 //! It is NOT a model. It is the two halves a model cannot do for you and that every app otherwise
 //! rebuilds badly: turning a natural-language question into the handful of passages that bear on it
 //! (each with the reference it must be cited by), and the instructions that keep a model from doing
-//! the three things that make a Quran assistant harmful — inventing verse numbers, quoting
+//! the three things that make a Quran assistant harmful, inventing verse numbers, quoting
 //! scripture it has half-remembered, and issuing rulings.
 //!
 //! Four lanes, interleaved round-robin so each gets a voice inside the passage budget rather than
 //! the first one filling it: what the question NAMES (marked as the subject), IDF-weighted
-//! keywords, the curated themes, and — only when a [`crate::semantic::Semantic`] index is supplied
-//! — meaning.
+//! keywords, the curated themes, and: only when a [`crate::semantic::Semantic`] index is supplied
+//!, meaning.
 //!
 //! See `../../docs/14-ask-ai.md`.
 
@@ -77,7 +77,7 @@ pub struct Turn {
 /// The instructions and the user-side prompt for one turn: the passages, the recent conversation,
 /// the question.
 ///
-/// Eight passages of 500 characters is roughly a thousand tokens — sized for a ~4k on-device window
+/// Eight passages of 500 characters is roughly a thousand tokens, sized for a ~4k on-device window
 /// with room for the instructions, the conversation, and a full answer. Raise both for a larger
 /// model; the shape does not change.
 pub fn chat_prompt(question: &str, passages: &[Passage], transcript: &[Turn]) -> (String, String) {
@@ -387,7 +387,7 @@ impl Engine {
         out
     }
 
-    /// Lane 2: ayahs from the curated topic the question matches — the lane that reaches verses
+    /// Lane 2: ayahs from the curated topic the question matches, the lane that reaches verses
     /// sharing no wording with the question at all.
     pub fn theme_passages(&self, question: &str, limit: usize) -> Vec<Passage> {
         let words = self.content_words(question);
@@ -492,7 +492,7 @@ impl Engine {
     }
 
     /// A surah's background prose. The bundled notes open with the period of revelation, which
-    /// answers "what is this surah about" with history — so the theme section, when a source has
+    /// answers "what is this surah about" with history, so the theme section, when a source has
     /// one, is what the question actually meant.
     pub fn surah_passage(&self, surah_id: u32) -> Option<Passage> {
         let surah = self.surah(surah_id)?;

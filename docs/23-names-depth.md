@@ -29,7 +29,7 @@ Every Name carries exactly one theme and every theme has members, so the nine **
 ## Roots
 
 ```js
-engine.namesDepth.byRoot("رحم");     // [1, 2] — Ar-Raḥmān and Ar-Raḥīm
+engine.namesDepth.byRoot("رحم"); // [1, 2], Ar-Raḥmān and Ar-Raḥīm
 engine.namesDepth.byRoot("ر ح م");   // the same; either spelling is accepted
 rootKey("ر ح م");                    // "رحم"
 ```

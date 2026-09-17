@@ -22,7 +22,7 @@ private struct MuqattaatFile: Decodable {
     let ayahs: [MuqattaatPronunciation]
 }
 
-/// Muqaṭṭaʿāt — the disconnected opening letters of 29 surahs. Thin accessor over
+/// Muqaṭṭaʿāt, the disconnected opening letters of 29 surahs. Thin accessor over
 /// `muqattaat.json`. Ash-Shūra (42) is the one surah whose muqattaʿāt span two ayahs
 /// (1: Ḥā Mīm, 2: ʿAyn Sīn Qāf), so there are 30 entries. Mirrors `muqattaat.js`.
 public final class Muqattaat: Decodable {

@@ -44,7 +44,7 @@ fn is_punct_or_symbol(c: char) -> bool {
     c.is_ascii_punctuation()
         || matches!(
             c,
-            '،' | '؛' | '؟' | '٪' | '۔' | '«' | '»' | '“' | '”' | '‘' | '’' | '—' | '–' | '…'
+            '،' | '؛' | '؟' | '٪' | '۔' | '«' | '»' | '“' | '”' | '‘' | '’' | ', ' | '–' | '…'
         )
         || (c as u32) >= 0x2000 && (c as u32) <= 0x206F // general punctuation block
 }

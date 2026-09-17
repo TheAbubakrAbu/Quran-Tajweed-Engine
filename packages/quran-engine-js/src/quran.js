@@ -8,7 +8,7 @@
 
 import { removingArabicDiacriticsAndSigns } from "./text.js";
 
-/** ۩ ARABIC PLACE OF SAJDAH (U+06E9) — marks the 15 sajdah (prostration) ayahs. */
+/** ۩ ARABIC PLACE OF SAJDAH (U+06E9), marks the 15 sajdah (prostration) ayahs. */
 const SAJDAH_MARK = "۩";
 
 /**
@@ -125,7 +125,7 @@ export class Quran {
     return this.surah(this.surahs.length + 1 - n);
   }
 
-  /** Whether an ayah is a sajdah (prostration) ayah — carries the ۩ mark (U+06E9). */
+  /** Whether an ayah is a sajdah (prostration) ayah, carries the ۩ mark (U+06E9). */
   isSajdahAyah(surahId, ayahId) {
     return (this.ayah(surahId, ayahId)?.textArabic ?? "").includes(SAJDAH_MARK);
   }
@@ -221,7 +221,7 @@ export class Quran {
   }
 
   /**
-   * Ayah count of a surah in the given riwayah — the number of Hafs ayahs that exist there (e.g. Baqarah
+   * Ayah count of a surah in the given riwayah, the number of Hafs ayahs that exist there (e.g. Baqarah
    * is 286 in Hafs but 285 in Warsh). Mirrors Surah.numberOfAyahs(for:).
    * @param {number} surahId @param {string} [riwayah]
    */

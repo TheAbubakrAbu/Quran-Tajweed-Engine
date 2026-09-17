@@ -1,5 +1,5 @@
 //! The Arabic alphabet as a Quran reader meets it: every letter with its joining forms, its name and
-//! transliteration, and — the part that matters for tajweed — its WEIGHT.
+//! transliteration, and (the part that matters for tajweed), its WEIGHT.
 //!
 //! Weight is why this belongs in a tajweed engine rather than in a phrasebook. Every letter is
 //! pronounced thin (tarqiq) or full (tafkhim), a few depend on context (raa, and the lam of the
@@ -32,7 +32,7 @@ pub struct ArabicLetter {
     pub show_tashkeel: bool,
     #[serde(default)]
     pub sound: String,
-    /// `"light"`, `"heavy"`, `"conditional"`, `"followsPrevious"` — or `None` where none is recorded.
+    /// `"light"`, `"heavy"`, `"conditional"`, `"followsPrevious"`, or `None` where none is recorded.
     #[serde(default)]
     pub weight: Option<String>,
     /// Why, in one sentence.
@@ -150,7 +150,7 @@ impl Engine {
         &self.alphabet.weights
     }
 
-    /// The letters pronounced full — the isti'la letters.
+    /// The letters pronounced full, the isti'la letters.
     pub fn heavy_letters(&self) -> Vec<&ArabicLetter> {
         self.letters().iter().filter(|l| l.weight.as_deref() == Some("heavy")).collect()
     }

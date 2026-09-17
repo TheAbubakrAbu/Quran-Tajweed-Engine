@@ -1,12 +1,12 @@
 // Word by word: what each word of an ayah means, and how it is said.
 //
-// Two layers over the SAME tokens — the English gloss and a Latin
-// transliteration — where the tokens are the ayah's own whitespace-separated
+// Two layers over the SAME tokens, the English gloss and a Latin
+// transliteration: where the tokens are the ayah's own whitespace-separated
 // words. Split the ayah and index straight in; the alignment against a corpus
 // that tokenizes ~200 ayahs differently was done once, at build time.
 //
 // A token with no word of its own (the ۞ ornament, the tail of a word the
-// corpus writes as two) carries `''` in both layers — show nothing for it
+// corpus writes as two) carries `''` in both layers, show nothing for it
 // rather than a neighbour's meaning.
 //
 // See `../../docs/12-word-by-word.md`.
@@ -72,7 +72,7 @@ class WordByWord {
               .toList(growable: false),
       };
 
-  /// Whether a pack is loaded at all — cheap enough to gate UI on.
+  /// Whether a pack is loaded at all, cheap enough to gate UI on.
   bool get isLoaded => _english.isNotEmpty;
 
   /// Every word of an ayah, in reading order.
@@ -106,7 +106,7 @@ class WordByWord {
   List<String>? transliterations(int surahId, int ayahId) =>
       _row(_transliteration, surahId, ayahId);
 
-  /// Ayahs containing a word whose gloss carries [term] — a word-level English
+  /// Ayahs containing a word whose gloss carries [term], a word-level English
   /// search, which finds ayahs a translation search misses because no
   /// translator used that phrasing.
   List<GlossHit> find(String term, {int limit = 50}) {

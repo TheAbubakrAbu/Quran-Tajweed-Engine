@@ -2,7 +2,7 @@ name: CI
 
 # Protects the engine once apps (e.g. Al-Islam) depend on it: every port's tests + the shared
 # conformance vectors run on every push/PR, and the GENERATED artifacts (tajweed annotations,
-# bundled package resources) are verified in sync with the canonical /data — so a change to the
+# bundled package resources) are verified in sync with the canonical /data, so a change to the
 # detector or data can't land without regenerating.
 
 on:

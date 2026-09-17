@@ -2,7 +2,7 @@
 /**
  * Ayah & surah search. Faithful port of the search system in QuranData.swift.
  *
- * Verse matching is unranked — results come back in mushaf order (surah, then ayah). Each verse is
+ * Verse matching is unranked, results come back in mushaf order (surah, then ayah). Each verse is
  * indexed into three Arabic/English blobs plus token lists; a query matches a verse when the whole
  * cleaned query is a substring of the blob OR the query tokens phrase-prefix-match the verse tokens.
  *
@@ -74,7 +74,7 @@ export class Search {
     if (!cleaned) return [];
 
     // Reject any query containing a digit (numeric/refs go via surah search). Done BEFORE the boolean
-    // path — exactly as QuranData.search(term:) does — so even a boolean query with a digit returns [].
+    // path, exactly as QuranData.search(term:) does, so even a boolean query with a digit returns [].
     if (/\p{Nd}/u.test(cleaned)) return [];
 
     // Boolean grammar?
@@ -85,7 +85,7 @@ export class Search {
       ? cleanSearch(removingSilentArabicLettersForSearch(query), { whitespace: true })
       : "";
 
-    // Plain substring search in mushaf order — word/sentence boundaries DON'T matter (a query matches
+    // Plain substring search in mushaf order, word/sentence boundaries DON'T matter (a query matches
     // anywhere it appears, e.g. "رب" inside "ربهم"). Whole-word / phrase matching lives in the `=`
     // operator; `#` does an exact (case/tashkeel-sensitive) match. Mirrors regularSearchEntryMatches().
     /** @param {VerseIndexEntry} e */
@@ -105,7 +105,7 @@ export class Search {
   _booleanSearch(query, opts) {
     const useArabic = containsArabicLetters(query);
     const normalized = query.replace(/&&/g, "&").replace(/\|\|/g, "|");
-    // Drop any term whose cleaned value is empty — booleanAyahSearchTerm() returns nil in that case.
+    // Drop any term whose cleaned value is empty, booleanAyahSearchTerm() returns nil in that case.
     const orGroups = normalized.split("|").map((g) =>
       g.split("&").map((t) => parseTerm(t)).filter((t) => t.value !== "")
     ).filter((g) => g.length);

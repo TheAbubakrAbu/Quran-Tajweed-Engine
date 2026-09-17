@@ -1,6 +1,6 @@
 # Flutter
 
-Use **`quran-engine-dart`** in a Flutter app. It's a thin, data-driven wrapper over the JSON in [`/data`](../../data) — no network, database, or framework at runtime (audio is just URL strings). Tajweed uses the pre-computed annotation corpus (strategy A), so coloring is exact and dependency-free.
+Use **`quran-engine-dart`** in a Flutter app. It's a thin, data-driven wrapper over the JSON in [`/data`](../../data): no network, database, or framework at runtime (audio is just URL strings). Tajweed uses the pre-computed annotation corpus (strategy A), so coloring is exact and dependency-free.
 
 ## Setup
 
@@ -53,11 +53,11 @@ engine.quran.ayah(2, 255)!.textArabic;        // Ayat al-Kursi
 engine.globalAyahNumber(2, 255);              // global ayah number
 ```
 
-Build the engine once (e.g. in `main()` before `runApp`, or behind a `FutureBuilder` / provider) and reuse it — decoding `quran.json` is the heaviest step.
+Build the engine once (e.g. in `main()` before `runApp`, or behind a `FutureBuilder` / provider) and reuse it, decoding `quran.json` is the heaviest step.
 
 ## Tajweed rendering with `RichText` / `TextSpan`
 
-`engine.tajweedSpans(surah, ayah)` returns `List<TajweedSpan>`, each with `text`, `rule`, and `colorHex` (e.g. `"#AE2517"`). The spans are non-overlapping and in order, but only cover the *colored* parts — fill the gaps with the surrounding text so nothing is dropped. Convert the hex string to a `Color`:
+`engine.tajweedSpans(surah, ayah)` returns `List<TajweedSpan>`, each with `text`, `rule`, and `colorHex` (e.g. `"#AE2517"`). The spans are non-overlapping and in order, but only cover the *colored* parts, fill the gaps with the surrounding text so nothing is dropped. Convert the hex string to a `Color`:
 
 ```dart
 import 'package:flutter/material.dart';
@@ -103,7 +103,7 @@ Widget tajweedAyah(Engine engine, int surah, int ayah) {
 
 ## Audio with `just_audio` (or `audioplayers`)
 
-Audio URLs come from the free functions `surahAudioUrl` / `ayahAudioUrl`. The engine never fetches audio — hand the URL to your player.
+Audio URLs come from the free functions `surahAudioUrl` / `ayahAudioUrl`. The engine never fetches audio, hand the URL to your player.
 
 ```yaml
 dependencies:
@@ -140,7 +140,7 @@ With `audioplayers` the equivalent is `AudioPlayer().play(UrlSource(surahAudioUr
 
 ## See also
 
-- [recipes.md](../recipes.md) — #2 (tajweed), #4–6 (audio), #9 (mushaf page).
+- [recipes.md](../recipes.md): #2 (tajweed), #4–6 (audio), #9 (mushaf page).
 - [02-tajweed.md](../02-tajweed.md) · [01-quran.md](../01-quran.md) · [06-ayah-search.md](../06-ayah-search.md)
 - [04-surah-recitations.md](../04-surah-recitations.md) · [05-ayah-recitations.md](../05-ayah-recitations.md)
 - [`quran-engine-dart` README](../../packages/quran-engine-dart/README.md)

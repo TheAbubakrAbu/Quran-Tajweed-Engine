@@ -1,6 +1,6 @@
 # iOS / macOS (SwiftUI)
 
-Use **`quran-engine-swift`** in a SwiftUI app. It's a thin, idiomatic wrapper over the JSON in [`/data`](../../data) plus a few pure functions — no network, database, or framework required. Tajweed uses the pre-computed annotation corpus (strategy A), so coloring is exact and offsets slice natively.
+Use **`quran-engine-swift`** in a SwiftUI app. It's a thin, idiomatic wrapper over the JSON in [`/data`](../../data) plus a few pure functions: no network, database, or framework required. Tajweed uses the pre-computed annotation corpus (strategy A), so coloring is exact and offsets slice natively.
 
 ## Setup
 
@@ -15,7 +15,7 @@ dependencies: [
 
 Or in Xcode: **File ▸ Add Package Dependencies…** and point at the `quran-engine-swift` directory (or its git URL). Then `import QuranEngine`.
 
-**The data ships inside the package.** The core JSON corpus (`quran.json`, `juz.json`, `reciters.json`, `tajweed-rules.json`, `tajweed-annotations.json`, plus `surah-info` / `names-of-allah` / `arabic-alphabet`) is bundled as a SwiftPM resource (`Sources/QuranEngine/Resources/`, generated from [`/data`](../../data) by `scripts/sync-package-resources.mjs`). So `try Engine.load()` works with **zero filesystem setup** — you do NOT copy `/data` into your app. Pass `dataDirectory:` only to override with your own corpus.
+**The data ships inside the package.** The core JSON corpus (`quran.json`, `juz.json`, `reciters.json`, `tajweed-rules.json`, `tajweed-annotations.json`, plus `surah-info` / `names-of-allah` / `arabic-alphabet`) is bundled as a SwiftPM resource (`Sources/QuranEngine/Resources/`, generated from [`/data`](../../data) by `scripts/sync-package-resources.mjs`). So `try Engine.load()` works with **zero filesystem setup**: you do NOT copy `/data` into your app. Pass `dataDirectory:` only to override with your own corpus.
 
 ## Minimal working example (canonical load + a SwiftUI view)
 
@@ -29,7 +29,7 @@ import QuranEngine
 final class QuranStore: ObservableObject {
     let engine: Engine
     init() {
-        // Data is bundled inside the package — no app-side data setup needed.
+        // Data is bundled inside the package, no app-side data setup needed.
         engine = try! Engine.load()
     }
 }
@@ -54,7 +54,7 @@ struct AyahScreen: View {
 
 ## Tajweed rendering with `AttributedString`
 
-`engine.tajweed.tajweedSpans(surah, ayah)` returns `[TajweedSpan]`, each with `start`, `end`, `rule`, `colorHex` (`"#RRGGBB"`, optional), and the reconstructed `text`. The spans cover only the *colored* parts, in order and non-overlapping — fill the gaps with the surrounding text. Build an `AttributedString` and set the foreground color per run:
+`engine.tajweed.tajweedSpans(surah, ayah)` returns `[TajweedSpan]`, each with `start`, `end`, `rule`, `colorHex` (`"#RRGGBB"`, optional), and the reconstructed `text`. The spans cover only the *colored* parts, in order and non-overlapping, fill the gaps with the surrounding text. Build an `AttributedString` and set the foreground color per run:
 
 ```swift
 import SwiftUI
@@ -106,7 +106,7 @@ struct TajweedText: View {
 }
 ```
 
-`TajweedSpan.start`/`end` are UTF-16 offsets and `span.text` is already the reconstructed `[start, end)` slice — Swift `String` indexes natively via `String.Index(utf16Offset:in:)`, so no conversion is needed. See [02-tajweed.md](../02-tajweed.md).
+`TajweedSpan.start`/`end` are UTF-16 offsets and `span.text` is already the reconstructed `[start, end)` slice, Swift `String` indexes natively via `String.Index(utf16Offset:in:)`, so no conversion is needed. See [02-tajweed.md](../02-tajweed.md).
 
 ## Audio with `AVPlayer`
 
@@ -140,7 +140,7 @@ For verse-by-verse auto-advance, observe `AVPlayerItemDidPlayToEndTime` and load
 
 ## See also
 
-- [recipes.md](../recipes.md) — #2 (tajweed), #4–6 (audio).
+- [recipes.md](../recipes.md): #2 (tajweed), #4–6 (audio).
 - [02-tajweed.md](../02-tajweed.md) · [01-quran.md](../01-quran.md) · [06-ayah-search.md](../06-ayah-search.md)
 - [04-surah-recitations.md](../04-surah-recitations.md) · [05-ayah-recitations.md](../05-ayah-recitations.md) · [08-caching.md](../08-caching.md)
 - [`quran-engine-swift` README](../../packages/quran-engine-swift/README.md)

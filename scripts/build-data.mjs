@@ -74,7 +74,7 @@ for (const r of RIWAYAT) {
     const ids = ayahs.filter((a) => (a.text ?? "").trim() !== "").map((a) => a.id).sort((a, b) => a - b);
     // must be contiguous 1..N for the count to fully determine existence
     if (ids.length && (ids[0] !== 1 || ids[ids.length - 1] !== ids.length)) {
-      throw new Error(`qiraat ${r} surah ${surahStr}: ids not contiguous 1..N — the count index would be wrong`);
+      throw new Error(`qiraat ${r} surah ${surahStr}: ids not contiguous 1..N: the count index would be wrong`);
     }
     perSurah[surahStr] = ids.length;
   }

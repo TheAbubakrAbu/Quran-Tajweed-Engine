@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * @quran-tajweed-engine/core — framework-agnostic Quran engine.
+ * @quran-tajweed-engine/core, framework-agnostic Quran engine.
  *
  * Pure ESM, zero runtime dependencies. Works in browsers, Node 18+, Deno, Bun, React Native
  * (via Hermes/Intl.Segmenter polyfill). The engine is data-driven: feed it the JSON from `/data`.

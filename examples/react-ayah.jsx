@@ -10,7 +10,7 @@
 // In a bundler (Vite/Next/CRA) you import the JSON yourself and build the engine
 // with createEngine(). Do this ONCE at app scope, not per render. Two common ways:
 //
-//   // (a) static import — bundles the data
+//   // (a) static import: bundles the data
 //   import quran from "../data/quran.json";
 //   import juz from "../data/juz.json";
 //   import reciters from "../data/reciters.json";
@@ -18,7 +18,7 @@
 //   import { createEngine } from "@quran-tajweed-engine/core";
 //   export const engine = createEngine({ quran, juz, reciters, tajweedRules });
 //
-//   // (b) fetch at runtime (keeps the 5 MB quran.json out of the main bundle) —
+//   // (b) fetch at runtime (keeps the 5 MB quran.json out of the main bundle):
 //   //     load it in an effect / loader and pass `engine` down via context/props.
 //
 // Here we accept `engine` as a prop so the component stays pure and testable.

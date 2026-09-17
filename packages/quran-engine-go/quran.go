@@ -83,7 +83,7 @@ func (e *Engine) ExistsInQiraah(surahID, ayahID int, riwayah string) bool {
 	return ayahID <= count
 }
 
-// NumberOfAyahsInQiraah returns the ayah count of a surah in the given riwayah — the
+// NumberOfAyahsInQiraah returns the ayah count of a surah in the given riwayah, the
 // number of Hafs ayahs that exist there (e.g. Baqarah is 286 in Hafs but 285 in Warsh).
 // Mirrors Quran.numberOfAyahsInQiraah. Returns 0 for an unknown surah; an unknown/unloaded
 // riwayah falls back to the Hafs count.
@@ -120,7 +120,7 @@ func (e *Engine) SurahFromEnd(n int) *Surah {
 	return e.byID[len(e.surahs)+1-n]
 }
 
-// IsSajdahAyah reports whether the ayah is a sajdah (prostration) ayah — it carries
+// IsSajdahAyah reports whether the ayah is a sajdah (prostration) ayah: it carries
 // the ۩ mark (U+06E9) in its Arabic text.
 func (e *Engine) IsSajdahAyah(surahID, ayahID int) bool {
 	a := e.Ayah(surahID, ayahID)

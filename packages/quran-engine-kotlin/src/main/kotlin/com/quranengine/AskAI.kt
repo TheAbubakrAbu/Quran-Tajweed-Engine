@@ -11,9 +11,9 @@ import kotlin.math.max
  * It is NOT a model. It is the two halves of a question-answering feature that a model cannot do for
  * you and that every app otherwise rebuilds badly:
  *
- *  1. **Retrieval** — turn a natural-language question into the handful of passages that actually
+ *  1. **Retrieval**: turn a natural-language question into the handful of passages that actually
  *     bear on it, each with the reference it must be cited by.
- *  2. **The prompt** — the instructions that keep a model from doing the three things that make a
+ *  2. **The prompt**: the instructions that keep a model from doing the three things that make a
  *     Quran assistant harmful: inventing verse numbers, quoting scripture it has half-remembered,
  *     and issuing rulings.
  *
@@ -21,8 +21,8 @@ import kotlin.math.max
  *
  * The lanes answer different KINDS of question and one would otherwise drown the others: what the
  * question NAMES (marked [Passage.isSubject], so a model given eight loosely-related verses does not
- * explain the wrong one), IDF-weighted keywords, the curated themes, and — only when you pass a
- * [Semantic] index — meaning. They are interleaved round-robin rather than concatenated, so each
+ * explain the wrong one), IDF-weighted keywords, the curated themes, and, only when you pass a
+ * [Semantic] index, meaning. They are interleaved round-robin rather than concatenated, so each
  * lane gets a voice inside the passage budget instead of the first lane filling it.
  *
  * See `../../docs/14-ask-ai.md`.
@@ -131,7 +131,7 @@ class AskAI(
                 if (hit != null) { surahs += hit; break }
             }
         }
-        // "surah al-kahf verse 10" — an ayah number on its own belongs to the surah just named.
+        // "surah al-kahf verse 10", an ayah number on its own belongs to the surah just named.
         val loose = AYAH_MENTION.findAll(question).mapNotNull { it.groupValues[1].toIntOrNull() }.toList()
         if (loose.isNotEmpty() && surahs.isNotEmpty() && ayahs.isEmpty()) {
             for (ayah in loose) if (quran.ayah(surahs[0], ayah) != null) ayahs += surahs[0] to ayah
@@ -199,7 +199,7 @@ class AskAI(
     // ---- Lane 2: themes -------------------------------------------------------------
 
     /**
-     * Ayahs from the curated topic whose name or description the question matches — the lane that
+     * Ayahs from the curated topic whose name or description the question matches, the lane that
      * reaches verses sharing no wording with the question at all.
      */
     fun themePassages(question: String, limit: Int = 2): List<Passage> {
@@ -228,7 +228,7 @@ class AskAI(
     // ---- Lane 3: meaning ------------------------------------------------------------
 
     /**
-     * Ayahs closest in MEANING to the question. Empty unless a semantic index was supplied — the
+     * Ayahs closest in MEANING to the question. Empty unless a semantic index was supplied, the
      * other lanes still answer, which is why this one is optional.
      */
     fun semanticPassages(question: String, limit: Int = 3, minScore: Float = 0.42f): List<Passage> {
@@ -271,7 +271,7 @@ class AskAI(
 
     /**
      * A surah's background prose. The bundled notes open with the period of revelation, which
-     * answers "what is this surah about" with history — so the theme section, when a source has one,
+     * answers "what is this surah about" with history, so the theme section, when a source has one,
      * is what the question actually meant.
      */
     fun surahPassage(surahId: Int): Passage? {
@@ -402,7 +402,7 @@ You may be given PASSAGES the app retrieved for the question (ayahs, a surah's b
          * The instructions and the user-side prompt for one turn: the passages, the recent
          * conversation, the question.
          *
-         * Eight passages of 500 characters is roughly a thousand tokens — sized for a ~4k on-device
+         * Eight passages of 500 characters is roughly a thousand tokens, sized for a ~4k on-device
          * window with room for the instructions, the conversation, and a full answer. Raise both for
          * a larger model; the shape does not change.
          */

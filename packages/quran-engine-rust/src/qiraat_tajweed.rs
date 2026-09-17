@@ -9,7 +9,7 @@
 //! * **The meaning of a colour is per edition.** Each mushaf prints its own legend, so the same
 //!   code is a different rule in a different riwayah. Always read the legend. The `rule` KEY is
 //!   stable across riwayat, which is why one catalogue can explain it for all of them.
-//! * **Extents are base-letter indices, not character offsets** — `first_letter..=last_letter` in
+//! * **Extents are base-letter indices, not character offsets**, `first_letter..=last_letter` in
 //!   reading order with diacritics not counted, or the whole word when `whole_word`.
 //!
 //! Only the seven verified non-Hafs riwayat carry a pack. See `../../docs/11-qiraat-tajweed.md`.
@@ -31,7 +31,7 @@ pub struct LegendRow {
 pub struct LegendEntry {
     /// The single letter this riwayah's data uses for the rule.
     pub code: String,
-    /// Stable rule key, e.g. `"idgham"` — the same across riwayat.
+    /// Stable rule key, e.g. `"idgham"`: the same across riwayat.
     pub rule: String,
     /// The rule's name as this mushaf prints it.
     pub arabic: String,
@@ -154,7 +154,7 @@ impl Engine {
         out
     }
 
-    /// The ayahs of a surah this riwayah reads differently from Hafs somewhere — the index behind a
+    /// The ayahs of a surah this riwayah reads differently from Hafs somewhere, the index behind a
     /// "show me where these two readings part" list, without walking every ayah's rules.
     pub fn khilaf_ayahs(&self, surah: u32, riwayah: &str) -> &[u32] {
         self.qiraat_tajweed

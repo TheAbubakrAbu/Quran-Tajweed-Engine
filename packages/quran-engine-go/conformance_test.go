@@ -1,6 +1,6 @@
 package quranengine
 
-// Conformance test — runs the language-agnostic vectors in /conformance/vectors.json
+// Conformance test, runs the language-agnostic vectors in /conformance/vectors.json
 // against the engine. These vectors are the SINGLE SOURCE OF BEHAVIORAL TRUTH: a
 // behavior is specified ONCE in that JSON, and every language port runs the same file
 // (see docs/PORTING.md → "Conformance vectors"). This mirrors the reference consumer
@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-// maddLazimMaddah is U+0653 ARABIC MADDAH ABOVE — the madd-lāzim mark whose
+// maddLazimMaddah is U+0653 ARABIC MADDAH ABOVE, the madd-lāzim mark whose
 // presence in spelledOutArabic lets the tajweed pass colour the long vowels.
 const maddLazimMaddah = "ٓ"
 

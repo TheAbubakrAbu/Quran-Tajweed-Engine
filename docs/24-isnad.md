@@ -35,7 +35,7 @@ This reads the imam the corpus records for that narration. The tags are display 
 
 ```js
 engine.isnad.readsDirectly("Hafs an Asim");          // true
-engine.isnad.readsDirectly("Qunbul an Ibn Kathir");  // false — three links between
+engine.isnad.readsDirectly("Qunbul an Ibn Kathir"); // false: three links between
 engine.isnad.sentence("Qunbul an Ibn Kathir");
 // "Qunbul did not meet Ibn Kathir: the reading reached him through Ahmad al-Qawwas,
 //  Abu al-Ikhrit Wahb ibn Wadih and then Isma'il al-Qust, and from Ibn Kathir it runs

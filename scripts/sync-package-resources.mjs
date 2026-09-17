@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * Sync the canonical /data JSON into each language package that bundles data as a build resource
- * (so the package is self-contained and consumable WITHOUT the repo /data dir present — e.g. the
+ * (so the package is self-contained and consumable WITHOUT the repo /data dir present: e.g. the
  * Swift package added to an iOS app via SwiftPM).
  *
- * SINGLE SOURCE OF TRUTH stays /data. These bundled copies are GENERATED — never hand-edit them;
+ * SINGLE SOURCE OF TRUTH stays /data. These bundled copies are GENERATED, never hand-edit them;
  * re-run `node scripts/sync-package-resources.mjs` after changing /data (or running build-data.mjs).
  *
  * Currently targets the Swift package (the one Al-Islam will consume). Other ports discover the
@@ -17,9 +17,9 @@ import { dirname, join } from "node:path";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const p = (...a) => join(ROOT, ...a);
 
-// The JSON the engine decodes. Nested paths are kept nested — SwiftPM's `.copy("Resources")`
+// The JSON the engine decodes. Nested paths are kept nested, SwiftPM's `.copy("Resources")`
 // preserves the directory structure, and the Swift loader looks a file up under its own
-// subdirectory. Excluded on purpose: the per-surah splits (surahs/, tajweed/ — redundant with the
+// subdirectory. Excluded on purpose: the per-surah splits (surahs/, tajweed/, redundant with the
 // combined files), fonts/ (TTFs the app bundles itself), qiraat/ (11 MB of riwayah text: the Swift
 // loader reads it when `loadQiraat` is passed a `dataDirectory`, but bundling it would triple the
 // package for a feature most consumers do not use), and mushaf/pdfs/ (23 MB of facsimiles the engine

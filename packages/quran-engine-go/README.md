@@ -1,6 +1,6 @@
 # quran-engine-go
 
-The **Go** port of the open-source Quran Tajweed Engine. It is a thin, idiomatic wrapper over the JSON data in the repository's `/data` directory plus a handful of pure functions — no network call, database, or framework required. *The data is the engine.*
+The **Go** port of the open-source Quran Tajweed Engine. It is a thin, idiomatic wrapper over the JSON data in the repository's `/data` directory plus a handful of pure functions; no network call, database, or framework required. *The data is the engine.*
 
 This port implements the shared contract in [`../../docs/PORTING.md`](../../docs/PORTING.md) and the per-feature specs in `../../docs/01…08`.
 

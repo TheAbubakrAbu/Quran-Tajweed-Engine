@@ -14,7 +14,7 @@
 // [RiwayahEntry.textIncluded] says which is which.
 //
 // See `../../docs/10-mushaf.md`.
-// A surah+ayah pair by number — what the page tables index and return.
+// A surah+ayah pair by number: what the page tables index and return.
 
 class VerseRef {
   final int surah;
@@ -54,7 +54,7 @@ class RiwayahEntry {
   final int pdfBytes;
   final String pages;
 
-  /// Null when the riwayah's text — and so its line table — is not published.
+ /// Null when the riwayah's text (and so its line table), is not published.
   final String? lines;
 
   /// Null when the riwayah has no tajweed pack.

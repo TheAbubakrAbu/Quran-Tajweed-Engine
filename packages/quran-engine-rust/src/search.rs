@@ -1,4 +1,4 @@
-//! Ayah & surah search. Faithful port of `src/search.js` — matches its behaviour byte-for-byte.
+//! Ayah & surah search. Faithful port of `src/search.js`: matches its behaviour byte-for-byte.
 //!
 //! ## What is implemented
 //! - `search_verses`: unranked verse-text search in mushaf order. The regular (non-boolean) path is
@@ -160,7 +160,7 @@ impl SearchIndex {
             return Vec::new();
         }
         // Reject any query containing a Unicode decimal digit (numeric/refs go via surah search).
-        // Done BEFORE the boolean path — so even a boolean query with a digit returns []. Uses a
+        // Done BEFORE the boolean path, so even a boolean query with a digit returns []. Uses a
         // Unicode-aware check so Arabic-Indic digits are caught too.
         if cleaned.chars().any(|c| c.is_numeric()) {
             return Vec::new();
@@ -178,7 +178,7 @@ impl SearchIndex {
             String::new()
         };
 
-        // Pure substring search in mushaf order — word/sentence boundaries DON'T matter (a query
+        // Pure substring search in mushaf order, word/sentence boundaries DON'T matter (a query
         // matches anywhere it appears). Whole-word / phrase matching lives in the boolean operators.
         let hits = self.verses.iter().filter(|e| {
             if use_arabic {
@@ -201,7 +201,7 @@ impl SearchIndex {
     fn boolean_search(&self, query: &str, opts: &SearchOpts) -> Vec<VerseHit> {
         let use_arabic = contains_arabic_letters(query);
         let normalized = query.replace("&&", "&").replace("||", "|");
-        // Drop any term whose cleaned value is empty — `parseTerm` yields nil there.
+        // Drop any term whose cleaned value is empty, `parseTerm` yields nil there.
         let or_groups: Vec<Vec<Term>> = normalized
             .split('|')
             .map(|g| {

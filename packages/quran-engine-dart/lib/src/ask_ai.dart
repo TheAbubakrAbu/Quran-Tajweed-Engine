@@ -6,10 +6,10 @@
 // It is NOT a model. It is the two halves of a question-answering feature that
 // a model cannot do for you and that every app otherwise rebuilds badly:
 //
-//  1. **Retrieval** — turn a natural-language question into the handful of
+//  1. **Retrieval**: turn a natural-language question into the handful of
 //     passages that actually bear on it, each with the reference it must be
 //     cited by.
-//  2. **The prompt** — the instructions that keep a model from doing the three
+//  2. **The prompt**: the instructions that keep a model from doing the three
 //     things that make a Quran assistant harmful: inventing verse numbers,
 //     quoting scripture it has half-remembered, and issuing rulings.
 //
@@ -18,8 +18,8 @@
 // The lanes answer different KINDS of question and one would otherwise drown
 // the others: what the question NAMES (marked [Passage.isSubject], so a model
 // given eight loosely-related verses does not explain the wrong one),
-// IDF-weighted keywords, the curated themes, and — only when a [Semantic] index
-// is supplied — meaning. They are interleaved round-robin rather than
+// IDF-weighted keywords, the curated themes, and, only when a [Semantic] index
+// is supplied, meaning. They are interleaved round-robin rather than
 // concatenated, so each lane gets a voice inside the passage budget instead of
 // the first lane filling it.
 //
@@ -254,7 +254,7 @@ class AskAI {
         }
       }
     }
-    // "surah al-kahf verse 10" — an ayah number on its own belongs to the surah
+    // "surah al-kahf verse 10", an ayah number on its own belongs to the surah
     // just named.
     final loose = _ayahMention
         .allMatches(question)
@@ -344,7 +344,7 @@ class AskAI {
   // ---- Lane 2: themes -----------------------------------------------------
 
   /// Ayahs from the curated topic whose name or description the question
-  /// matches — the lane that reaches verses sharing no wording with the question
+  /// matches, the lane that reaches verses sharing no wording with the question
   /// at all.
   List<Passage> themePassages(String question, {int limit = 2}) {
     final topics = themes?.all();
@@ -382,7 +382,7 @@ class AskAI {
   // ---- Lane 3: meaning ----------------------------------------------------
 
   /// Ayahs closest in MEANING to the question. Empty unless a semantic index was
-  /// supplied — the other lanes still answer, which is why this one is optional.
+  /// supplied: the other lanes still answer, which is why this one is optional.
   List<Passage> semanticPassages(String question,
       {int limit = 3, double minScore = 0.42}) {
     final index = semantic;
@@ -425,7 +425,7 @@ class AskAI {
   }
 
   /// A surah's background prose. The bundled notes open with the period of
-  /// revelation, which answers "what is this surah about" with history — so the
+  /// revelation, which answers "what is this surah about" with history, so the
   /// theme section, when a source has one, is what the question actually meant.
   Passage? surahPassage(int surahId) {
     final surah = quran.surah(surahId);
@@ -514,7 +514,7 @@ class ChatPrompt {
 /// The instructions and the user-side prompt for one turn: the passages, the
 /// recent conversation, the question.
 ///
-/// Eight passages of 500 characters is roughly a thousand tokens — sized for a
+/// Eight passages of 500 characters is roughly a thousand tokens, sized for a
 /// ~4k on-device window with room for the instructions, the conversation, and a
 /// full answer. Raise both for a larger model; the shape does not change.
 

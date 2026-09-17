@@ -1,4 +1,4 @@
-// Conformance test — runs the language-agnostic vectors in /conformance/vectors.json against the
+// Conformance test, runs the language-agnostic vectors in /conformance/vectors.json against the
 // engine. These vectors are the SINGLE SOURCE OF BEHAVIORAL TRUTH: a behavior is specified ONCE in
 // that JSON, and every language port runs the same file (see docs/PORTING.md -> "Conformance
 // vectors"). The JS harness in packages/quran-engine-js/test/conformance.test.js is the reference

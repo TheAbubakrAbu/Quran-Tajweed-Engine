@@ -51,8 +51,8 @@ Derived/generated files are reproducible: `node scripts/build-data.mjs` regenera
 
 This is the one place with real algorithmic depth, so the engine offers two strategies:
 
-- **(A) Consume the corpus** — load `tajweed-annotations.json`, map each `rule` to a color. Tiny, exact, consistent. **All native ports use this.** Best when you're coloring the bundled Hafs text.
-- **(B) Run the detector** — the JS package ([`src/tajweed.js`](../packages/quran-engine-js/src/tajweed.js)) implements the full heuristic engine from [docs/02](02-tajweed.md). Use it to color text the corpus doesn't cover (other qiraat, user input) or to avoid a data dependency.
+- **(A) Consume the corpus**: load `tajweed-annotations.json`, map each `rule` to a color. Tiny, exact, consistent. **All native ports use this.** Best when you're coloring the bundled Hafs text.
+- **(B) Run the detector**: the JS package ([`src/tajweed.js`](../packages/quran-engine-js/src/tajweed.js)) implements the full heuristic engine from [docs/02](02-tajweed.md). Use it to color text the corpus doesn't cover (other qiraat, user input) or to avoid a data dependency.
 
 The corpus is literally the detector's output over all 6236 ayahs, so (A) and (B) agree by construction.
 
@@ -69,18 +69,18 @@ Every port exposes the same surface:
 | `search` | verse & surah search, reference parsing | 06 |
 | `sorting` | sort & filter the 114 | 07 |
 | `cache` | offline-download paths | 08 |
-| `text` | Arabic normalization, grapheme clustering, UTF-16 slicing | — |
-| `engine` | facade tying it together + the disk loader | — |
+| `text` | Arabic normalization, grapheme clustering, UTF-16 slicing |, |
+| `engine` | facade tying it together + the disk loader |, |
 
 ## String offsets: the one cross-language gotcha
 
-Tajweed annotation `start`/`end` are **UTF-16 code-unit offsets** (the native unit of JS, Swift, Java, Kotlin, Dart, C#). Languages that index by code point (Python) or bytes (Rust, Go) must convert — every such port ships a `utf16_slice` helper, and the porting contract spells it out. See [PORTING.md → String indexing](PORTING.md#string-indexing-utf-16-offsets).
+Tajweed annotation `start`/`end` are **UTF-16 code-unit offsets** (the native unit of JS, Swift, Java, Kotlin, Dart, C#). Languages that index by code point (Python) or bytes (Rust, Go) must convert, every such port ships a `utf16_slice` helper, and the porting contract spells it out. See [PORTING.md → String indexing](PORTING.md#string-indexing-utf-16-offsets).
 
 ## Performance notes
 
 - Loading `quran.json` (~5 MB) is the heaviest step. For web, prefer the per-surah `surahs/NNN.json` files and load on demand; the lightweight `surahs/index.json` (no ayah text) is enough to render a surah list.
 - Search builds an in-memory index of 6236 short blobs at construction. That's fast enough to filter linearly; the reference Swift app additionally keeps inverted token/prefix indexes for very hot search.
-- Tajweed via the corpus is a dictionary lookup + a slice — effectively free.
+- Tajweed via the corpus is a dictionary lookup + a slice, effectively free.
 
 ## Extending the engine
 

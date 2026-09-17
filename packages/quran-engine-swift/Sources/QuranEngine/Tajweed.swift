@@ -27,7 +27,7 @@ public final class Tajweed {
     public func colorHex(forRule rule: String) -> String? { colorByRule[rule] }
 
     /// Colored spans for an ayah, in annotation order. Each span's `text` is the reconstructed
-    /// UTF-16 slice `[start, end)` of the ayah's Arabic text — equal to what the JS engine produces.
+    /// UTF-16 slice `[start, end)` of the ayah's Arabic text, equal to what the JS engine produces.
     public func tajweedSpans(_ surahId: Int, _ ayahId: Int, riwayah: String? = nil) -> [TajweedSpan] {
         guard let text = quran.arabicText(surahId, ayahId, riwayah: riwayah),
               let annotations = annotationsByVerse["\(surahId):\(ayahId)"] else { return [] }

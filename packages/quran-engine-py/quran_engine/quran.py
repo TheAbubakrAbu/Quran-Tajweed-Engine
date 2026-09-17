@@ -4,7 +4,7 @@ from typing import Iterator, Optional
 from .models import Surah, Ayah
 from .text import removing_arabic_diacritics_and_signs
 
-# ۩ ARABIC PLACE OF SAJDAH (U+06E9) — marks the 15 sajdah (prostration) ayahs.
+# ۩ ARABIC PLACE OF SAJDAH (U+06E9), marks the 15 sajdah (prostration) ayahs.
 SAJDAH_MARK = "۩"
 
 
@@ -57,7 +57,7 @@ class Quran:
         return self.surah(len(self.surahs) + 1 - n)
 
     def is_sajdah_ayah(self, surah_id: int, ayah_id: int) -> bool:
-        """Whether an ayah is a sajdah (prostration) ayah — carries the ۩ mark (U+06E9)."""
+        """Whether an ayah is a sajdah (prostration) ayah, carries the ۩ mark (U+06E9)."""
         a = self.ayah(surah_id, ayah_id)
         return SAJDAH_MARK in (a.text_arabic if a else "")
 
@@ -133,7 +133,7 @@ class Quran:
         return sorted(self._qiraat)
 
     def number_of_ayahs_in_qiraah(self, surah_id: int, riwayah: Optional[str] = None) -> int:
-        """Ayah count of a surah in the given riwayah — the number of Hafs ayahs that exist there (e.g.
+        """Ayah count of a surah in the given riwayah, the number of Hafs ayahs that exist there (e.g.
         Baqarah is 286 in Hafs but 285 in Warsh). Mirrors Surah.numberOfAyahs(for:)."""
         s = self.surah(surah_id)
         if not s:

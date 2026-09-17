@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping make the Quran more accessible. Contributions of all kinds are welcome — bug fixes, new language ports, better tajweed accuracy, more data, docs, and examples.
+Thank you for helping make the Quran more accessible. Contributions of all kinds are welcome, bug fixes, new language ports, better tajweed accuracy, more data, docs, and examples.
 
 ## Ground rules
 
@@ -16,7 +16,7 @@ Thank you for helping make the Quran more accessible. Contributions of all kinds
 - If it's a shared-behavior bug, fix the reference JS port first, then mirror it.
 
 ### Add a new language port
-1. Read [docs/PORTING.md](docs/PORTING.md) — the full contract.
+1. Read [docs/PORTING.md](docs/PORTING.md): the full contract.
 2. Create `packages/quran-engine-<lang>/`.
 3. Implement: Load + Quran + Tajweed (via the annotation corpus) + JuzPage + audio URLs + sorting + reference parsing. Search and caching are "extended" (nice to have).
 4. Use the pre-computed tajweed corpus (strategy A) unless you have a reason to port the detector.
@@ -43,7 +43,7 @@ Thank you for helping make the Quran more accessible. Contributions of all kinds
 ## Style
 
 - Match the surrounding code. Keep comments meaningful and tie engine logic back to the specs.
-- No heavyweight dependencies in the core ports — they should stay pure and offline.
+- No heavyweight dependencies in the core ports: they should stay pure and offline.
 
 ## Reporting issues
 

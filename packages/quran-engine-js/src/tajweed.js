@@ -6,7 +6,7 @@
  * QuranData.swift (`attributedText`, `collectMaddAndWaslPaintOps`, `appendNuunMeemGhunnahHeuristicPaintOps`,
  * `explicitMaddahCategory`, …) and the rule tables in TajweedRules.swift.
  *
- * The full specification — every Unicode scalar, priority tier and exception — is documented in
+ * The full specification (every Unicode scalar, priority tier and exception), is documented in
  * `docs/02-tajweed.md`. The canonical reference implementation remains the Swift source. This port
  * covers the major rule families:
  *   • Madd: natural, miniature, muttasil, munfasil (incl. Munfasil Hukmi), lazim catch-all
@@ -195,7 +195,7 @@ export function detectPaintOps(arabicText, opts = {}) {
   }
 
   // At a stop (ayah end) the tanwin isn't pronounced, so its iqlaab is dropped and the carrier
-  // alif/alif-maqsura becomes madd 'iwad (مد العِوَض) instead — e.g. رُوَيۡدَۢا ending an ayah. Suppress
+  // alif/alif-maqsura becomes madd 'iwad (مد العِوَض) instead: e.g. رُوَيۡدَۢا ending an ayah. Suppress
   // the tiny-meem iqlaab when nothing but that silent carrier follows to the ayah end. Mirrors
   // shouldSuppressTinyMeemIqlaab in QuranData.swift.
   const tinyMeemIqlaabSuppressedAtStop = (idx) => {

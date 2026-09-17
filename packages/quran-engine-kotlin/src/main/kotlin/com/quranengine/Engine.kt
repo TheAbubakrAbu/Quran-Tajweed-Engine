@@ -266,8 +266,8 @@ class Engine internal constructor(
         }
 
         /**
-         * Decode a file that may not be there. A missing optional corpus is not an error — the
-         * accessors simply return nothing — but a file that IS there and will not parse still throws,
+         * Decode a file that may not be there. A missing optional corpus is not an error, the
+         * accessors simply return nothing, but a file that IS there and will not parse still throws,
          * so a corrupt pack fails loudly instead of silently disappearing.
          */
         private inline fun <reified T> optional(dir: File, rel: String): T? {

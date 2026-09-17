@@ -18,7 +18,7 @@ import kotlinx.serialization.json.jsonPrimitive
  *  * **The meaning of a colour is per edition.** Each mushaf prints its own legend, so the same code
  *    is a different rule in a different riwayah. Always read [legend]. The `rule` KEY is stable
  *    across riwayat, which is why one catalogue can explain it for all of them.
- *  * **Extents are base-letter indices, not character offsets** — `firstLetter..lastLetter`
+ *  * **Extents are base-letter indices, not character offsets**, `firstLetter..lastLetter`
  *    inclusive in reading order with diacritics not counted, or the whole word when `wholeWord`.
  *
  * Only the seven verified non-Hafs riwayat carry a pack. See `../../docs/11-qiraat-tajweed.md`.
@@ -35,7 +35,7 @@ data class LegendRow(
 data class LegendEntry(
     /** The single letter this riwayah's data uses for the rule. */
     val code: String,
-    /** Stable rule key, e.g. `"idgham"` — the same across riwayat. */
+    /** Stable rule key, e.g. `"idgham"`: the same across riwayat. */
     val rule: String,
     /** The rule's name as this mushaf prints it. */
     val arabic: String,
@@ -64,7 +64,7 @@ data class WordRule(
 data class RuleDescription(val short: String = "", val long: String = "")
 
 /**
- * `data/tajweed-qiraat/<slug>.json`. The rule triples are `[code, firstLetter, lastLetter]` —
+ * `data/tajweed-qiraat/<slug>.json`. The rule triples are `[code, firstLetter, lastLetter]`, 
  * heterogeneous, so they stay as [JsonElement] until [QiraatTajweed.wordRules] reads them.
  */
 @Serializable
@@ -132,7 +132,7 @@ class QiraatTajweed(
     }
 
     /**
-     * The ayahs of a surah this riwayah reads differently from Hafs somewhere — the index behind a
+     * The ayahs of a surah this riwayah reads differently from Hafs somewhere, the index behind a
      * "show me where these two readings part" list, without walking every ayah's rules.
      */
     fun khilafAyahs(surahId: Int, riwayah: String): List<Int> =

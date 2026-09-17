@@ -16,8 +16,8 @@ Plain-English definitions of every Quran, recitation, and tajweed term used in t
 | **Mushaf** (مصحف) | A physical/printed copy of the Quran. "Mushaf order" = the standard 1→114 sequence. |
 | **Juz** (جزء), pl. **Ajzaa** | One of 30 roughly-equal parts the Quran is divided into for daily reading (a.k.a. *para*). |
 | **Page** | A page of the standard Madani mushaf (~604 pages). Each ayah carries its page number. |
-| **Sajdah** (سجدة) | A verse of prostration — on reciting it, the reader prostrates. Marked with ۩. |
-| **Muqatta'at** (حروف مقطعة) | The "disconnected letters" that open 29 surahs (e.g. الم, حم) — recited letter-by-letter. |
+| **Sajdah** (سجدة) | A verse of prostration, on reciting it, the reader prostrates. Marked with ۩. |
+| **Muqatta'at** (حروف مقطعة) | The "disconnected letters" that open 29 surahs (e.g. الم, حم), recited letter-by-letter. |
 | **Khatm / Khatmah** (ختمة) | A complete reading of the whole Quran, often planned over a period (e.g. a month). |
 
 ## Text, script & translation
@@ -36,10 +36,10 @@ Plain-English definitions of every Quran, recitation, and tajweed term used in t
 
 | Term | Meaning |
 |---|---|
-| **Tajweed** (تجويد) | The rules of correct Quranic pronunciation — how letters are sounded, merged, hidden, and stretched. This engine colors them. |
-| **Qira'ah** (قراءة), pl. **Qira'at** | A canonical "reading" of the Quran — a transmitted way of reciting, with minor differences in pronunciation/wording. There are 10 well-known ones. |
+| **Tajweed** (تجويد) | The rules of correct Quranic pronunciation: how letters are sounded, merged, hidden, and stretched. This engine colors them. |
+| **Qira'ah** (قراءة), pl. **Qira'at** | A canonical "reading" of the Quran: a transmitted way of reciting, with minor differences in pronunciation/wording. There are 10 well-known ones. |
 | **Riwayah** (رواية) | A specific transmission of a qira'ah through a named narrator. |
-| **Hafs an Asim** | The most widespread riwayah today — the default text in this engine and most mushafs. |
+| **Hafs an Asim** | The most widespread riwayah today, the default text in this engine and most mushafs. |
 | **Warsh, Qaloon, ad-Duri, as-Susi, al-Bazzi, Qunbul, Shubah** | Other riwayat included in `data/qiraat/` (used across North/West Africa and elsewhere). |
 | **Reciter / Qari** (قارئ) | A person who recites the Quran. The engine lists 60+ with audio feeds. |
 | **Murattal** (مرتل) | A measured, steady recitation style (most common for listening/learning). |
@@ -56,34 +56,34 @@ These are the 17 categories the engine detects. Colors are in `data/tajweed-rule
 |---|---|
 | **Lam Shamsiyyah** (لام شمسية) | The "L" of *al-* goes silent before a "sun letter" (the next letter doubles instead): *ash-shams*, not *al-shams*. |
 | **Dropped letter** | A letter written in the script but not pronounced. |
-| **Hamzat al-Wasl** (همزة الوصل) | A "connecting hamza" (ٱ) — pronounced only when you *start* on it; silent when reading continuously. |
+| **Hamzat al-Wasl** (همزة الوصل) | A "connecting hamza" (ٱ), pronounced only when you *start* on it; silent when reading continuously. |
 | **Idgham bila Ghunnah** (إدغام بلا غنة) | Merging a noon-sound into the next letter **without** a nasal hum (before ل or ر). |
 
 ### Ghunnah / nasal sounds (~2 beats of nasal hum)
 | Rule | Plain meaning |
 |---|---|
-| **Ghunnah** (غنة) | A nasal hum made through the nose — the buzzing on ن or م with a shadda. |
+| **Ghunnah** (غنة) | A nasal hum made through the nose, the buzzing on ن or م with a shadda. |
 | **Idgham with Ghunnah** (إدغام بغنة) | Merging a noon-sound into the next letter **with** a nasal hum (before ي ن م و). |
-| **Ikhfaa** (إخفاء) | "Hiding" — a noon-sound is partly concealed with a nasal hum before certain letters. *Light* vs *heavy* depending on the next letter. |
-| **Iqlaab** (إقلاب) | "Conversion" — a noon-sound turns into an *m* sound before ب. |
+| **Ikhfaa** (إخفاء) | "Hiding": a noon-sound is partly concealed with a nasal hum before certain letters. *Light* vs *heavy* depending on the next letter. |
+| **Iqlaab** (إقلاب) | "Conversion", a noon-sound turns into an *m* sound before ب. |
 
 ### Sifaat / articulation
 | Rule | Plain meaning |
 |---|---|
 | **Qalqalah** (قلقلة) | A slight "bounce" or echo on the letters ق ط ب ج د when they have a sukoon or end a word. |
-| **Tafkhim** (تفخيم) | "Heaviness" — certain letters (خ ص ض ط ظ غ ق, and sometimes ر) are pronounced full and thick. |
+| **Tafkhim** (تفخيم) | "Heaviness", certain letters (خ ص ض ط ظ غ ق, and sometimes ر) are pronounced full and thick. |
 
 ### Madd / elongation (stretching a vowel)
 | Rule | Plain meaning | Length |
 |---|---|---|
 | **Madd Tabee'i (Natural)** (مد طبيعي) | The basic 2-count stretch on ا و ي. | 2 |
 | **Madd (miniature marks)** | Same 2-count stretch, written with small superscript vowel marks. | 2 |
-| **Madd Muttasil (Connected)** (مد متصل) | A madd letter followed by a hamza **in the same word** — stretched longer. | 4–5 |
+| **Madd Muttasil (Connected)** (مد متصل) | A madd letter followed by a hamza **in the same word**: stretched longer. | 4–5 |
 | **Madd Munfasil (Separated)** (مد منفصل) | A madd at a word's end meeting a hamza at the **next word's** start. | 2/4/5 |
 | **Madd Aarid / Leen (Stop madd)** (مد عارض للسكون) | Extra stretch that appears only when you **stop** at a word's end. | 2/4/6 |
 | **Madd Lazim (Necessary)** (مد لازم) | An obligatory fixed 6-count stretch (madd followed by a permanent sukoon/shadda). | 6 |
 
-> "Counts" (*harakat*) are the timing unit of tajweed — roughly the time to say one short vowel. They keep recitation rhythmically consistent. The engine **colors** these rules; it doesn't enforce timing.
+> "Counts" (*harakat*) are the timing unit of tajweed, roughly the time to say one short vowel. They keep recitation rhythmically consistent. The engine **colors** these rules; it doesn't enforce timing.
 
 ## Engine terms
 

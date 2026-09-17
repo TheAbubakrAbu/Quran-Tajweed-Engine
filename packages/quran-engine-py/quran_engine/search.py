@@ -1,7 +1,7 @@
 """
 Ayah & surah search. Faithful port of src/search.js.
 
-Verse matching is unranked — results come back in mushaf order (surah, then ayah). Each verse is
+Verse matching is unranked, results come back in mushaf order (surah, then ayah). Each verse is
 indexed into Arabic/English blobs plus token lists; the regular path is pure substring, while a small
 boolean grammar (`&` AND, `|` OR, `!` NOT, `#` exact, `=` whole-word, `^` starts-with, `%`/`$`
 ends-with) drives whole-word / prefix / tashkeel-sensitive matching.
@@ -174,7 +174,7 @@ class Search:
         if not cleaned:
             return []
         # Reject any query containing a (Unicode) digit. Done BEFORE the boolean path, exactly as
-        # QuranData.search(term:) does — so even a boolean query with a digit returns [].
+        # QuranData.search(term:) does, so even a boolean query with a digit returns [].
         if re.search(r"\d", cleaned, re.UNICODE):
             return []
         if _BOOLEAN_CHARS.search(query):
@@ -186,7 +186,7 @@ class Search:
             if use_arabic and ignore_silent_letters else ""
         )
 
-        # Plain substring search in mushaf order — word/sentence boundaries DON'T matter. Whole-word /
+        # Plain substring search in mushaf order, word/sentence boundaries DON'T matter. Whole-word /
         # phrase matching lives in the `=` operator; `#` does an exact (tashkeel-sensitive) match.
         def matches(e: _Entry) -> bool:
             if use_arabic:
@@ -203,7 +203,7 @@ class Search:
     def _boolean_search(self, query: str, offset: int, limit: Optional[int]) -> list[dict]:
         use_arabic = contains_arabic_letters(query)
         normalized = query.replace("&&", "&").replace("||", "|")
-        # Drop any term whose cleaned value is empty — booleanAyahSearchTerm() returns nil in that case.
+        # Drop any term whose cleaned value is empty, booleanAyahSearchTerm() returns nil in that case.
         or_groups = [
             [t for t in (_parse_term(raw) for raw in group.split("&")) if t.value != ""]
             for group in normalized.split("|")

@@ -1,4 +1,4 @@
-/// Quran Tajweed Engine — Dart / Flutter port.
+/// Quran Tajweed Engine, Dart / Flutter port.
 ///
 /// A thin, idiomatic, data-driven wrapper over the JSON corpus in the repo
 /// `/data` directory. Implements the shared contract in `docs/PORTING.md`:

@@ -95,7 +95,7 @@ export class AudioCache {
   }
 }
 
-/** A simple in-memory CacheStore — handy for tests and ephemeral use. @returns {CacheStore} */
+/** A simple in-memory CacheStore, handy for tests and ephemeral use. @returns {CacheStore} */
 export function memoryStore() {
   /** @type {Map<string,Uint8Array>} */
   const m = new Map();

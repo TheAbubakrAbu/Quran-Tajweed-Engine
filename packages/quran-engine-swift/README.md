@@ -1,6 +1,6 @@
 # QuranEngine (Swift)
 
-The Swift port of the open-source **Quran Tajweed Engine**. A thin, idiomatic wrapper over the JSON corpus in [`../../data`](../../data) plus a handful of pure functions — no network, database, or framework required.
+The Swift port of the open-source **Quran Tajweed Engine**. A thin, idiomatic wrapper over the JSON corpus in [`../../data`](../../data) plus a handful of pure functions, no network, database, or framework required.
 
 This package follows the shared contract in [`../../docs/PORTING.md`](../../docs/PORTING.md); the behaviour matches the reference JS implementation in [`../quran-engine-js`](../quran-engine-js). See `../../docs/01-quran.md` … `08-caching.md` for the per-feature specs.
 
@@ -92,4 +92,4 @@ The test target asserts the canonical cases from `docs/PORTING.md` (totalAyahs =
 
 ## License & attribution
 
-MIT. All data and algorithms are extracted from the open-source **Al-Islam | Islamic Pillars** app by **Abubakr Elmallah**. Please preserve this attribution — see [`../../CREDITS.md`](../../CREDITS.md) and [`../../LICENSE`](../../LICENSE).
+MIT. All data and algorithms are extracted from the open-source **Al-Islam | Islamic Pillars** app by **Abubakr Elmallah**. Please preserve this attribution, see [`../../CREDITS.md`](../../CREDITS.md) and [`../../LICENSE`](../../LICENSE).

@@ -301,7 +301,7 @@ data class TajweedLessonsFile(val chapters: List<TajweedChapter> = emptyList())
  * The tajweed course: chapters from the Arabic alphabet to the rules of stopping, each lesson
  * carrying its prose, its drills, and Quranic examples to hear the rule in.
  *
- * Content, not algorithm — but it belongs in the engine for the same reason the rule catalogue does:
+ * Content, not algorithm, but it belongs in the engine for the same reason the rule catalogue does:
  * every app that teaches tajweed otherwise rewrites the same curriculum, and a lesson that cites
  * `2:255` should cite the same ayah everywhere.
  */
@@ -322,7 +322,7 @@ class TajweedLessons(private val chapters: List<TajweedChapter> = emptyList()) {
     /** Which chapter a lesson belongs to. */
     fun chapterOf(id: String): TajweedChapter? = byLesson[id]?.first
 
-    /** The lesson after this one, walking across chapter boundaries — the "next" button's answer. */
+    /** The lesson after this one, walking across chapter boundaries, the "next" button's answer. */
     fun next(id: String): TajweedLesson? {
         val all = allLessons()
         val at = all.indexOfFirst { it.id == id }

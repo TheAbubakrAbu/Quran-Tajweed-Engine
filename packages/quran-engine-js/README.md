@@ -1,6 +1,6 @@
 # @quran-tajweed-engine/core
 
-The reference implementation of the [Quran Tajweed Engine](../../README.md) — pure ESM JavaScript with TypeScript types and **zero runtime dependencies**. Runs in browsers, Node 18+, Deno, Bun, and React Native (with an `Intl.Segmenter` polyfill for grapheme clustering).
+The reference implementation of the [Quran Tajweed Engine](../../README.md), pure ESM JavaScript with TypeScript types and **zero runtime dependencies**. Runs in browsers, Node 18+, Deno, Bun, and React Native (with an `Intl.Segmenter` polyfill for grapheme clustering).
 
 This package *is* the executable spec: every module maps to a feature doc in [`../../docs`](../../docs).
 
@@ -15,7 +15,7 @@ This package *is* the executable spec: every module maps to a feature doc in [`.
 | `search.js` | ayah & surah search (+ boolean) | 06 |
 | `sorting.js` | surah sorting & filtering | 07 |
 | `cache.js` | offline-download paths + `AudioCache` | 08 |
-| `text.js` | Arabic normalization + grapheme clustering | — |
+| `text.js` | Arabic normalization + grapheme clustering |, |
 
 Everything is re-exported from the package root, so `import { ... } from "@quran-tajweed-engine/core"` gives you the whole API and the bundler tree-shakes what you don't use.
 
@@ -59,7 +59,7 @@ engine.quran        // Quran:    surah(), ayah(), arabicText(.., riwayah), globa
 engine.juzPage      // JuzPage:  juz(), ayahsInJuz(), ayahsOnPage(), firstAyahOf*(), juzForAyah(), totalPages(), juzFromEnd(), juzStats()
 engine.reciters     // Reciters: all(), byId(), byQiraah(), withSurahFeed(), qiraat()
 engine.search       // Search:   searchVerses(), searchSurahs(), parseReference()
-engine.namesOfAllah // NamesOfAllah: all(), byNumber()   — the 99 Names
+engine.namesOfAllah // NamesOfAllah: all(), byNumber(), the 99 Names
 engine.tajweed(text, opts?)   // → colored spans (category + colorHex + text + range)
 // also: sortSurahs(), filterByRevelationType(), filterByCounts()  (named exports)
 ```
@@ -74,8 +74,8 @@ node --test test/*.test.js     # 18 tests, run against the real ../../data
 
 ## Fidelity
 
-Ported faithfully from Al-Islam's Swift source. The tajweed detector covers all rule families; two edge areas (full final-raa vowel context, muqatta'at lazim-harfi sub-typing) are simplified — see [docs/02-tajweed.md](../../docs/02-tajweed.md). Search, sorting, juz/page, and audio URL building match the Swift behavior exactly (verified by the test suite).
+Ported faithfully from Al-Islam's Swift source. The tajweed detector covers all rule families; two edge areas (full final-raa vowel context, muqatta'at lazim-harfi sub-typing) are simplified, see [docs/02-tajweed.md](../../docs/02-tajweed.md). Search, sorting, juz/page, and audio URL building match the Swift behavior exactly (verified by the test suite).
 
 ## License
 
-MIT — see [../../LICENSE](../../LICENSE) and [../../CREDITS.md](../../CREDITS.md).
+MIT, see [../../LICENSE](../../LICENSE) and [../../CREDITS.md](../../CREDITS.md).

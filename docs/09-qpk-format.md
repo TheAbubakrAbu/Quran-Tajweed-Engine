@@ -2,11 +2,11 @@
 
 `.qpk` is the optional binary build artifact for apps. This document specifies it completely, so any language can read a pack without consulting the Swift source.
 
-**The JSON in [`data/`](../data) remains canonical and portable.** Packs are reproducible from it, and nothing is in a pack that is not in the JSON. If you are porting the engine, reading the JSON is the supported path — this format is for shipping apps that care about install size and launch cost.
+**The JSON in [`data/`](../data) remains canonical and portable.** Packs are reproducible from it, and nothing is in a pack that is not in the JSON. If you are porting the engine, reading the JSON is the supported path: this format is for shipping apps that care about install size and launch cost.
 
 ## Why it exists
 
-Al-Islam ships ~17 MB of Quran JSON, decodes it on first launch, and writes a binary-plist cache to Application Support which it maps on later launches. The device pays **twice** — once in bundle size for the JSON, again in disk for the derived cache — and the first launch pays the whole decode.
+Al-Islam ships ~17 MB of Quran JSON, decodes it on first launch, and writes a binary-plist cache to Application Support which it maps on later launches. The device pays **twice** (once in bundle size for the JSON, again in disk for the derived cache), and the first launch pays the whole decode.
 
 The packs are **3.1 MB** and *are* the decoded form:
 
@@ -27,29 +27,29 @@ No JSON parse, no derived cache, and the large text stays on disk until somethin
 - Records are not naturally aligned. Read integers byte by byte, or use unaligned loads.
 - All three packs share the same container; only the eager section differs.
 
-## Header — 48 bytes at offset 0
+## Header: 48 bytes at offset 0
 
 | Offset | Type | Field |
 |---:|---|---|
-| 0 | `u32` | magic — `0x4B505251`, `"QRPK"` |
-| 4 | `u16` | format version — currently **1** |
+| 0 | `u32` | magic, `0x4B505251`, `"QRPK"` |
+| 4 | `u16` | format version, currently **1** |
 | 6 | `u8` | eager codec |
 | 7 | `u8` | block codec |
 | 8 | `u16` | block count |
 | 10 | `u16` | reserved, 0 |
-| 12 | `u32` | record count — surahs (114) / readings (7) / infos (114) |
-| 16 | `u32` | unit count — ayahs (6236) / total ayah rows / total sources |
+| 12 | `u32` | record count, surahs (114) / readings (7) / infos (114) |
+| 16 | `u32` | unit count, ayahs (6236) / total ayah rows / total sources |
 | 20 | `u32` | eager section offset |
 | 24 | `u32` | eager compressed length |
 | 28 | `u32` | eager raw length |
-| 32 | `u64` | source fingerprint — FNV-1a over the JSON this was built from |
+| 32 | `u64` | source fingerprint, FNV-1a over the JSON this was built from |
 | 40 | `u64` | reserved, 0 |
 
 **Codec values:** `1` = LZFSE, `2` = LZMA. Current builds use LZMA for both sections; Apple's LZMA output reads as standard XZ.
 
-Reject the file if the magic or version does not match. Bound any allocation by what the buffer could actually hold — a truncated file otherwise hands you a count read out of garbage.
+Reject the file if the magic or version does not match. Bound any allocation by what the buffer could actually hold: a truncated file otherwise hands you a count read out of garbage.
 
-## Block table — 16 bytes per block, starting at offset 48
+## Block table: 16 bytes per block, starting at offset 48
 
 | Offset | Type | Field |
 |---:|---|---|
@@ -60,7 +60,7 @@ Reject the file if the magic or version does not match. Bound any allocation by 
 
 ## `quran.qpk`
 
-The eager section holds **everything except ayah text** — about 300 KB — which is what lets any surah open with none of its text loaded.
+The eager section holds **everything except ayah text** (about 300 KB), which is what lets any surah open with none of its text loaded.
 
 ```
 u32   surah count
@@ -111,7 +111,7 @@ u32   reading count
     u16     block index         one block per reading
 ```
 
-Which surahs a reading covers, and how many ayahs each has, are **resident** — so `existsInQiraah` and `numberOfAyahs(for:)` are answered with no text touched at all. Most users never open a qiraah, and this is why that costs nothing.
+Which surahs a reading covers, and how many ayahs each has, are **resident**, so `existsInQiraah` and `numberOfAyahs(for:)` are answered with no text touched at all. Most users never open a qiraah, and this is why that costs nothing.
 
 **Blocks** hold, per surah in the order the eager section lists them, that surah's ayahs as `u32 ayahNumber` followed by a `String` of text. To reach one surah, skip the preceding surahs using their eager ayah counts.
 
@@ -127,7 +127,7 @@ u32   entry count
 
 Source names are resident, so a picker ("Maududi / Ibn Ashur") can be built without touching any prose.
 
-**One block per surah** — 114 blocks. "About this surah" is opened for exactly one surah at a time and the prose is large, so a shared block would decompress 113 surahs nobody asked for. That is why this pack's ratio (2.68x) is lower than the others: it trades compression for genuine laziness, deliberately.
+**One block per surah**: 114 blocks. "About this surah" is opened for exactly one surah at a time and the prose is large, so a shared block would decompress 113 surahs nobody asked for. That is why this pack's ratio (2.68x) is lower than the others: it trades compression for genuine laziness, deliberately.
 
 **Blocks** hold the `contents` string of each source, in the same order as the names.
 
@@ -137,11 +137,11 @@ Source names are resident, so a picker ("Maududi / Ibn Ashur") can be built with
 2. Read the block table.
 3. Decompress the eager section; parse per the layouts above.
 4. To read a value in a block: decompress that block, split into strings, index by slot.
-5. Cache decompressed blocks with a byte budget, and drop them under memory pressure — everything here is rebuildable from the bundle.
+5. Cache decompressed blocks with a byte budget, and drop them under memory pressure, everything here is rebuildable from the bundle.
 
 ## Reference implementations
 
-- **Swift** — `Al-Islam-iOS/iPhone/Quran/QuranPack.swift`. Compiles standalone; `QuranPackContainer` is the shared plumbing and `QuranPack` / `QiraatPack` / `SurahInfoPack` are the typed readers.
+- **Swift**: `Al-Islam-iOS/iPhone/Quran/QuranPack.swift`. Compiles standalone; `QuranPackContainer` is the shared plumbing and `QuranPack` / `QiraatPack` / `SurahInfoPack` are the typed readers.
 - Verified with 135,289 assertions against the source JSON, 0 failures.
 
 ## Manifest

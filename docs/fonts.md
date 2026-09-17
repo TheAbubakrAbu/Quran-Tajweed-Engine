@@ -10,20 +10,20 @@ The engine bundles three Quran display fonts in [`data/fonts/`](../data/fonts) s
 
 ## Which font should I use?
 
-### Uthmani — the default, and best for tajweed
+### Uthmani, the default, and best for tajweed
 `Uthmani.ttf` (KFGQPC Hafs Uthmanic Script) has **crisp, well-separated letters and marks**, which makes per-letter tajweed coloring clean: each colored span lands on exactly the glyph it should. Use it for the bundled Hafs text and anywhere you apply the [tajweed engine](02-tajweed.md). The pre-computed tajweed corpus and its UTF-16 offsets are calibrated against this text.
 
-### Qiraat — for the non-Hafs readings
+### Qiraat, for the non-Hafs readings
 The standard `Uthmani.ttf` doesn't contain every glyph/mark used by the other qiraat. `Qiraat.ttf` (KFGQPC Qunbul Uthmanic Script) is an Uthmani-style font that **does** support those characters, so it can display the readings in [`data/qiraat/`](../data/qiraat) (Warsh, Qaloon, Duri, Susi, al-Bazzi, Qunbul, Shubah) correctly.
 
 > **Trade-off:** because Qiraat.ttf packs more marks per glyph, its diacritics tend to **blend/overlap**, which makes per-letter tajweed coloring messier than with Uthmani.ttf. Rule of thumb: **Uthmani for Hafs + tajweed colors; Qiraat when you need to show another riwayah.**
 
-### Indopak — the South-Asian style
+### Indopak, the South-Asian style
 `Indopak.ttf` (Al Mushaf / Nastaliq) is the writing style familiar across the Indian subcontinent. It uses different orthographic conventions, and the bundled tajweed offsets are computed against the Uthmani text, so treat Indopak as a reading font rather than a tajweed-coloring font.
 
 ## How to register and use a font
 
-The key is the **PostScript name** — that's what you pass to your text API after loading the TTF.
+The key is the **PostScript name**: that's what you pass to your text API after loading the TTF.
 
 ### Web / CSS
 ```css
@@ -66,7 +66,7 @@ For the qiraat readings, render with **Qiraat.ttf** and color more coarsely (wor
 
 These fonts are the work of their authors and are included for convenience under the terms by which they were published for Quranic use:
 
-- **Uthmani & Qiraat** — King Fahd Glorious Quran Printing Complex (KFGQPC). Source: [qul.tarteel.ai/resources/font/245](https://qul.tarteel.ai/resources/font/245), [quran-data-kfgqpc](https://github.com/thetruetruth/quran-data-kfgqpc).
-- **Indopak (Al Mushaf)** — Ayman Siddiqui and R. Siddiqua. Source: [qul.tarteel.ai/resources/font/242](https://qul.tarteel.ai/resources/font/242).
+- **Uthmani & Qiraat**: King Fahd Glorious Quran Printing Complex (KFGQPC). Source: [qul.tarteel.ai/resources/font/245](https://qul.tarteel.ai/resources/font/245), [quran-data-kfgqpc](https://github.com/thetruetruth/quran-data-kfgqpc).
+- **Indopak (Al Mushaf)**: Ayman Siddiqui and R. Siddiqua. Source: [qul.tarteel.ai/resources/font/242](https://qul.tarteel.ai/resources/font/242).
 
 See [CREDITS.md](../CREDITS.md). If you redistribute the fonts, follow the original publishers' terms.

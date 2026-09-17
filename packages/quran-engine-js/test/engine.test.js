@@ -162,7 +162,7 @@ test("search: boolean AND/OR/NOT", () => {
 });
 
 test("search: regular search is pure substring (no phrase boundaries)", () => {
-  // A mid-word substring must still match — regular search ignores word boundaries.
+  // A mid-word substring must still match, regular search ignores word boundaries.
   const r = engine.search.searchVerses("orld"); // inside "world(s)"
   assert.ok(r.some((e) => e.id === "1:2"));
 });

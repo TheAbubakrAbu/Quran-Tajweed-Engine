@@ -21,7 +21,7 @@ import org.junit.jupiter.api.TestInstance
 import java.io.File
 
 /**
- * Conformance test — runs the language-agnostic vectors in `/conformance/vectors.json` against the
+ * Conformance test, runs the language-agnostic vectors in `/conformance/vectors.json` against the
  * engine. These vectors are the SINGLE SOURCE OF BEHAVIORAL TRUTH: a behavior is specified ONCE in
  * that JSON, and every language port runs the same file (see docs/PORTING.md → "Conformance
  * vectors"). The reference consumer is `packages/quran-engine-js/test/conformance.test.js`; this
@@ -269,7 +269,7 @@ class ConformanceTest {
             assertNotNull(got, "muqattaat $surah:$ayah present")
             assertEquals(str(p, "transliteration"), got!!.transliteration, "muqattaat $surah:$ayah transliteration")
             if (bool(p, "spelledContainsMaddah")) {
-                // U+0653 ARABIC MADDAH ABOVE — the madd-lāzim mark the tajweed pass colours.
+                // U+0653 ARABIC MADDAH ABOVE, the madd-lāzim mark the tajweed pass colours.
                 assertTrue(
                     got.spelledOutArabic.contains("ٓ"),
                     "muqattaat $surah:$ayah keeps madd-lāzim maddah",

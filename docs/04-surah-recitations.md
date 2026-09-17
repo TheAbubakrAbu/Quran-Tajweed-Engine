@@ -46,6 +46,6 @@ Default **Hafs an Asim**, plus **Warsh**, **Qaloon**, **ad-Duri**, **as-Susi**, 
 ## Caveats
 
 - A few rows historically embed a full per-file URL in `surahLink` (ending in `.mp3`). Normalize any reciter table you author so `surahLink` is always a directory ending in `/`; `withSurahFeed()` filters out the malformed `.mp3`-ending entries.
-- All audio is hosted on `mp3quran.net` CDNs. The engine only builds URLs — playback, prefetch, and gapless hand-off are the host app's concern (see doc 08 for caching).
+- All audio is hosted on `mp3quran.net` CDNs. The engine only builds URLs, playback, prefetch, and gapless hand-off are the host app's concern (see doc 08 for caching).
 
 Reference: [`src/audio.js`](../packages/quran-engine-js/src/audio.js).

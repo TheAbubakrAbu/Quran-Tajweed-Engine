@@ -3,10 +3,10 @@
  * SINGLE SOURCE OF TRUTH → CODE GENERATOR for the tajweed rule catalogue.
  *
  * Reads data/tajweed-rules.json (the master) and regenerates, in every language port, a
- * `tajweed-rules.generated.*` file containing the rule colors, titles, order, and letter sets —
+ * `tajweed-rules.generated.*` file containing the rule colors, titles, order, and letter sets, 
  * plus docs/tajweed-rules-reference.md.
  *
- * Workflow: edit data/tajweed-rules.json, run `node scripts/generate-tajweed.mjs`, done — every
+ * Workflow: edit data/tajweed-rules.json, run `node scripts/generate-tajweed.mjs`, done, every
  * language and the reference doc update together. No hand-editing of the generated files.
  */
 import { readFile, writeFile, mkdir } from "node:fs/promises";
@@ -241,7 +241,7 @@ const sections = master.sections ?? [];
 let md = `# Tajweed rule reference (generated)
 
 > Generated from [\`data/tajweed-rules.json\`](../data/tajweed-rules.json) by
-> \`scripts/generate-tajweed.mjs\`. **Do not edit by hand** — edit the master and regenerate.
+> \`scripts/generate-tajweed.mjs\`. **Do not edit by hand**: edit the master and regenerate.
 > For plain-English explanations of each rule, see [tajweed-rules-explained.md](tajweed-rules-explained.md).
 
 ${cats.length} rule categories across ${sections.length} sections.
@@ -252,7 +252,7 @@ for (const sec of sections) {
   md += `## ${sec.title}\n\n`;
   md += `| Rule | Color | Counts | Trigger letters | Meaning |\n|---|---|---|---|---|\n`;
   for (const c of inSec) {
-    md += `| **${c.englishTitle}** (${c.transliteration}) — \`${c.id}\` | \`${c.colorHex}\` | ${c.countLabel ?? "—"} | ${c.applicableLetters ? c.applicableLetters.replace(/\|/g, "\\|") : "—"} | ${c.literalMeaning ?? ""} |\n`;
+    md += `| **${c.englishTitle}** (${c.transliteration}): \`${c.id}\` | \`${c.colorHex}\` | ${c.countLabel ?? ", "} | ${c.applicableLetters ? c.applicableLetters.replace(/\|/g, "\\|"): ", "} | ${c.literalMeaning ?? ""} |\n`;
   }
   md += `\n`;
 }

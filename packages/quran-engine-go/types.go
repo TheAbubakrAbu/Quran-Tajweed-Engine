@@ -42,7 +42,7 @@ type Surah struct {
 	Ayahs               []Ayah   `json:"ayahs"`
 }
 
-// MuqattaatPronunciation is one muqattaʿāt opening — the disconnected letters
+// MuqattaatPronunciation is one muqattaʿāt opening, the disconnected letters
 // (e.g. الٓمٓ) that open 29 surahs, recited letter by letter. It carries the bare
 // letters, a transliteration ("Alif Lām Mīm"), and the fully vocalized Arabic
 // spelling whose long vowels keep the madd-lāzim maddah (U+0653). From

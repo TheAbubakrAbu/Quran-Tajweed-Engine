@@ -10,14 +10,14 @@ import kotlin.math.sqrt
  * Measured, not assumed. Scoring an ayah by the cosine between a SENTENCE embedding of the query and
  * one of the ayah ranks this corpus close to randomly: translated scripture is dense, and one vector
  * for a whole verse washes out the single idea the query is asking about. Scoring word by word fixes
- * it — embed every word, and score a text as the MEAN over the query's words of the BEST matching
+ * it, embed every word, and score a text as the MEAN over the query's words of the BEST matching
  * word in the text. On real verses that separates related (0.42–0.70) from unrelated (0.27–0.41)
  * cleanly, and it degrades gracefully: a query word the model has never seen contributes nothing
  * instead of poisoning the vector.
  *
  * ## The embedder is yours
  *
- * This engine ships no model — word vectors are tens of megabytes and every platform already has one
+ * This engine ships no model, word vectors are tens of megabytes and every platform already has one
  * worth using (ML Kit on Android, a GloVe file on the JVM). Hand the constructor a function from a
  * lowercased word to its vector, or null when it has none. Vectors are cached per word, so a
  * repeated word costs one lookup for the whole corpus.
@@ -53,7 +53,7 @@ class Semantic(
 
     /**
      * The documents closest in meaning to [query], best first. [minScore] is a floor on "actually
-     * related" — 0.42 is a sensible start on English translations, but calibrate it against YOUR
+     * related": 0.42 is a sensible start on English translations, but calibrate it against YOUR
      * embedder.
      */
     fun search(query: String, limit: Int = 10, minScore: Float = 0f): List<Hit> {

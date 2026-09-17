@@ -394,7 +394,7 @@ class TajweedChapter {
 /// stopping, each lesson carrying its prose, its drills, and Quranic examples to
 /// hear the rule in.
 ///
-/// Content, not algorithm — but it belongs in the engine for the same reason the
+/// Content, not algorithm, but it belongs in the engine for the same reason the
 /// rule catalogue does: every app that teaches tajweed otherwise rewrites the
 /// same curriculum, and a lesson that cites `2:255` should cite the same ayah
 /// everywhere.

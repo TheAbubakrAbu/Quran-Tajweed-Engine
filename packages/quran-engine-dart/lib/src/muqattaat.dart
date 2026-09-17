@@ -1,4 +1,4 @@
-/// Muqaṭṭaʿāt — the disconnected opening letters of 29 surahs (e.g. الٓمٓ).
+/// Muqaṭṭaʿāt, the disconnected opening letters of 29 surahs (e.g. الٓمٓ).
 ///
 /// The mushaf prints them joined with maddah marks but they are recited letter
 /// by letter ("Alif Lām Mīm"), so this exposes, per opening ayah, the individual

@@ -1,10 +1,10 @@
 # quran-engine (Python)
 
-Python port of the [Quran Tajweed Engine](../../README.md). Pure standard library — no dependencies. Reads the canonical JSON in [`../../data`](../../data) and follows the shared [porting contract](../../docs/PORTING.md).
+Python port of the [Quran Tajweed Engine](../../README.md). Pure standard library: no dependencies. Reads the canonical JSON in [`../../data`](../../data) and follows the shared [porting contract](../../docs/PORTING.md).
 
 ## Install / use
 
-No build needed to use it from the repo — the loader finds `/data` automatically:
+No build needed to use it from the repo, the loader finds `/data` automatically:
 
 ```python
 from quran_engine import Engine
@@ -44,7 +44,7 @@ sort_surahs(engine.quran.all(), "ayahs", "descending")[0].id   # 2
 
 ## Modules
 
-`quran` · `juz_page` · `tajweed` · `audio` · `search` · `sorting` · `cache` · `text` — one per feature, mirroring the JS package and the `docs/` specs.
+`quran` · `juz_page` · `tajweed` · `audio` · `search` · `sorting` · `cache` · `text`: one per feature, mirroring the JS package and the `docs/` specs.
 
 ## Tajweed strategy
 
@@ -58,4 +58,4 @@ python tests/test_engine.py        # or: python -m pytest
 
 ## License
 
-MIT — see [../../LICENSE](../../LICENSE) and [../../CREDITS.md](../../CREDITS.md).
+MIT, see [../../LICENSE](../../LICENSE) and [../../CREDITS.md](../../CREDITS.md).

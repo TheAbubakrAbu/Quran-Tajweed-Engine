@@ -7,7 +7,7 @@ package com.quranengine
  * pure substring match of the whole cleaned query against the relevant blob. A small boolean grammar
  * (`& | ! # ^ % $ =`) provides AND/OR/NOT plus whole-word / starts-with / ends-with / exact /
  * tashkeel-sensitive operators. Any query containing a Unicode decimal digit returns no verse results
- * (numeric/refs go via surah search) — checked BEFORE the boolean branch.
+ * (numeric/refs go via surah search), checked BEFORE the boolean branch.
  */
 class Search(
     private val quran: Quran,
@@ -71,7 +71,7 @@ class Search(
 
     /**
      * Search verse text. Returns matches in mushaf order. Verse search rejects any query containing a
-     * digit (numeric/refs go via surah search) — checked BEFORE the boolean branch. The regular path
+     * digit (numeric/refs go via surah search), checked BEFORE the boolean branch. The regular path
      * is a pure substring match; the boolean grammar handles whole-word / phrase / exact matching.
      */
     fun searchVerses(
@@ -97,7 +97,7 @@ class Search(
             ""
         }
 
-        // Pure substring search in mushaf order — word/sentence boundaries DON'T matter (a query
+        // Pure substring search in mushaf order, word/sentence boundaries DON'T matter (a query
         // matches anywhere it appears). Whole-word/phrase matching lives in the boolean operators.
         fun matches(e: VerseIndexEntry): Boolean {
             return if (useArabic) {
@@ -116,7 +116,7 @@ class Search(
     private fun booleanSearch(query: String, offset: Int, limit: Int?): List<VerseIndexEntry> {
         val useArabic = Text.containsArabicLetters(query)
         val normalized = query.replace("&&", "&").replace("||", "|")
-        // Drop any term whose cleaned value is empty — parseTerm-equivalent returns nil in that case.
+        // Drop any term whose cleaned value is empty, parseTerm-equivalent returns nil in that case.
         val orGroups = normalized.split("|")
             .map { group -> group.split("&").map { parseTerm(it) }.filter { it.value.isNotEmpty() } }
             .filter { it.isNotEmpty() }

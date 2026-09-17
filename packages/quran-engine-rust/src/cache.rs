@@ -1,6 +1,6 @@
 //! Caching path helpers. Mirrors the path-builder portion of `src/cache.js`.
 //!
-//! The engine stays storage-agnostic — it only produces the canonical cache paths/keys.
+//! The engine stays storage-agnostic, it only produces the canonical cache paths/keys.
 //! Layout: `<root>/<sanitize(reciter.id)>/<zeroPad3(surah)>.mp3`.
 
 use crate::util::zero_pad3;

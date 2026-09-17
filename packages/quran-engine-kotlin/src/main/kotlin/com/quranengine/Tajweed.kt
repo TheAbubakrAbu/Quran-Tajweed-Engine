@@ -6,7 +6,7 @@ package com.quranengine
  * `tajweed-rules.json`. No detection logic, so it is small and exactly consistent with the reference.
  *
  * Annotation `start`/`end` are UTF-16 code-unit offsets. Kotlin/JVM `String` is UTF-16 internally, so
- * `text.substring(start, end)` slices on the same units the reference engine uses — no conversion needed.
+ * `text.substring(start, end)` slices on the same units the reference engine uses, no conversion needed.
  */
 class Tajweed(
     private val annotationsByKey: Map<Pair<Int, Int>, List<TajweedAnnotation>>,

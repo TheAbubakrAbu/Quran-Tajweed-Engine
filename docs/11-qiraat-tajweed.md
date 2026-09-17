@@ -1,14 +1,14 @@
 # 11 · Riwayah tajweed
 
-Where a reading differs from Ḥafṣ, and why. Seven packs — one per verified non-Ḥafṣ riwayah — carrying each printed muṣḥaf's own coloured marks, its own legend, and a shared catalogue that explains what each rule *means*.
+Where a reading differs from Ḥafṣ, and why. Seven packs (one per verified non-Ḥafṣ riwayah), carrying each printed muṣḥaf's own coloured marks, its own legend, and a shared catalogue that explains what each rule *means*.
 
-> **Key facts:** this is a **different layer** from [02 · Tajweed](02-tajweed.md). Extents are base-**letter** indices, not character offsets. The meaning of a colour is **per edition** — always read `legend(riwayah)`.
+> **Key facts:** this is a **different layer** from [02 · Tajweed](02-tajweed.md). Extents are base-**letter** indices, not character offsets. The meaning of a colour is **per edition**, always read `legend(riwayah)`.
 
 ## Why it cannot be detected
 
 The tajweed detector in [02](02-tajweed.md) reads the text and works out the rules: a nūn sākin before a bā is iqlāb, wherever it appears, in any reading. That is why it can ship as an algorithm.
 
-Riwayah tajweed is the opposite kind of fact. That Warsh reads a particular alif with *taqlīl*, that al-Bazzī doubles the tāʾ of a particular word onto the one before it, that Ḥafṣ and Qālūn part company at a specific letter — none of that is derivable from the text, because it **is** the text's difference. It comes from each printed muṣḥaf: the imālah dot (U+065C), the taqlīl ring (U+06EA), the ṣilah wāw (U+06E5), the idghām bare-letter-plus-shadda orthography, and the colour marks the edition prints, all extracted once at build time and cross-checked against the printed originals.
+Riwayah tajweed is the opposite kind of fact. That Warsh reads a particular alif with *taqlīl*, that al-Bazzī doubles the tāʾ of a particular word onto the one before it, that Ḥafṣ and Qālūn part company at a specific letter: none of that is derivable from the text, because it **is** the text's difference. It comes from each printed muṣḥaf: the imālah dot (U+065C), the taqlīl ring (U+06EA), the ṣilah wāw (U+06E5), the idghām bare-letter-plus-shadda orthography, and the colour marks the edition prints, all extracted once at build time and cross-checked against the printed originals.
 
 So the engine ships it as **data**, not as a detector, and the data is per riwayah.
 
@@ -22,9 +22,9 @@ engine.qiraatTajweed.legend("warsh");
 //    english: "Letter differing from Ḥafṣ", short: "…", long: "…" }, …]
 ```
 
-The `rule` **key** is stable across riwayat — `idgham` is `idgham` everywhere — which is why `describe(rule)` can explain it once for all seven. The `code` is the edition's own single-letter tag and is only meaningful inside that pack.
+The `rule` **key** is stable across riwayat (`idgham` is `idgham` everywhere), which is why `describe(rule)` can explain it once for all seven. The `code` is the edition's own single-letter tag and is only meaningful inside that pack.
 
-**2. Extents are letters, not characters.** A rule colours base letters in reading order, `firstLetter`…`lastLetter` inclusive, with diacritics not counted — or the whole word when `wholeWord` is true (`firstLetter` is `-1`). Map them onto your own rendering:
+**2. Extents are letters, not characters.** A rule colours base letters in reading order, `firstLetter`…`lastLetter` inclusive, with diacritics not counted, or the whole word when `wholeWord` is true (`firstLetter` is `-1`). Map them onto your own rendering:
 
 ```js
 engine.qiraatTajweed.wordRules(2, 3, "warsh");
@@ -81,7 +81,7 @@ data/tajweed-qiraat/
 
 ## Why only seven
 
-The twelve riwayat whose text this engine does not publish have no pack here either — their rules index into that text by word position, so the offsets would point at nothing. See [10 · The printed muṣḥaf](10-mushaf.md#the-twelve-without-text). Ḥafṣ has no pack because "differs from Ḥafṣ" is not a thing Ḥafṣ does; its tajweed is the detector's job.
+The twelve riwayat whose text this engine does not publish have no pack here either; their rules index into that text by word position, so the offsets would point at nothing. See [10 · The printed muṣḥaf](10-mushaf.md#the-twelve-without-text). Ḥafṣ has no pack because "differs from Ḥafṣ" is not a thing Ḥafṣ does; its tajweed is the detector's job.
 
 ## API
 
