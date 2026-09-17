@@ -15,9 +15,19 @@
  * @property {string} titleAr
  * @property {string} summary
  * @property {string[]} body       paragraphs
- * @property {{caption:string, text:string}[]} [drills]  practice fragments
- * @property {{surahId:number, ayahNumber:number, focus:string}[]} examples  ayahs to hear it in
- * @property {{fragments:{caption:string,text:string}[], countEn?:string, countAr?:string}} [mushafCard]
+ * @property {{caption:string, text:string, ayah?:[number,number,number,number]}[]} [drills]
+ *           practice fragments; the Arabic is `text` when a tutor wrote it (invented drill
+ *           syllables, single letters, the isti'adhah) and `ayah` when it IS Quran, which is
+ *           `[surah, ayah, first, last]`, a 0-based inclusive token range into the ayah's raw
+ *           text, and then `text` is empty (version 4). Cut the words out of `engine.quran`
+ * @property {{surahId:number, ayahNumber:number, focus:string, wordSpan?:[number,number]}[]} examples
+ *           ayahs to hear it in; `wordSpan` is the 0-based inclusive token range of the words to
+ *           listen at, into the ayah's raw text (read them out of `engine.quran`: the data carries
+ *           no copy of the words), absent when the lesson names the whole ayah
+ * @property {{fragments:{caption:string,text:string,ayah?:number[]}[], trigger?:string,
+ *             action?:string, hold?:string, mnemonic?:{arabic:string,gloss:string},
+ *             countEn?:string, countAr?:string}} [ruleCard]
+ *           the card stating the rule; its fragments reference the Quran the same way drills do
  * @property {string} [color]      the tajweed colour this rule is painted in, where it has one
  */
 

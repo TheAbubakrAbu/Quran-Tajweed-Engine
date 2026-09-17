@@ -1,6 +1,8 @@
 package com.quranengine
 
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -156,8 +158,29 @@ class ParityTest {
         val found = matches.firstOrNull { it.surah == 3 && it.ayah == 2 }
         assertNotNull(found, "3:2 is a match")
         assertTrue(found!!.verified)
+        // Version 2 carries no phrase text: the shared wording is a span into 3:2's own words.
+        assertEquals(listOf(0..6), found.spans)
+        assertTrue(found.labels.isEmpty())
+        assertNull(found.score)
         assertTrue(engine.similarAyahs.has(2, 255))
         assertTrue(engine.similarAyahs.count() > 5000)
+    }
+
+    @Test
+    fun `similar ayahs reads version 2 only`() {
+        val json = Json { ignoreUnknownKeys = true }
+        val v2 = SimilarAyahs(
+            json.decodeFromString<SimilarAyahsFile>("""{"v":2,"ayahs":{"2:255":[[3,2,1,[[0,6]],[],null]]}}""")
+        )
+        assertEquals(1, v2.count())
+        assertEquals(listOf(0..6), v2.matches(2, 255).single().spans)
+        // A version-1 file (rows keyed at the top level, the phrase as text) is no data, as in JS.
+        val v1 = SimilarAyahs(
+            json.decodeFromString<SimilarAyahsFile>("""{"2:255":[[3,2,"phrase",1]]}""")
+        )
+        assertEquals(0, v1.count())
+        assertFalse(v1.has(2, 255))
+        assertTrue(v1.matches(2, 255).isEmpty())
     }
 
     @Test
@@ -175,6 +198,56 @@ class ParityTest {
         assertNull(engine.tajweedLessons.previous(lessons[0].id))
         assertEquals(lessons[1].id, engine.tajweedLessons.next(lessons[0].id)?.id)
         assertNotNull(engine.tajweedLessons.chapterOf(lessons[0].id))
+    }
+
+    @Test
+    fun `lesson examples point at their words by span`() {
+        val example = engine.tajweedLessons.allLessons()
+            .flatMap { it.examples }
+            .first { it.wordSpan != null }
+        assertEquals(112, example.surahId)
+        assertEquals(1, example.ayahNumber)
+        assertEquals(1..3, example.wordSpan)
+        // The span indexes the ayah's raw text, so it must fit inside its words.
+        val words = engine.quran.ayah(112, 1)!!.textArabic.trim().split(Regex("(?U)\\s+"))
+        assertTrue(example.wordSpan!!.last < words.size, "span ${example.wordSpan} within ${words.size} words")
+    }
+
+    @Test
+    fun `lesson Quran references resolve to the engine's own text`() {
+        // Version 4: a drill or rule-card fragment whose Arabic IS Quran carries an `ayah`
+        // reference and no text at all, so a port that ignores the field shows an empty row
+        // rather than a verse. This reads one back out of the Quran to prove the whole path.
+        val lessons = engine.tajweedLessons.allLessons()
+        val drill = lessons.flatMap { it.drills }.first { it.ayah != null }
+        val reference = drill.ayah!!
+        assertEquals(110, reference.surahId)
+        assertEquals(1, reference.ayahNumber)
+        assertEquals(0..4, reference.span)
+        assertTrue(drill.text.isEmpty(), "a referenced drill carries no copy of the words")
+
+        // The span names the whole of an-Nasr 1, so the words it cuts are the ayah itself.
+        // Compared against the engine's own text rather than a pasted literal: a copy here would
+        // have to be kept in the file's exact normalization, the drift this version removed.
+        val words = engine.quran.ayah(110, 1)!!.textArabic.trim().split(Regex("(?U)\\s+"))
+        assertEquals(5, words.size)
+        assertEquals(words.joinToString(" "), words.slice(reference.span).joinToString(" "))
+
+        // Every reference across drills and rule cards lands inside its ayah.
+        var referenced = 0
+        for (lesson in lessons) {
+            for (row in lesson.drills + (lesson.ruleCard?.fragments ?: emptyList())) {
+                val span = row.ayah ?: continue
+                referenced += 1
+                val tokens = engine.quran.ayah(span.surahId, span.ayahNumber)!!
+                    .textArabic.trim().split(Regex("(?U)\\s+"))
+                assertTrue(span.span.last < tokens.size, "$span within ${tokens.size} words")
+            }
+        }
+        assertEquals(28, referenced, "7 drills and 21 rule-card fragments reference the Quran")
+
+        // The card itself is `ruleCard`; it was declared as `mushafCard` and decoded to nothing.
+        assertEquals(32, lessons.count { it.ruleCard != null })
     }
 
     // ---- meaning search ---------------------------------------------------------------------

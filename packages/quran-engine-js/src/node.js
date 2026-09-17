@@ -33,7 +33,7 @@ async function readJson(rel) {
  * @param {boolean} [opts.loadMushaf=false]  also load the mushaf index, page and line tables (~2 MB)
  * @param {boolean} [opts.loadQiraatTajweed=false]  also load the 7 riwayah tajweed packs (~0.9 MB)
  * @param {boolean} [opts.loadWordByWord=false]  also load word-by-word.json (~1.8 MB)
- * @param {boolean} [opts.loadSimilarAyahs=false]  also load similar-ayahs.json (~3.5 MB)
+ * @param {boolean} [opts.loadSimilarAyahs=false]  also load similar-ayahs.json (~2.9 MB)
  * @param {boolean} [opts.loadMorphology=false]  also load morphology.json (~776 KB); needed by
  *        `engine.morphology`, which knows nothing without it
  * @param {boolean} [opts.loadMutashabihat=false]  also load mutashabihat.json (~178 KB)
@@ -63,8 +63,12 @@ export async function loadFromDisk(opts = {}) {
   // consumer should not have to opt into.
   // Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB) join them on the
   // same reasoning: small, and each answers a question a consumer should not have to opt into.
+  // The Names in depth (47 KB) and the chains of transmission (20 KB) likewise.
+  // The miracles corpus (393 KB) joins them: bigger than those, but smaller than the tajweed
+  // course that has always loaded by default, and a consumer cross-linking an ayah to what has
+  // been written about it should not have to know a flag existed.
   const [themes, tajweedLessons, surahSections, arabicAlphabet,
-         quranMetadata, ayahThemes, wordOfDay] = await Promise.all([
+         quranMetadata, ayahThemes, wordOfDay, namesDepth, isnad, miracles] = await Promise.all([
     read("themes.json"),
     read("tajweed-lessons.json"),
     read("surah-sections.json"),
@@ -72,12 +76,15 @@ export async function loadFromDisk(opts = {}) {
     read("quran-metadata.json"),
     read("ayah-themes.json"),
     read("word-of-day.json"),
+    read("names-depth.json"),
+    read("isnad.json"),
+    read("miracles.json"),
   ]);
 
   /** @type {any} */
   const data = { quran, juz, reciters, tajweedRules, surahInfo, namesOfAllah, muqattaat, qiraatCounts,
                  themes, tajweedLessons, surahSections, arabicAlphabet,
-                 quranMetadata, ayahThemes, wordOfDay };
+                 quranMetadata, ayahThemes, wordOfDay, namesDepth, isnad, miracles };
 
   if (opts.loadQiraat) {
     /** @type {Record<string, any>} */

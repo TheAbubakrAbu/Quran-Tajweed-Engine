@@ -34,6 +34,20 @@ juncture.segments;   // [{ ayah: "2:184", span: [16, 18] }]
 
 Spans are **0-based inclusive token indices of the raw Ḥafṣ text**, and `span` is `null` where the builder could not place the word. A consumer shows the word untinted in that case; guessing a position would be worse than showing none.
 
+## Reading text · sukoon marks
+
+`text` on a reading and on a juncture follows the convention of `quran.json`, not the source's. Two codepoints read as a sukoon: **U+06E1** (the small head-of-khah the muṣḥaf prints) marks a consonant with no vowel; **U+0652** (ARABIC SUKUN) marks a letter that is written but not pronounced (the alif of كَانُواْ, the waw of أُوْلَٰٓئِكَ, the yaa of وَمَلَإِيْهِۦ); and a long vowel carries nothing. Quran.com's matrix mixed the first two by surah and typed a sukoon onto long vowels. Since 2026-09-16 the pack is built with each mark normalized by the letter it sits on, with the rule proven against the Ḥafṣ text (77,629 words unchanged and round-tripped), and every juncture headword that differed from its Ḥafṣ tokens only in those marks now matches them. So a byte comparison of a headword against `quran.json` is meaningful, which it was not before. Three readings keep a U+0652 on the alif of وَلَاْ, a typo the rule cannot tell from the real silent alif of سَلَٰسِلَاْ without knowing the word.
+
+## `category` · what kind of difference
+
+Each juncture carries the source's category code (`"A"`, `"B"`, `"AM"`, `"BM"`, or `""` for twenty junctures), which the source publishes without a legend. The matrix itself fixes the meaning: every **A** juncture's readings render differently in English (630 of 630), while **B** junctures render alike (864 of 900), so A marks a difference of *sense* and B a difference of form or pronunciation only. The **M** suffix marks a word the early codices (the Uthmanic masahif) themselves spell differently, which the commentary at those junctures says in so many words. Show it as a caption on the juncture, never as a verdict on a reading.
+
+```js
+engine.qiraatVariants.junctures(1, 4)[0].category;    // "A"  ·  مَالِكِ / مَلِكِ differ in sense
+engine.qiraatVariants.junctures(104, 3)[0].category;  // "B"  ·  يَحْسَبُ / يَحْسِبُ, one sense
+engine.qiraatVariants.junctures(18, 86)[0].category;  // "AM" ·  حَمِئَةٍ / حَامِيَةٍ, and the codices differ
+```
+
 ## `places` · where a riwayah differs at all
 
 The comparison answers "how does this riwayah read this ayah". This answers the question before it, so a reader can step from one difference to the next instead of hunting:

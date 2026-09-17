@@ -39,6 +39,9 @@ import { QuranTopics, AyahThemes } from "./topics.js";
 import { QuranMetadata } from "./metadata.js";
 import { QiraatVariants } from "./qiraatVariants.js";
 import { WordOfDay } from "./wordOfDay.js";
+import { NamesDepth } from "./namesDepth.js";
+import { Isnad } from "./isnad.js";
+import { Miracles } from "./miracles.js";
 import { tajweedSpans, detectPaintOps, resolveSpans } from "./tajweed.js";
 
 export * from "./text.js";
@@ -67,6 +70,9 @@ export * from "./topics.js";
 export * from "./metadata.js";
 export * from "./qiraatVariants.js";
 export * from "./wordOfDay.js";
+export * from "./namesDepth.js";
+export * from "./isnad.js";
+export * from "./miracles.js";
 export * from "./cache.js";
 
 /**
@@ -85,7 +91,7 @@ export * from "./cache.js";
  * @param {Record<string, {short:string,long:string}>} [data.qiraatTajweedRules] data/tajweed-qiraat/rules.json
  * @param {Record<string, any>} [data.qiraatTajweed]                slug -> data/tajweed-qiraat/<slug>.json
  * @param {{english:Record<string,string[][]>, transliteration:Record<string,string[][]>}} [data.wordByWord] data/word-by-word.json
- * @param {Record<string, any>} [data.similarAyahs]                 data/similar-ayahs.json
+ * @param {{v:number, ayahs:Record<string, any>}} [data.similarAyahs]  data/similar-ayahs.json (version 2)
  * @param {{topics:any[]}} [data.themes]                            data/themes.json
  * @param {{chapters:any[]}} [data.tajweedLessons]                  data/tajweed-lessons.json
  * @param {Record<string, any>} [data.surahSections]                data/surah-sections.json
@@ -99,6 +105,9 @@ export * from "./cache.js";
  * @param {any} [data.qiraatPlaces]                                 data/qiraat-places.json
  * @param {any} [data.qiraatVariantAudio]                           data/qiraat-variant-audio.json
  * @param {{words:any[]}} [data.wordOfDay]                          data/word-of-day.json
+ * @param {any} [data.namesDepth]                                   data/names-depth.json
+ * @param {any} [data.isnad]                                        data/isnad.json
+ * @param {any} [data.miracles]                                     data/miracles.json
  * @param {{ riwayah?: string }} [opts]
  */
 export function createEngine(data, opts = {}) {
@@ -128,6 +137,9 @@ export function createEngine(data, opts = {}) {
     variants: data.qiraatVariants, places: data.qiraatPlaces, audio: data.qiraatVariantAudio,
   });
   const wordOfDay = new WordOfDay(data.wordOfDay ?? {});
+  const namesDepth = new NamesDepth(data.namesDepth ?? {});
+  const isnad = new Isnad(data.isnad ?? {});
+  const miracles = new Miracles(data.miracles ?? {});
   const tajweedRules = data.tajweedRules ?? null;
 
   return {
@@ -154,6 +166,9 @@ export function createEngine(data, opts = {}) {
     quranMetadata,
     qiraatVariants,
     wordOfDay,
+    namesDepth,
+    isnad,
+    miracles,
     tajweedRules,
     /**
      * Detect tajweed spans for any Arabic ayah text.

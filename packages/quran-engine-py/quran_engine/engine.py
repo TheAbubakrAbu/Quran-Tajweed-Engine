@@ -28,6 +28,9 @@ from .topics import QuranTopics, AyahThemes
 from .metadata import QuranMetadata
 from .qiraat_variants import QiraatVariants
 from .word_of_day import WordOfDay
+from .names_depth import NamesDepth
+from .isnad import Isnad
+from .miracles import Miracles
 
 _RIWAYAT = ["warsh", "qaloon", "duri", "susi", "buzzi", "qunbul", "shubah"]
 #: The eight riwayat whose text this engine publishes - the ones with line tables.
@@ -58,7 +61,10 @@ class Engine:
                  ayah_themes: Optional[AyahThemes] = None,
                  quran_metadata: Optional[QuranMetadata] = None,
                  qiraat_variants: Optional[QiraatVariants] = None,
-                 word_of_day: Optional[WordOfDay] = None):
+                 word_of_day: Optional[WordOfDay] = None,
+                 names_depth: Optional[NamesDepth] = None,
+                 isnad: Optional[Isnad] = None,
+                 miracles: Optional[Miracles] = None):
         self.quran = quran
         self.juz_page = juz_page
         self.reciters = reciters
@@ -78,6 +84,9 @@ class Engine:
         self.quran_metadata = quran_metadata or QuranMetadata()
         self.qiraat_variants = qiraat_variants or QiraatVariants()
         self.word_of_day = word_of_day or WordOfDay()
+        self.names_depth = names_depth or NamesDepth()
+        self.isnad = isnad or Isnad()
+        self.miracles = miracles or Miracles()
         self.tajweed_lessons = tajweed_lessons or TajweedLessons()
         self.surah_sections = surah_sections or SurahSections()
         self.alphabet = alphabet or ArabicAlphabet()
@@ -177,6 +186,12 @@ class Engine:
         quran_metadata = QuranMetadata(read("quran-metadata.json"))
         ayah_themes = AyahThemes(read("ayah-themes.json"))
         word_of_day = WordOfDay(read("word-of-day.json"))
+        names_depth = NamesDepth(read("names-depth.json"))
+        isnad = Isnad(read("isnad.json"))
+        # The miracles corpus (393 KB) joins them: bigger than those, but smaller than the tajweed
+        # course that has always loaded by default, and a consumer cross-linking an ayah to what
+        # has been written about it should not have to know a flag existed.
+        miracles = Miracles(read("miracles.json"))
 
         morphology = Morphology(read("morphology.json")) if load_morphology else None
         mutashabihat = Mutashabihat(read("mutashabihat.json")) if load_mutashabihat else None
@@ -212,4 +227,7 @@ class Engine:
             quran_metadata=quran_metadata,
             qiraat_variants=qiraat_variants,
             word_of_day=word_of_day,
+            names_depth=names_depth,
+            isnad=isnad,
+            miracles=miracles,
         )

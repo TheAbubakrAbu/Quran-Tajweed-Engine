@@ -56,6 +56,10 @@ public final class Engine {
     public let qiraatVariants: QiraatVariants
     /// The curated vocabulary; loaded by default.
     public let wordOfDay: WordOfDay
+    public let namesDepth: NamesDepth
+    public let isnad: Isnad
+    /// The scientific-miracles corpus; loaded by default.
+    public let miracles: Miracles
 
     public init(quran: Quran, juzPage: JuzPage, reciters: Reciters, tajweed: Tajweed, search: Search,
                 namesOfAllah: NamesOfAllah, muqattaat: Muqattaat,
@@ -70,7 +74,10 @@ public final class Engine {
                 ayahThemes: AyahThemes = AyahThemes(),
                 quranMetadata: QuranMetadata = QuranMetadata(),
                 qiraatVariants: QiraatVariants = QiraatVariants(),
-                wordOfDay: WordOfDay = WordOfDay()) {
+                wordOfDay: WordOfDay = WordOfDay(),
+                namesDepth: NamesDepth = NamesDepth(),
+                isnad: Isnad = Isnad(),
+                miracles: Miracles = Miracles()) {
         self.quran = quran
         self.juzPage = juzPage
         self.reciters = reciters
@@ -93,6 +100,9 @@ public final class Engine {
         self.quranMetadata = quranMetadata
         self.qiraatVariants = qiraatVariants
         self.wordOfDay = wordOfDay
+        self.namesDepth = namesDepth
+        self.isnad = isnad
+        self.miracles = miracles
         self.askAI = AskAI(quran: quran, search: search, themes: themes)
         self.qiraatComparison = QiraatComparison(quran: quran)
     }
@@ -108,7 +118,7 @@ public final class Engine {
     ///     themselves are never loaded by the engine - `mushaf.pdfPath(_:)` hands you the path.
     ///   - loadQiraatTajweed: the seven riwayah tajweed packs (~0.9 MB).
     ///   - loadWordByWord: the per-word gloss + transliteration pack (~1.8 MB).
-    ///   - loadSimilarAyahs: the mutashabihat corpus (~3.5 MB).
+    ///   - loadSimilarAyahs: the mutashabihat corpus (~2.9 MB).
     ///   - loadQiraat: the seven non-Hafs riwayat's own text (~11 MB) - what `qiraatComparison`
     ///     compares. NOT bundled in the package, so this needs a `dataDirectory`.
     ///   - loadMorphology: root and lemma of every word (~776 KB).
@@ -243,9 +253,9 @@ public final class Engine {
         }
 
         var similar = SimilarAyahs()
-        if loadSimilarAyahs,
-           let rows = decodeIfPresent([String: [[SimilarAyahs.Field]]].self, "similar-ayahs.json") {
-            similar = SimilarAyahs(rows)
+        if loadSimilarAyahs {
+            // The file is { v, ayahs }; SimilarAyahs keeps the rows only when v == 2.
+            similar = SimilarAyahs(decodeIfPresent(SimilarAyahsFile.self, "similar-ayahs.json"))
         }
 
         // Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB) load by
@@ -254,6 +264,13 @@ public final class Engine {
         let metadata = QuranMetadata(decodeIfPresent(QuranMetadataFile.self, "quran-metadata.json"))
         let ayahThemes = AyahThemes(decodeIfPresent([String: [ThemePassage]].self, "ayah-themes.json"))
         let wordOfDay = WordOfDay(decodeIfPresent(WordOfDayFile.self, "word-of-day.json"))
+        // The Names in depth (47 KB) and the chains (20 KB) load by default on the same footing.
+        let namesDepth = NamesDepth(decodeIfPresent(NamesDepthFile.self, "names-depth.json"))
+        let isnad = Isnad(decodeIfPresent(IsnadFile.self, "isnad.json"))
+        // The miracles corpus (393 KB) joins them: bigger than those, but smaller than the tajweed
+        // course that has always loaded by default, and a consumer cross-linking an ayah to what
+        // has been written about it should not have to know a flag existed.
+        let miracles = Miracles(decodeIfPresent(MiraclesFile.self, "miracles.json"))
 
         var morphology = Morphology()
         if loadMorphology, let file = decodeIfPresent(MorphologyFile.self, "morphology.json") {
@@ -283,7 +300,10 @@ public final class Engine {
                       morphology: morphology, mutashabihat: mutashabihat,
                       quranTopics: quranTopics, ayahThemes: ayahThemes,
                       quranMetadata: metadata, qiraatVariants: qiraatVariants,
-                      wordOfDay: wordOfDay)
+                      wordOfDay: wordOfDay,
+                      namesDepth: namesDepth,
+                      isnad: isnad,
+                      miracles: miracles)
     }
 
     /// Resolve the `/data` directory, trying several strategies.

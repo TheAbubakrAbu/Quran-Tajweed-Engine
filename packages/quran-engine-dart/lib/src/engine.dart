@@ -17,6 +17,8 @@ import 'corpora.dart';
 import 'ask_ai.dart';
 import 'sections.dart';
 import 'alphabet.dart';
+import 'batch6.dart';
+import 'miracles.dart';
 import 'qiraat_comparison.dart';
 import 'word_of_day.dart';
 import 'qiraat_variants.dart';
@@ -71,6 +73,11 @@ class Engine {
 
   /// The curated vocabulary; loaded by default.
   final WordOfDay wordOfDay;
+  final NamesDepth namesDepth;
+  final Isnad isnad;
+
+  /// The scientific-miracles corpus; loaded by default.
+  final Miracles miracles;
 
   /// The curated topics; loaded by default.
   final Themes themes;
@@ -108,6 +115,9 @@ class Engine {
     QuranMetadata? quranMetadata,
     QiraatVariants? qiraatVariants,
     WordOfDay? wordOfDay,
+    NamesDepth? namesDepth,
+    Isnad? isnad,
+    Miracles? miracles,
     Themes? themes,
     TajweedLessons? tajweedLessons,
     SurahSections? surahSections,
@@ -121,7 +131,7 @@ class Engine {
         mushaf = mushaf ?? Mushaf(),
         qiraatTajweed = qiraatTajweed ?? QiraatTajweed(),
         wordByWord = wordByWord ?? WordByWord(),
-        similarAyahs = similarAyahs ?? const SimilarAyahs(),
+        similarAyahs = similarAyahs ?? SimilarAyahs(),
         morphology = morphology ?? Morphology(),
         mutashabihat = mutashabihat ?? const Mutashabihat(),
         quranTopics = quranTopics ?? QuranTopics(),
@@ -129,6 +139,9 @@ class Engine {
         quranMetadata = quranMetadata ?? QuranMetadata(),
         qiraatVariants = qiraatVariants ?? const QiraatVariants(),
         wordOfDay = wordOfDay ?? WordOfDay(),
+        namesDepth = namesDepth ?? NamesDepth(),
+        isnad = isnad ?? Isnad(),
+        miracles = miracles ?? Miracles(),
         themes = themes ?? Themes(),
         tajweedLessons = tajweedLessons ?? TajweedLessons(),
         askAI = AskAI(
@@ -176,6 +189,9 @@ class Engine {
     Map<String, dynamic>? qiraatPlacesJson,
     Map<String, dynamic>? qiraatVariantAudioJson,
     Map<String, dynamic>? wordOfDayJson,
+    Map<String, dynamic>? namesDepthJson,
+    Map<String, dynamic>? isnadJson,
+    Map<String, dynamic>? miraclesJson,
     Map<String, dynamic>? surahSectionsJson,
     Map<String, dynamic>? arabicAlphabetJson,
     Map<String, Map<String, dynamic>> qiraatJson = const {},
@@ -204,7 +220,7 @@ class Engine {
         riwayat: qiraatTajweedPacksJson,
       ),
       wordByWord: WordByWord(pack: wordByWordJson, quran: quran),
-      similarAyahs: SimilarAyahs(similarAyahsJson ?? const {}),
+      similarAyahs: SimilarAyahs(similarAyahsJson),
       morphology: Morphology(morphologyJson ?? const {}),
       mutashabihat: Mutashabihat(mutashabihatJson ?? const {}),
       quranTopics: QuranTopics(quranTopicsJson),
@@ -216,6 +232,9 @@ class Engine {
         audio: qiraatVariantAudioJson ?? const {},
       ),
       wordOfDay: WordOfDay(wordOfDayJson),
+      namesDepth: NamesDepth(namesDepthJson),
+      isnad: Isnad(isnadJson),
+      miracles: Miracles(miraclesJson),
       surahSections: SurahSections(surahSectionsJson ?? const {}),
       alphabet: ArabicAlphabet(arabicAlphabetJson ?? const {}),
     );
@@ -343,6 +362,14 @@ class Engine {
     final quranMetadataJson = await readOptional('quran-metadata.json');
     final ayahThemesJson = await readOptional('ayah-themes.json');
     final wordOfDayJson = await readOptional('word-of-day.json');
+    // The Names in depth (47 KB) and the chains (20 KB) load by default too.
+    final namesDepthJson = await readOptional('names-depth.json');
+    final isnadJson = await readOptional('isnad.json');
+    // The miracles corpus (393 KB) joins them: bigger than those, but smaller
+    // than the tajweed course that has always loaded by default, and a consumer
+    // cross-linking an ayah to what has been written about it should not have to
+    // know a flag existed.
+    final miraclesJson = await readOptional('miracles.json');
 
     final morphologyJson = loadMorphology
         ? await read('morphology.json') as Map<String, dynamic>
@@ -392,6 +419,9 @@ class Engine {
       qiraatPlacesJson: qiraatPlacesJson,
       qiraatVariantAudioJson: qiraatVariantAudioJson,
       wordOfDayJson: wordOfDayJson,
+      namesDepthJson: namesDepthJson,
+      isnadJson: isnadJson,
+      miraclesJson: miraclesJson,
       surahSectionsJson: surahSectionsJson,
       arabicAlphabetJson: arabicAlphabetJson,
       qiraatJson: qiraatJson,

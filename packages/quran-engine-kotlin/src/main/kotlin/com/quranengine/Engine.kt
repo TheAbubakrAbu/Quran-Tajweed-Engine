@@ -57,6 +57,10 @@ class Engine internal constructor(
     val qiraatVariants: QiraatVariants = QiraatVariants(),
     /** The curated vocabulary; loaded by default. */
     val wordOfDay: WordOfDay = WordOfDay(),
+    val namesDepth: NamesDepth = NamesDepth(),
+    val isnad: Isnad = Isnad(),
+    /** The scientific-miracles corpus; loaded by default. */
+    val miracles: Miracles = Miracles(),
 ) {
     /** Needs `loadQiraat`; with no qiraah text it reports "hafs" alone and compares nothing. */
     val qiraatComparison: QiraatComparison by lazy { QiraatComparison(quran) }
@@ -186,9 +190,10 @@ class Engine internal constructor(
                     WordByWord(json.decodeFromString<WordByWordPack>(text("word-by-word.json")), quran)
                 } else WordByWord()
 
+            // The file is `{v, ayahs}`; SimilarAyahs keeps the rows only when v == 2.
             val similar =
                 if (loadSimilarAyahs) {
-                    SimilarAyahs(json.decodeFromString(text("similar-ayahs.json")))
+                    SimilarAyahs(json.decodeFromString<SimilarAyahsFile>(text("similar-ayahs.json")))
                 } else SimilarAyahs()
 
             // Metadata (8 KB), the passage themes (142 KB) and the word list (128 KB) load by
@@ -200,6 +205,14 @@ class Engine internal constructor(
             val ayahThemes = AyahThemes(
                 optional<Map<String, List<ThemePassage>>>(dir, "ayah-themes.json") ?: emptyMap()
             )
+            // The Names in depth (47 KB) and the chains (20 KB) load by default on the same footing.
+            val depthFile = optional<NamesDepthFile>(dir, "names-depth.json") ?: NamesDepthFile()
+            val namesDepth = NamesDepth(depthFile.names, depthFile.themes)
+            val isnad = Isnad(optional<IsnadFile>(dir, "isnad.json") ?: IsnadFile())
+            // The miracles corpus (393 KB) joins them: bigger than those, but smaller than the
+            // tajweed course that has always loaded by default, and a consumer cross-linking an
+            // ayah to what has been written about it should not have to know a flag existed.
+            val miracles = Miracles(optional<MiraclesFile>(dir, "miracles.json") ?: MiraclesFile())
             val wordOfDay = WordOfDay(
                 optional<WordOfDayFile>(dir, "word-of-day.json")?.words ?: emptyList()
             )
@@ -246,6 +259,9 @@ class Engine internal constructor(
                 quranMetadata = metadata,
                 qiraatVariants = qiraatVariants,
                 wordOfDay = wordOfDay,
+                namesDepth = namesDepth,
+                isnad = isnad,
+                miracles = miracles,
             )
         }
 

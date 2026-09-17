@@ -55,7 +55,7 @@ Quran Tajweed Engine/
 │   ├── mushaf/                 20 printed mushafs (604-page facsimiles) + per-riwayah page & line tables
 │   ├── tajweed-qiraat/         where each reading differs from Hafs, + the shared rule catalogue
 │   ├── word-by-word.json       77,629 words: English gloss + Latin transliteration, token-aligned
-│   ├── similar-ayahs.json      mutashabihat: 5,446 ayahs with their matches, pre-ranked
+│   ├── similar-ayahs.json      mutashabihat: 5,446 ayahs with their matches, pre-ranked; shared words as spans
 │   ├── themes.json             323 curated topics, each with its ayahs
 │   ├── tajweed-lessons.json    the 10-chapter tajweed course
 │   ├── morphology.json         root + lemma of all 77,629 words (Quranic Arabic Corpus via QUL)
@@ -149,8 +149,13 @@ Per-feature specifications, in priority order:
 19. **Topics, passages and divisions** — three ways of saying where you are → [docs/20](docs/20-topics-and-metadata.md)
 20. **Qiraat variants** — who reads what, and what it means → [docs/21](docs/21-qiraat-variants.md)
 21. **Word of the day** — curated vocabulary with every occurrence → [docs/22](docs/22-word-of-day.md)
+22. **The 99 Names in depth** — roots, themes, explanations and where each Name appears → [docs/23](docs/23-names-depth.md)
+23. **Chains of transmission** — the isnād of each of the Ten Readings → [docs/24](docs/24-isnad.md)
+24. **Scientific miracles**: 202 articles, each anchored to the ayahs it rests on → [docs/25](docs/25-miracles.md)
 
 **Plus:** bundled Quran [**fonts**](docs/fonts.md) (Uthmani / Qiraat / Indopak), the [**alphabet data file**](docs/arabic-alphabet.md) documented field by field, and a detailed [**tajweed rules explained**](docs/tajweed-rules-explained.md) guide ("what does *idgham* mean?").
+
+**[What's new](docs/whats-new.md)**, what each release added, newest first. The long version is [CHANGELOG.md](CHANGELOG.md).
 
 ## One source of truth → seven implementations
 

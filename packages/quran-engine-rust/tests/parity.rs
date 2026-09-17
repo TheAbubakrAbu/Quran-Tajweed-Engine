@@ -5,6 +5,7 @@
 //! `ParityTests.swift` case for case, so a divergence between the ports shows up as a failing test
 //! rather than as a surprise in an app.
 
+use quran_engine::corpora::SimilarAyahsFile;
 use quran_engine::{Engine, LoadOptions, PassageKind, Semantic, QUESTION_WORDS};
 
 fn engine() -> Engine {
@@ -161,8 +162,30 @@ fn similar_ayahs() {
     let matches = engine.similar_ayahs(2, 255);
     let found = matches.iter().find(|m| m.surah == 3 && m.ayah == 2).expect("3:2 is a match");
     assert!(found.verified);
+    // The shared wording is a span into 3:2's own text, not a copy of it.
+    assert_eq!(found.spans, vec![[0, 6]]);
+    assert!(found.labels.is_empty());
+    assert_eq!(found.score, None);
     assert!(engine.has_similar_ayahs(2, 255));
     assert!(engine.similar_ayah_count() > 5000);
+}
+
+#[test]
+fn similar_ayahs_reads_only_version_2() {
+    // A version-1 file (rows keyed at the top level, the phrase as text) loads as no data, as the
+    // JS port does, rather than putting the shared wording where a span is expected.
+    let v1: SimilarAyahsFile = serde_json::from_str(r#"{"2:255": [[3, 2, "phrase", 1]]}"#).unwrap();
+    assert!(v1.into_ayahs().is_empty());
+
+    let v2: SimilarAyahsFile =
+        serde_json::from_str(r#"{"v": 2, "ayahs": {"2:255": [[3, 2, 1, [[0, 6]], [], null]]}}"#)
+            .unwrap();
+    let rows = v2.into_ayahs();
+    let row = &rows["2:255"][0];
+    assert_eq!((row.surah, row.ayah, row.verified), (3, 2, true));
+    assert_eq!(row.spans, vec![[0, 6]]);
+    assert!(row.labels.is_empty());
+    assert_eq!(row.score, None);
 }
 
 #[test]
@@ -182,6 +205,57 @@ fn lessons_walk_in_course_order() {
     assert!(engine.previous_tajweed_lesson(&lessons[0].id).is_none());
     assert_eq!(engine.next_tajweed_lesson(&lessons[0].id).unwrap().id, lessons[1].id);
     assert!(engine.tajweed_chapter_of(&lessons[0].id).is_some());
+    // An example points at its words by span into the ayah's raw text (version 3): the first one
+    // in the course is 112:1, the words at tokens 1..=3.
+    let example = lessons
+        .iter()
+        .flat_map(|l| l.examples.iter())
+        .find(|e| e.word_span.is_some())
+        .expect("an example carries a word span");
+    assert_eq!((example.surah_id, example.ayah_number), (112, 1));
+    assert_eq!(example.word_span, Some([1, 3]));
+}
+
+#[test]
+fn lesson_quran_references_resolve_to_the_engines_own_text() {
+    // Version 4: a drill or rule-card fragment whose Arabic IS Quran carries an `ayah` reference
+    // and no text at all, so a port that ignores the field shows an empty row rather than a
+    // verse. This reads one back out of quran.json to prove the whole path.
+    let engine = engine();
+    let lessons = engine.tajweed_lessons();
+
+    let drill = lessons
+        .iter()
+        .flat_map(|l| l.drills.iter())
+        .find(|d| d.ayah.is_some())
+        .expect("a drill references the Quran");
+    let [surah, ayah, first, last] = drill.ayah.unwrap();
+    assert_eq!((surah, ayah, first, last), (110, 1, 0, 4));
+    assert!(drill.text.is_empty(), "a referenced drill carries no copy of the words");
+
+    // The span names the whole of an-Nasr 1, so the words it cuts are the ayah itself. Compared
+    // against the engine's own text rather than a pasted literal: a copy here would have to be
+    // kept in the file's exact normalization, which is the drift this version removed.
+    let text = engine.ayah(surah as u32, ayah as u32).expect("110:1 is in the Quran");
+    let words: Vec<&str> = text.text_arabic.split_whitespace().collect();
+    assert_eq!(words.len(), 5);
+    assert_eq!(words[first..=last].join(" "), words.join(" "));
+
+    // Every reference across drills and rule cards lands inside its ayah.
+    let mut referenced = 0;
+    for lesson in &lessons {
+        let fragments = lesson.rule_card.iter().flat_map(|c| c.fragments.iter());
+        for drill in lesson.drills.iter().chain(fragments) {
+            let Some([s, a, f, l]) = drill.ayah else { continue };
+            referenced += 1;
+            let ayah = engine.ayah(s as u32, a as u32).expect("a real ayah");
+            assert!(l < ayah.text_arabic.split_whitespace().count() && f <= l);
+        }
+    }
+    assert_eq!(referenced, 28, "7 drills and 21 rule-card fragments reference the Quran");
+
+    // The card itself is `ruleCard`; it was declared as `mushafCard` and so decoded to nothing.
+    assert_eq!(lessons.iter().filter(|l| l.rule_card.is_some()).count(), 32);
 }
 
 // ---- meaning search ---------------------------------------------------------------------

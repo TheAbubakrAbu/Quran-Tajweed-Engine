@@ -141,8 +141,67 @@ void main() {
       final found = matches.where((m) => m.surah == 3 && m.ayah == 2).toList();
       expect(found, isNotEmpty, reason: '3:2 is a match');
       expect(found.first.verified, isTrue);
+      // Version 2 carries no text: the shared wording is a span into the
+      // matched ayah.
+      expect(found.first.spans, [
+        [0, 6]
+      ]);
+      expect(found.first.labels, isEmpty);
+      expect(found.first.score, isNull);
       expect(engine.similarAyahs.has(2, 255), isTrue);
       expect(engine.similarAyahs.count(), greaterThan(5000));
+    });
+
+    test('similar ayahs reads only version 2', () {
+      // A version-1 file put the phrase text where a span now sits: read as
+      // no data, like the JS.
+      expect(SimilarAyahs().count(), 0);
+      expect(
+          SimilarAyahs({
+            '2:255': [
+              [3, 2, 'text', 1]
+            ]
+          }).count(),
+          0);
+      expect(
+          SimilarAyahs({
+            'v': 1,
+            'ayahs': {
+              '2:255': [
+                [3, 2, 1, [], [], null]
+              ]
+            }
+          }).count(),
+          0);
+      final two = SimilarAyahs({
+        'v': 2,
+        'ayahs': {
+          '2:255': [
+            [
+              3,
+              2,
+              1,
+              [
+                [0, 6]
+              ],
+              [],
+              null
+            ]
+          ]
+        }
+      });
+      expect(two.count(), 1);
+      expect(two.has(2, 255), isTrue);
+      expect(two.has(3, 2), isFalse);
+      final match = two.matches(2, 255).single;
+      expect(match.surah, 3);
+      expect(match.ayah, 2);
+      expect(match.verified, isTrue);
+      expect(match.labels, isEmpty);
+      expect(match.spans, [
+        [0, 6]
+      ]);
+      expect(match.score, isNull);
     });
 
     test('themes index both ways', () {
@@ -158,6 +217,66 @@ void main() {
       expect(engine.tajweedLessons.previous(lessons[0].id), isNull);
       expect(engine.tajweedLessons.next(lessons[0].id)?.id, lessons[1].id);
       expect(engine.tajweedLessons.chapterOf(lessons[0].id), isNotNull);
+      // Version 3 examples point at their words by span; the data carries no
+      // copy of the words.
+      final example = lessons
+          .expand((l) => l.examples)
+          .firstWhere((e) => e.wordSpan != null);
+      expect(example.surahId, 112);
+      expect(example.ayahNumber, 1);
+      expect(example.wordSpan, [1, 3]);
+      expect(const TajweedExample(112, 1, 'focus').wordSpan, isNull);
+      expect(
+          TajweedExample.fromJson({'surahId': 112, 'ayahNumber': 1, 'focus': ''})
+              .wordSpan,
+          isNull);
+    });
+
+    test("lesson Quran references resolve to the engine's own text", () {
+      // Version 4: a drill or rule-card fragment whose Arabic IS Quran carries
+      // an `ayah` reference and no text at all, so a port that ignores the
+      // field shows an empty row rather than a verse. This reads one back out
+      // of the Quran to prove the whole path.
+      final lessons = engine.tajweedLessons.allLessons();
+      final drill =
+          lessons.expand((l) => l.drills).firstWhere((d) => d.ayah != null);
+      final reference = drill.ayah!;
+      expect(reference.surahId, 110);
+      expect(reference.ayahNumber, 1);
+      expect([reference.first, reference.last], [0, 4]);
+      expect(drill.text, isEmpty,
+          reason: 'a referenced drill carries no copy of the words');
+
+      // The span names the whole of an-Nasr 1, so the words it cuts are the
+      // ayah itself. Compared against the engine's own text rather than a
+      // pasted literal: a copy here would have to be kept in the file's exact
+      // normalization, the drift this version removed.
+      final words = engine.quran.ayah(110, 1)!.textArabic.split(RegExp(r'\s+'));
+      expect(words.length, 5);
+      expect(words.sublist(reference.first, reference.last + 1).join(' '),
+          words.join(' '));
+
+      // Every reference across drills and rule cards lands inside its ayah.
+      var referenced = 0;
+      for (final lesson in lessons) {
+        final fragments = lesson.ruleCard?.fragments ?? const [];
+        for (final row in [...lesson.drills, ...fragments]) {
+          final span = row.ayah;
+          if (span == null) continue;
+          referenced += 1;
+          final tokens = engine.quran
+              .ayah(span.surahId, span.ayahNumber)!
+              .textArabic
+              .split(RegExp(r'\s+'));
+          expect(span.last, lessThan(tokens.length));
+        }
+      }
+      expect(referenced, 28,
+          reason: '7 drills and 21 rule-card fragments reference the Quran');
+
+      // The card itself is `ruleCard`; it was declared as `mushafCard` and so
+      // decoded to nothing.
+      expect(lessons.where((l) => l.ruleCard != null).length, 32);
     });
   });
 

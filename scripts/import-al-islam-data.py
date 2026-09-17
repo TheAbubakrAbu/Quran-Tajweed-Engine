@@ -39,6 +39,11 @@ data - and their tajweed packs and line tables index INTO that text, so those st
 out with it. Their printed mushafs do ship: a facsimile is exact whatever the state
 of the extraction, and `data/mushaf/pages/` makes all twenty navigable by ayah.
 
+The ILLUSTRATIONS of the Miracles articles. Their prose is rights-waived by
+miracles-of-quran.com and ships; the pictures stream from Jamil Hammoudeh's Tilawa
+server under permission granted for the APP, not for a public library, so every
+`image` block is filtered out and `imageBase` is never published.
+
     python3 scripts/import-al-islam-data.py [path/to/Al-Islam-iOS]
 
 Defaults to ../Al-Islam-iOS. Idempotent: run it again after the app updates a corpus.
@@ -263,6 +268,48 @@ def import_tajweed_qiraat(app: pathlib.Path) -> None:
         })
 
 
+def check_lesson_references(lessons: dict) -> None:
+    """Refuse a lesson pack whose Quran references do not resolve against this engine's own text.
+
+    A version-4 drill, rule-card fragment or quiz question is EITHER written-out teaching Arabic
+    (`text` / `arabic`) OR an `ayah` reference, never both, and a referenced one carries no copy of
+    the words at all. So a reference that points off the end of its ayah does not degrade, it
+    renders an empty row, and it would do so silently in every port at once. Checking it here, at
+    the one place the data enters, is what keeps that from shipping.
+
+    The span is `[surah, ayah, first, last]`, 0-based and inclusive over whitespace-separated
+    tokens, the same convention as `wordSpan` and the similar-ayah spans.
+    """
+    quran = json.loads((DATA / "quran.json").read_text(encoding="utf-8"))
+    tokens = {(s["id"], a["id"]): a["textArabic"].split() for s in quran for a in s["ayahs"]}
+
+    referenced = 0
+    for chapter in lessons["chapters"]:
+        for lesson in chapter["lessons"]:
+            rule_card = lesson.get("ruleCard") or {}
+            rows = (lesson.get("drills", []) + lesson.get("quiz", [])
+                    + rule_card.get("fragments", []))
+            for row in rows:
+                span = row.get("ayah")
+                if span is None:
+                    continue
+                referenced += 1
+                where = f"{lesson['id']} {span}"
+                if len(span) != 4:
+                    raise SystemExit(f"lesson reference {where} is not [surah, ayah, first, last]")
+                surah, ayah, first, last = span
+                words = tokens.get((surah, ayah))
+                if words is None:
+                    raise SystemExit(f"lesson reference {where} names an ayah that is not in the Quran")
+                if not 0 <= first <= last < len(words):
+                    raise SystemExit(
+                        f"lesson reference {where} falls outside {surah}:{ayah}, "
+                        f"which has {len(words)} tokens")
+                if "text" in row or "arabic" in row:
+                    raise SystemExit(f"lesson reference {where} also carries a copy of the words")
+    print(f"  {referenced} lesson Quran references resolve")
+
+
 def import_payloads(app: pathlib.Path) -> None:
     print("word-by-word and the search corpora")
     quran_data = app / "Resources" / "Data" / "Quran"
@@ -273,10 +320,24 @@ def import_payloads(app: pathlib.Path) -> None:
     write_json(DATA / "word-by-word.json",
                {"english": pack["en"], "transliteration": pack["tr"]})
 
-    write_json(DATA / "similar-ayahs.json", unxz(quran_data / "SimilarAyahs.json.xz"))
+    # Version 2 (2026-09-16): rows are [surah, ayah, verified, spans, labels, score] and the pack
+    # stores no text; the shared wording is token spans into the matched ayah. A version-1 pack
+    # carried the phrase as a string, which this engine's modules no longer read.
+    similar = unxz(quran_data / "SimilarAyahs.json.xz")
+    if similar.get("v") != 2:
+        raise SystemExit("SimilarAyahs.json.xz is not a version-2 pack - rebuild it in the app first")
+    write_json(DATA / "similar-ayahs.json", similar)
     write_json(DATA / "themes.json", unxz(quran_data / "ThematicTopics.json.xz"))
     write_json(DATA / "surah-sections.json", unxz(quran_data / "SurahSections.json.xz"))
-    write_json(DATA / "tajweed-lessons.json", unxz(quran_data / "TajweedLessons.json.xz"))
+    # Version 3: an example's words to listen at are `wordSpan`, a token range into the ayah, not
+    # a copy of the words. Version 4 carries the same idea into the lesson body: a drill, a rule-card
+    # fragment or a quiz question whose Arabic IS Quran holds an `ayah` reference instead of the
+    # words, and holds no text at all, so a consumer that ignores the field renders an empty row.
+    lessons = unxz(quran_data / "TajweedLessons.json.xz")
+    if lessons.get("version") != 4:
+        raise SystemExit("TajweedLessons.json.xz is not a version-4 pack - rebuild it in the app first")
+    check_lesson_references(lessons)
+    write_json(DATA / "tajweed-lessons.json", lessons)
     write_json(DATA / "surah-stats.json",
                json.loads((quran_data / "surah-stats.json").read_text(encoding="utf-8")))
 
@@ -538,12 +599,21 @@ def import_word_of_day(app: pathlib.Path) -> None:
     The curation and glosses are Tilawa's (Jamil Hammoudeh, with permission); the occurrences
     are derived from the Hafs text, so the count and the list behind it are one derivation.
     `token` indices are into the ayah's raw whitespace tokens, as everywhere else.
+
+    The app's pack (version 2) carries no copy of the word: the form is the app's own token at
+    the anchor. This file keeps publishing `arabic` for consumers that do not load quran.json,
+    derived here from this engine's own text at that anchor, so it is the same derivation and
+    cannot drift from it.
     """
     print("word of the day")
     pack = unxz(app / "Resources" / "Data" / "Quran" / "WordOfDay.json.xz")
+    if pack.get("version") != 2:
+        raise SystemExit("WordOfDay.json.xz is not a version-2 pack - rebuild it in the app first")
+    quran = json.loads((DATA / "quran.json").read_text(encoding="utf-8"))
+    tokens = {(s["id"], a["id"]): a["textArabic"].split() for s in quran for a in s["ayahs"]}
     words = [{
         "id": row["id"],
-        "arabic": row["ar"],
+        "arabic": tokens[(row["s"], row["a"])][row["p"]],
         "transliteration": row.get("tr", ""),
         "meaning": row.get("en", ""),
         "surah": row["s"],
@@ -553,6 +623,214 @@ def import_word_of_day(app: pathlib.Path) -> None:
         "occurrences": [{"surah": o[0], "ayah": o[1], "tokens": o[2]} for o in row["occ"]],
     } for row in pack["words"]]
     write_json(DATA / "word-of-day.json", {"words": words})
+
+
+def import_names_depth(app: pathlib.Path) -> None:
+    """The 99 Names in depth: root, theme, an explanation, a living line, and where each occurs.
+
+    `data/names-of-allah.json` already carries the name, its meaning and a short description.
+    This is the layer under that: the triliteral root the name is built on, one of nine themes,
+    a paragraph on what the name means, one line on living by it, and the ayahs the name itself
+    appears in with the token it sits at. The written material is Tilawa's (Jamil Hammoudeh,
+    with permission); the occurrences point into this engine's own Hafs text.
+
+    The app keys names by number as a STRING, because its pack is a JSON object; the engine
+    publishes a list ordered by number, like every other corpus here.
+    """
+    print("names of Allah in depth")
+    pack = unxz(app / "Resources" / "Data" / "Islam" / "NamesDetails.json.xz")
+    names = []
+    for key in sorted(pack["names"], key=int):
+        row = pack["names"][key]
+        names.append({
+            "number": int(key),
+            # A root prints spaced ("ر ح م"); a consumer that matches it against morphology.json
+            # must close the spaces up, as every port's morphology fold already does.
+            "root": row.get("root", ""),
+            "theme": row.get("theme", ""),
+            "explanation": row.get("explanation", ""),
+            "living": row.get("living", ""),
+            # [surah, ayah, token, count] in the app's pack; `count` is how many tokens the name
+            # spans, which is 1 everywhere today but is carried rather than assumed. The app marks
+            # an occurrence it could not place in the ayah's tokens with token -1 and count 0; that
+            # is published as a null `token`, the same convention `qiraat-variants.json` uses for a
+            # word the builder could not place. The AYAH is still right, so a consumer highlights
+            # nothing and shows the verse whole. Ten occurrences across four names today (60, 77,
+            # 81 and 97 - al-Hayy, al-Waliyy, al-Muntaqim and al-Warith - each with none placed).
+            "occurrences": [
+                {"surah": v[0], "ayah": v[1],
+                 "token": v[2] if v[2] >= 0 else None,
+                 "tokens": v[3]}
+                for v in row.get("verses", [])
+            ],
+        })
+    themes = [{"id": t["id"], "label": t["label"]} for t in pack.get("themes", [])]
+    write_json(DATA / "names-depth.json", {"themes": themes, "names": names})
+
+
+def import_isnad(app: pathlib.Path) -> None:
+    """The chains of transmission of the Ten Readings, parsed out of the app's Swift source.
+
+    Unlike every other corpus here this one is not a compressed pack: it is hand-authored data
+    in `iPhone/Quran/QiraatIsnad.swift`, so the import parses that file. The links are the
+    standard ones of the classical record (Ibn al-Jazari's al-Nashr and Ghayat al-Nihayah,
+    al-Dani's al-Taysir, and the turuq of al-Shatibiyyah and al-Durrah).
+
+    Shape: the Prophet at the top, the Companions each imam's teachers read on, the imam's own
+    teachers, and per narrator the links between him and his imam (empty where he read on the
+    imam himself) and the students who carried his narration on. Riwayah keys are the app's
+    canonical tags ("Warsh an Nafi"), except Hafs, whose tag is the empty string in the app
+    because it is the default; it is published under "Hafs an Asim" so every key is a name.
+
+    Each narrator carries its imam EXPLICITLY, read from `QiraatProfiles`' own `masterID`, rather
+    than left to be parsed off the end of the tag: four tags name the imam in the Arabic genitive
+    ("ad-Duri an Abi Amr", "Ibn Wardan an Abi Jafar") while the imam key is the nominative ("Abu
+    Amr", "Abu Jafar"), so splitting on " an " resolves those four to nothing.
+    """
+    print("isnad chains")
+    source = (app / "iPhone" / "Quran" / "QiraatIsnad.swift").read_text(encoding="utf-8")
+    settings = (app / "iPhone" / "Settings" / "SettingsQuran.swift").read_text(encoding="utf-8")
+    tags = dict(re.findall(r'static let (\w+) = "([^"]*)"', settings))
+
+    def resolve(expr: str) -> str:
+        m = re.match(r"Settings\.Riwayah\.(\w+)", expr.strip())
+        return tags.get(m.group(1), expr.strip()) if m else expr.strip()
+
+    def nodes_of(kind: str, text: str) -> list:
+        return [{"name": n, "arabic": a, "detail": d, "role": kind}
+                for n, a, d in re.findall(kind + r'\("([^"]+)", "([^"]+)", "([^"]+)"\)', text)]
+
+    def chain_nodes(text: str) -> list:
+        out = []
+        for kind in ("successor", "link", "student"):
+            out.extend(nodes_of(kind, text))
+        return out
+
+    companions = {}
+    for key, name, arabic, detail in re.findall(
+            r'case \.(\w+): return IsnadNode\(name: "([^"]+)", arabic: "([^"]+)", '
+            r'detail: "([^"]+)", role: \.companion\)', source):
+        companions[key] = {"name": name, "arabic": arabic, "detail": detail, "role": "companion"}
+
+    m = re.search(r'static let prophet = IsnadNode\(name: "([^"]+)", arabic: "([^"]+)", detail: "([^"]+)"', source)
+    prophet = {"name": m.group(1), "arabic": m.group(2), "detail": m.group(3), "role": "prophet"}
+
+    imam_src = source[source.index("static let imamChains"):source.index("static let narratorChains")]
+    imams = {}
+    for m in re.finditer(r"(Settings\.Riwayah\.\w+): ImamChain\(\s*teachers: \[(.*?)\],"
+                         r"\s*companions: \[(.*?)\]\s*\)", imam_src, re.S):
+        imams[resolve(m.group(1))] = {
+            "teachers": chain_nodes(m.group(2)),
+            "companions": [companions[c.strip().lstrip(".")] for c in m.group(3).split(",") if c.strip()],
+        }
+
+    # tag -> imam, from QiraatProfiles' own `masterID` (see the docstring: the tag cannot be split).
+    profiles = (app / "iPhone" / "Islam" / "QiraatProfiles.swift").read_text(encoding="utf-8")
+    masters = {}
+    # Non-greedy across the whole file would let one profile's `id` pair with a later profile's
+    # `masterID`; each RiwayahNarratorProfile literal is matched on its own instead.
+    for block in re.findall(r"RiwayahNarratorProfile\((.*?)\n        \)", profiles, re.S):
+        id_m = re.search(r"id: (Settings\.Riwayah\.\w+)", block)
+        master_m = re.search(r"masterID: (Settings\.Riwayah\.\w+)", block)
+        if id_m and master_m:
+            masters[resolve(id_m.group(1)) or "Hafs an Asim"] = resolve(master_m.group(1))
+
+    nar_src = source[source.index("static let narratorChains"):]
+    cut = nar_src.find("\n    static func")
+    if cut > 0:
+        nar_src = nar_src[:cut]
+    narrators = {}
+    for m in re.finditer(r"(Settings\.Riwayah\.\w+): NarratorChain\(links: \[(.*?)\], "
+                         r"students: \[(.*?)\]\)", nar_src, re.S):
+        key = resolve(m.group(1)) or "Hafs an Asim"
+        imam = masters.get(key)
+        if imam is None:
+            raise SystemExit(f"isnad: no masterID for {key!r} in QiraatProfiles.swift")
+        narrators[key] = {"imam": imam,
+                          "links": chain_nodes(m.group(2)),
+                          "students": chain_nodes(m.group(3))}
+
+    if len(imams) != 10 or len(narrators) != 20:
+        raise SystemExit(f"isnad parse found {len(imams)} imams and {len(narrators)} narrators, expected 10 and 20")
+    write_json(DATA / "isnad.json", {
+        "prophet": prophet,
+        "companions": [companions[k] for k in companions],
+        "imams": imams,
+        "narrators": narrators,
+    })
+
+
+def import_miracles(app: pathlib.Path) -> None:
+    """The 202 "Miracles of the Quran" articles, WITHOUT their illustrations.
+
+    The prose is miracles-of-quran.com's, whose author waived rights on the site's own writing.
+    The ILLUSTRATIONS are a different matter: they stream from Jamil Hammoudeh's Tilawa server
+    under permission granted for the app, not for a public library. So every `image` block is
+    dropped and `imageBase` is not published: what ships here is the text, which is free, and
+    no pointer into someone else's server. Nothing is left empty by the drop (verified: every
+    article keeps prose blocks). A consumer that wants the pictures goes to the site.
+
+    Each article is a list of typed blocks, in reading order:
+      claim    the one-line hook under the title
+      lead     the opening paragraph
+      text     a body paragraph
+      quote    an excerpt from a third party, with `sourceLabel` and `sourceUrl`; these are
+               NOT rights-waived, so they stay short and attributed, exactly as the app shows
+               them (102 of the 203 are Wikipedia, the rest journals and science press)
+      ayah     a reference, never text: surah + an ayah RANGE (`ayah`..`endAyah`), so a
+               consumer pulls the verses from this engine's own quran.json rather than
+               trusting a second copy
+      closer   the closing rhetorical line
+
+    `text` and `lead` blocks may carry `links`: either an outward `url` or an internal `slug`
+    pointing at another article here.
+
+    `level` is per ARTICLE and is NOT the category's level (147 of the 202 differ), so both
+    are published. The app's four levels run simple < intermediate < advanced < extreme.
+    """
+    print("miracles of the Quran")
+    pack = unxz(app / "Resources" / "Data" / "Islam" / "Miracles.json.xz")
+    categories = [{"id": c["id"], "level": c["level"]} for c in pack.get("categories", [])]
+
+    articles = []
+    for row in pack.get("articles", []):
+        blocks = []
+        for b in row.get("blocks", []):
+            kind = b.get("kind")
+            # The one block kind that is not ours to republish. See the docstring.
+            if kind == "image":
+                continue
+            if kind == "ayah":
+                blocks.append({"kind": "ayah", "surah": b["surah"],
+                               "ayah": b["ayah"], "endAyah": b.get("endAyah", b["ayah"])})
+                continue
+            block = {"kind": kind, "text": b.get("text", "")}
+            if kind == "quote":
+                block["sourceLabel"] = b.get("sourceLabel", "")
+                block["sourceUrl"] = b.get("sourceUrl", "")
+            if b.get("links"):
+                block["links"] = b["links"]
+            blocks.append(block)
+        articles.append({
+            "slug": row["slug"],
+            "title": row["title"],
+            "category": row["category"],
+            "level": row["level"],
+            "blocks": blocks,
+        })
+
+    if any(b["kind"] == "image" for a in articles for b in a["blocks"]):
+        raise SystemExit("miracles: an image block survived the filter")
+    empty = [a["slug"] for a in articles if not a["blocks"]]
+    if empty:
+        raise SystemExit(f"miracles: articles left with no blocks: {empty}")
+
+    write_json(DATA / "miracles.json", {
+        "source": pack.get("source", ""),
+        "imagesIncluded": False,
+        "categories": categories,
+        "articles": articles,
+    })
 
 
 def main() -> None:
@@ -573,6 +851,9 @@ def main() -> None:
     import_qiraat_places(app)
     import_qiraat_variant_audio(app)
     import_word_of_day(app)
+    import_names_depth(app)
+    import_isnad(app)
+    import_miracles(app)
     print("done")
 
 

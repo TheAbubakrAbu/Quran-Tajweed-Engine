@@ -4,36 +4,47 @@
  *
  * Three sources, already merged and ranked at build time so nothing here scores or sorts:
  *
- *  * **verified** - the classical mutashabihat corpus, listed first. `phrase` is the shared
- *    wording when the corpus records it.
+ *  * **verified** - the classical mutashabihat corpus, listed first.
  *  * **generated** - phrase-overlap matches, each carrying the `labels` that explain why it
  *    matched ("Reckoning", "Root rbb"). These are a reading aid, not a scholarly claim.
  *
  * `verified` is the flag to gate on if you show only one kind.
  *
- * The Quranic Universal Library's table is the third source, and it adds two things the other
- * two cannot: `spans`, the exact token ranges of the shared words in the MATCHED ayah, and
- * `score`, its own 0-100 similarity. Tint `spans` where they exist and fall back to locating
- * `phrase` where they do not; `score` is null for rows that came from the other two sources,
- * which rank but do not score.
+ * The Quranic Universal Library's table is the third source, and it adds `score`, its own 0-100
+ * similarity; `score` is null for rows that came from the other two sources, which rank but do
+ * not score.
+ *
+ * The shared wording is `spans`: 0-based inclusive token ranges into the MATCHED ayah's raw text.
+ * QUL's own placement where it lists the pair, else the wording the corpus recorded, located in
+ * the ayah when the data was built. The data carries no text of its own (version 2): read the
+ * words out of `engine.quran` by those spans, so what you show is the Quran text you already
+ * have and not a second copy of it.
  */
 
 /**
  * @typedef {Object} SimilarMatch
  * @property {number} surah
  * @property {number} ayah
- * @property {string} phrase    the shared wording, "" when none is recorded
  * @property {boolean} verified
  * @property {string[]} labels  why a generated row matched; empty for verified rows
  * @property {Array<[number, number]>} spans  0-based inclusive token ranges of the shared words
- *           in the MATCHED ayah's raw text (QUL rows); empty when only the phrase is known
+ *           in the MATCHED ayah's raw text; empty when no source records shared wording
  * @property {number|null} score  QUL's 0-100 similarity, null for rows from the other sources
  */
 
+/**
+ * @typedef {Object} SimilarAyahsData
+ * @property {number} v  the data version; this module reads version 2
+ * @property {Record<string, Array<[number, number, number, Array<[number,number]>, string[], number|null]>>} ayahs
+ *           keyed "surah:ayah", each row [surah, ayah, verifiedFlag, spans, labels, score]
+ */
+
 export class SimilarAyahs {
-  /** @param {Record<string, Array<[number, number, string, number, string[]?, Array<[number,number]>?, number?]>>} [data] data/similar-ayahs.json */
+  /** @param {SimilarAyahsData|Object} [data] data/similar-ayahs.json (version 2) */
   constructor(data = {}) {
-    this._data = data;
+    // A version-1 file (rows keyed at the top level, the phrase as text) is not read: it would
+    // put the shared wording where a span is expected. Treated as no data rather than half a one.
+    this._data = data && data.v === 2 && data.ayahs ? data.ayahs : {};
   }
 
   /**
@@ -44,10 +55,9 @@ export class SimilarAyahs {
   matches(surahId, ayahId) {
     const rows = this._data[`${surahId}:${ayahId}`];
     if (!rows) return [];
-    return rows.map(([surah, ayah, phrase, verified, labels, spans, score]) => ({
+    return rows.map(([surah, ayah, verified, spans, labels, score]) => ({
       surah,
       ayah,
-      phrase: phrase ?? "",
       verified: verified === 1,
       labels: labels ?? [],
       spans: spans ?? [],

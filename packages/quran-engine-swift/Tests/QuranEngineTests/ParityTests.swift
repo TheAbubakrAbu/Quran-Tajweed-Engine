@@ -127,8 +127,52 @@ final class ParityTests: XCTestCase {
         let matches = engine.similarAyahs.matches(2, 255)
         let found = try XCTUnwrap(matches.first { $0.surah == 3 && $0.ayah == 2 })
         XCTAssertTrue(found.verified)
+        XCTAssertEqual(found.spans, [0...6])
+        XCTAssertTrue(found.labels.isEmpty)
+        XCTAssertNil(found.score)
         XCTAssertTrue(engine.similarAyahs.has(2, 255))
         XCTAssertGreaterThan(engine.similarAyahs.count(), 5000)
+
+        // The data carries no phrase text: the wording is cut from quran.json by the span.
+        // 3:2 is seven tokens long and the span names all of them.
+        let tokens = try XCTUnwrap(engine.quran.ayah(3, 2)?.textArabic.split(separator: " "))
+        XCTAssertEqual(tokens.count, 7)
+        let span = try XCTUnwrap(found.spans.first)
+        XCTAssertEqual(tokens[span].joined(separator: " "), engine.quran.ayah(3, 2)?.textArabic)
+
+        // Generated rows carry the labels that explain the match; verified rows carry none.
+        let generated = try XCTUnwrap(matches.first { !$0.verified })
+        XCTAssertFalse(generated.labels.isEmpty)
+    }
+
+    func testSimilarAyahsReadsOnlyVersionTwo() throws {
+        let decoder = JSONDecoder()
+
+        // Version 2: six fields by position; [] spans and labels and a null score decode as
+        // empty and nil, and an unverified row carries its labels.
+        let v2 = """
+        {"v": 2, "ayahs": {"2:255": [[42, 4, 1, [], [], null],
+                                     [20, 110, 0, [[3, 7]], ["Shared phrase", "Root HwT"], 87]]}}
+        """
+        let similar = SimilarAyahs(try decoder.decode(SimilarAyahsFile.self, from: Data(v2.utf8)))
+        XCTAssertEqual(similar.count(), 1)
+        let rows = similar.matches(2, 255)
+        XCTAssertEqual(rows.count, 2)
+        XCTAssertEqual(rows[0], SimilarMatch(surah: 42, ayah: 4, verified: true,
+                                             labels: [], spans: [], score: nil))
+        XCTAssertEqual(rows[1], SimilarMatch(surah: 20, ayah: 110, verified: false,
+                                             labels: ["Shared phrase", "Root HwT"],
+                                             spans: [3...7], score: 87))
+        XCTAssertFalse(similar.has(1, 1))
+
+        // Version 1 (rows keyed at the top level, the phrase as text) is not read, as in JS.
+        let v1 = """
+        {"2:255": [[3, 2, "some phrase", 1]]}
+        """
+        let legacy = SimilarAyahs(try decoder.decode(SimilarAyahsFile.self, from: Data(v1.utf8)))
+        XCTAssertEqual(legacy.count(), 0)
+        XCTAssertTrue(legacy.matches(2, 255).isEmpty)
+        XCTAssertEqual(SimilarAyahs().count(), 0)
     }
 
     func testThemesIndexBothWays() {
@@ -145,6 +189,80 @@ final class ParityTests: XCTestCase {
         XCTAssertNil(engine.tajweedLessons.previous(first.id))
         XCTAssertEqual(engine.tajweedLessons.next(first.id)?.id, lessons[1].id)
         XCTAssertNotNil(engine.tajweedLessons.chapterOf(first.id))
+    }
+
+    func testLessonQuranReferencesResolveToTheEnginesOwnText() throws {
+        // Version 4: a drill or rule-card fragment whose Arabic IS Quran carries an `ayah`
+        // reference and no text at all, so a port that ignores the field shows an empty row
+        // rather than a verse. This reads one back out of the Quran to prove the whole path.
+        let lessons = engine.tajweedLessons.allLessons()
+        let drill = try XCTUnwrap(lessons.flatMap(\.drills).first { $0.ayah != nil })
+        let reference = try XCTUnwrap(drill.ayah)
+        XCTAssertEqual(reference.surahId, 110)
+        XCTAssertEqual(reference.ayahNumber, 1)
+        XCTAssertEqual(reference.span, 0...4)
+        XCTAssertTrue(drill.text.isEmpty, "a referenced drill carries no copy of the words")
+
+        // The span names the whole of an-Nasr 1, so the words it cuts are the ayah itself.
+        // Compared against the engine's own text rather than a pasted literal: a copy here would
+        // have to be kept in the file's exact normalization, the drift this version removed.
+        let ayah = try XCTUnwrap(engine.quran.ayah(110, 1))
+        let words = ayah.textArabic.split(separator: " ")
+        XCTAssertEqual(words.count, 5)
+        XCTAssertEqual(words[reference.span].joined(separator: " "), words.joined(separator: " "))
+
+        // Every reference across drills and rule cards lands inside its ayah.
+        var referenced = 0
+        for lesson in lessons {
+            for row in lesson.drills + (lesson.ruleCard?.fragments ?? []) {
+                guard let reference = row.ayah else { continue }
+                referenced += 1
+                let ayah = try XCTUnwrap(engine.quran.ayah(reference.surahId, reference.ayahNumber))
+                XCTAssertLessThan(reference.span.upperBound,
+                                  ayah.textArabic.split(separator: " ").count)
+            }
+        }
+        XCTAssertEqual(referenced, 28, "7 drills and 21 rule-card fragments reference the Quran")
+
+        // The card itself is `ruleCard`; it was declared as `mushafCard` and decoded to nothing.
+        XCTAssertEqual(lessons.filter { $0.ruleCard != nil }.count, 32)
+    }
+
+    func testLessonExamplesPointAtWordsBySpan() throws {
+        // Version 3: an example names its words by wordSpan, a token range into the ayah, and
+        // carries no copy of the words. The first example with one is 112:1, words 1 to 3.
+        let examples = engine.tajweedLessons.allLessons().flatMap(\.examples)
+        let first = try XCTUnwrap(examples.first { $0.wordSpan != nil })
+        XCTAssertEqual(first.surahId, 112)
+        XCTAssertEqual(first.ayahNumber, 1)
+        XCTAssertEqual(first.wordSpan, 1...3)
+        let tokens = try XCTUnwrap(engine.quran.ayah(112, 1)?.textArabic.split(separator: " "))
+        XCTAssertEqual(tokens.count, 4)
+
+        // Every span fits inside the ayah it points at.
+        for example in examples {
+            guard let span = example.wordSpan else { continue }
+            let count = engine.quran.ayah(example.surahId, example.ayahNumber)?
+                .textArabic.split(separator: " ").count ?? 0
+            XCTAssertLessThan(span.upperBound, count,
+                              "\(example.surahId):\(example.ayahNumber) span \(span) past \(count) tokens")
+        }
+    }
+
+    func testLessonExampleWordSpanIsOptional() throws {
+        let decoder = JSONDecoder()
+        let absent = """
+        {"surahId": 1, "ayahNumber": 1, "focus": "the whole ayah"}
+        """
+        XCTAssertNil(try decoder.decode(TajweedExample.self, from: Data(absent.utf8)).wordSpan)
+        let inverted = """
+        {"surahId": 1, "ayahNumber": 1, "focus": "x", "wordSpan": [3, 1]}
+        """
+        XCTAssertNil(try decoder.decode(TajweedExample.self, from: Data(inverted.utf8)).wordSpan)
+        let present = """
+        {"surahId": 112, "ayahNumber": 1, "focus": "x", "wordSpan": [1, 3]}
+        """
+        XCTAssertEqual(try decoder.decode(TajweedExample.self, from: Data(present.utf8)).wordSpan, 1...3)
     }
 
     // MARK: Meaning search

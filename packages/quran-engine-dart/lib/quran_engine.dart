@@ -53,4 +53,6 @@ export 'src/morphology.dart';
 export 'src/batch5.dart';
 export 'src/qiraat_variants.dart';
 export 'src/word_of_day.dart';
+export 'src/batch6.dart';
+export 'src/miracles.dart';
 export 'src/engine.dart';

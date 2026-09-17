@@ -49,4 +49,4 @@ Loaded by default (128 KB), like the metadata and the passage themes.
 
 ## Provenance
 
-The curation, transliterations and glosses are Tilawa's (Jamil Hammoudeh), used with permission. The occurrences are derived from this engine's own Ḥafṣ text. See [CREDITS.md](../CREDITS.md).
+The curation, transliterations and glosses are Tilawa's (Jamil Hammoudeh), used with permission. The occurrences are derived from this engine's own Ḥafṣ text, and so is `arabic`: the upstream pack stores no copy of the word, only the anchor, and the importer reads the token at that anchor out of `quran.json`, so the form on a card is the text's own. See [CREDITS.md](../CREDITS.md).

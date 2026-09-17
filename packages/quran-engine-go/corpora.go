@@ -12,23 +12,33 @@ import (
 )
 
 // SimilarMatch is one similar-ayah match, in display order.
+//
+// The data carries no text of its own (similar-ayahs.json version 2): the shared wording is
+// Spans, and a consumer cuts the words out of the ayah text it already holds from quran.json,
+// so what it shows is the Quran text it has and not a second copy of it.
 type SimilarMatch struct {
 	Surah int
 	Ayah  int
-	// Phrase is the shared wording, "" when none is recorded.
-	Phrase string
 	// Verified is true for the classical corpus, false for a generated phrase-overlap match.
 	Verified bool
 	// Labels say why a generated row matched; empty for verified rows.
 	Labels []string
-	// Spans are 0-based inclusive token ranges of the shared words in the MATCHED ayah's raw
-	// text, from the Quranic Universal Library's table. Empty when only the phrase is known,
-	// which is why a consumer tints these where they exist and falls back to locating Phrase
-	// where they do not.
+	// Spans are the shared wording: 0-based inclusive token ranges into the MATCHED ayah's raw
+	// text, the tokens being strings.Fields of Ayah.TextArabic. The Quranic Universal Library's
+	// own placement where it lists the pair, else the wording the corpus recorded, located in
+	// the ayah when the data was built. Empty when no source records shared wording. To show
+	// the words, cut them from quran.json by the span: tokens[start : end+1].
 	Spans [][2]int
 	// Score is QUL's 0-100 similarity, where it listed the pair. Nil for rows from the other two
 	// sources: they rank, but they do not score.
 	Score *int
+}
+
+// similarAyahsFile is data/similar-ayahs.json: {v, ayahs}, the rows under ayahs keyed
+// "surah:ayah" and read field by field by SimilarAyahs. Only version 2 is read.
+type similarAyahsFile struct {
+	V     int                            `json:"v"`
+	Ayahs map[string][][]json.RawMessage `json:"ayahs"`
 }
 
 // Topic is one curated topic and the ayahs that speak to it.
@@ -50,21 +60,45 @@ type themesFile struct {
 // listen for.
 type TajweedDrill struct {
 	Caption string `json:"caption"`
-	Text    string `json:"text"`
+	// Text is the fragment as written, and is empty when Ayah locates it instead. Teaching
+	// Arabic a tutor wrote (invented drill syllables, single letters, the isti'adhah) lives
+	// here; Arabic that IS Quran is referenced, not copied.
+	Text string `json:"text"`
+	// Ayah is [surah, ayah, first, last]: a 0-based inclusive token range into the ayah's raw
+	// text, set when this drill is a real verse (version 4). Cut the words out of quran.json by
+	// it; the lessons file carries no copy of them. Nil when Text already holds the Arabic.
+	Ayah []int `json:"ayah,omitempty"`
 }
 
-// TajweedExample is an ayah to hear the rule in, with the phrase to focus on.
+// TajweedExample is an ayah to hear the rule in, with the words to focus on.
 type TajweedExample struct {
 	SurahID    int    `json:"surahId"`
 	AyahNumber int    `json:"ayahNumber"`
 	Focus      string `json:"focus"`
+	// WordSpan is [start, end]: 0-based inclusive token indices into the ayah's raw text (the
+	// tokens being strings.Fields of Ayah.TextArabic) of the words the example is about. The
+	// lessons file carries no word text of its own (version 3): cut the words from quran.json
+	// by the span. Nil when the example does not point at particular words.
+	WordSpan []int `json:"wordSpan,omitempty"`
 }
 
-// TajweedMushafCard shows the rule as it appears in the mushaf.
-type TajweedMushafCard struct {
-	Fragments []TajweedDrill `json:"fragments"`
-	CountEn   string         `json:"countEn"`
-	CountAr   string         `json:"countAr"`
+// TajweedMnemonic is the memory-hook word a rule card hangs on, with what it means. Teaching
+// Arabic chosen for the rule it demonstrates, so it is written out rather than referenced.
+type TajweedMnemonic struct {
+	Arabic string `json:"arabic"`
+	Gloss  string `json:"gloss"`
+}
+
+// TajweedRuleCard states the rule: when it triggers, what to do, how long to hold it, the
+// mnemonic it hangs on, and fragments to see it in.
+type TajweedRuleCard struct {
+	Fragments []TajweedDrill   `json:"fragments"`
+	Trigger   string           `json:"trigger"`
+	Action    string           `json:"action"`
+	Hold      string           `json:"hold"`
+	Mnemonic  *TajweedMnemonic `json:"mnemonic"`
+	CountEn   string           `json:"countEn"`
+	CountAr   string           `json:"countAr"`
 }
 
 // TajweedLesson is one lesson of the course.
@@ -75,9 +109,9 @@ type TajweedLesson struct {
 	Summary string   `json:"summary"`
 	Body    []string `json:"body"`
 	// Drills is absent on the lessons that teach through examples alone.
-	Drills     []TajweedDrill     `json:"drills"`
-	Examples   []TajweedExample   `json:"examples"`
-	MushafCard *TajweedMushafCard `json:"mushafCard"`
+	Drills   []TajweedDrill   `json:"drills"`
+	Examples []TajweedExample `json:"examples"`
+	RuleCard *TajweedRuleCard `json:"ruleCard"`
 	// Color is the tajweed colour this rule is painted in, where it has one.
 	Color string `json:"color"`
 }
@@ -104,37 +138,32 @@ func (e *Engine) SimilarAyahs(surahID, ayahID int) []SimilarMatch {
 	}
 	var out []SimilarMatch
 	for _, row := range rows {
-		// [surah, ayah, phrase, verifiedFlag, labels?, spans?, score?]: heterogeneous, so read
-		// field by field. The last two come only from the Quranic Universal Library's table.
-		if len(row) < 4 {
+		// [surah, ayah, verifiedFlag, spans, labels, score]: six fields, heterogeneous, so read
+		// field by field. spans and labels may be empty lists; score is null unless the Quranic
+		// Universal Library's table listed the pair.
+		if len(row) < 6 {
 			continue
 		}
 		var match SimilarMatch
 		if json.Unmarshal(row[0], &match.Surah) != nil || json.Unmarshal(row[1], &match.Ayah) != nil {
 			continue
 		}
-		_ = json.Unmarshal(row[2], &match.Phrase)
 		var verified int
-		_ = json.Unmarshal(row[3], &verified)
+		_ = json.Unmarshal(row[2], &verified)
 		match.Verified = verified == 1
-		if len(row) > 4 {
-			_ = json.Unmarshal(row[4], &match.Labels)
-		}
-		if len(row) > 5 {
-			_ = json.Unmarshal(row[5], &match.Spans)
-		}
-		if len(row) > 6 {
-			var score int
-			if json.Unmarshal(row[6], &score) == nil {
-				match.Score = &score
-			}
+		_ = json.Unmarshal(row[3], &match.Spans)
+		_ = json.Unmarshal(row[4], &match.Labels)
+		// Through a pointer, so a JSON null stays nil rather than reading as a score of 0.
+		var score *int
+		if json.Unmarshal(row[5], &score) == nil {
+			match.Score = score
 		}
 		out = append(out, match)
 	}
 	return out
 }
 
-// HasSimilarAyahs reports whether the ayah has any — a map hit, cheap enough to gate a button on.
+// HasSimilarAyahs reports whether the ayah has any: a map hit, cheap enough to gate a button on.
 func (e *Engine) HasSimilarAyahs(surahID, ayahID int) bool {
 	return len(e.similarAyahs[fmt.Sprintf("%d:%d", surahID, ayahID)]) > 0
 }

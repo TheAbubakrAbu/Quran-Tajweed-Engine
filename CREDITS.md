@@ -81,6 +81,24 @@ overdue.
   (<https://everyayah.com/>) and **MP3 Quran** (<https://mp3quran.net/eng>) and is not bundled.
 - **Word of the day** (`word-of-day.json`) - the curation, transliterations and glosses are
   **Tilawa**'s, used with permission; the occurrences are derived from this engine's own text.
+- **The 99 Names in depth** (`names-depth.json`) - the roots, themes, explanations and living
+  lines are **Tilawa**'s, by **Jamil Hammoudeh**, used with permission; the occurrences are
+  derived against this engine's own text. The Names themselves are `names-of-allah.json`, above.
+- **Chains of transmission** (`isnad.json`) - compiled from the classical record: **Ibn
+  al-Jazari**'s *al-Nashr fi al-Qiraat al-Ashr* and *Ghayat al-Nihayah*, **al-Dani**'s
+  *al-Taysir*, and the turuq of *al-Shatibiyyah* and *al-Durrah*, assembled for the **Al-Islam**
+  app and kept consistent with the death years this engine already ships.
+- **Scientific miracles** (`miracles.json`) - the 202 articles are
+  **miracles-of-quran.com**'s, whose author waived rights on the site's own prose -
+  <https://www.miracles-of-quran.com/>. The quotations inside them are third-party excerpts, kept
+  short and each carrying its own `sourceLabel` and `sourceUrl` (about half are Wikipedia, the
+  rest journals and science press); they are quoted under fair use and remain their authors'.
+  The corpus came to this engine through the **Al-Islam** app, which took it from **Tilawa**, by
+  **Jamil Hammoudeh**, with his permission.
+  **The illustrations are deliberately not published here.** They stream from Tilawa's own server
+  under permission granted for the app rather than for a public library, so the importer drops
+  every `image` block and never publishes `imageBase`; `imagesIncluded` is `false` to say so in
+  the data itself. Ask before adding them.
 
 ## Tajweed teaching content
 

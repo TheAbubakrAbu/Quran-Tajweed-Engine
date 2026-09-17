@@ -1,4 +1,18 @@
-"""The tajweed course: chapters, lessons, drills, Quranic examples. Mirrors src/lessons.js."""
+"""The tajweed course: chapters, lessons, drills, Quranic examples. Mirrors src/lessons.js.
+
+Chapters, lessons and their examples are passed through as the dicts data/tajweed-lessons.json
+(version 4) holds. Each example is {surahId, ayahNumber, focus, wordSpan?}: `wordSpan` is the
+0-based inclusive token range of the words to listen at, into the ayah's raw text, and is absent
+when the lesson names the whole ayah. The data carries no copy of the words (the old `word`
+string is gone): read them out of `engine.quran` by the span.
+
+Version 4 carries the same idea into the lesson body. A drill, a rule-card fragment or a quiz
+question holds its Arabic in exactly one of two places: `text` (or `arabic` on a quiz) when a
+tutor wrote it, which covers the invented drill syllables, the single letters and the
+isti'adhah; or `ayah` when the Arabic IS Quran, and then there is no text at all. An `ayah` is
+[surah, ayahNumber, first, last], the span again 0-based and inclusive, so a consumer that
+ignores the field renders an empty row rather than a verse.
+"""
 from __future__ import annotations
 from typing import Optional
 

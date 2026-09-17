@@ -23,10 +23,12 @@ use std::path::{Path, PathBuf};
 pub mod ask_ai;
 pub mod audio;
 pub mod batch5;
+pub mod batch6;
 pub mod cache;
 pub mod corpora;
 pub mod model;
 pub mod morphology;
+pub mod miracles;
 pub mod mushaf;
 pub mod alphabet;
 pub mod qiraat_comparison;
@@ -43,7 +45,7 @@ pub use ask_ai::{chat_prompt, Passage, PassageKind, CHAT_INSTRUCTIONS, PASSAGE_C
                  PASSAGE_LIMIT, QUESTION_WORDS, SUBJECT_CHARACTER_LIMIT};
 pub use audio::{ayah_audio_url, ayah_now_playing_name, defaults_to_minshawi, surah_audio_url};
 pub use corpora::{
-    SimilarMatch, TajweedChapter, TajweedDrill, TajweedExample, TajweedLesson, TajweedMushafCard,
+    SimilarMatch, TajweedChapter, TajweedDrill, TajweedExample, TajweedLesson, TajweedMnemonic, TajweedRuleCard,
     Topic,
 };
 pub use mushaf::RiwayahEntry;
@@ -156,8 +158,9 @@ pub struct Engine {
     alphabet: alphabet::ArabicAlphabetFile,
     /// The two aligned word-by-word layers (empty unless `LoadOptions::word_by_word`).
     word_by_word: word_by_word::WordByWordPack,
-    /// `data/similar-ayahs.json` (empty unless `LoadOptions::similar_ayahs`).
-    similar_ayahs: HashMap<String, Vec<Vec<corpora::SimilarField>>>,
+    /// The `ayahs` of `data/similar-ayahs.json`, keyed `"surah:ayah"` (empty unless
+    /// `LoadOptions::similar_ayahs`, and empty when the file is not version 2).
+    similar_ayahs: HashMap<String, Vec<SimilarMatch>>,
     /// The curated topics; loaded by default.
     topics: Vec<Topic>,
     /// The tajweed course; loaded by default.
@@ -175,6 +178,10 @@ pub struct Engine {
     qiraat_places: batch5::QiraatPlacesFile,
     qiraat_variant_audio: batch5::QiraatVariantAudioFile,
     words_of_day: Vec<batch5::WordOfDayEntry>,
+    names_depth: batch6::NamesDepthFile,
+    isnad: batch6::IsnadFile,
+    /// The scientific-miracles corpus; loads by default.
+    miracles: miracles::MiraclesFile,
     search: SearchIndex,
 }
 
@@ -190,7 +197,7 @@ pub struct LoadOptions {
     pub qiraat_tajweed: bool,
     /// The per-word gloss + transliteration pack (~1.8 MB).
     pub word_by_word: bool,
-    /// The mutashabihat corpus (~3.5 MB).
+    /// The mutashabihat corpus (~2.9 MB).
     pub similar_ayahs: bool,
     /// The seven non-Hafs riwayat's own text (~11 MB) — what `compare_surah` compares.
     pub qiraat: bool,
@@ -394,7 +401,8 @@ impl Engine {
         }
 
         let similar_ayahs = if options.similar_ayahs {
-            read_json(&data_dir.join("similar-ayahs.json"))?
+            let file: corpora::SimilarAyahsFile = read_json(&data_dir.join("similar-ayahs.json"))?;
+            file.into_ayahs()
         } else {
             HashMap::new()
         };
@@ -408,6 +416,14 @@ impl Engine {
             read_json_or_default(&data_dir.join("ayah-themes.json"))?;
         let word_file: batch5::WordOfDayFile =
             read_json_or_default(&data_dir.join("word-of-day.json"))?;
+        // The Names in depth (47 KB) and the chains (20 KB) load by default on the same footing.
+        let names_depth: batch6::NamesDepthFile =
+            read_json_or_default(&data_dir.join("names-depth.json"))?;
+        let isnad: batch6::IsnadFile = read_json_or_default(&data_dir.join("isnad.json"))?;
+        // The miracles corpus (393 KB) joins them: bigger than those, but smaller than the tajweed
+        // course that has always loaded by default, and a consumer cross-linking an ayah to what
+        // has been written about it should not have to know a flag existed.
+        let miracles: miracles::MiraclesFile = read_json_or_default(&data_dir.join("miracles.json"))?;
 
         let morphology = if options.morphology {
             read_json(&data_dir.join("morphology.json"))?
@@ -473,6 +489,9 @@ impl Engine {
             qiraat_places,
             qiraat_variant_audio,
             words_of_day: word_file.words,
+            names_depth,
+            isnad,
+            miracles,
             search,
         })
     }
@@ -1810,4 +1829,262 @@ impl Engine {
             self.words_of_day.iter().map(|word| word.count as usize).sum(),
         )
     }
+
+    // -- the Names in depth ----------------------------------------------------------
+
+    /// All 99, ordered by number.
+    pub fn names_in_depth(&self) -> &[batch6::NameDepth] {
+        &self.names_depth.names
+    }
+
+    /// One Name's depth entry, by its number (1..=99).
+    pub fn name_in_depth(&self, number: u32) -> Option<&batch6::NameDepth> {
+        self.names_depth.names.iter().find(|name| name.number == number)
+    }
+
+    /// The nine themes, in the corpus's own order.
+    pub fn name_themes(&self) -> &[batch6::NameTheme] {
+        &self.names_depth.themes
+    }
+
+    /// Every Name under one theme, by number.
+    pub fn names_by_theme(&self, theme: &str) -> Vec<&batch6::NameDepth> {
+        self.names_depth.names.iter().filter(|name| name.theme == theme).collect()
+    }
+
+    /// Every Name built on one root. Accepts either spelling, spaced or closed up.
+    pub fn names_by_root(&self, root: &str) -> Vec<&batch6::NameDepth> {
+        let key = batch6::root_key(root);
+        if key.is_empty() {
+            return Vec::new();
+        }
+        self.names_depth
+            .names
+            .iter()
+            .filter(|name| batch6::root_key(&name.root) == key)
+            .collect()
+    }
+
+    /// Every Name appearing in an ayah, with the occurrence that put it there, in token order.
+    pub fn names_in_ayah(&self, surah_id: u32, ayah_id: u32) -> Vec<(&batch6::NameDepth, &batch6::NameOccurrence)> {
+        let mut hits: Vec<(&batch6::NameDepth, &batch6::NameOccurrence)> = self
+            .names_depth
+            .names
+            .iter()
+            .flat_map(|name| {
+                name.occurrences
+                    .iter()
+                    .filter(move |o| o.surah == surah_id && o.ayah == ayah_id)
+                    .map(move |o| (name, o))
+            })
+            .collect();
+        // Unplaced occurrences (a `None` token) sort last, so a highlighted list stays in
+        // reading order.
+        hits.sort_by_key(|(_, o)| o.token.unwrap_or(usize::MAX));
+        hits
+    }
+
+    /// Matches the root (spaces closed on both sides), the explanation and the living line.
+    pub fn search_names_in_depth(&self, query: &str, limit: usize) -> Vec<&batch6::NameDepth> {
+        let q = query.trim();
+        if q.is_empty() {
+            return Vec::new();
+        }
+        let lower = q.to_lowercase();
+        let key = batch6::root_key(q);
+        self.names_depth
+            .names
+            .iter()
+            .filter(|name| {
+                (!key.is_empty() && batch6::root_key(&name.root).contains(&key))
+                    || name.explanation.to_lowercase().contains(&lower)
+                    || name.living.to_lowercase().contains(&lower)
+            })
+            .take(if limit == 0 { usize::MAX } else { limit })
+            .collect()
+    }
+
+    /// How many Names carry depth, how many themes, and how many occurrences they cover.
+    pub fn names_depth_count(&self) -> (usize, usize, usize) {
+        (
+            self.names_depth.names.len(),
+            self.names_depth.themes.len(),
+            self.names_depth.names.iter().map(|n| n.occurrences.len()).sum(),
+        )
+    }
+
+    // -- the chains of transmission --------------------------------------------------
+
+    /// The Prophet, the head of every chain.
+    pub fn isnad_prophet(&self) -> Option<&batch6::IsnadNode> {
+        self.isnad.prophet.as_ref()
+    }
+
+    /// The thirteen Companions the readings are transmitted from.
+    pub fn isnad_companions(&self) -> &[batch6::IsnadNode] {
+        &self.isnad.companions
+    }
+
+    /// The ten imams' keys, sorted.
+    pub fn isnad_imam_keys(&self) -> Vec<&str> {
+        let mut keys: Vec<&str> = self.isnad.imams.keys().map(String::as_str).collect();
+        keys.sort_unstable();
+        keys
+    }
+
+    /// The twenty riwayah tags, sorted.
+    pub fn isnad_narrator_keys(&self) -> Vec<&str> {
+        let mut keys: Vec<&str> = self.isnad.narrators.keys().map(String::as_str).collect();
+        keys.sort_unstable();
+        keys
+    }
+
+    /// One imam's side of the chain.
+    pub fn isnad_imam(&self, imam: &str) -> Option<&batch6::ImamChain> {
+        self.isnad.imams.get(imam)
+    }
+
+    /// One narrator's side of the chain.
+    pub fn isnad_narrator(&self, riwayah: &str) -> Option<&batch6::NarratorChain> {
+        self.isnad.narrators.get(riwayah)
+    }
+
+    /// Whether a narrator read on his imam himself, with nobody between them.
+    pub fn isnad_reads_directly(&self, riwayah: &str) -> bool {
+        self.isnad.narrators.get(riwayah).is_some_and(|c| c.links.is_empty())
+    }
+
+    /// The imam a riwayah tag belongs to ("Warsh an Nafi" -> "Nafi").
+    pub fn isnad_imam_of(&self, riwayah: &str) -> Option<String> {
+        batch6::imam_of(&self.isnad, riwayah)
+    }
+
+    /// A whole chain as layers: a riwayah tag for one narration, an imam key for a reading.
+    pub fn isnad_chain(&self, key: &str) -> Vec<batch6::IsnadLayer> {
+        batch6::chain(&self.isnad, key)
+    }
+
+    /// One sentence on how a narrator reaches his imam.
+    pub fn isnad_sentence(&self, riwayah: &str) -> String {
+        batch6::sentence(&self.isnad, riwayah)
+    }
+
+    /// How many imams, narrators and Companions the chains cover.
+    pub fn isnad_count(&self) -> (usize, usize, usize) {
+        (
+            self.isnad.imams.len(),
+            self.isnad.narrators.len(),
+            self.isnad.companions.len(),
+        )
+    }
+
+    // -- the scientific-miracles corpus ----------------------------------------------
+
+    /// All 202 articles, in corpus order.
+    pub fn miracles(&self) -> &[miracles::MiracleArticle] {
+        &self.miracles.articles
+    }
+
+    /// One article, by its slug.
+    pub fn miracle(&self, slug: &str) -> Option<&miracles::MiracleArticle> {
+        self.miracles.articles.iter().find(|a| a.slug == slug)
+    }
+
+    /// The fifteen categories, in the corpus's own order.
+    pub fn miracle_categories(&self) -> &[miracles::MiracleCategory] {
+        &self.miracles.categories
+    }
+
+    /// One category, by its id.
+    pub fn miracle_category(&self, id: &str) -> Option<&miracles::MiracleCategory> {
+        self.miracles.categories.iter().find(|c| c.id == id)
+    }
+
+    /// Every article filed under one category.
+    pub fn miracles_by_category(&self, id: &str) -> Vec<&miracles::MiracleArticle> {
+        self.miracles.articles.iter().filter(|a| a.category == id).collect()
+    }
+
+    /// Every article at one level.
+    ///
+    /// The ARTICLE's level, not its category's: they disagree far more often than they agree, and
+    /// a reader who picked "simple" means the article.
+    pub fn miracles_by_level(&self, level: &str) -> Vec<&miracles::MiracleArticle> {
+        self.miracles.articles.iter().filter(|a| a.level == level).collect()
+    }
+
+    /// The article levels actually present, easiest first.
+    pub fn miracle_levels(&self) -> Vec<&str> {
+        let mut present: Vec<&str> =
+            self.miracles.articles.iter().map(|a| a.level.as_str()).collect();
+        present.sort_unstable_by_key(|level| (miracles::level_rank(level), *level));
+        present.dedup();
+        present
+    }
+
+    /// Every article that cites an ayah: the way into this corpus from elsewhere in the engine.
+    ///
+    /// An `ayah` block is a RANGE, so an article citing 21:30-33 answers to 21:31 as well. An
+    /// article that cites the same ayah in two blocks is still listed once.
+    pub fn miracles_citing(&self, surah_id: u32, ayah_id: u32) -> Vec<&miracles::MiracleArticle> {
+        self.miracles
+            .articles
+            .iter()
+            .filter(|a| miracles::article_cites(a, surah_id, ayah_id))
+            .collect()
+    }
+
+    /// The ayah ranges one article cites, in the order it cites them.
+    pub fn miracle_ayah_refs(&self, slug: &str) -> Vec<miracles::MiracleAyahRef> {
+        self.miracle(slug).map(miracles::article_ayah_refs).unwrap_or_default()
+    }
+
+    /// Articles whose title or prose matches a query, case-insensitively.
+    ///
+    /// Quotes are searched as well: a reader looking for a word remembers reading it, not who
+    /// wrote it.
+    pub fn search_miracles(&self, query: &str, limit: usize) -> Vec<&miracles::MiracleArticle> {
+        let q = query.trim().to_lowercase();
+        if q.is_empty() {
+            return Vec::new();
+        }
+        self.miracles
+            .articles
+            .iter()
+            .filter(|a| {
+                a.title.to_lowercase().contains(&q)
+                    || a.blocks.iter().any(|b| b.text.to_lowercase().contains(&q))
+            })
+            .take(limit)
+            .collect()
+    }
+
+    /// One article's own prose, quotes and ayah blocks left out. See [`miracles::article_text`].
+    pub fn miracle_text(&self, slug: &str) -> String {
+        self.miracle(slug).map(miracles::article_text).unwrap_or_default()
+    }
+
+    /// Where the corpus came from and when it was captured.
+    pub fn miracles_source(&self) -> &str {
+        &self.miracles.source
+    }
+
+    /// False, always: the illustrations are not republished.
+    pub fn miracles_images_included(&self) -> bool {
+        self.miracles.images_included
+    }
+
+    /// How many articles, categories and ayah refs the corpus carries.
+    pub fn miracles_count(&self) -> (usize, usize, usize) {
+        (
+            self.miracles.articles.len(),
+            self.miracles.categories.len(),
+            self.miracles
+                .articles
+                .iter()
+                .map(|a| a.blocks.iter().filter(|b| b.kind == "ayah").count())
+                .sum(),
+        )
+    }
 }
+

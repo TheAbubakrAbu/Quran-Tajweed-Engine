@@ -8,6 +8,9 @@ package quranengine
 // failing test rather than as a surprise in an app.
 
 import (
+	"os"
+	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -230,6 +233,20 @@ func TestSimilarAyahs(t *testing.T) {
 			if !match.Verified {
 				t.Error("3:2 is a classical match and should be verified")
 			}
+			// Version 2 carries no phrase text: the shared wording is the span into 3:2, and
+			// here it is the whole ayah, all seven tokens of it.
+			if !reflect.DeepEqual(match.Spans, [][2]int{{0, 6}}) {
+				t.Errorf("3:2 spans = %v, want [[0 6]]", match.Spans)
+			}
+			if len(match.Labels) != 0 {
+				t.Errorf("3:2 is verified and should carry no labels, got %v", match.Labels)
+			}
+			if match.Score != nil {
+				t.Errorf("3:2 did not come from QUL and should have no score, got %d", *match.Score)
+			}
+			if ayah := e.Ayah(3, 2); ayah == nil || len(strings.Fields(ayah.TextArabic)) != 7 {
+				t.Errorf("the span [0, 6] should cover exactly the 7 tokens of 3:2")
+			}
 		}
 	}
 	if !found {
@@ -240,6 +257,76 @@ func TestSimilarAyahs(t *testing.T) {
 	}
 	if e.SimilarAyahCount() <= 5000 {
 		t.Errorf("only %d ayahs have matches", e.SimilarAyahCount())
+	}
+}
+
+func TestSimilarAyahScoresReadNullAsNil(t *testing.T) {
+	e := parityEngine(t)
+	// Every row now carries a sixth field. It is null for the classical and generated sources,
+	// which rank but do not score, and 2:255's dozen rows all come from those two. The parser
+	// must keep null as nil rather than read it as a score of 0.
+	matches := e.SimilarAyahs(2, 255)
+	if len(matches) < 10 {
+		t.Fatalf("2:255 has %d matches", len(matches))
+	}
+	for _, match := range matches {
+		if match.Score != nil {
+			t.Errorf("%d:%d should have no score, got %d", match.Surah, match.Ayah, *match.Score)
+		}
+	}
+	// Where QUL listed the pair the row carries its 0-100 similarity: 101:10 and 69:3 score 75.
+	found := false
+	for _, match := range e.SimilarAyahs(101, 10) {
+		if match.Surah != 69 || match.Ayah != 3 {
+			continue
+		}
+		found = true
+		if match.Score == nil {
+			t.Fatal("69:3 is a QUL pair and should carry a score")
+		}
+		if *match.Score != 75 {
+			t.Errorf("69:3 scores %d, want 75", *match.Score)
+		}
+		if !reflect.DeepEqual(match.Spans, [][2]int{{0, 2}}) {
+			t.Errorf("69:3 spans = %v, want [[0 2]]", match.Spans)
+		}
+	}
+	if !found {
+		t.Fatal("69:3 is not listed as similar to 101:10")
+	}
+}
+
+func TestSimilarAyahsVersionOneLoadsAsEmpty(t *testing.T) {
+	// A version-1 file keyed the rows at the top level, with the phrase as text. The loader
+	// keeps only version 2's ayahs, so such a file is no data rather than half a one, as in the
+	// JS port. Stand up the real data dir with only that file swapped.
+	real, err := FindDataDir()
+	if err != nil {
+		t.Fatal(err)
+	}
+	entries, err := os.ReadDir(real)
+	if err != nil {
+		t.Fatal(err)
+	}
+	dir := t.TempDir()
+	for _, entry := range entries {
+		if entry.Name() == "similar-ayahs.json" {
+			continue
+		}
+		if err := os.Symlink(filepath.Join(real, entry.Name()), filepath.Join(dir, entry.Name())); err != nil {
+			t.Fatal(err)
+		}
+	}
+	v1 := `{"2:255":[[3,2,"ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ",1]]}`
+	if err := os.WriteFile(filepath.Join(dir, "similar-ayahs.json"), []byte(v1), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	e, err := LoadFromWith(dir, LoadOptions{SimilarAyahs: true})
+	if err != nil {
+		t.Fatalf("a version-1 file should load, as no data: %v", err)
+	}
+	if e.SimilarAyahCount() != 0 || e.HasSimilarAyahs(2, 255) || e.SimilarAyahs(2, 255) != nil {
+		t.Errorf("a version-1 file should load as no similar ayahs, got %d ayahs", e.SimilarAyahCount())
 	}
 }
 
@@ -290,6 +377,101 @@ func TestLessonsWalkInCourseOrder(t *testing.T) {
 	}
 	if e.TajweedChapterOf(lessons[0].ID) == nil {
 		t.Error("every lesson belongs to a chapter")
+	}
+}
+
+func TestLessonExamplesPointAtWordsBySpan(t *testing.T) {
+	e := parityEngine(t)
+	// Version 3 of the lessons file replaced each example's `word` text with a wordSpan into the
+	// ayah. The first spanned example in the course is 112:1, focused on هُوَ ٱللَّهُ أَحَدٌ:
+	// tokens 1 to 3 of the four.
+	for _, lesson := range e.TajweedLessons() {
+		for _, example := range lesson.Examples {
+			if example.WordSpan == nil {
+				continue
+			}
+			if example.SurahID != 112 || example.AyahNumber != 1 {
+				t.Fatalf("first spanned example is %d:%d, want 112:1", example.SurahID, example.AyahNumber)
+			}
+			if !reflect.DeepEqual(example.WordSpan, []int{1, 3}) {
+				t.Fatalf("112:1 wordSpan = %v, want [1 3]", example.WordSpan)
+			}
+			ayah := e.Ayah(112, 1)
+			if ayah == nil {
+				t.Fatal("112:1 is missing from the Quran text")
+			}
+			if tokens := strings.Fields(ayah.TextArabic); example.WordSpan[1] >= len(tokens) {
+				t.Fatalf("wordSpan [1, 3] runs past the %d tokens of 112:1", len(tokens))
+			}
+			return
+		}
+	}
+	t.Fatal("no lesson example carries a wordSpan")
+}
+
+func TestLessonQuranReferencesResolveToTheEnginesOwnText(t *testing.T) {
+	e := parityEngine(t)
+	// Version 4: a drill or rule-card fragment whose Arabic IS Quran carries an `ayah` reference
+	// and no text at all, so a port that ignores the field shows an empty row rather than a
+	// verse. This reads one back out of the Quran to prove the whole path.
+	var first *TajweedDrill
+	referenced := 0
+	for _, lesson := range e.TajweedLessons() {
+		rows := lesson.Drills
+		if lesson.RuleCard != nil {
+			rows = append(append([]TajweedDrill{}, rows...), lesson.RuleCard.Fragments...)
+		}
+		for i, drill := range rows {
+			if drill.Ayah == nil {
+				continue
+			}
+			referenced++
+			if first == nil && i < len(lesson.Drills) {
+				drill := drill
+				first = &drill
+			}
+			ayah := e.Ayah(drill.Ayah[0], drill.Ayah[1])
+			if ayah == nil {
+				t.Fatalf("%d:%d is missing from the Quran text", drill.Ayah[0], drill.Ayah[1])
+			}
+			tokens := strings.Fields(ayah.TextArabic)
+			if drill.Ayah[2] > drill.Ayah[3] || drill.Ayah[3] >= len(tokens) {
+				t.Fatalf("reference %v runs past the %d tokens of its ayah", drill.Ayah, len(tokens))
+			}
+		}
+	}
+	if first == nil {
+		t.Fatal("no lesson drill references the Quran")
+	}
+	if !reflect.DeepEqual(first.Ayah, []int{110, 1, 0, 4}) {
+		t.Fatalf("first referenced drill = %v, want [110 1 0 4]", first.Ayah)
+	}
+	if first.Text != "" {
+		t.Fatalf("a referenced drill carries a copy of the words: %q", first.Text)
+	}
+	// The span names the whole of an-Nasr 1, so the words it cuts are the ayah itself. Compared
+	// against the engine's own text rather than a pasted literal: a copy here would have to be
+	// kept in the file's exact normalization, the drift this version removed.
+	words := strings.Fields(e.Ayah(110, 1).TextArabic)
+	if len(words) != 5 {
+		t.Fatalf("110:1 has %d tokens, want 5", len(words))
+	}
+	cut := strings.Join(words[first.Ayah[2]:first.Ayah[3]+1], " ")
+	if cut != strings.Join(words, " ") {
+		t.Fatalf("the span cuts %q, want the whole ayah", cut)
+	}
+	if referenced != 28 {
+		t.Fatalf("%d drills and fragments reference the Quran, want 28", referenced)
+	}
+	// The card itself is `ruleCard`; it was declared as `mushafCard` and so decoded to nothing.
+	cards := 0
+	for _, lesson := range e.TajweedLessons() {
+		if lesson.RuleCard != nil {
+			cards++
+		}
+	}
+	if cards != 32 {
+		t.Fatalf("%d lessons carry a rule card, want 32", cards)
 	}
 }
 

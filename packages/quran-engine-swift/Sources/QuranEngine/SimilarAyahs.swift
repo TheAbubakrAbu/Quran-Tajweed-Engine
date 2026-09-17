@@ -5,80 +5,77 @@ import Foundation
 /// Rows are merged and ranked at build time from three sources, so nothing here scores or sorts.
 /// `verified` rows come from the classical corpus and are listed first; generated rows carry the
 /// `labels` that explain why they matched, and are a reading aid rather than a scholarly claim.
-/// The Quranic Universal Library's table is the third, and it adds two things the other two
-/// cannot: `spans`, the exact token ranges of the shared words in the MATCHED ayah, and `score`,
-/// its own 0-100 similarity.
+/// The Quranic Universal Library's table is the third, and it adds `score`, its own 0-100
+/// similarity; `score` is nil for rows from the other two sources, which rank but do not score.
+///
+/// The shared wording is `spans`: 0-based inclusive token ranges into the MATCHED ayah's raw
+/// text. QUL's own placement where it lists the pair, else the wording the corpus recorded,
+/// located in the ayah when the data was built. The data carries no text of its own (version 2):
+/// cut the words out of `engine.quran` by those spans, so what you show is the Quran text you
+/// already have and not a second copy of it.
 ///
 /// See docs/13-similar-and-themes.md.
 public struct SimilarMatch: Sendable, Equatable {
     public let surah: Int
     public let ayah: Int
-    /// The shared wording, "" when none is recorded.
-    public let phrase: String
     public let verified: Bool
     /// Why a generated row matched; empty for verified rows.
     public let labels: [String]
-    /// 0-based inclusive token ranges of the shared words in the MATCHED ayah's raw text (QUL
-    /// rows); empty when only the phrase is known. Tint these where they exist and fall back to
-    /// locating `phrase` where they do not.
+    /// 0-based inclusive token ranges of the shared words in the MATCHED ayah's raw text
+    /// (`textArabic` split on spaces); empty when no source records shared wording. Tint these,
+    /// or join the tokens they name to show the wording: there is no phrase text to fall back on.
     public let spans: [ClosedRange<Int>]
     /// QUL's 0-100 similarity, where it listed the pair. Nil for rows from the other two
     /// sources: they rank, but they do not score.
     public let score: Int?
 }
 
-public final class SimilarAyahs {
-    /// One row as it ships: [surah, ayah, phrase, verifiedFlag, labels?, spans?, score?].
-    ///
-    /// The decode order matters: `[String]` is tried before `[[Int]]` because position 4 is the
-    /// one routinely `[]`, and an empty array decodes as either.
-    public enum Field: Decodable, Sendable {
-        case number(Int)
-        case text(String)
-        case labels([String])
-        case spans([[Int]])
-
-        public init(from decoder: Decoder) throws {
-            let container = try decoder.singleValueContainer()
-            if let value = try? container.decode(Int.self) { self = .number(value) }
-            else if let value = try? container.decode(String.self) { self = .text(value) }
-            else if let value = try? container.decode([String].self) { self = .labels(value) }
-            else { self = .spans(try container.decode([[Int]].self)) }
+extension SimilarMatch: Decodable {
+    /// One row as it ships: `[surah, ayah, verifiedFlag, spans, labels, score]`, exactly six
+    /// fields, decoded by position. `spans` and `labels` may be `[]`, `score` may be `null`.
+    /// A span pair that is not `[start, end]` with `0 <= start <= end` is dropped.
+    public init(from decoder: Decoder) throws {
+        var row = try decoder.unkeyedContainer()
+        surah = try row.decode(Int.self)
+        ayah = try row.decode(Int.self)
+        verified = try row.decode(Int.self) == 1
+        spans = try row.decode([[Int]].self).compactMap { pair in
+            guard pair.count == 2, pair[0] >= 0, pair[1] >= pair[0] else { return nil }
+            return pair[0]...pair[1]
         }
-
-        var intValue: Int? { if case .number(let value) = self { return value } else { return nil } }
-        var stringValue: String? { if case .text(let value) = self { return value } else { return nil } }
-        var listValue: [String]? { if case .labels(let value) = self { return value } else { return nil } }
-        var spanValue: [ClosedRange<Int>]? {
-            guard case .spans(let rows) = self else { return nil }
-            return rows.compactMap { row in
-                guard row.count == 2, row[0] >= 0, row[1] >= row[0] else { return nil }
-                return row[0]...row[1]
-            }
-        }
+        labels = try row.decode([String].self)
+        score = try row.decodeIfPresent(Int.self)
     }
+}
 
-    private let data: [String: [[Field]]]
+/// data/similar-ayahs.json as it ships: `{ "v": 2, "ayahs": { "2:255": [row, ...], ... } }`.
+public struct SimilarAyahsFile: Decodable, Sendable {
+    /// The data version; this module reads version 2.
+    public let v: Int?
+    /// Keyed "surah:ayah", each row already in display order.
+    public let ayahs: [String: [SimilarMatch]]?
+}
 
-    public init(_ data: [String: [[Field]]] = [:]) {
-        self.data = data
+public final class SimilarAyahs {
+    private let data: [String: [SimilarMatch]]
+
+    /// Reads a version-2 file. A version-1 file (rows keyed at the top level, the phrase as
+    /// text) is not read: it would put the shared wording where a span is expected. Treated as
+    /// no data rather than half a one, as the JS port does.
+    public init(_ file: SimilarAyahsFile? = nil) {
+        if let file, file.v == 2, let ayahs = file.ayahs {
+            data = ayahs
+        } else {
+            data = [:]
+        }
     }
 
     /// Matches for an ayah, in display order. Empty for most short ayahs.
     public func matches(_ surahId: Int, _ ayahId: Int) -> [SimilarMatch] {
-        (data["\(surahId):\(ayahId)"] ?? []).compactMap { row in
-            guard row.count >= 4, let surah = row[0].intValue, let ayah = row[1].intValue,
-                  let verified = row[3].intValue else { return nil }
-            return SimilarMatch(surah: surah, ayah: ayah,
-                                phrase: row[2].stringValue ?? "",
-                                verified: verified == 1,
-                                labels: row.count > 4 ? (row[4].listValue ?? []) : [],
-                                spans: row.count > 5 ? (row[5].spanValue ?? []) : [],
-                                score: row.count > 6 ? row[6].intValue : nil)
-        }
+        data["\(surahId):\(ayahId)"] ?? []
     }
 
-    /// Whether the ayah has any - a dictionary hit, cheap enough to gate a button on.
+    /// Whether the ayah has any: a dictionary hit, cheap enough to gate a button on.
     public func has(_ surahId: Int, _ ayahId: Int) -> Bool {
         !(data["\(surahId):\(ayahId)"] ?? []).isEmpty
     }

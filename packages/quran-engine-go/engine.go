@@ -46,7 +46,9 @@ type Engine struct {
 	qiraatRuleDescriptions map[string]RuleDescription
 	qiraatTajweed          map[string]*QiraatTajweedPack
 
-	wordByWord   WordByWordPack
+	wordByWord WordByWordPack
+	// similar-ayahs.json version 2's ayahs: "surah:ayah" -> rows, read field by field by
+	// SimilarAyahs. Nil (no data) for a file of any other version.
 	similarAyahs map[string][][]json.RawMessage
 
 	// riwayah -> surah id (as a string) -> that reading's own verses (empty unless
@@ -68,6 +70,11 @@ type Engine struct {
 	places       qiraatPlacesFile
 	variantAudio qiraatVariantAudioFile
 	wordsOfDay   []WordOfDayEntry
+	namesDepth   []NameDepth
+	nameThemes   []NameTheme
+	isnad        isnadFile
+	// The scientific-miracles corpus; loads by default.
+	miracles miraclesFile
 
 	// Lazily built by TermWeights, over the translations.
 	documentFrequency map[string]int
@@ -225,7 +232,7 @@ func LoadFromWith(dataDir string, options LoadOptions) (*Engine, error) {
 }
 
 // loadCorpora reads the optional data: themes and the tajweed course always, the rest on request.
-// A missing optional file is not an error — the accessors simply return nothing — but a file that
+// A missing optional file is not an error (the accessors simply return nothing), but a file that
 // is present and unreadable is, so a corrupt pack fails loudly instead of silently disappearing.
 func (e *Engine) loadCorpora(dataDir string, options LoadOptions) error {
 	var themes themesFile
@@ -285,8 +292,16 @@ func (e *Engine) loadCorpora(dataDir string, options LoadOptions) error {
 	}
 
 	if options.SimilarAyahs {
-		if err := readJSON(filepath.Join(dataDir, "similar-ayahs.json"), &e.similarAyahs); err != nil {
+		// Version 2 wraps the rows: {v: 2, ayahs: {"surah:ayah": [...]}}. A version-1 file (rows
+		// keyed at the top level, the phrase as text) is not read: it would put the shared
+		// wording where a span is expected. It loads as no data rather than half a one, as the
+		// JS port does.
+		var file similarAyahsFile
+		if err := readJSON(filepath.Join(dataDir, "similar-ayahs.json"), &file); err != nil {
 			return err
+		}
+		if file.V == 2 {
+			e.similarAyahs = file.Ayahs
 		}
 	}
 
@@ -323,6 +338,22 @@ func (e *Engine) loadCorpora(dataDir string, options LoadOptions) error {
 		return err
 	}
 	e.wordsOfDay = words.Words
+	// The Names in depth (47 KB) and the chains (20 KB) load by default on the same footing.
+	var depth namesDepthFile
+	if err := readOptionalJSON(filepath.Join(dataDir, "names-depth.json"), &depth); err != nil {
+		return err
+	}
+	e.namesDepth = depth.Names
+	e.nameThemes = depth.Themes
+	if err := readOptionalJSON(filepath.Join(dataDir, "isnad.json"), &e.isnad); err != nil {
+		return err
+	}
+	// The miracles corpus (393 KB) joins them: bigger than those, but smaller than the tajweed
+	// course that has always loaded by default, and a consumer cross-linking an ayah to what has
+	// been written about it should not have to know a flag existed.
+	if err := readOptionalJSON(filepath.Join(dataDir, "miracles.json"), &e.miracles); err != nil {
+		return err
+	}
 
 	if options.Morphology {
 		if err := readJSON(filepath.Join(dataDir, "morphology.json"), &e.morphology); err != nil {

@@ -53,6 +53,13 @@ const FILES = [
   "qiraat-variants.json",
   "qiraat-places.json",
   "qiraat-variant-audio.json",
+  // Batch 6: both small and both load by default.
+  "names-depth.json",
+  "isnad.json",
+  // The miracles corpus. 393 KB, and it loads by default like the tajweed course above it: an
+  // article set is what a consumer cross-links an ayah to, and a flag to reach it would only be
+  // one more thing to know about.
+  "miracles.json",
   "mushaf/index.json",
   "tajweed-qiraat/rules.json",
   ...["hafs", "shubah", "warsh", "qaloon", "buzzi", "qunbul", "duri", "susi",

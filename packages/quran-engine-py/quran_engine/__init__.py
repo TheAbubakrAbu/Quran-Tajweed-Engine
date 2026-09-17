@@ -46,6 +46,9 @@ from .topics import QuranTopics, AyahThemes, QulTopic, Passage as ThemePassage, 
 from .metadata import QuranMetadata, Division
 from .qiraat_variants import QiraatVariants, Juncture
 from .word_of_day import WordOfDay, WordEntry
+from .names_depth import NamesDepth, NameDepth, NameTheme, root_key
+from .isnad import Isnad, IsnadNode, IsnadLayer
+from .miracles import Miracles, MiracleArticle, MiracleCategory, MIRACLE_LEVELS
 
 __version__ = "0.1.0"
 
@@ -71,4 +74,7 @@ __all__ = [
     "QuranMetadata", "Division",
     "QiraatVariants", "Juncture",
     "WordOfDay", "WordEntry",
+    "NamesDepth", "NameDepth", "NameTheme", "root_key",
+    "Isnad", "IsnadNode", "IsnadLayer",
+    "Miracles", "MiracleArticle", "MiracleCategory", "MIRACLE_LEVELS",
 ]

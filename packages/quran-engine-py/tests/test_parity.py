@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from quran_engine import Engine, Semantic, chat_prompt, QUESTION_WORDS  # noqa: E402
+from quran_engine import Engine, Semantic, SimilarAyahs, chat_prompt, QUESTION_WORDS  # noqa: E402
 
 engine = Engine.load(load_mushaf=True, load_qiraat_tajweed=True,
                      load_word_by_word=True, load_similar_ayahs=True, load_qiraat=True)
@@ -111,8 +111,24 @@ def test_similar_ayahs():
     matches = engine.similar_ayahs.matches(2, 255)
     found = next(m for m in matches if m["surah"] == 3 and m["ayah"] == 2)
     assert found["verified"]
+    # Version 2 carries no text: the shared wording is a span into the matched ayah.
+    assert found["spans"] == [(0, 6)]
+    assert found["labels"] == []
+    assert found["score"] is None
+    assert "phrase" not in found
     assert engine.similar_ayahs.has(2, 255)
     assert engine.similar_ayahs.count() > 5000
+
+
+def test_similar_ayahs_reads_only_version_2():
+    # A version-1 file put the phrase text where a span now sits: read as no data, like the JS.
+    assert SimilarAyahs().count() == 0
+    assert SimilarAyahs({"2:255": [[3, 2, "text", 1]]}).count() == 0
+    assert SimilarAyahs({"v": 1, "ayahs": {"2:255": [[3, 2, 1, [], [], None]]}}).count() == 0
+    two = SimilarAyahs({"v": 2, "ayahs": {"2:255": [[3, 2, 1, [[0, 6]], [], None]]}})
+    assert two.count() == 1 and two.has(2, 255) and not two.has(3, 2)
+    assert two.matches(2, 255) == [{"surah": 3, "ayah": 2, "verified": True,
+                                    "labels": [], "spans": [(0, 6)], "score": None}]
 
 
 def test_themes_index_both_ways():
@@ -128,6 +144,45 @@ def test_tajweed_lessons_walk_in_course_order():
     assert engine.tajweed_lessons.previous(lessons[0]["id"]) is None
     assert engine.tajweed_lessons.next(lessons[0]["id"])["id"] == lessons[1]["id"]
     assert engine.tajweed_lessons.chapter_of(lessons[0]["id"])
+    # Version 3 examples point at their words by span; the data carries no copy of the words.
+    first_example = next(l for l in lessons if l.get("examples"))["examples"][0]
+    assert (first_example["surahId"], first_example["ayahNumber"]) == (112, 1)
+    assert first_example["wordSpan"] == [1, 3]
+    assert "word" not in first_example
+
+
+def test_lesson_quran_references_resolve_to_the_engines_own_text():
+    """Version 4: a drill or rule-card fragment whose Arabic IS Quran carries an `ayah`
+    reference and no text at all, so a consumer that ignores the field shows an empty row
+    rather than a verse. This reads one back out of the Quran to prove the whole path."""
+    lessons = engine.tajweed_lessons.all_lessons()
+    drill = next(d for lesson in lessons for d in lesson.get("drills", []) if "ayah" in d)
+    assert drill["ayah"] == [110, 1, 0, 4]
+    assert not drill.get("text"), "a referenced drill carries no copy of the words"
+
+    # The span names the whole of an-Nasr 1, so the words it cuts are the ayah itself. Compared
+    # against the engine's own text rather than a pasted literal: a copy here would have to be
+    # kept in the file's exact normalization, which is the drift this version removed.
+    surah, ayah, first, last = drill["ayah"]
+    words = engine.quran.ayah(surah, ayah).text_arabic.split()
+    assert len(words) == 5
+    assert " ".join(words[first:last + 1]) == " ".join(words)
+
+    # Every reference across drills and rule cards lands inside its ayah.
+    referenced = 0
+    for lesson in lessons:
+        fragments = (lesson.get("ruleCard") or {}).get("fragments", [])
+        for row in lesson.get("drills", []) + fragments:
+            if "ayah" not in row:
+                continue
+            referenced += 1
+            s, a, f, l = row["ayah"]
+            tokens = engine.quran.ayah(s, a).text_arabic.split()
+            assert f <= l < len(tokens)
+    assert referenced == 28, "7 drills and 21 rule-card fragments reference the Quran"
+
+    # The card itself is `ruleCard`; it was declared as `mushafCard` and so decoded to nothing.
+    assert sum(1 for lesson in lessons if lesson.get("ruleCard")) == 32
 
 
 # ---- semantic ---------------------------------------------------------------------

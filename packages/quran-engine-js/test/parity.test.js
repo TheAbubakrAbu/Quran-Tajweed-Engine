@@ -146,6 +146,42 @@ test("tajweedLessons: chapters walk in course order", () => {
   assert.ok(engine.tajweedLessons.chapterOf(lessons[0].id));
 });
 
+test("tajweedLessons: a Quran drill resolves to the engine's own text", () => {
+  // Version 4: a drill or rule-card fragment whose Arabic IS Quran carries an `ayah` reference
+  // and no text at all, so a consumer that ignores the field shows an empty row rather than a
+  // verse. This reads one back out of the Quran to prove the whole path.
+  const lessons = engine.tajweedLessons.allLessons();
+  const drill = lessons.flatMap((l) => l.drills ?? []).find((d) => d.ayah);
+  assert.ok(drill, "a drill references the Quran");
+  assert.deepEqual(drill.ayah, [110, 1, 0, 4]);
+  assert.ok(!drill.text, "a referenced drill carries no copy of the words");
+
+  // The span names the whole of an-Nasr 1, so the words it cuts are the ayah itself. Compared
+  // against the engine's own text rather than a pasted literal: a copy here would have to be kept
+  // in the file's exact normalization, which is the drift this version removed.
+  const [surah, ayah, first, last] = drill.ayah;
+  const words = engine.quran.ayah(surah, ayah).textArabic.split(/\s+/);
+  assert.equal(words.length, 5);
+  assert.equal(words.slice(first, last + 1).join(" "), words.join(" "));
+
+  // Every reference across drills and rule cards lands inside its ayah.
+  let referenced = 0;
+  for (const lesson of lessons) {
+    const fragments = lesson.ruleCard?.fragments ?? [];
+    for (const row of [...(lesson.drills ?? []), ...fragments]) {
+      if (!row.ayah) continue;
+      referenced += 1;
+      const [s, a, f, l] = row.ayah;
+      const tokens = engine.quran.ayah(s, a).textArabic.split(/\s+/);
+      assert.ok(f <= l && l < tokens.length);
+    }
+  }
+  assert.equal(referenced, 28, "7 drills and 21 rule-card fragments reference the Quran");
+
+  // The card itself is `ruleCard`; it was declared as `mushafCard` and so decoded to nothing.
+  assert.equal(lessons.filter((l) => l.ruleCard).length, 32);
+});
+
 // ---- semantic ---------------------------------------------------------------------
 
 test("semantic: MaxSim ranks by meaning, not by shared words", () => {

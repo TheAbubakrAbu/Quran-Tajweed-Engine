@@ -24,7 +24,7 @@ Canonical, language-agnostic data for the Quran Tajweed Engine. Plain UTF-8 JSON
 | `word-by-word.json` | object | 77,629 words × 2 layers | [docs/12-word-by-word.md](../docs/12-word-by-word.md) |
 | `similar-ayahs.json` | object | 5,446 ayahs | [docs/13-similar-and-themes.md](../docs/13-similar-and-themes.md) |
 | `themes.json` | object | 323 topics | [docs/13-similar-and-themes.md](../docs/13-similar-and-themes.md) |
-| `tajweed-lessons.json` | object | 8 chapters / 34 lessons | [docs/13-similar-and-themes.md](../docs/13-similar-and-themes.md) |
+| `tajweed-lessons.json` | object | 10 chapters / 57 lessons | [docs/13-similar-and-themes.md](../docs/13-similar-and-themes.md) |
 | `surah-sections.json` | object | 741 sections / 111 surahs | [docs/15-surah-sections.md](../docs/15-surah-sections.md) |
 | `surah-stats.json` | object | 114 | a standalone index — see below |
 | `surahs/NNN.json` + `index.json` | per-surah | 114 + index | [docs/architecture.md](../docs/architecture.md) |
@@ -62,6 +62,82 @@ See [../CREDITS.md](../CREDITS.md) for full attribution. The Quranic Arabic text
   "otherNames": ["The Most Merciful", "The Most Compassionate", "The Beneficent"]
 }
 ```
+
+## `names-depth.json`
+
+The layer under `names-of-allah.json`, keyed by the same 1…99 number.
+
+```jsonc
+{
+  "themes": [{ "id": "mercy", "label": "Mercy" }],   // nine, partitioning the 99
+  "names": [{
+    "number": 1,
+    "root": "ر ح م",                 // SPACED; morphology.json stores it closed up
+    "theme": "mercy",
+    "explanation": "Rahmah shares its root with the womb: …",
+    "living": "Meet people with more mercy than they have earned from you, …",
+    "occurrences": [
+      { "surah": 1, "ayah": 3, "token": 0, "tokens": 1 }
+      // token is null (and tokens 0) where the corpus knows the ayah but could
+      // not place the word in it: ten occurrences, across Names 60, 77, 81, 97.
+    ]
+  }]
+}
+```
+
+See [docs/23-names-depth.md](../docs/23-names-depth.md).
+
+## `isnad.json`
+
+The chains of transmission of the Ten Readings.
+
+```jsonc
+{
+  "prophet": { "name": "Prophet Muhammad ﷺ", "arabic": "…", "detail": "d. 11 AH", "role": "prophet" },
+  "companions": [ /* the thirteen, same node shape */ ],
+  "imams": {
+    "Nafi": { "teachers": [ /* Successors */ ], "companions": [ /* who they read on */ ] }
+  },
+  "narrators": {
+    "Warsh an Nafi": {
+      "imam": "Nafi",      // READ THIS. Do not split the key: "ad-Duri an Abi Amr" -> "Abu Amr".
+      "links": [],          // empty = he read on the imam himself
+      "students": [ /* who carried the narration on */ ]
+    }
+  }
+}
+```
+
+See [docs/24-isnad.md](../docs/24-isnad.md).
+
+## `miracles.json`
+
+202 short articles, each making one claim and anchoring it to the ayahs it rests on.
+
+```jsonc
+{
+  "source": "miracles-of-quran.com, captured …",
+  "imagesIncluded": false,   // the illustrations are NOT republished; no block has kind "image"
+  "categories": [{ "id": "cosmology", "level": "advanced" }],   // fifteen
+  "articles": [{
+    "slug": "big_bang_crunch",
+    "title": "Big Bang",
+    "category": "cosmology",
+    "level": "extreme",       // the ARTICLE's level; 147 of the 202 differ from their category's
+    "blocks": [
+      { "kind": "claim",  "text": "Creation of the universe." },
+      { "kind": "ayah",   "surah": 21, "ayah": 30, "endAyah": 30 },  // a RANGE, and no text: the
+                                                                     // verse comes from quran.json
+      { "kind": "text",   "text": "…", "links": [{ "label": "Dark Energy", "slug": "dark_energy" }] },
+      // a link is EITHER {label, url} (an outside page) or {label, slug} (another article here)
+      { "kind": "quote",  "text": "…", "sourceLabel": "Wikipedia, …", "sourceUrl": "https://…" },
+      { "kind": "closer", "text": "How could an illiterate man …" }
+    ]
+  }]
+}
+```
+
+See [docs/25-miracles.md](../docs/25-miracles.md).
 
 ## File-size note
 
