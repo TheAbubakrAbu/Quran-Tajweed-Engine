@@ -89,7 +89,7 @@ A **meem sakinah** is a meem with sukun (مْ). Its three rules are called **sha
 2. **Idgham Shafawi**: meem sakinah **+ م**. The first meem merges into the second → a doubled meem with ghunnah (~2 counts). (لَهُم مَّا = *lahum-maa*.)
 3. **Idhaar Shafawi**: meem sakinah **+ any other letter**. The meem is pronounced clearly, no extra ghunnah. (عَلَيْكُمْ سَلَامٌ.)
 
-> **Meem mushaddadah (مّ)** (a meem with shaddah), is always held with a strong ghunnah for ~2 counts (ثُمَّ, لَمَّا). It's closely related, though not one of the three meem-sakinah rules. The engine colors both meem and noon shaddah as `generalGhunnah`.
+> **Meem mushaddadah (مّ)** (a meem with shaddah) is always held with a strong ghunnah for ~2 counts (ثُمَّ, لَمَّا). It's closely related, though not one of the three meem-sakinah rules. The engine colors both meem and noon shaddah as `generalGhunnah`.
 
 ---
 

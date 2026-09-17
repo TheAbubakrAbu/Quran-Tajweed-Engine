@@ -35,7 +35,7 @@ Surah-name resolution prefers an **exact** name match over a substring one. `sea
 
 Plain term counting ranks a question by whichever verse says "the" most. Weighting each term by `log(N / (1 + df))` (its inverse document frequency over the translations), fixes it with **no stopword list to maintain** against the corpus. A word in half the Quran weighs almost nothing; a word in ten ayahs weighs a lot, and a verse matching two informative words beats one matching a single word twice.
 
-A small hard-coded set (`QUESTION_WORDS`) drops the words that are grammar rather than topic, "what", "how", "does", and also "quran", "allah", "verse", which are in nearly every question asked of this app and name nothing.
+A small hard-coded set (`QUESTION_WORDS`) drops the words that are grammar rather than topic: "what", "how", "does", and also "quran", "allah", "verse", which are in nearly every question asked of this app and name nothing.
 
 ### Lane 2, themes
 
@@ -84,7 +84,7 @@ Vectors are cached per word, so a repeated word costs one lookup for the whole c
 
 ## Follow-ups
 
-A question with fewer than two content words ("why?", "and zakat?", "what about that one"), retrieves noise on its own. Pass the previous question and the passages the previous answer cited, and the follow-up searches as *both* questions while keeping those passages in the pool:
+A question with fewer than two content words ("why?", "and zakat?", "what about that one") retrieves noise on its own. Pass the previous question and the passages the previous answer cited, and the follow-up searches as *both* questions while keeping those passages in the pool:
 
 ```js
 const first = engine.askAI.retrieve("tell me about 2:153");

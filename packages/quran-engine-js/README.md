@@ -15,7 +15,7 @@ This package *is* the executable spec: every module maps to a feature doc in [`.
 | `search.js` | ayah & surah search (+ boolean) | 06 |
 | `sorting.js` | surah sorting & filtering | 07 |
 | `cache.js` | offline-download paths + `AudioCache` | 08 |
-| `text.js` | Arabic normalization + grapheme clustering |, |
+| `text.js` | Arabic normalization + grapheme clustering | – |
 
 Everything is re-exported from the package root, so `import { ... } from "@quran-tajweed-engine/core"` gives you the whole API and the bundler tree-shakes what you don't use.
 

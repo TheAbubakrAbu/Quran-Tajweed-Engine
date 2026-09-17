@@ -10,10 +10,10 @@
 
 | Rule | Color | Counts | Trigger letters | Meaning |
 |---|---|---|---|---|
-| **Solar Lam** (Laam Shamiyyah): `lamShamsiyah` | `#B4B4B4` | ,  | ,  | The laam of 'al-' assimilates into a following sun letter (which doubles). |
-| **Written but Not Pronounced** (Harf Ghayr Mantuq): `droppedLetter` | `#B4B4B4` | ,  | ,  | A letter written in the Uthmani script but not pronounced. |
-| **Joining Hamzah** (Hamzat al-Wasl): `hamzatWaslSilent` | `#B4B4B4` | ,  | ,  | Hamzat al-wasl (the 'connecting hamzah') is silent when joining from a previous word. |
-| **Merge Without Ghunnah** (Idgham Bilaa Ghunnah): `idghamBilaGhunnah` | `#B4B4B4` | ,  | When noon (ن) or tanween comes before: ل، ر | Idgham = merging; bila ghunnah = without a nasal hum. |
+| **Solar Lam** (Laam Shamiyyah): `lamShamsiyah` | `#B4B4B4` | – | – | The laam of 'al-' assimilates into a following sun letter (which doubles). |
+| **Written but Not Pronounced** (Harf Ghayr Mantuq): `droppedLetter` | `#B4B4B4` | – | – | A letter written in the Uthmani script but not pronounced. |
+| **Joining Hamzah** (Hamzat al-Wasl): `hamzatWaslSilent` | `#B4B4B4` | – | – | Hamzat al-wasl (the 'connecting hamzah') is silent when joining from a previous word. |
+| **Merge Without Ghunnah** (Idgham Bilaa Ghunnah): `idghamBilaGhunnah` | `#B4B4B4` | – | When noon (ن) or tanween comes before: ل، ر | Idgham = merging; bila ghunnah = without a nasal hum. |
 
 ## Ghunnah: Nasal
 
@@ -29,8 +29,8 @@
 
 | Rule | Color | Counts | Trigger letters | Meaning |
 |---|---|---|---|---|
-| **Bounce Letter** (Qalqalah): `qalqalah` | `#78CCF9` | ,  | Letters that bounce when they have sukoon or are stopped on: ق، ط، ب، ج، د | Qalqalah = a slight echo/bounce on qutb-jad letters at sukoon or stop. |
-| **Heavy Letter** (Tafkheem): `tafkhim` | `#3B85C2` | ,  | Letters pronounced heavily (elevated tongue): خ، ص، ض، غ، ط، ق، ظ | Tafkhim = heaviness; the istiʿla letters are pronounced full and deep. |
+| **Bounce Letter** (Qalqalah): `qalqalah` | `#78CCF9` | – | Letters that bounce when they have sukoon or are stopped on: ق، ط، ب، ج، د | Qalqalah = a slight echo/bounce on qutb-jad letters at sukoon or stop. |
+| **Heavy Letter** (Tafkheem): `tafkhim` | `#3B85C2` | – | Letters pronounced heavily (elevated tongue): خ، ص، ض، غ، ط، ق، ظ | Tafkhim = heaviness; the istiʿla letters are pronounced full and deep. |
 
 ## Madd: Elongation
 

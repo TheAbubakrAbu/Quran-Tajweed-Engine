@@ -31,7 +31,7 @@ Canonical, language-agnostic data for the Quran Tajweed Engine. Plain UTF-8 JSON
 
 ### `surah-stats.json` is a convenience index, not a source
 
-Every value in it (ayah, word and letter counts, juz list, revelation type), is already on the surah in `quran.json`, and a test asserts the two still agree. It ships as an 8 KB file for a consumer that wants the counts without parsing 30 MB of text; the engine's own API answers those questions from `Quran`, so no module reads it.
+Every value in it (ayah, word and letter counts, juz list, revelation type) is already on the surah in `quran.json`, and a test asserts the two still agree. It ships as an 8 KB file for a consumer that wants the counts without parsing 30 MB of text; the engine's own API answers those questions from `Quran`, so no module reads it.
 
 ## Provenance
 

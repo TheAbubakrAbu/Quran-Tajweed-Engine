@@ -114,6 +114,6 @@ This engine constructs URLs to these third-party services; it neither hosts nor 
 
 ## A note on intent
 
-This project (like the apps it draws from, **Al-Islam**, **Al-Adhan**, and **Al-Quran**), is offered as *sadaqah jariyah*: a continuing charity for the benefit of the Muslim community and anyone building tools to read, learn, and listen to the Quran. If it helps you, please keep the chain of attribution intact and consider contributing improvements back, so the reward continues for everyone who came before you.
+This project (like the apps it draws from, **Al-Islam**, **Al-Adhan**, and **Al-Quran**) is offered as *sadaqah jariyah*: a continuing charity for the benefit of the Muslim community and anyone building tools to read, learn, and listen to the Quran. If it helps you, please keep the chain of attribution intact and consider contributing improvements back, so the reward continues for everyone who came before you.
 
 > *"When a person dies, all their deeds end except three: a continuing charity (sadaqah jariyah), beneficial knowledge, or a righteous child who prays for them."*, Prophet Muhammad ﷺ (Sahih Muslim)

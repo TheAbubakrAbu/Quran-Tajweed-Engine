@@ -6,7 +6,7 @@
  * QuranData.swift (`attributedText`, `collectMaddAndWaslPaintOps`, `appendNuunMeemGhunnahHeuristicPaintOps`,
  * `explicitMaddahCategory`, …) and the rule tables in TajweedRules.swift.
  *
- * The full specification (every Unicode scalar, priority tier and exception), is documented in
+ * The full specification (every Unicode scalar, priority tier and exception) is documented in
  * `docs/02-tajweed.md`. The canonical reference implementation remains the Swift source. This port
  * covers the major rule families:
  *   • Madd: natural, miniature, muttasil, munfasil (incl. Munfasil Hukmi), lazim catch-all

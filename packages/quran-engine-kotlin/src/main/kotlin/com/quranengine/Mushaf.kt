@@ -36,7 +36,7 @@ data class RiwayahEntry(
     val pdf: String,
     val pdfBytes: Long,
     val pages: String,
-  /** Null when the riwayah's text (and so its line table), is not published. */
+  /** Null when the riwayah's text (and so its line table) is not published. */
     val lines: String? = null,
     /** Null when the riwayah has no tajweed pack. */
     val tajweed: String? = null,
@@ -110,7 +110,7 @@ class Mushaf(
 
     /**
      * The character offsets into the ayah's own text at which this riwayah's print starts a new
-   * line. Null when the riwayah's text (and so its line table), is not published.
+   * line. Null when the riwayah's text (and so its line table) is not published.
      */
     fun lineBreaks(surahId: Int, ayahId: Int, riwayah: String = "hafs"): List<Int>? =
         lineTables[riwayah]?.lineBreaks?.get(surahId.toString())?.get(ayahId.toString())

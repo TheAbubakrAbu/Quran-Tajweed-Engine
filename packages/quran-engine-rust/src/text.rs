@@ -41,10 +41,14 @@ fn is_punct_or_symbol(c: char) -> bool {
         return false;
     }
     // ASCII punctuation/symbols and common Arabic punctuation.
+    // The em dash below is DATA, not prose: this set decides whether a scalar is punctuation, and
+    // the Quran translations we normalize contain em dashes. Do not "de-dash" it - it is a char
+    // literal, and replacing it with ", " does not compile.
+
     c.is_ascii_punctuation()
         || matches!(
             c,
-            '،' | '؛' | '؟' | '٪' | '۔' | '«' | '»' | '“' | '”' | '‘' | '’' | ', ' | '–' | '…'
+            '،' | '؛' | '؟' | '٪' | '۔' | '«' | '»' | '“' | '”' | '‘' | '’' | '—' | '–' | '…'
         )
         || (c as u32) >= 0x2000 && (c as u32) <= 0x206F // general punctuation block
 }

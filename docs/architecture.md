@@ -69,8 +69,8 @@ Every port exposes the same surface:
 | `search` | verse & surah search, reference parsing | 06 |
 | `sorting` | sort & filter the 114 | 07 |
 | `cache` | offline-download paths | 08 |
-| `text` | Arabic normalization, grapheme clustering, UTF-16 slicing |, |
-| `engine` | facade tying it together + the disk loader |, |
+| `text` | Arabic normalization, grapheme clustering, UTF-16 slicing | – |
+| `engine` | facade tying it together + the disk loader | – |
 
 ## String offsets: the one cross-language gotcha
 

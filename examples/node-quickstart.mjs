@@ -55,7 +55,7 @@ console.log(`Detected ${spans.length} colored spans. First 8:\n`);
 console.log("  category               color     text");
 console.log("  ─────────────────────  ────────  ────");
 for (const s of spans.slice(0, 8)) {
-  console.log(`  ${s.category.padEnd(21)}  ${(s.color ?? ", ").padEnd(8)}  ${s.text}`);
+  console.log(`  ${s.category.padEnd(21)}  ${(s.color ?? "–").padEnd(8)}  ${s.text}`);
 }
 
 // ---------------------------------------------------------------------------

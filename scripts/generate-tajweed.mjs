@@ -252,7 +252,7 @@ for (const sec of sections) {
   md += `## ${sec.title}\n\n`;
   md += `| Rule | Color | Counts | Trigger letters | Meaning |\n|---|---|---|---|---|\n`;
   for (const c of inSec) {
-    md += `| **${c.englishTitle}** (${c.transliteration}): \`${c.id}\` | \`${c.colorHex}\` | ${c.countLabel ?? ", "} | ${c.applicableLetters ? c.applicableLetters.replace(/\|/g, "\\|"): ", "} | ${c.literalMeaning ?? ""} |\n`;
+    md += `| **${c.englishTitle}** (${c.transliteration}): \`${c.id}\` | \`${c.colorHex}\` | ${c.countLabel ?? "–"} | ${c.applicableLetters ? c.applicableLetters.replace(/\|/g, "\\|") : "–"} | ${c.literalMeaning ?? ""} |\n`;
   }
   md += `\n`;
 }

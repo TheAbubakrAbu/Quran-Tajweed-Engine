@@ -54,7 +54,7 @@ class RiwayahEntry {
   final int pdfBytes;
   final String pages;
 
- /// Null when the riwayah's text (and so its line table), is not published.
+ /// Null when the riwayah's text (and so its line table) is not published.
   final String? lines;
 
   /// Null when the riwayah has no tajweed pack.

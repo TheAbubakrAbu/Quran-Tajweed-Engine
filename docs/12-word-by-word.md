@@ -28,7 +28,7 @@ Reconciling that at render time means shipping the Arabic of every word (~2 MB m
 
 ### Empty entries are real
 
-A token with no word of its own (the ۞ ornament, the tail of a word the corpus writes as two), carries `""` in **both** layers. Show nothing for it; do not fall back to a neighbour.
+A token with no word of its own (the ۞ ornament, the tail of a word the corpus writes as two) carries `""` in **both** layers. Show nothing for it; do not fall back to a neighbour.
 
 The two layers always agree on which entries are empty, so a word that has a meaning has a pronunciation.
 

@@ -44,7 +44,7 @@ Top-level is a JSON **array** of surah objects:
 }
 ```
 
-The **global ayah number** (1..6236) (used by the ayah-audio CDN and as a stable verse key), is the cumulative ayah index across the whole mushaf:
+The **global ayah number** (1..6236) (used by the ayah-audio CDN and as a stable verse key) is the cumulative ayah index across the whole mushaf:
 
 ```
 globalAyahNumber(surah, ayah) = (sum of numberOfAyahs for all surahs before `surah`) + ayah

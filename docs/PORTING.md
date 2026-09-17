@@ -39,7 +39,7 @@ Reciter `id` = `"{name}|{qiraah or 'Hafs'}|{surahLink}"`. `qiraah` is null/absen
 
 Two ways to get tajweed colors. **Prefer (A)** for new ports, it's small, correct, and consistent:
 
-- **(A) Consume the pre-computed corpus.** Load `data/tajweed/NNN.json` (or `tajweed-annotations.json`), take the ayah's `annotations`, and map each `rule` to `tajweed-rules.json → categories[].colorHex`. The `start`/`end` are UTF-16 offsets, see "String indexing" below. This needs ~30 lines of code.
+- **(A) Consume the pre-computed corpus.** Load `data/tajweed/NNN.json` (or `tajweed-annotations.json`) take the ayah's `annotations`, and map each `rule` to `tajweed-rules.json → categories[].colorHex`. The `start`/`end` are UTF-16 offsets, see "String indexing" below. This needs ~30 lines of code.
 - **(B) Port the detector.** Re-implement `docs/02-tajweed.md` from scratch. Only do this if you need to color text the corpus doesn't cover (other qiraat, user input) or you want zero data dependency.
 
 ## String indexing (UTF-16 offsets)
@@ -91,7 +91,7 @@ Field guide: `searchVerses[].query` with `contains` (ids that must appear), `exc
 
 ## Module coverage per port
 
-The core modules (Quran, tajweed, juz/page, audio, search, sorting, caching, names, muqattaat), are in **all seven** ports and are covered by the conformance vectors.
+The core modules (Quran, tajweed, juz/page, audio, search, sorting, caching, names, muqattaat) are in **all seven** ports and are covered by the conformance vectors.
 
 Everything beyond the core is in **all seven** too: the mushaf, riwayah tajweed, word by word, similar ayahs, themes, the tajweed course, meaning search and Ask AI retrieval (batch 3), then surah sections, the alphabet reference and the qiraat comparison (batch 4), then morphology, mutashabihat, the QUL topic indexes, the mushaf divisions, the qiraat variant matrix and the word of the day (batch 5). Each port carries parity suites that are deliberate translations of the same cases:
 
